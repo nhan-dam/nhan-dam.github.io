@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Nhan Dam's technical Notes on Machine Learning.">
+        <meta name="description" content="Nhan Dam's Technical Notes on Machine Learning.">
       
       
         <meta name="author" content="Nhan Dam">
@@ -15,6 +15,10 @@
         <link rel="canonical" href="https://nhan-dam.github.io/rlhf/dlai/DLAI_Lecture2/">
       
       
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../DLAI_Lecture3/">
       
       
         
@@ -25,7 +29,7 @@
     
     
       
-        <title>1. RLHF — Conceptual Overview - nhan-dam.github.io</title>
+        <title>RLHF — Conceptual Overview - ND's Machine Learning Notes</title>
       
     
     
@@ -76,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#1-rlhf-conceptual-overview" class="md-skip">
+        <a href="#1-the-core-problem" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +96,7 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="nhan-dam.github.io" class="md-header__button md-logo" aria-label="nhan-dam.github.io" data-md-component="logo">
+    <a href="../../.." title="ND&#39;s Machine Learning Notes" class="md-header__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -106,13 +110,13 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            nhan-dam.github.io
+            ND's Machine Learning Notes
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              1. RLHF — Conceptual Overview
+              RLHF — Conceptual Overview
             
           </span>
         </div>
@@ -236,10 +240,12 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../../" class="md-tabs__link">
           
   
@@ -320,13 +326,13 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="nhan-dam.github.io" class="md-nav__button md-logo" aria-label="nhan-dam.github.io" data-md-component="logo">
+    <a href="../../.." title="ND&#39;s Machine Learning Notes" class="md-nav__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    nhan-dam.github.io
+    ND's Machine Learning Notes
   </label>
   
     <div class="md-nav__source">
@@ -374,28 +380,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -413,7 +422,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -503,6 +512,165 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DLAI Course
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    DLAI Course
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 2 - Conceptual Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../DLAI_Lecture3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 3 - Datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -714,6 +882,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/github-pages-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitHub Pages Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -764,13 +960,11 @@
   
 
 
-<h1 id="1-rlhf-conceptual-overview">1. RLHF — Conceptual Overview<a class="headerlink" href="#1-rlhf-conceptual-overview" title="Permanent link">&para;</a></h1>
-<hr />
-<h1 id="2-the-core-problem">2. The Core Problem<a class="headerlink" href="#2-the-core-problem" title="Permanent link">&para;</a></h1>
+<h1 id="1-the-core-problem">1. The Core Problem<a class="headerlink" href="#1-the-core-problem" title="Permanent link">&para;</a></h1>
 <p>Standard supervised fine-tuning maps input to a single correct output. But for open-ended tasks like summarisation, <strong>there is no single correct answer</strong> — only human preferences. RLHF reframes the problem: instead of 'what is the right answer?', ask 'what do humans prefer?'</p>
 <hr />
-<h1 id="3-the-three-stage-pipeline">3. The Three-Stage Pipeline<a class="headerlink" href="#3-the-three-stage-pipeline" title="Permanent link">&para;</a></h1>
-<h2 id="31-stage-1-build-a-preference-dataset">3.1. Stage 1 — Build a Preference Dataset<a class="headerlink" href="#31-stage-1-build-a-preference-dataset" title="Permanent link">&para;</a></h2>
+<h1 id="2-the-three-stage-pipeline">2. The Three-Stage Pipeline<a class="headerlink" href="#2-the-three-stage-pipeline" title="Permanent link">&para;</a></h1>
+<h2 id="21-stage-1-build-a-preference-dataset">2.1. Stage 1 — Build a Preference Dataset<a class="headerlink" href="#21-stage-1-build-a-preference-dataset" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Use the base LLM to generate <strong>multiple completions</strong> for the same prompt.</li>
 <li>Show human labellers <strong>two completions side-by-side</strong> and ask which they prefer (pairwise comparison is preferable to absolute rating scales, which are too subjective and vary across people).</li>
@@ -780,18 +974,18 @@
 <p>⚠️ Key nuance: this dataset captures the preferences of <em>your specific labellers</em>, not human preference in general. Defining your <strong>alignment criteria</strong> upfront (e.g. more helpful, less toxic, more concise) is critical.</p>
 </blockquote>
 <hr />
-<h2 id="32-stage-2-train-a-reward-model">3.2. Stage 2 — Train a Reward Model<a class="headerlink" href="#32-stage-2-train-a-reward-model" title="Permanent link">&para;</a></h2>
+<h2 id="22-stage-2-train-a-reward-model">2.2. Stage 2 — Train a Reward Model<a class="headerlink" href="#22-stage-2-train-a-reward-model" title="Permanent link">&para;</a></h2>
 <p>The reward model is itself an LLM, repurposed as a <strong>regression model</strong> — it takes a <code>(prompt, completion)</code> pair as input and outputs a single scalar score (higher = better aligned with human preferences).</p>
-<h3 id="321-the-loss-function">3.2.1. The Loss Function<a class="headerlink" href="#321-the-loss-function" title="Permanent link">&para;</a></h3>
+<h3 id="221-the-loss-function">2.2.1. The Loss Function<a class="headerlink" href="#221-the-loss-function" title="Permanent link">&para;</a></h3>
 <p>The reward model is trained using a <strong>pairwise ranking loss</strong> derived from the Bradley-Terry model for pairwise comparisons. Given a triplet <code>(prompt x, chosen response y_w, rejected response y_l)</code>, the loss is:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>L = -log( σ( r(x, y_w) - r(x, y_l) ) )
 </code></pre></div>
 <p>where <code>r(x, y)</code> is the scalar score the reward model outputs for a given prompt-completion pair, and <code>σ</code> is the sigmoid function.</p>
-<h3 id="322-why-not-maximise-the-raw-score-difference">3.2.2. Why Not Maximise the Raw Score Difference?<a class="headerlink" href="#322-why-not-maximise-the-raw-score-difference" title="Permanent link">&para;</a></h3>
+<h3 id="222-why-not-maximise-the-raw-score-difference">2.2.2. Why Not Maximise the Raw Score Difference?<a class="headerlink" href="#222-why-not-maximise-the-raw-score-difference" title="Permanent link">&para;</a></h3>
 <p>A simpler alternative would be <code>L = -(r(y_w) - r(y_l))</code> — directly maximising the gap between chosen and rejected scores. This fails for two reasons.</p>
 <p>First, the loss is <strong>unbounded below</strong>. The optimiser can always make the loss more negative by widening the gap further, with no natural stopping point. There is no sense of 'confident enough' — gradients never diminish as the model becomes more certain, which makes training unstable.</p>
 <p>Second, the gradients are <strong>constant</strong>. The gradient of the raw difference with respect to the output scores is always ±1, regardless of how confidently right or wrong the model is. A model that barely separates a pair (<code>r(y_w) = 0.51, r(y_l) = 0.50</code>) receives exactly the same gradient update as one that separates them decisively (<code>r(y_w) = 100, r(y_l) = -100</code>). The network cannot tell from the gradient signal alone whether it should be more or less confident.</p>
-<h3 id="323-what-the-log-sigmoid-does">3.2.3. What the Log-Sigmoid Does<a class="headerlink" href="#323-what-the-log-sigmoid-does" title="Permanent link">&para;</a></h3>
+<h3 id="223-what-the-log-sigmoid-does">2.2.3. What the Log-Sigmoid Does<a class="headerlink" href="#223-what-the-log-sigmoid-does" title="Permanent link">&para;</a></h3>
 <p>The sigmoid squashes the score difference into a probability between 0 and 1 — specifically, the model's estimated probability that <code>y_w</code> is preferred over <code>y_l</code>. Taking the log then gives the loss two important properties.</p>
 <p>The loss is now <strong>bounded</strong>: as the gap grows large and positive, <code>σ</code> approaches 1 and <code>log(σ)</code> approaches 0. Training naturally saturates once the model is confident, and gradients shrink towards zero — a stable, well-behaved objective.</p>
 <p>The gradients are now <strong>adaptive</strong>: the gradient of <code>L</code> with respect to <code>r(y_w)</code> works out to <code>-(1 - σ(r(y_w) - r(y_l)))</code>. When the model is already confident, the sigmoid is close to 1, so the gradient is nearly zero — a small nudge. When the model is wrong or uncertain, the sigmoid is near 0 or 0.5, the gradient is large, and the network receives a strong corrective signal. Training effort is automatically concentrated where it is most needed.</p>
@@ -799,7 +993,7 @@
 <p>💡 The Bradley-Terry framing is a natural fit for preference data: the reward model learns a relative 'strength' for each completion — meaningful only in comparison to other completions, never on an absolute scale. This mirrors exactly how human labellers produce the data, always expressing relative rather than absolute judgements.</p>
 </blockquote>
 <hr />
-<h2 id="33-stage-3-fine-tune-with-rl-ppo">3.3. Stage 3 — Fine-tune with RL (PPO)<a class="headerlink" href="#33-stage-3-fine-tune-with-rl-ppo" title="Permanent link">&para;</a></h2>
+<h2 id="23-stage-3-fine-tune-with-rl-ppo">2.3. Stage 3 — Fine-tune with RL (PPO)<a class="headerlink" href="#23-stage-3-fine-tune-with-rl-ppo" title="Permanent link">&para;</a></h2>
 <p>The RL framing maps naturally onto the LLM setting:</p>
 <table>
 <thead>
@@ -843,7 +1037,7 @@
 <p>⚠️ A <strong>KL-divergence penalty</strong> is added in practice to prevent the tuned model from drifting too far from the base model (an important detail glossed over in the lecture).</p>
 </blockquote>
 <hr />
-<h1 id="4-efficient-training-peft">4. Efficient Training: PEFT<a class="headerlink" href="#4-efficient-training-peft" title="Permanent link">&para;</a></h1>
+<h1 id="3-efficient-training-peft">3. Efficient Training: PEFT<a class="headerlink" href="#3-efficient-training-peft" title="Permanent link">&para;</a></h1>
 <p>Full fine-tuning updates all model weights, which is expensive for large models. <strong>Parameter-Efficient Fine-Tuning (PEFT)</strong> instead trains only a small subset of (or entirely new) parameters. The key benefits are:</p>
 <ul>
 <li>Much faster training.</li>
@@ -851,7 +1045,7 @@
 </ul>
 <p>The course uses a PEFT approach when tuning LLaMA 2.</p>
 <hr />
-<h1 id="5-summary">5. Summary<a class="headerlink" href="#5-summary" title="Permanent link">&para;</a></h1>
+<h1 id="4-summary">4. Summary<a class="headerlink" href="#4-summary" title="Permanent link">&para;</a></h1>
 <blockquote>
 <p>Collect human preference comparisons → train a reward model to score outputs → use PPO to optimise the LLM towards high-reward completions, efficiently via PEFT.</p>
 </blockquote>
@@ -861,6 +1055,9 @@
 
 
 
+
+  
+  
 
 
 

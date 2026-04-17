@@ -1,5 +1,5 @@
----
-title: RLHF — Conceptual Overview
+# RLHF — Conceptual Overview
+
 ---
 
 # 1. The Core Problem

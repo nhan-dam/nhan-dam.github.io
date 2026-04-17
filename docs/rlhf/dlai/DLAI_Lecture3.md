@@ -1,3 +1,7 @@
+---
+title: RLHF Datasets
+---
+
 # 1. Overview
 
 This note summarises Lecture 3 of the RLHF course, which covers the two datasets required before fine-tuning a large language model with Reinforcement Learning from Human Feedback. The worked examples use a Reddit post summarisation task with the OSS LLaMA 2 model.

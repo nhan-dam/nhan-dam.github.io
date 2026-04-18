@@ -1,4 +1,4 @@
-# ml-notes
+# Nhan Dam's Machine Learning Notes
 
 Technical notes on Machine Learning.
 

@@ -1,8 +1,6 @@
----
-title: GitHub Pages Setup
----
+# GitHub Pages Setup
 
-# 1. Overview
+## 1. Overview
 
 This note documents how to set up a personal website on GitHub Pages using MkDocs Material — a free, zero-maintenance way to publish technical notes alongside source code in the same repository.
 
@@ -10,7 +8,7 @@ The resulting site is served at `https://your-username.github.io/your-repo-name`
 
 ---
 
-# 2. Prerequisites
+## 2. Prerequisites
 
 - A GitHub account.
 - Git installed and configured locally (see Section 3).
@@ -18,7 +16,7 @@ The resulting site is served at `https://your-username.github.io/your-repo-name`
 
 ---
 
-# 3. Git Configuration
+## 3. Git Configuration
 
 Before creating any commits, configure git to use your GitHub private no-reply email address. This is required if the 'Block command line pushes that expose my email' privacy setting is enabled in GitHub (Settings → Emails) — pushes made with a real email address will be rejected.
 
@@ -53,7 +51,7 @@ git remote set-url origin git@github.com:your-username/your-repo.git
 
 ---
 
-# 4. Repository Structure
+## 4. Repository Structure
 
 The minimal structure required for MkDocs is:
 
@@ -84,15 +82,15 @@ __pycache__/
 
 ---
 
-# 5. Configuration Files
+## 5. Configuration Files
 
-## 5.1. `requirements.txt`
+### 5.1. `requirements.txt`
 
 ```
 mkdocs-material>=9.5
 ```
 
-## 5.2. `mkdocs.yml`
+### 5.2. `mkdocs.yml`
 
 ```yaml
 site_name: Your Site Name
@@ -147,7 +145,7 @@ nav:
 
 The `nav` block controls the sidebar navigation. Each entry maps a label to a Markdown file path relative to `docs/`.
 
-## 5.3. `docs/javascripts/mathjax.js`
+### 5.3. `docs/javascripts/mathjax.js`
 
 Required for LaTeX rendering in notes. Without this file, the `extra_javascript` entry in `mkdocs.yml` will have no effect.
 
@@ -166,7 +164,7 @@ window.MathJax = {
 };
 ```
 
-## 5.4. `.github/workflows/deploy.yml`
+### 5.4. `.github/workflows/deploy.yml`
 
 This workflow triggers on every push to `main`, installs MkDocs Material, and deploys the built site to the `gh-pages` branch.
 
@@ -208,13 +206,13 @@ jobs:
 
 ---
 
-# 6. GitHub Repository Settings
+## 6. GitHub Repository Settings
 
-## 6.1. Create the Repository
+### 6.1. Create the Repository
 
 Create a new repository on GitHub. The site will be served at `https://your-username.github.io/your-repo-name`, so choose the repo name accordingly.
 
-## 6.2. Push the Initial Commit
+### 6.2. Push the Initial Commit
 
 ```bash
 cd your-repo
@@ -234,7 +232,7 @@ git push origin main
 
 > **`--rebase` vs plain `git pull`:** Without `--rebase`, `git pull` creates an extra merge commit joining the two histories. With `--rebase`, your local commits are replayed on top of the remote commits, producing a clean linear history. For a personal repo this is mostly aesthetic, but it is a good habit.
 
-## 6.3. Configure GitHub Pages
+### 6.3. Configure GitHub Pages
 
 After the first push, the Actions workflow will run and create a `gh-pages` branch. Once it completes:
 
@@ -250,7 +248,7 @@ The site will be live within about 30 seconds at `https://your-username.github.i
 
 ---
 
-# 7. Ongoing Workflow
+## 7. Ongoing Workflow
 
 Every subsequent `git push` to `main` triggers a rebuild automatically. No manual steps are needed after the initial setup.
 
@@ -271,7 +269,7 @@ mkdocs serve
 
 ---
 
-# 8. URL Structure
+## 8. URL Structure
 
 | Repo name | Site URL |
 |---|---|
@@ -282,13 +280,13 @@ A repo named exactly `your-username.github.io` produces a root personal site. An
 
 ---
 
-# 9. Troubleshooting
+## 9. Troubleshooting
 
-## 9.1. Site shows raw `README.md` instead of the MkDocs site
+### 9.1. Site Shows Raw `README.md` Instead of the MkDocs Site
 
 The `gh-pages` branch has not been created yet, or GitHub Pages is not pointed at it. Check that the Actions workflow has run successfully (repository → **Actions** tab), then verify the Pages source setting as described in Section 6.3.
 
-## 9.2. Old version of the site appears after deployment
+### 9.2. Old Version of the Site Appears After Deployment
 
 This is a browser caching issue. Hard-refresh to bypass the cache:
 
@@ -297,7 +295,7 @@ This is a browser caching issue. Hard-refresh to bypass the cache:
 
 Alternatively, open the site in a private/incognito window, which has no cache. To permanently clear the cache for the site in Chrome: DevTools (`Cmd + Option + I`) → **Application** → **Storage** → **Clear site data**.
 
-## 9.3. Push rejected with email privacy error
+### 9.3. Push Rejected with Email Privacy Error
 
 GitHub rejects pushes that expose a real email address when the privacy setting is enabled. Fix by amending the commit author to use the no-reply address:
 

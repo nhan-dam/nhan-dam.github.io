@@ -1,6 +1,4 @@
----
-title: ML Workstation Setup — Mac mini M4 Pro with uv
----
+# ML Workstation Setup: Mac Mini M4 Pro with uv
 
 **Machine:** Mac mini M4 Pro · 64 GB RAM · internal 512 GB SSD.
 
@@ -10,7 +8,7 @@ title: ML Workstation Setup — Mac mini M4 Pro with uv
 
 ---
 
-# 1. Philosophy
+## 1. Philosophy
 
 The storage split between drives is as follows.
 
@@ -21,9 +19,9 @@ The storage split between drives is as follows.
 
 ---
 
-# 2. Prepare the External Drive
+## 2. Prepare the External Drive
 
-## 2.1. Format as APFS
+### 2.1. Format as APFS
 
 1. Open **Disk Utility** (Spotlight → 'Disk Utility').
 2. Select the Samsung 990 Pro (the physical drive, not a partition).
@@ -37,7 +35,7 @@ The storage split between drives is as follows.
 >
 > **Why `ML_Workspace` and not `ML Workspace`?** Spaces in volume names require quoting or escaping in every shell command (`/Volumes/ML\ Workspace`), which is constant friction. An underscore is equally readable with zero shell complexity.
 
-## 2.2. Verify Mount Point
+### 2.2. Verify Mount Point
 
 ```bash
 ls /Volumes/ML_Workspace
@@ -62,13 +60,13 @@ Key fields to confirm in the full `diskutil info` output for a broader sanity ch
 - `SMART Status: Verified` — drive health is good.
 - `Volume Used Space:` — should be near zero after a fresh format.
 
-## 2.3. Verify Auto-Mount on Login
+### 2.3. Verify Auto-Mount on Login
 
 Reboot once and confirm `/Volumes/ML_Workspace` is present. APFS volumes auto-mount on macOS by default.
 
 ---
 
-# 3. Directory Structure on External Drive
+## 3. Directory Structure on External Drive
 
 ```bash
 mkdir -p /Volumes/ML_Workspace/{projects,datasets,models,kaggle}
@@ -103,9 +101,9 @@ Final structure:
 
 ---
 
-# 4. Core System Tools
+## 4. Core System Tools
 
-## 4.1. Check for Xcode Command Line Tools
+### 4.1. Check for Xcode Command Line Tools
 
 The Xcode Command Line Tools provide the compiler toolchain (`clang`, `make`) that Homebrew and some Python C-extension builds depend on. Check if already installed:
 
@@ -122,7 +120,7 @@ xcode-select --install
 
 Accept the dialog. Takes approximately five minutes.
 
-## 4.2. Install Homebrew
+### 4.2. Install Homebrew
 
 Homebrew is a package manager for macOS — it lets you install command-line tools with a single command rather than downloading installers manually. It is the standard way to get system-level tools that are not Python packages and cannot be installed via `uv`.
 
@@ -158,7 +156,7 @@ Verify:
 brew --version
 ```
 
-## 4.3. Install System Dependencies via Homebrew
+### 4.3. Install System Dependencies via Homebrew
 
 ```bash
 brew install git wget htop tmux tree swig cmake
@@ -176,7 +174,7 @@ brew install git wget htop tmux tree swig cmake
 
 ---
 
-# 5. Install `uv`
+## 5. Install `uv`
 
 `uv` is a Rust-based Python package and environment manager. It replaces `pyenv`, `virtualenv`, and `pip` in one tool and is 10–100× faster than pip/conda for package installation.
 
@@ -209,7 +207,7 @@ which uv
 
 ---
 
-# 6. Shell Environment Variables
+## 6. Shell Environment Variables
 
 This phase redirects all ML tools to store their files on the external NVMe. Add all path configuration to `~/.zshrc` in one block:
 
@@ -269,7 +267,7 @@ source ~/.zshrc
 
 ---
 
-# 7. Install Python via `uv`
+## 7. Install Python via `uv`
 
 `uv` manages its own Python downloads — no need for `pyenv` or Homebrew Python.
 
@@ -293,11 +291,11 @@ ls /Volumes/ML_Workspace/python/
 
 ---
 
-# 8. Project-Based Workflow with `uv`
+## 8. Project-Based Workflow with `uv`
 
 `uv` encourages per-project virtual environments. This is better for ML work: your RLHF course and a Kaggle competition can pin different library versions without conflict.
 
-## 8.1. Create a New Project
+### 8.1. Create a New Project
 
 ```bash
 mkdir /Volumes/ML_Workspace/projects/rlhf-course
@@ -325,7 +323,7 @@ rlhf-course/
 > - `-a` includes hidden files and directories (those starting with `.`) which are not shown by default.
 > - `-L 1` limits output to one level deep, so you see the project root contents without being flooded by files inside `.venv` and other subdirectories.
 
-## 8.2. Add Packages
+### 8.2. Add Packages
 
 ```bash
 cd /Volumes/ML_Workspace/projects/rlhf-course
@@ -358,7 +356,7 @@ uv add jupyterlab ipywidgets ipykernel
 >
 > **Note on `huggingface_hub`:** The CLI entry point shipped with this package was renamed from `huggingface-cli` to `hf` in recent versions. The login command is now `uv run hf auth login` (see Section 14). If you ever need to check what CLI commands a package registers, inspect `.venv/lib/python3.12/site-packages/<package>.dist-info/entry_points.txt`.
 
-## 8.3. Reproducing the Environment on Another Machine
+### 8.3. Reproducing the Environment on Another Machine
 
 When you run `uv add`, two files are automatically maintained.
 
@@ -399,7 +397,7 @@ uv pip freeze > requirements.txt
 
 For your own projects between machines, `uv.lock` + `uv sync` is the better mechanism — it is more precise and fully automated.
 
-## 8.4. Run Commands in the Project Environment
+### 8.4. Run Commands in the Project Environment
 
 ```bash
 # Option A: prefix commands with `uv run` (no activation needed — preferred)
@@ -411,7 +409,7 @@ source /Volumes/ML_Workspace/projects/rlhf-course/.venv/bin/activate
 python my_script.py
 ```
 
-## 8.5. Repeat for Each New Project
+### 8.5. Repeat for Each New Project
 
 ```bash
 # Example: Kaggle competition
@@ -425,9 +423,9 @@ Each project gets its own isolated `.venv`. Wheels are cached in `/Volumes/ML_Wo
 
 ---
 
-# 9. Jupyter Lab Setup
+## 9. Jupyter Lab Setup
 
-## 9.1. When to Register a Jupyter Kernel
+### 9.1. When to Register a Jupyter Kernel
 
 If you launch Jupyter Lab via `uv run` from inside the project directory, the correct environment is used automatically — no kernel registration needed:
 
@@ -446,15 +444,15 @@ python -m ipykernel install --user --name rlhf-course --display-name "Python (rl
 
 Repeat for each additional project you want accessible as a named kernel.
 
-## 9.2. Switch Kernels in Notebooks
+### 9.2. Switch Kernels in Notebooks
 
 In Jupyter Lab: top-right kernel selector → choose 'Python (rlhf-course)'. Each notebook can use a different project's environment.
 
 ---
 
-# 10. Editor: VS Code + Claude Code
+## 10. Editor: VS Code + Claude Code
 
-## 10.1. Why Not Cursor?
+### 10.1. Why Not Cursor?
 
 Cursor ($20/month) is a popular AI-native IDE, but given you already have Claude Pro (which includes Claude Code), paying for Cursor is redundant for this use case.
 
@@ -464,7 +462,7 @@ Cursor ($20/month) is a popular AI-native IDE, but given you already have Claude
 
 Cursor's main advantage is fast inline autocomplete while actively typing. For ML work — writing training loops, running experiments, iterating on RLHF pipelines — you spend more time thinking and running code than typing boilerplate, so that advantage matters less.
 
-## 10.2. Install VS Code
+### 10.2. Install VS Code
 
 Download from https://code.visualstudio.com — drag to Applications.
 
@@ -482,7 +480,7 @@ code /Volumes/ML_Workspace/projects/rlhf-course     # open a project
 >
 > **macOS permission prompt:** When running `code --install-extension` for the first time, macOS will ask for permission to access the external drive. This is triggered by VS Code scanning connected volumes to detect project environments — not because extensions are being installed there. Grant the permission; without it VS Code cannot detect your `.venv` folders on the external drive. You will only be asked once.
 
-## 10.3. Install Extensions
+### 10.3. Install Extensions
 
 ```bash
 code --install-extension ms-python.python
@@ -502,13 +500,13 @@ What each extension does.
 
 > **Note on a `uv` extension:** There is no official `uv` VS Code extension from Astral. The core Python extension (`ms-python.python`) already detects `uv`-managed `.venv` folders automatically — no additional extension is needed.
 
-## 10.4. Auto-Detection of uv Environments
+### 10.4. Auto-Detection of uv Environments
 
 When you open `/Volumes/ML_Workspace/projects/rlhf-course` in VS Code, it automatically detects the `.venv` folder and selects the correct Python interpreter. No manual configuration needed.
 
 ---
 
-# 11. Git Configuration
+## 11. Git Configuration
 
 ```bash
 git config --global user.name "Your Name"
@@ -528,7 +526,7 @@ cat ~/.ssh/id_ed25519.pub
 # → Add to GitHub: Settings → SSH Keys
 ```
 
-### Global `.gitignore` — exclude common generated files from all repos
+#### Global `.gitignore` — exclude common generated files from all repos
 
 ```bash
 cat > ~/.gitignore_global << 'EOF'
@@ -551,7 +549,7 @@ git config --global core.excludesfile ~/.gitignore_global
 
 ---
 
-# 12. Kaggle CLI
+## 12. Kaggle CLI
 
 ```bash
 cd /Volumes/ML_Workspace/projects/kaggle-titanic
@@ -583,11 +581,11 @@ uv run kaggle competitions download -c titanic -p /Volumes/ML_Workspace/kaggle/t
 
 ---
 
-# 13. Ollama (Local LLM Inference)
+## 13. Ollama (Local LLM Inference)
 
 Ollama model blobs are large (4–70 GB each) — storing them on the external NVMe is essential.
 
-## 13.1. Install Ollama
+### 13.1. Install Ollama
 
 ```bash
 brew install ollama
@@ -601,7 +599,7 @@ brew services start ollama
 
 > **Do not run `ollama serve` manually.** Once the background service is running, `ollama serve` will fail with 'address already in use' because the service already owns port 11434. The background service is always running — just use `ollama` commands directly.
 
-## 13.2. Redirect Model Storage to External Drive
+### 13.2. Redirect Model Storage to External Drive
 
 Background services launched by `brew services` run in a separate environment from your terminal and do not read `~/.zshrc`. This means the `OLLAMA_MODELS` path set in Section 6 is invisible to the service — models will default to `~/.ollama/models/` on your internal SSD.
 
@@ -638,7 +636,7 @@ launchctl load ~/Library/LaunchAgents/ollama.environment.plist
 brew services start ollama
 ```
 
-## 13.3. Pull a Model
+### 13.3. Pull a Model
 
 ```bash
 ollama pull llama3.2:3b
@@ -662,7 +660,7 @@ ollama list
 
 ---
 
-# 14. HuggingFace & W&B Login
+## 14. HuggingFace & W&B Login
 
 These are one-time setup steps. Credentials are stored persistently on disk and survive terminal restarts and reboots — you do not need to repeat these logins.
 
@@ -700,7 +698,7 @@ uv run wandb login
 
 ---
 
-# 15. Smoke Test
+## 15. Smoke Test
 
 ```bash
 cd /Volumes/ML_Workspace/projects/rlhf-course
@@ -744,9 +742,9 @@ uv run python smoke_test.py
 
 ---
 
-# 16. Daily Workflow Cheatsheet
+## 16. Daily Workflow Cheatsheet
 
-## 16.1. Start Working on a Project
+### 16.1. Start Working on a Project
 
 ```bash
 cd /Volumes/ML_Workspace/projects/rlhf-course
@@ -755,7 +753,7 @@ uv run jupyter lab          # no activation needed
 source .venv/bin/activate   # traditional activation
 ```
 
-## 16.2. Open Project in VS Code
+### 16.2. Open Project in VS Code
 
 ```bash
 code /Volumes/ML_Workspace/projects/rlhf-course
@@ -764,20 +762,20 @@ cd /Volumes/ML_Workspace/projects/rlhf-course
 code .
 ```
 
-## 16.3. Add a New Package
+### 16.3. Add a New Package
 
 ```bash
 uv add stable-baselines3          # adds to pyproject.toml + installs
 uv add --dev pytest               # dev-only dependency
 ```
 
-## 16.4. Remove a Package
+### 16.4. Remove a Package
 
 ```bash
 uv remove stable-baselines3
 ```
 
-## 16.5. Reproduce an Environment on Another Machine
+### 16.5. Reproduce an Environment on Another Machine
 
 ```bash
 # uv.lock is auto-generated — commit it to git alongside pyproject.toml
@@ -787,7 +785,7 @@ cd rlhf-course
 uv sync                           # recreates .venv from uv.lock exactly
 ```
 
-## 16.6. Update Packages
+### 16.6. Update Packages
 
 ```bash
 uv pip list --outdated
@@ -796,7 +794,7 @@ uv lock --upgrade                 # upgrade all
 uv sync                           # apply updated lock to venv
 ```
 
-## 16.7. Monitor System Resources During Training
+### 16.7. Monitor System Resources During Training
 
 ```bash
 htop                                                         # CPU and RAM
@@ -807,7 +805,7 @@ du -sh /Volumes/ML_Workspace/cache/uv                       # uv cache size
 
 ---
 
-# 17. Maintenance Reference
+## 17. Maintenance Reference
 
 | Task | Command |
 |---|---|
@@ -827,7 +825,7 @@ du -sh /Volumes/ML_Workspace/cache/uv                       # uv cache size
 
 ---
 
-# 18. `uv` vs Miniforge — Why `uv`
+## 18. `uv` vs Miniforge — Why `uv`
 
 | | Miniforge (conda) | uv |
 |---|---|---|

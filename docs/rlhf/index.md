@@ -1,14 +1,14 @@
-# 1. RLHF Curriculum
+# RLHF Curriculum
 
 A self-directed study programme working from foundational RL theory up to modern RLHF methods used in production language models.
 
 ---
 
-## 1.1. Motivation
+## 1. Motivation
 
 Reinforcement learning from human feedback (RLHF) is the dominant technique for aligning large language models. Understanding it properly requires building up from first principles: Markov decision processes, dynamic programming, policy gradient methods, and then the specific adaptations (reward modelling, PPO fine-tuning, DPO) used in practice.
 
-## 1.2. Curriculum Structure
+## 2. Curriculum Structure
 
 | Week | Topic | Status |
 |------|-------|--------|
@@ -18,7 +18,7 @@ Reinforcement learning from human feedback (RLHF) is the dominant technique for 
 | 4 | RLHF end-to-end | Planned |
 | 5 | DPO and alternatives to PPO | Planned |
 
-## 1.3. References
+## 3. References
 
 - Sutton & Barto, *Reinforcement Learning: An Introduction* (2nd ed.).
 - Schulman et al., 'Proximal Policy Optimisation Algorithms' (2017).

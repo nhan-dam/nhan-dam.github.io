@@ -55,16 +55,16 @@ extra_javascript:
 nav:
   - Home: index.md
   - RLHF Curriculum:
-    - Overview: rlhf/index.md
-    - Week 1 – MDPs & Bellman Equations: rlhf/week1-mdp.md
-    - Week 2 – Policy Gradients & PPO: rlhf/week2-ppo.md
+    # - Overview: rlhf/index.md
+    # - Week 1 – MDPs & Bellman Equations: rlhf/week1-mdp.md
+    # - Week 2 – Policy Gradients & PPO: rlhf/week2-ppo.md
     - DLAI Course:
       - Overview: rlhf/dlai/index.md
       - Lecture 2 - Conceptual Overview: rlhf/dlai/DLAI_Lecture2.md
       - Lecture 3 - Datasets: rlhf/dlai/DLAI_Lecture3.md
-  - Projects:
-    - Overview: projects/index.md
-    - CartPole with PPO: projects/cartpole-ppo.md
+  # - Projects:
+  #   - Overview: projects/index.md
+  #   - CartPole with PPO: projects/cartpole-ppo.md
   - Reference:
     - Mac ML Workstation Setup: reference/ml_workstation_setup_uv.md
     - GitHub Pages Setup: reference/github-pages-setup.md

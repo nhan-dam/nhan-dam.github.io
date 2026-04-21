@@ -1196,8 +1196,8 @@
 </code></pre></div>
 <h3 id="43-training-steps">4.3. Training Steps<a class="headerlink" href="#43-training-steps" title="Permanent link">&para;</a></h3>
 <p>The pipeline accepts the number of <strong>training steps</strong> (not epochs) for each of the two training phases. The conversion from epochs to steps uses the formula:</p>
-<div class="arithmatex">\[stepsPerEpoch = \left\lceil \frac{datasetSize}{batchSize} \right\rceil$$
-$$trainSteps = stepsPerEpoch \times numEpochs\]</div>
+<div class="arithmatex">\[stepsPerEpoch = \left\lceil \frac{datasetSize}{batchSize} \right\rceil\]</div>
+<div class="arithmatex">\[trainSteps = stepsPerEpoch \times numEpochs\]</div>
 <p>The batch size is fixed at 64 for this pipeline. The recommended epoch ranges are 20–30 for the reward model and 10–20 for the RL loop.</p>
 <p><strong>Reward model training steps:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>

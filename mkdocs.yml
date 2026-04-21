@@ -62,10 +62,11 @@ nav:
       - Overview: rlhf/dlai/index.md
       - Lecture 2 - Conceptual Overview: rlhf/dlai/DLAI_Lecture2.md
       - Lecture 3 - Datasets: rlhf/dlai/DLAI_Lecture3.md
+      - Lecture 4 - Tune an LLM with RLHF: rlhf/dlai/DLAI_Lecture4.md
   # - Projects:
   #   - Overview: projects/index.md
   #   - CartPole with PPO: projects/cartpole-ppo.md
   - Reference:
     - Mac ML Workstation Setup: reference/ml_workstation_setup_uv.md
     - GitHub Pages Setup: reference/github-pages-setup.md
-    - GitHub Cheatsheet: reference/github_cheatsheet_chapter.md
+    - GitHub Task-Oriented Cheatsheet: reference/github_cheatsheet_chapter.md

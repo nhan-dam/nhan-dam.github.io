@@ -1060,10 +1060,8 @@
 
 
 <h1 id="github-task-oriented-cheatsheet">GitHub Task-Oriented Cheatsheet<a class="headerlink" href="#github-task-oriented-cheatsheet" title="Permanent link">&para;</a></h1>
-<blockquote>
 <p>Created on: 20 April 2026
 Updated on: 20 April 2026</p>
-</blockquote>
 <h2 id="1-create-a-new-local-repository">1. Create a New Local Repository<a class="headerlink" href="#1-create-a-new-local-repository" title="Permanent link">&para;</a></h2>
 <p><strong>Note for <code>uv</code> projects:</strong> <code>uv init</code> automatically runs <code>git init</code> and creates a <code>.gitignore</code> pre-populated with <code>.venv/</code> and <code>.python-version</code>. If you are scaffolding a project with <code>uv</code>, skip <code>git init</code> — the repository already exists.</p>
 <p>For a plain directory not managed by <code>uv</code>:</p>
@@ -1138,47 +1136,50 @@ Updated on: 20 April 2026</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>git<span class="w"> </span>rebase<span class="w"> </span>-i<span class="w"> </span>HEAD~&lt;n&gt;
 </code></pre></div>
 <p>In the editor that opens, leave the first entry as <code>pick</code> and change the remaining entries to <code>squash</code> (or <code>s</code>). Save and close; Git will then prompt for a combined commit message.</p>
-<p><strong>Note:</strong> do not squash commits that have already been pushed to a shared remote branch, as this rewrites history and will cause conflicts for other contributors.</p>
+<p><strong>Note:</strong> squashing rewrites history, so if any of the squashed commits were already on the remote, a normal <code>git push</code> will be rejected because the local <code>HEAD</code> is now behind the remote. Force-push to overwrite the remote history:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>git<span class="w"> </span>push<span class="w"> </span>--force-with-lease
+</code></pre></div>
+<p>Prefer <code>--force-with-lease</code> over <code>--force</code>; it refuses the push if the remote has received commits since the last fetch, guarding against accidentally overwriting others' work. Coordinate with collaborators before force-pushing to any shared branch.</p>
 <hr />
 <h2 id="8-permanently-discard-current-changes-and-revert-to-a-prior-commit">8. Permanently Discard Current Changes and Revert to a Prior Commit<a class="headerlink" href="#8-permanently-discard-current-changes-and-revert-to-a-prior-commit" title="Permanent link">&para;</a></h2>
 <p>First, identify the target commit hash using the one-line log (also useful for counting commits to squash; see Section 7):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>-&lt;n&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>-&lt;n&gt;
 </code></pre></div>
 <p>Copy the short hash of the desired target commit, then perform a hard reset. This moves <code>HEAD</code> to the specified commit and discards all subsequent commits and uncommitted changes. The operation is irreversible.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>&lt;commit-hash&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>&lt;commit-hash&gt;
 </code></pre></div>
 <p>If the branch has already been pushed to a remote, force-push to overwrite the remote history:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>git<span class="w"> </span>push<span class="w"> </span>--force-with-lease
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>git<span class="w"> </span>push<span class="w"> </span>--force-with-lease
 </code></pre></div>
 <p>Prefer <code>--force-with-lease</code> over <code>--force</code>; it refuses the push if the remote has received commits since the last fetch, guarding against accidentally overwriting others' work.</p>
 <hr />
 <h2 id="9-temporarily-discard-current-changes-and-revert-to-a-prior-commit">9. Temporarily Discard Current Changes and Revert to a Prior Commit<a class="headerlink" href="#9-temporarily-discard-current-changes-and-revert-to-a-prior-commit" title="Permanent link">&para;</a></h2>
 <p>'Stashing' saves uncommitted changes to a temporary stack and restores a clean working directory, without permanently discarding anything.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;&lt;description&gt;&quot;</span>
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>&lt;commit-hash&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;&lt;description&gt;&quot;</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>&lt;commit-hash&gt;
 </code></pre></div>
 <p>To restore the stashed changes later:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>git<span class="w"> </span>stash<span class="w"> </span>pop
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>git<span class="w"> </span>stash<span class="w"> </span>pop
 </code></pre></div>
 <p><code>git stash pop</code> applies the most recent stash entry and removes it from the stack. To apply without removing it, use <code>git stash apply</code> instead.</p>
 <hr />
 <h2 id="10-permanently-discard-current-changes-and-switch-branch">10. Permanently Discard Current Changes and Switch Branch<a class="headerlink" href="#10-permanently-discard-current-changes-and-switch-branch" title="Permanent link">&para;</a></h2>
 <p>Discard all uncommitted changes in the working directory and index, then switch to another branch. This is irreversible.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>HEAD
-<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>git<span class="w"> </span>switch<span class="w"> </span>&lt;branch-name&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>HEAD
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>git<span class="w"> </span>switch<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
 <p>Or, equivalently, in a single step using the <code>--discard-changes</code> flag:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>git<span class="w"> </span>switch<span class="w"> </span>--discard-changes<span class="w"> </span>&lt;branch-name&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>git<span class="w"> </span>switch<span class="w"> </span>--discard-changes<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
 <hr />
 <h2 id="11-temporarily-discard-current-changes-and-switch-branch">11. Temporarily Discard Current Changes and Switch Branch<a class="headerlink" href="#11-temporarily-discard-current-changes-and-switch-branch" title="Permanent link">&para;</a></h2>
 <p>Stash uncommitted changes before switching, preserving them for later retrieval.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;&lt;description&gt;&quot;</span>
-<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>git<span class="w"> </span>switch<span class="w"> </span>&lt;branch-name&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;&lt;description&gt;&quot;</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>git<span class="w"> </span>switch<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
 <p>To bring the stashed changes back after returning to the original branch:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>git<span class="w"> </span>switch<span class="w"> </span>&lt;original-branch&gt;
-<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>git<span class="w"> </span>stash<span class="w"> </span>pop
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>git<span class="w"> </span>switch<span class="w"> </span>&lt;original-branch&gt;
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>git<span class="w"> </span>stash<span class="w"> </span>pop
 </code></pre></div>
 
 

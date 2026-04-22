@@ -1,237 +1,223 @@
-# Tuning an LLM with RLHF on Vertex AI
+# Evaluating a Reinforcement-Learning-from-Human-Feedback Tuned Model
 
-> Created on: 20 April 2026
+> Created on: 21 April 2026
 >
-> Updated on: 20 April 2026
+> Updated on: 21 April 2026
 
 ## 1. Overview
 
-This chapter covers the practical steps needed to execute a Reinforcement Learning from Human Feedback (RLHF) tuning job on Google Cloud's Vertex AI platform. The process is encapsulated in a pre-built ML pipeline, which handles the multi-stage workflow — reward model training, reinforcement learning fine-tuning, and evaluation — as a single reproducible unit. The learner does not need to author or modify the pipeline itself; the task is to compile it and configure the job parameters correctly.
+The ultimate goal of the RLHF pipeline is not merely to run a training loop, but to produce a large language model (LLM) that performs a target task better than the original base model. Evaluation is therefore the critical closing step: it tells us whether the tuning actually worked, and by how much. This chapter covers the three broad families of evaluation strategy relevant to RLHF, explains what the training curves mean and how to interpret them, and then examines two advanced techniques, RLAIF and Auto Side-by-Side (AutoSxS), that push the frontier of scalable evaluation.
 
 ---
 
-## 2. ML Pipelines and Why RLHF Uses Them
+## 2. Evaluation Strategies for RLHF
 
-A machine learning pipeline is a portable, scalable workflow composed of sequential **components** (steps where code executes) and **artefacts** (outputs produced by those steps, e.g. datasets, trained models, metrics). Pipelines are a natural fit for RLHF because the process involves multiple interdependent stages:
+LLM evaluation is an active area of research, but three approaches are most commonly used.
 
-1. A preference dataset is used to train a reward model.
-2. The reward model is used alongside a prompt dataset in a reinforcement learning loop to fine-tune the base LLM.
-3. An optional evaluation dataset triggers a batch inference job after tuning completes.
+### 2.1. Training Curves
 
-Vertex AI represents all of these stages visually, with components shown as blue-cube boxes and artefacts as yellow-triangle boxes. Notably, the pipeline contains a **Reward Model Trainer** component and a **Reinforcer** component, the latter being the RL loop that directly fine-tunes the base model.
+Training curves are plots of loss and reward against training steps, written to TensorBoard during the training process. They are the cheapest and most immediate signal of whether a model is learning at all. Two separate curves are relevant in the RLHF context: one from the reward model training phase, and one from the reinforcement learning (RL) loop itself.
 
----
+### 2.2. Automated Metrics
 
-## 3. Compiling the Pipeline
+Automated metrics are algorithmic measures of output quality that require a ground-truth reference, i.e. a human-written 'gold' completion. Familiar examples include accuracy and F1 for classification tasks, and the ROUGE family of metrics for generative tasks. ROUGE measures how similar a generated summary is to a reference summary, and is widely used in standard supervised summarisation.
 
-The RLHF pipeline is distributed as part of the `google-cloud-pipeline-components` library (currently in preview). Before it can be executed on Vertex AI, it must be **compiled** into a YAML file — a self-contained, human-readable description of every pipeline step and its inputs. The compiler comes from the `kfp` (Kubeflow Pipelines) library.
+However, ROUGE is a poor fit for evaluating RLHF. The reason is subtle but important: RLHF is not trying to produce text that is close to any particular reference text. It is trying to produce text that humans prefer, which is a different objective entirely. Research has shown that aggressively optimising for ROUGE can actually degrade the quality of an RLHF-tuned model, because the metric does not capture what RLHF aims to maximise.
 
-```python
-# Install dependencies (only needed outside the course environment)
-# !pip3 install google-cloud-pipeline-components kfp
+### 2.3. Side-by-Side (SxS) Evaluation
 
-# Import the pre-built RLHF pipeline (in preview as of writing)
-from google_cloud_pipeline_components.preview.llm import rlhf_pipeline
-
-# Import the KFP compiler
-from kfp import compiler
-
-# Define an output path for the compiled YAML
-RLHF_PIPELINE_PKG_PATH = "rlhf_pipeline.yaml"
-
-# Compile: this writes all pipeline metadata and step definitions to the YAML file
-compiler.Compiler().compile(
-    pipeline_func=rlhf_pipeline,
-    package_path=RLHF_PIPELINE_PKG_PATH
-)
-
-# Inspect the first few lines of the generated file
-# !head rlhf_pipeline.yaml
-# To see the full file: !cat rlhf_pipeline.yaml
-```
-
-The resulting YAML file is auto-generated and should not be edited manually. It is the artefact that Vertex AI reads to understand what the pipeline should do.
+Side-by-side evaluation presents completions from two models, the base (untuned) model and the RLHF-tuned model, for the same set of input prompts. A human (or an automated judge; see Section 5.2) then decides which completion they prefer. The result is expressed as a **win rate**, i.e. the proportion of prompts for which the tuned model produced the preferred completion. Alongside training curves, side-by-side evaluation is the most informative approach for RLHF.
 
 ---
 
-## 4. Configuring the Pipeline Parameters
+## 3. Interpreting TensorBoard Training Curves
 
-All job-specific configuration is passed as a Python dictionary called `parameter_values`. The parameters fall into four logical groups.
+### 3.1. Reward Model Curves
 
-### 4.1. Dataset Paths
+The reward model is trained using a pairwise ranking objective, and the relevant loss is called the **rank loss**. Like any well-behaved loss, you want to see it decrease over training steps and then plateau (converge). In the notebook, the reward-model TensorBoard log shows exactly this pattern: the rank loss falls steadily and then flattens well before training ends, suggesting that fewer steps would have been sufficient and no additional data was wasted.
 
-Three datasets are required, all stored in Google Cloud Storage (paths prefixed with `gs://`). They must all be in JSON Lines (`.jsonl`) format and reside in the same GCS bucket.
+### 3.2. RL Loop Curves
 
-```python
-parameter_values = {
-    # Human preference comparisons, used to train the reward model
-    "preference_dataset": "gs://vertex-ai/generative-ai/rlhf/text_small/"
-                          "summarize_from_feedback_tfds/comparisons/train/*.jsonl",
+The RL loop produces two key metrics: the **KL loss** and the **reward**.
 
-    # Reddit posts used as prompts during the RL fine-tuning loop
-    "prompt_dataset": "gs://vertex-ai/generative-ai/rlhf/text_small/"
-                      "reddit_tfds/train/*.jsonl",
+The **KL loss** (Kullback–Leibler divergence) measures how far the tuned model's output distribution has drifted from the original base model's distribution. A small KL means the models behave similarly; a large KL means the tuned model has diverged significantly. In a healthy training run, you expect the KL loss to increase gradually and then plateau: the model is allowed to drift away from the base model in order to improve reward, but eventually the KL penalty in the objective prevents it from drifting too far.
 
-    # Validation prompts; triggers a batch inference job post-tuning
-    "eval_dataset": "gs://vertex-ai/generative-ai/rlhf/text_small/"
-                    "reddit_tfds/val/*.jsonl",
-    ...
-}
-```
+The **reward** measures the score assigned by the reward model to the tuned model's completions. You want this to increase monotonically across training and then plateau, indicating that the model has learned to produce outputs that the reward model rates highly.
 
-### 4.2. Base Model Selection
+#### 3.2.1. Why Is the RL Loss Increasing?
 
-The `large_model_reference` parameter specifies which foundational model to fine-tune. Supported options include `"llama-2-7b"`, `"text-bison@001"`, and T5x family models.
+A common point of confusion is the 'rl_loss' curve, which is also visible in TensorBoard and appears to **increase** rather than decrease. This surprises learners who expect all losses to go down. The explanation lies in what 'rl_loss' actually represents.
 
-```python
-"large_model_reference": "llama-2-7b",
-```
+In the Vertex AI RLHF pipeline, the reported `rl_loss` is essentially the **negative reward** (often derived from the policy gradient objective). Because the optimiser is maximising reward, it is simultaneously minimising the negative reward. As the reward climbs upward, the negative of that reward climbs downward in absolute terms, which appears on the plot as an increasing curve when the sign convention flips or when the pipeline logs `−reward` directly. In short, the rl_loss increasing is the **mirror image** of the reward increasing, and is the expected, healthy behaviour for a model that is genuinely learning to produce higher-quality outputs. If both the reward and rl_loss were flat or erratic, that would indicate underfitting, which is exactly what the small-data (1% subset) logs showed.
 
-### 4.3. Training Steps
+### 3.3. Diagnosing Underfitting
 
-The pipeline accepts the number of **training steps** (not epochs) for each of the two training phases. The conversion from epochs to steps uses the formula:
-
-$$stepsPerEpoch = \left\lceil \frac{datasetSize}{batchSize} \right\rceil$$
-
-$$trainSteps = stepsPerEpoch \times numEpochs$$
-
-The batch size is fixed at 64 for this pipeline. The recommended epoch ranges are 20–30 for the reward model and 10–20 for the RL loop.
-
-**Reward model training steps:**
-
-```python
-import math
-
-PREF_DATASET_SIZE = 3000  # Size of the preference dataset
-BATCH_SIZE = 64           # Fixed by the pipeline; cannot be changed
-
-REWARD_STEPS_PER_EPOCH = math.ceil(PREF_DATASET_SIZE / BATCH_SIZE)  # = 47
-REWARD_NUM_EPOCHS = 30
-
-reward_model_train_steps = REWARD_STEPS_PER_EPOCH * REWARD_NUM_EPOCHS  # = 1410
-```
-
-**RL fine-tuning steps:**
-
-```python
-PROMPT_DATASET_SIZE = 2000  # Size of the prompt dataset
-BATCH_SIZE = 64
-
-RL_STEPS_PER_EPOCH = math.ceil(PROMPT_DATASET_SIZE / BATCH_SIZE)  # = 32
-RL_NUM_EPOCHS = 10
-
-reinforcement_learning_train_steps = RL_STEPS_PER_EPOCH * RL_NUM_EPOCHS  # = 320
-```
-
-> **Tip:** It is good practice to run the pipeline on a small subset of the data first (e.g. 2,000–3,000 examples) to verify that the job executes without errors before committing to a full run, which can take over a day.
-
-### 4.4. Learning Rate Multipliers and KL Coefficient
-
-These are more advanced parameters that can be left at their defaults initially and tuned later.
-
-**Learning rate multipliers** (`reward_model_learning_rate_multiplier`, `reinforcement_learning_rate_multiplier`): The absolute learning rate is fixed by the pipeline to match the rate used during the base model's original training (which may not be publicly known). These multipliers scale that fixed rate up or down — values greater than 1 increase the magnitude of gradient updates, values less than 1 decrease it. Both default to `1.0`.
-
-**KL coefficient** (`kl_coeff`): This is a regularisation term that guards against **reward hacking** — the tendency for the policy model to exploit the reward signal in unintended ways. For example, the reward model might give high scores to completions filled with positive-sounding words like 'excellent' or 'fantastic', even when the response is otherwise nonsensical. The KL coefficient penalises the tuned model for diverging too far from the original model's output distribution. Setting it to `0` removes all penalty; larger values impose stronger regularisation. The default is `0.1`.
-
-### 4.5. Task Instruction
-
-The `instruction` parameter prepends a task description to every prompt in both the preference and prompt datasets. It should only be set if the instruction is **not** already embedded in the dataset prompts themselves.
-
-```python
-"instruction": "Summarise in less than 50 words"
-```
+In the notebook, the RL logs from training on only 1% of the data show neither a clear upward trend in reward nor a clear upward trend in KL loss. Both curves are essentially flat and noisy. This is the signature of **underfitting**: the model has not seen enough data to find a coherent direction in which to improve. The full-data logs, by contrast, show the reward climbing steadily and the KL loss rising and then levelling off, which is the expected healthy pattern.
 
 ---
 
-## 5. Complete Parameter Dictionary
+## 4. Side-by-Side Evaluation in the Notebook
 
-Below is the full `parameter_values` dictionary used for the small-dataset demonstration run:
+### 4.1. Loading the Evaluation Results
 
-```python
-parameter_values = {
-    "preference_dataset": "gs://vertex-ai/generative-ai/rlhf/text_small/"
-                          "summarize_from_feedback_tfds/comparisons/train/*.jsonl",
-    "prompt_dataset":     "gs://vertex-ai/generative-ai/rlhf/text_small/"
-                          "reddit_tfds/train/*.jsonl",
-    "eval_dataset":       "gs://vertex-ai/generative-ai/rlhf/text_small/"
-                          "reddit_tfds/val/*.jsonl",
-    "large_model_reference":                    "llama-2-7b",
-    "reward_model_train_steps":                 1410,
-    "reinforcement_learning_train_steps":       320,
-    "reward_model_learning_rate_multiplier":    1.0,
-    "reinforcement_learning_rate_multiplier":   1.0,
-    "kl_coeff":                                 0.1,
-    "instruction":                              "Summarise in less than 50 words",
-}
-```
+The pipeline accepts an evaluation dataset of prompts (no completions) and, once tuning is complete, runs a bulk inference job that generates completions for each prompt using both the base model and the tuned model. These results are written to a JSONL file in Google Cloud Storage, accessible via the 'Bulk Infer' component in the Vertex AI Pipelines console.
 
-For a full-dataset run (the configuration used by the course team to produce the evaluation results in the next lesson), the step counts are substantially higher and the RL learning rate multiplier is reduced:
+In the notebook, two JSONL files are loaded into Python lists, one for the untuned model and one for the tuned model. Each record in both files is a dictionary with the following structure.
+
+- `inputs` → `inputs_pretokenized`: the full prompt string sent to the model.
+- `prediction`: the completion produced by the model for that prompt.
+
+Prompts are extracted from the tuned-model list (both files share identical prompts), and completions are extracted separately from each list. Everything is then assembled into a three-column pandas DataFrame. The full code is shown below.
 
 ```python
-# Full dataset configuration (takes ~24 hours on TPUs/GPUs)
-parameter_values = {
-    "preference_dataset": "gs://vertex-ai/generative-ai/rlhf/text/"
-                          "summarize_from_feedback_tfds/comparisons/train/*.jsonl",
-    "prompt_dataset":     "gs://vertex-ai/generative-ai/rlhf/text/reddit_tfds/train/*.jsonl",
-    "eval_dataset":       "gs://vertex-ai/generative-ai/rlhf/text/reddit_tfds/val/*.jsonl",
-    "large_model_reference":                    "llama-2-7b",
-    "reward_model_train_steps":                 10000,
-    "reinforcement_learning_train_steps":       10000,
-    "reward_model_learning_rate_multiplier":    1.0,
-    "reinforcement_learning_rate_multiplier":   0.2,  # Reduced to prevent reward hacking
-    "kl_coeff":                                 0.1,
-    "instruction":                              "Summarise in less than 50 words",
-}
+import json
+import pandas as pd
+
+# --- Load the JSONL files ---
+eval_data_tuned = []
+with open('eval_results_tuned.jsonl') as f:
+    for line in f:
+        eval_data_tuned.append(json.loads(line))
+
+eval_data_untuned = []
+with open('eval_results_untuned.jsonl') as f:
+    for line in f:
+        eval_data_untuned.append(json.loads(line))
+
+# --- Extract prompts and completions ---
+# Prompts are identical in both files; use the tuned list as the source.
+prompts = [sample['inputs']['inputs_pretokenized']
+           for sample in eval_data_tuned]
+
+untuned_completions = [sample['prediction']
+                       for sample in eval_data_untuned]
+
+tuned_completions = [sample['prediction']
+                     for sample in eval_data_tuned]
+
+# --- Assemble the side-by-side DataFrame ---
+results = pd.DataFrame(data={
+    'prompt':      prompts,
+    'base_model':  untuned_completions,
+    'tuned_model': tuned_completions,
+})
+
+# Disable cell truncation so full completions are visible in the notebook.
+pd.set_option('display.max_colwidth', None)
+
+results
 ```
+
+Each row of `results` corresponds to one evaluation prompt and shows the completions from both models side by side, making qualitative comparison straightforward.
+
+### 4.2. What Does `pd.set_option('display.max_colwidth', None)` Do?
+
+By default, pandas truncates the text in any DataFrame cell that exceeds a certain character limit (typically 50 characters), replacing the overflow with an ellipsis (`...`). This is useful for compact display but disastrous for side-by-side text comparison, where you need to read the full completion.
+
+Calling `pd.set_option('display.max_colwidth', None)` removes this truncation limit entirely, instructing pandas to render every cell at its full width, regardless of length. The `None` argument means 'no limit'. The practical effect is that the entire prompt and both completions become visible in the notebook output, making it possible to actually read and compare them. Without this setting, the most informative parts of long completions would be invisible.
+
+### 4.3. Qualitative Observations from the Results
+
+One revealing difference visible in the results is the narrative **person** of the summaries. The tuned model tends to summarise Reddit posts in the first person, mirroring the voice of the original poster (e.g. 'Want to surprise my girlfriend with roses...'). The base model, by contrast, summarises in the third person (e.g. 'The author wants to surprise his girlfriend...'). This suggests the RLHF process, trained on human preference data from a Reddit summarisation task, has picked up on the stylistic convention that human raters preferred a summary that preserved the poster's own voice.
 
 ---
 
-## 6. Creating and Submitting the Pipeline Job
+## 5. Advanced Evaluation Techniques
 
-Once the parameters are defined and the YAML file has been compiled, the job is submitted to Vertex AI using the `google-cloud-aiplatform` SDK.
+### 5.1. RLAIF: Reinforcement Learning from AI Feedback
 
-```python
-# Authenticate and retrieve project credentials
-from utils import authenticate
-credentials, PROJECT_ID, STAGING_BUCKET = authenticate()
+**RLAIF** (Reinforcement Learning from AI Feedback) is a technique in which the preference dataset, traditionally labelled by human annotators, is instead generated by a capable off-the-shelf LLM acting as a labeller. The LLM is prompted to compare two completions and indicate which it prefers, producing the same (prompt, chosen, rejected) triples that a human would.
 
-# RLHF pipeline is available in this specific region only (as of writing)
-REGION = "europe-west4"
+#### 5.1.1. Key Selling Points of RLAIF
 
-import google.cloud.aiplatform as aiplatform
+The primary advantage of RLAIF is **scalability**. Human annotation is expensive, slow, and difficult to scale: recruiting, training, and quality-controlling thousands of human labellers is a significant organisational and financial undertaking. An LLM labeller can generate preference labels orders of magnitude faster and at a fraction of the cost, making it possible to produce much larger preference datasets than would be practical with humans alone.
 
-# Initialise the SDK with project and regional settings
-aiplatform.init(
-    project=PROJECT_ID,
-    location=REGION,
-    credentials=credentials
-)
+A secondary advantage is **consistency**. Human annotators vary in their preferences and can be influenced by fatigue, cultural background, or ambiguous guidelines. An LLM labeller applies the same underlying model, resulting in more uniform labels (though this consistency can also encode the LLM's own biases, which is a known limitation).
 
-# Define the pipeline job
-job = aiplatform.PipelineJob(
-    display_name="tutorial-rlhf-tuning",
-    pipeline_root=STAGING_BUCKET,        # GCS location for intermediate artefacts
-    template_path=RLHF_PIPELINE_PKG_PATH, # Path to the compiled YAML file
-    parameter_values=parameter_values    # Job-specific configuration
-)
+#### 5.1.2. Is RLAIF Just Fine-Tuning to Mimic Model Y?
 
-# Submit the job (runs remotely on Vertex AI, not locally)
-job.run()
-```
+This is a genuinely subtle question, and the short answer is: not quite, but the concern is valid and worth taking seriously.
 
-The job executes on Google Cloud infrastructure — not locally — and requires significant compute resources (i.e. TPUs or GPUs). A full-scale run takes well over 24 hours. For initial experimentation, always begin with a small subset of data.
+If model Y were used to directly generate completions and those completions were used as supervised fine-tuning (SFT) targets, then yes, you would simply be distilling model Y into the base LLM. The resulting model would try to copy model Y's outputs.
+
+RLAIF is different because model Y is used to produce **preference labels**, not output targets. The base LLM still generates its own completions; model Y only says which of two completions it prefers. Those preference signals are then used to train a reward model, which is used in the PPO loop to adjust the base LLM's behaviour incrementally. The base LLM is therefore learning to improve within its own output space, guided by a signal derived from model Y's judgements, rather than being forced to copy model Y's outputs verbatim.
+
+In practice, however, there is a real risk that the resulting model converges towards outputs that model Y would itself produce, since model Y's preferences naturally reflect its own style and knowledge. The hope is that if model Y is a good general-purpose judge of quality (e.g. clear, factual, helpful), the preferences it produces will capture broadly human-desirable properties rather than idiosyncratic stylistic quirks. The extent to which this hope is realised is an open empirical question, and it is one of the active research challenges in the RLAIF literature.
+
+The practical payoff is substantial even if RLAIF is an imperfect substitute for human feedback: a model trained with AI-generated preference labels is likely to be considerably better than the untuned base model, especially when human labelling would simply be infeasible at the required scale.
+
+### 5.2. AutoSxS: Automated Side-by-Side Evaluation
+
+**AutoSxS** (Auto Side-by-Side) replaces the human judge in side-by-side evaluation with a third LLM, sometimes called an 'arbiter' or 'judge' model. The arbiter is given the prompt, the base model's completion, and the tuned model's completion, and is asked to decide which completion is better, along with a natural-language explanation of its reasoning. The result is a win rate that can be computed automatically over thousands of examples without any human involvement.
+
+#### 5.2.1. Does AutoSxS Defeat the Purpose of RLHF?
+
+This is another pointed and important question. The concern is: if we trained the model to satisfy human preferences, but then evaluate it using another LLM's preferences, have we not simply gone in a circle?
+
+The answer requires distinguishing between the **training objective** and the **evaluation method**. The goal of RLHF remains to produce a model whose outputs better match human preferences. AutoSxS is a practical tool for measuring whether that goal has been achieved, not a substitute for it. The implicit assumption is that a capable arbiter LLM is a reasonable proxy for human judgement, in the same way that ROUGE was once assumed to be a reasonable proxy for summarisation quality (though, as discussed, ROUGE turned out to be a poor proxy for RLHF specifically).
+
+Several considerations support the use of AutoSxS as a useful evaluation tool even if it is imperfect. First, human SxS evaluation is expensive and slow, and often cannot be run at the scale needed to get statistically reliable win rates. AutoSxS enables evaluation on thousands of examples in minutes. Second, if the arbiter model is itself a strong, general-purpose model (e.g. a frontier model prompted with a careful rubric), its preferences are likely to correlate reasonably well with average human preferences, at least for well-defined tasks like summarisation. Third, AutoSxS does not replace human evaluation entirely: it is used as a fast, scalable **screening** tool, with human evaluation reserved for final validation or for ambiguous cases where the arbiter is uncertain.
+
+The deeper philosophical point is that 'human preference' is not monolithic. Even human evaluators disagree with each other substantially. Using a strong LLM as a judge is no more circular than using one group of humans to train a reward model and a different group to evaluate the final model: the signal is noisy and approximate in both cases, and the question is whether it is good enough to be directionally useful. Current evidence suggests that, for many tasks, it is.
 
 ---
 
-## 7. Key Concepts Summary
+## 6. Accessing Artefacts in Google Cloud
 
-| Concept | Description |
-|---|---|
-| **Pipeline** | A portable, multi-step ML workflow compiled to YAML and executed on Vertex AI. |
-| **Reward model** | Trained on preference data to score completions; trained for 20–30 epochs. |
-| **Reinforcer** | RL loop component that fine-tunes the base LLM; trained for 10–20 epochs. |
-| **Batch size** | Fixed at 64; used to convert epochs to training steps. |
-| **KL coefficient** | Regularisation term preventing the policy from diverging too far from the original model. |
-| **Reward hacking** | When the policy exploits the reward signal in unintended ways (e.g. generating hollow but highly-scored text). |
-| **GCS** | Google Cloud Storage; all datasets and artefacts must reside here in `.jsonl` format. |
-| **`large_model_reference`** | Specifies which foundational model to tune (e.g. `llama-2-7b`, `text-bison@001`). |
+For completeness, the following describes how to retrieve the relevant TensorBoard logs and evaluation outputs from the Vertex AI Pipelines console.
+
+To find TensorBoard logs, navigate to the pipeline run in the Cloud Console under Vertex AI > Pipelines > Runs, select the RLHF Train Template run, and click on either the 'reward model trainer' component (for reward model logs) or the 'reinforcer' component (for RL loop logs). Each component exposes a 'TensorBoard Metrics' output artefact whose URI points to a Google Cloud Storage path containing the log files, which can be downloaded and visualised locally.
+
+To find bulk inference results, click on the 'Perform Inference' component and then the 'Bulk Infer' sub-component. The output parameter `output_prediction_gcs_path` provides a GCS path to the JSONL file containing the evaluation completions.
+
+---
+
+## 7. Summary
+
+The table below maps each evaluation approach to its practical role in an RLHF workflow.
+
+| Approach | What it measures | Suitable for RLHF? | Key limitation |
+|---|---|---|---|
+| Training curves (reward, KL) | Whether the model is learning at all. | Yes, highly useful. | Does not measure final output quality directly. |
+| ROUGE / automated metrics | Similarity to a reference text. | No, poorly suited. | Does not capture human preference alignment. |
+| Human SxS evaluation | Direct human preference between two models. | Yes, gold standard. | Expensive and slow at scale. |
+| AutoSxS (LLM arbiter) | LLM-proxy of human preference. | Yes, scalable screening. | Arbiter may not perfectly reflect human preferences. |
+| RLAIF (LLM-labelled preference data) | Enables RLHF without human annotators. | Yes, scalable training. | Risk of encoding the labeller LLM's own biases. |
+
+---
+
+## Appendix A: Further Discussion — If the Arbiter LLM Is That Good, Why Do We Need RLHF at All?
+
+Sections 5.1.2 and 5.2.1 raise a natural follow-up question: if a frontier LLM is capable enough to reliably judge output quality (for RLAIF) or evaluate model performance (for AutoSxS), why not simply use that frontier model directly and skip fine-tuning the base model altogether?
+
+This appendix unpacks why the answer is not as straightforward as it might seem, by distinguishing between three separate concepts that are easy to conflate: the ability to *judge* quality, the ability to *generate* quality, and the economics of *deploying* quality at scale.
+
+### A.1. Judging Is Easier Than Generating
+
+The most fundamental point is that evaluating whether an output is good is a substantially easier cognitive task than producing a good output in the first place. A food critic who has eaten at ten thousand restaurants can reliably tell you whether a dish is well-executed, even if they could not cook it themselves. A skilled editor can spot a weak paragraph in seconds even if writing an equally strong replacement would take them considerably longer.
+
+The same asymmetry applies to LLMs. A frontier model can reliably identify which of two Llama 2 summaries is more faithful, concise, and natural, even in cases where Llama 2 itself could not have generated the better one unprompted. RLHF exploits this asymmetry deliberately: it uses the *easier* task of judging to provide a training signal for the *harder* task of generating. Crucially, the arbiter does not need to know *how* to produce a better output; it only needs to recognise *which* of two candidate outputs is better. That is a considerably lower bar, which is why a frontier model can serve as a useful judge even for a model that is significantly weaker than it.
+
+### A.2. The Arbiter Cannot Transfer Its Weights
+
+A second, more practical point is that knowing the right answer does not automatically make the base model capable of producing it. Even if a frontier LLM could perfectly articulate what a good summary looks like, the base model cannot absorb that knowledge through description alone. The base model's behaviour is determined by its weights, and those weights can only be updated through training. RLHF is precisely the mechanism that translates the arbiter's preference judgements into concrete weight updates via the reward model and the PPO loop. The arbiter provides the compass; RLHF is the engine that moves the model in the indicated direction.
+
+An analogy: a GPS can tell you with perfect accuracy that you need to turn left in 200 metres. But the GPS cannot drive the car. Something still has to do the moving.
+
+### A.3. Deployment Economics and Ownership
+
+Even if you were willing to accept the theoretical circularity, using a frontier model directly at inference time raises serious practical obstacles. Frontier models are expensive to call, introduce latency, are subject to rate limits, and, critically, are owned by a third party. Organisations that need low-latency, low-cost, on-premises, or domain-specialised behaviour cannot rely on an external API for every user request. The goal of fine-tuning a smaller base model with RLHF is to *internalise* improved behaviour into a model you own and can deploy freely, without ongoing dependency on a third-party service.
+
+This is also why distillation, i.e. generating completions from the frontier model and using them as supervised fine-tuning targets, is a related but distinct strategy. Distillation teaches the base model to copy the frontier model's outputs for the prompts it has seen. RLHF, by contrast, teaches the base model a more general disposition towards quality, which can generalise better to novel prompts not seen during training.
+
+### A.4. Reconciling the Apparent Circularity
+
+It is worth being precise about what the apparent circularity actually is. The concern is roughly: 'We train the base model using an LLM's preferences (RLAIF), then evaluate it using an LLM's preferences (AutoSxS). Are we just measuring whether the base model has learned to satisfy the LLM, rather than whether it has learned to satisfy humans?'
+
+This concern is legitimate but not fatal, for two reasons. First, the assumption underlying both RLAIF and AutoSxS is that a capable frontier model's preferences are a *reasonable proxy* for average human preferences, at least for well-defined tasks with relatively unambiguous quality criteria (e.g. factuality, conciseness, grammaticality in summarisation). If this assumption holds, then satisfying the LLM's preferences and satisfying human preferences are approximately the same objective, and there is no real circularity. Second, even if the proxy is imperfect, the question is not whether it is perfect but whether it is *good enough to be directionally useful*. A model trained and evaluated using an imperfect proxy can still be substantially better than the untuned base model, which is the comparison that matters in practice.
+
+The deeper insight is that 'human preference' is not a monolithic gold standard either. Human annotators disagree with each other substantially, are subject to fatigue and cultural bias, and often cannot articulate why they prefer one output over another. Using a frontier LLM as a judge is not obviously worse than using a panel of crowdsourced human annotators; it is simply a different, more scalable, and arguably more consistent approximation of the same underlying signal.
+
+### A.5. Summary of the Argument
+
+The three points above can be restated concisely. The arbiter LLM is good at judging but that judgement does not automatically improve the base model, so RLHF is still needed to translate judgements into weight updates. The base model after fine-tuning is cheaper and faster to deploy than calling the frontier model at inference time, and is owned outright by the organisation. And the apparent circularity of using an LLM to train and evaluate is not fatal, because the frontier model's preferences are a reasonable and scalable proxy for human preferences for many tasks. RLHF with AI feedback is therefore best understood not as a replacement for the idea of human-preference alignment, but as a practical engineering solution for achieving that alignment at a scale and cost that would be impossible with human annotators alone.

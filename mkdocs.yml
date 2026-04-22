@@ -64,6 +64,7 @@ nav:
       - Lecture 2 - Datasets: rlhf/dlai/DLAI_Lecture2.md
       - Lecture 3 - Tune an LLM with RLHF: rlhf/dlai/DLAI_Lecture3.md
       - Lecture 4 - Evaluate an RLHF-Tuned Model: rlhf/dlai/DLAI_Lecture4.md
+      - Lecture 5 - Google Cloud Setup: rlhf/dlai/DLAI_Lecture5.md
   # - Projects:
   #   - Overview: projects/index.md
   #   - CartPole with PPO: projects/cartpole-ppo.md

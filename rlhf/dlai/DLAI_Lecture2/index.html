@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://nhan-dam.github.io/rlhf/dlai/DLAI_Lecture2/">
       
       
-        <link rel="prev" href="../">
+        <link rel="prev" href="../DLAI_Lecture1/">
       
       
         <link rel="next" href="../DLAI_Lecture3/">
@@ -29,7 +29,7 @@
     
     
       
-        <title>Lecture 2 - Conceptual Overview - ND's Machine Learning Notes</title>
+        <title>Lecture 2 - Datasets - ND's Machine Learning Notes</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#rlhf-conceptual-overview" class="md-skip">
+        <a href="#rlhf-datasets" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Lecture 2 - Conceptual Overview
+              Lecture 2 - Datasets
             
           </span>
         </div>
@@ -514,6 +514,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../DLAI_Lecture1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 1 - Conceptual Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -533,7 +561,7 @@
   <span class="md-ellipsis">
     
   
-    Lecture 2 - Conceptual Overview
+    Lecture 2 - Datasets
   
 
     
@@ -551,7 +579,7 @@
   <span class="md-ellipsis">
     
   
-    Lecture 2 - Conceptual Overview
+    Lecture 2 - Datasets
   
 
     
@@ -577,10 +605,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-the-core-problem" class="md-nav__link">
+  <a href="#1-overview" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. The Core Problem
+        1. Overview
       
     </span>
   </a>
@@ -588,22 +616,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-the-three-stage-pipeline" class="md-nav__link">
+  <a href="#2-datasets-required-for-rlhf" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. The Three-Stage Pipeline
+        2. Datasets Required for RLHF
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. The Three-Stage Pipeline">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-preference-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Preference Dataset
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Preference Dataset">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#21-stage-1-build-a-preference-dataset" class="md-nav__link">
+  <a href="#31-structure" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.1. Stage 1 — Build a Preference Dataset
+        3.1. Structure
       
     </span>
   </a>
@@ -611,22 +650,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#22-stage-2-train-a-reward-model" class="md-nav__link">
+  <a href="#32-prompt-format-convention" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2. Stage 2 — Train a Reward Model
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="2.2. Stage 2 — Train a Reward Model">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#221-the-loss-function" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2.2.1. The Loss Function
+        3.2. Prompt Format Convention
       
     </span>
   </a>
@@ -634,10 +661,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#222-why-not-maximise-the-raw-score-difference" class="md-nav__link">
+  <a href="#33-human-preference-labels" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2.2. Why Not Maximise the Raw Score Difference?
+        3.3. Human Preference Labels
       
     </span>
   </a>
@@ -645,26 +672,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#223-what-the-log-sigmoid-does" class="md-nav__link">
+  <a href="#34-dataset-size-recommendations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2.3. What the Log-Sigmoid Does
+        3.4. Dataset Size Recommendations
       
     </span>
   </a>
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-        
           <li class="md-nav__item">
-  <a href="#23-stage-3-fine-tune-with-rl-ppo" class="md-nav__link">
+  <a href="#35-loading-the-data" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.3. Stage 3 — Fine-tune with RL (PPO)
+        3.5. Loading the Data
       
     </span>
   </a>
@@ -677,21 +699,60 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-efficient-training-peft" class="md-nav__link">
+  <a href="#4-prompt-dataset" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Efficient Training: PEFT
+        4. Prompt Dataset
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Prompt Dataset">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Structure
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#4-summary" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#42-role-in-the-rlhf-pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Summary
+        4.2. Role in the RLHF Pipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-loading-the-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. Loading the Data
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Key Takeaways
       
     </span>
   </a>
@@ -721,7 +782,7 @@
   <span class="md-ellipsis">
     
   
-    Lecture 3 - Datasets
+    Lecture 3 - Tune an LLM with RLHF
   
 
     
@@ -749,7 +810,7 @@
   <span class="md-ellipsis">
     
   
-    Lecture 4 - Tune an LLM with RLHF
+    Lecture 4 - Evaluate an RLHF-Tuned Model
   
 
     
@@ -950,10 +1011,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-the-core-problem" class="md-nav__link">
+  <a href="#1-overview" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. The Core Problem
+        1. Overview
       
     </span>
   </a>
@@ -961,22 +1022,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-the-three-stage-pipeline" class="md-nav__link">
+  <a href="#2-datasets-required-for-rlhf" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. The Three-Stage Pipeline
+        2. Datasets Required for RLHF
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. The Three-Stage Pipeline">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-preference-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Preference Dataset
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Preference Dataset">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#21-stage-1-build-a-preference-dataset" class="md-nav__link">
+  <a href="#31-structure" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.1. Stage 1 — Build a Preference Dataset
+        3.1. Structure
       
     </span>
   </a>
@@ -984,22 +1056,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#22-stage-2-train-a-reward-model" class="md-nav__link">
+  <a href="#32-prompt-format-convention" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2. Stage 2 — Train a Reward Model
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="2.2. Stage 2 — Train a Reward Model">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#221-the-loss-function" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2.2.1. The Loss Function
+        3.2. Prompt Format Convention
       
     </span>
   </a>
@@ -1007,10 +1067,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#222-why-not-maximise-the-raw-score-difference" class="md-nav__link">
+  <a href="#33-human-preference-labels" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2.2. Why Not Maximise the Raw Score Difference?
+        3.3. Human Preference Labels
       
     </span>
   </a>
@@ -1018,26 +1078,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#223-what-the-log-sigmoid-does" class="md-nav__link">
+  <a href="#34-dataset-size-recommendations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2.3. What the Log-Sigmoid Does
+        3.4. Dataset Size Recommendations
       
     </span>
   </a>
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-        
           <li class="md-nav__item">
-  <a href="#23-stage-3-fine-tune-with-rl-ppo" class="md-nav__link">
+  <a href="#35-loading-the-data" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.3. Stage 3 — Fine-tune with RL (PPO)
+        3.5. Loading the Data
       
     </span>
   </a>
@@ -1050,21 +1105,60 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-efficient-training-peft" class="md-nav__link">
+  <a href="#4-prompt-dataset" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Efficient Training: PEFT
+        4. Prompt Dataset
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Prompt Dataset">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Structure
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#4-summary" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#42-role-in-the-rlhf-pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Summary
+        4.2. Role in the RLHF Pipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-loading-the-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. Loading the Data
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Key Takeaways
       
     </span>
   </a>
@@ -1096,97 +1190,88 @@
   
 
 
-<h1 id="rlhf-conceptual-overview">RLHF — Conceptual Overview<a class="headerlink" href="#rlhf-conceptual-overview" title="Permanent link">&para;</a></h1>
-<h2 id="1-the-core-problem">1. The Core Problem<a class="headerlink" href="#1-the-core-problem" title="Permanent link">&para;</a></h2>
-<p>Standard supervised fine-tuning maps an input to a single correct output. For open-ended tasks such as summarisation, however, <strong>there is no single correct answer</strong> — only human preferences. RLHF reframes the problem: instead of asking 'what is the right answer?', it asks 'what do humans prefer?'</p>
+<h1 id="rlhf-datasets">RLHF Datasets<a class="headerlink" href="#rlhf-datasets" title="Permanent link">&para;</a></h1>
+<h2 id="1-overview">1. Overview<a class="headerlink" href="#1-overview" title="Permanent link">&para;</a></h2>
+<p>This note summarises Lecture 3 of the RLHF course, which covers the two datasets required before fine-tuning a large language model with Reinforcement Learning from Human Feedback. The worked examples use a Reddit post summarisation task with the OSS LLaMA 2 model.</p>
 <hr />
-<h2 id="2-the-three-stage-pipeline">2. The Three-Stage Pipeline<a class="headerlink" href="#2-the-three-stage-pipeline" title="Permanent link">&para;</a></h2>
-<h3 id="21-stage-1-build-a-preference-dataset">2.1. Stage 1 — Build a Preference Dataset<a class="headerlink" href="#21-stage-1-build-a-preference-dataset" title="Permanent link">&para;</a></h3>
-<p>The pipeline begins by constructing a dataset of human preferences through three steps.</p>
-<ol>
-<li>Use the base LLM to generate <strong>multiple completions</strong> for the same prompt.</li>
-<li>Show human labellers <strong>two completions side-by-side</strong> and ask which they prefer. Pairwise comparison is preferable to absolute rating scales, which are too subjective and vary across individuals.</li>
-<li>Record the result as a dataset of <code>(prompt, chosen_completion, rejected_completion)</code> triplets.</li>
-</ol>
-<blockquote>
-<p>⚠️ Key nuance: this dataset captures the preferences of <em>your specific labellers</em>, not human preference in general. Defining your <strong>alignment criteria</strong> upfront (e.g. more helpful, less toxic, more concise) is critical.</p>
-</blockquote>
-<hr />
-<h3 id="22-stage-2-train-a-reward-model">2.2. Stage 2 — Train a Reward Model<a class="headerlink" href="#22-stage-2-train-a-reward-model" title="Permanent link">&para;</a></h3>
-<p>The reward model is itself an LLM, repurposed as a <strong>regression model</strong>. It takes a <code>(prompt, completion)</code> pair as input and outputs a single scalar score, where a higher score indicates greater alignment with human preferences.</p>
-<h4 id="221-the-loss-function">2.2.1. The Loss Function<a class="headerlink" href="#221-the-loss-function" title="Permanent link">&para;</a></h4>
-<p>The reward model is trained using a <strong>pairwise ranking loss</strong> derived from the Bradley-Terry model for pairwise comparisons. Given a triplet <code>(prompt x, chosen response y_w, rejected response y_l)</code>, the loss is:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>L = -log( σ( r(x, y_w) - r(x, y_l) ) )
-</code></pre></div>
-<p>where <code>r(x, y)</code> is the scalar score the reward model assigns to a given prompt–completion pair, and <code>σ</code> is the sigmoid function.</p>
-<h4 id="222-why-not-maximise-the-raw-score-difference">2.2.2. Why Not Maximise the Raw Score Difference?<a class="headerlink" href="#222-why-not-maximise-the-raw-score-difference" title="Permanent link">&para;</a></h4>
-<p>A simpler alternative would be <code>L = -(r(y_w) - r(y_l))</code> — directly maximising the gap between the chosen and rejected scores. This fails for two reasons.</p>
-<p>First, the loss is <strong>unbounded below</strong>. The optimiser can always make the loss more negative by widening the gap further, with no natural stopping point. There is no sense of 'confident enough' — gradients never diminish as the model becomes more certain, which makes training unstable.</p>
-<p>Second, the gradients are <strong>constant</strong>. The gradient of the raw difference with respect to the output scores is always ±1, regardless of how confidently right or wrong the model is. A model that barely separates a pair (<code>r(y_w) = 0.51, r(y_l) = 0.50</code>) receives exactly the same gradient update as one that separates them decisively (<code>r(y_w) = 100, r(y_l) = -100</code>). The network cannot tell from the gradient signal alone whether it should be more or less confident.</p>
-<h4 id="223-what-the-log-sigmoid-does">2.2.3. What the Log-Sigmoid Does<a class="headerlink" href="#223-what-the-log-sigmoid-does" title="Permanent link">&para;</a></h4>
-<p>The sigmoid squashes the score difference into a probability between 0 and 1 — specifically, the model's estimated probability that <code>y_w</code> is preferred over <code>y_l</code>. Taking the log then gives the loss two important properties.</p>
-<p>The loss is now <strong>bounded</strong>: as the gap grows large and positive, <code>σ</code> approaches 1 and <code>log(σ)</code> approaches 0. Training naturally saturates once the model is confident, and gradients shrink towards zero — a stable, well-behaved objective.</p>
-<p>The gradients are now <strong>adaptive</strong>: the gradient of <code>L</code> with respect to <code>r(y_w)</code> works out to <code>-(1 - σ(r(y_w) - r(y_l)))</code>. When the model is already confident, the sigmoid is close to 1, so the gradient is nearly zero — a small nudge. When the model is wrong or uncertain, the sigmoid is near 0 or 0.5, the gradient is large, and the network receives a strong corrective signal. Training effort is automatically concentrated where it is most needed.</p>
-<blockquote>
-<p>💡 The Bradley-Terry framing is a natural fit for preference data: the reward model learns a relative 'strength' for each completion — meaningful only in comparison to other completions, never on an absolute scale. This mirrors exactly how human labellers produce the data, always expressing relative rather than absolute judgements.</p>
-</blockquote>
-<hr />
-<h3 id="23-stage-3-fine-tune-with-rl-ppo">2.3. Stage 3 — Fine-tune with RL (PPO)<a class="headerlink" href="#23-stage-3-fine-tune-with-rl-ppo" title="Permanent link">&para;</a></h3>
-<p>The RL framing maps naturally onto the LLM setting, as summarised in the table below.</p>
-<table>
-<thead>
-<tr>
-<th>RL Concept</th>
-<th>RLHF Equivalent</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Agent</td>
-<td>The LLM being tuned.</td>
-</tr>
-<tr>
-<td>Policy</td>
-<td>LLM weights (maps state → action).</td>
-</tr>
-<tr>
-<td>State</td>
-<td>Current context (prompt + tokens generated so far).</td>
-</tr>
-<tr>
-<td>Action</td>
-<td>Generating the next token.</td>
-</tr>
-<tr>
-<td>Reward</td>
-<td>Score from the reward model.</td>
-</tr>
-</tbody>
-</table>
-<p>The training loop proceeds as follows.</p>
-<ol>
-<li>Sample a prompt from a <strong>prompt-only dataset</strong>.</li>
-<li>The LLM generates a completion.</li>
-<li>The reward model scores the <code>(prompt, completion)</code> pair.</li>
-<li>Update LLM weights via <strong>PPO</strong> (Proximal Policy Optimisation).</li>
-<li>Repeat — the policy gradually produces more preferred outputs.</li>
-</ol>
-<blockquote>
-<p>⚠️ A <strong>KL-divergence penalty</strong> is added in practice to prevent the tuned model from drifting too far from the base model.</p>
-</blockquote>
-<hr />
-<h2 id="3-efficient-training-peft">3. Efficient Training: PEFT<a class="headerlink" href="#3-efficient-training-peft" title="Permanent link">&para;</a></h2>
-<p>Full fine-tuning updates all model weights, which is expensive for large models. <strong>Parameter-Efficient Fine-Tuning (PEFT)</strong> instead trains only a small subset of — or entirely new — parameters. The key benefits are:</p>
+<h2 id="2-datasets-required-for-rlhf">2. Datasets Required for RLHF<a class="headerlink" href="#2-datasets-required-for-rlhf" title="Permanent link">&para;</a></h2>
+<p>RLHF requires two distinct datasets that must be prepared before any model training begins.</p>
 <ul>
-<li>Much faster training.</li>
-<li>Simpler serving: one base model with swappable adapter weights per use case.</li>
+<li>A <strong>preference dataset</strong>, used to train the reward model.</li>
+<li>A <strong>prompt dataset</strong>, used in the reinforcement learning loop to fine-tune the base LLM.</li>
 </ul>
-<p>The course uses a PEFT approach when tuning LLaMA 2.</p>
+<p>Both datasets must come from the <strong>same distribution</strong>. In this course, all prompts are drawn from a corpus of Reddit posts.</p>
 <hr />
-<h2 id="4-summary">4. Summary<a class="headerlink" href="#4-summary" title="Permanent link">&para;</a></h2>
-<blockquote>
-<p>Collect human preference comparisons → train a reward model to score outputs → use PPO to optimise the LLM towards high-reward completions, efficiently via PEFT.</p>
-</blockquote>
+<h2 id="3-preference-dataset">3. Preference Dataset<a class="headerlink" href="#3-preference-dataset" title="Permanent link">&para;</a></h2>
+<h3 id="31-structure">3.1. Structure<a class="headerlink" href="#31-structure" title="Permanent link">&para;</a></h3>
+<p>Each example in the preference dataset is a dictionary with four keys.</p>
+<ul>
+<li><code>input_text</code> — the prompt shown to the model (i.e. the Reddit post to be summarised).</li>
+<li><code>candidate_0</code> — one candidate completion generated for the prompt.</li>
+<li><code>candidate_1</code> — a second candidate completion for the same prompt.</li>
+<li><code>choice</code> — an integer (0 or 1) recording which candidate a human labeller preferred.</li>
+</ul>
+<h3 id="32-prompt-format-convention">3.2. Prompt Format Convention<a class="headerlink" href="#32-prompt-format-convention" title="Permanent link">&para;</a></h3>
+<p>All <code>input_text</code> values end with the literal string <code>[summary]:</code>. This is a deliberate formatting choice: the model must encounter the same instruction token at inference time as it did during training, so that it can recognise the pattern and generalise correctly. Mismatching training and inference formats will degrade performance.</p>
+<h3 id="33-human-preference-labels">3.3. Human Preference Labels<a class="headerlink" href="#33-human-preference-labels" title="Permanent link">&para;</a></h3>
+<p>A human labeller is shown both <code>candidate_0</code> and <code>candidate_1</code> and selects the better summary. The selected candidate is the <strong>winning</strong> candidate; the other is the <strong>losing</strong> candidate. For example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>candidate_0: &quot;When applying through a massive job portal, is just one HR
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>              person seeing ALL of them?&quot;
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>candidate_1: &quot;When applying to many jobs through a single university jobs
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>              portal, is just one HR person reading ALL my applications?&quot;
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>choice: 1   →  candidate_1 is preferred
+</code></pre></div>
+<p>The reward model is trained on triplets of <code>(input_text, winning_candidate, losing_candidate)</code> and learns to output a scalar score indicating response quality.</p>
+<h3 id="34-dataset-size-recommendations">3.4. Dataset Size Recommendations<a class="headerlink" href="#34-dataset-size-recommendations" title="Permanent link">&para;</a></h3>
+<p>The sample file <code>sample_preference.jsonl</code> is a small exploration subset. For production training, approximately 5,000–10,000 labelled examples are recommended.</p>
+<h3 id="35-loading-the-data">3.5. Loading the Data<a class="headerlink" href="#35-loading-the-data" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">preference_data</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;sample_preference.jsonl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        <span class="n">preference_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">sample</span> <span class="o">=</span> <span class="n">preference_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nb">print</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># dict_keys([&#39;input_text&#39;, &#39;candidate_0&#39;, &#39;candidate_1&#39;, &#39;choice&#39;])</span>
+</code></pre></div>
+<hr />
+<h2 id="4-prompt-dataset">4. Prompt Dataset<a class="headerlink" href="#4-prompt-dataset" title="Permanent link">&para;</a></h2>
+<h3 id="41-structure">4.1. Structure<a class="headerlink" href="#41-structure" title="Permanent link">&para;</a></h3>
+<p>Each example in the prompt dataset is a dictionary with a single key.</p>
+<ul>
+<li><code>input_text</code> — a prompt only, with no candidate completions or preference label.</li>
+</ul>
+<p>Like the preference dataset, all prompts end with <code>[summary]:</code>.</p>
+<h3 id="42-role-in-the-rlhf-pipeline">4.2. Role in the RLHF Pipeline<a class="headerlink" href="#42-role-in-the-rlhf-pipeline" title="Permanent link">&para;</a></h3>
+<p>Once the reward model has been trained on the preference dataset, the prompt dataset is fed into the RL loop. At each step, the base LLM generates a completion for a sampled prompt; the reward model scores that completion; and the policy is updated accordingly.</p>
+<h3 id="43-loading-the-data">4.3. Loading the Data<a class="headerlink" href="#43-loading-the-data" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">prompt_data</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;sample_prompt.jsonl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>        <span class="n">prompt_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">prompt_data</span><span class="p">))</span>  <span class="c1"># 6 (exploration sample)</span>
+</code></pre></div>
+<p>A helper function for readable inspection:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">print_d</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;key:</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="se">\n</span><span class="s2">val:</span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">print_d</span><span class="p">(</span><span class="n">prompt_data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</code></pre></div>
+<hr />
+<h2 id="5-key-takeaways">5. Key Takeaways<a class="headerlink" href="#5-key-takeaways" title="Permanent link">&para;</a></h2>
+<ul>
+<li>RLHF requires two datasets: a preference dataset (for reward model training) and a prompt dataset (for RL fine-tuning).</li>
+<li>Both datasets must share the same prompt distribution and formatting convention.</li>
+<li>The <code>[summary]:</code> suffix in <code>input_text</code> is a deliberate instruction token that must be preserved at inference time.</li>
+<li>Human preference labels are inherently subjective; careful labeller selection and clear annotation criteria are critical to dataset quality.</li>
+<li>The reward model is trained on <code>(prompt, winner, loser)</code> triplets and produces a scalar reward signal used to guide policy optimisation.</li>
+</ul>
 
 
 

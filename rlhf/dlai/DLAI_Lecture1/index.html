@@ -12,27 +12,31 @@
         <meta name="author" content="Nhan Dam">
       
       
-        <link rel="canonical" href="https://nhan-dam.github.io/rlhf/week1-mdp/">
+        <link rel="canonical" href="https://nhan-dam.github.io/rlhf/dlai/DLAI_Lecture1/">
       
       
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../DLAI_Lecture2/">
       
       
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>1. Week 1 – MDPs and Bellman Equations - ND's Machine Learning Notes</title>
+        <title>Lecture 1 - Conceptual Overview - ND's Machine Learning Notes</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -51,7 +55,7 @@
       
     
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#1-week-1-mdps-and-bellman-equations" class="md-skip">
+        <a href="#rlhf-conceptual-overview" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +96,7 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="ND&#39;s Machine Learning Notes" class="md-header__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
+    <a href="../../.." title="ND&#39;s Machine Learning Notes" class="md-header__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -112,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              1. Week 1 – MDPs and Bellman Equations
+              Lecture 1 - Conceptual Overview
             
           </span>
         </div>
@@ -219,7 +223,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href="../../.." class="md-tabs__link">
         
   
   
@@ -236,6 +240,8 @@
   
   
   
+    
+  
   
     
     
@@ -243,11 +249,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../dlai/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -270,7 +278,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../reference/ml_workstation_setup_uv/" class="md-tabs__link">
+        <a href="../../../reference/ml_workstation_setup_uv/" class="md-tabs__link">
           
   
   
@@ -310,7 +318,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="ND&#39;s Machine Learning Notes" class="md-nav__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
+    <a href="../../.." title="ND&#39;s Machine Learning Notes" class="md-nav__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -340,7 +348,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -364,28 +372,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -403,7 +414,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -418,28 +429,31 @@
                 
   
   
+    
   
   
+  
     
     
     
     
       
       
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
         
           
+          
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_1" >
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
         
           
-          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
             
   
   
@@ -457,7 +471,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2_1">
             <span class="md-nav__icon md-icon"></span>
             
@@ -475,7 +489,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../dlai/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   
@@ -500,10 +514,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../dlai/DLAI_Lecture1/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 1 - Conceptual Overview
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -519,6 +560,148 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-core-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The Core Problem
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-the-three-stage-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. The Three-Stage Pipeline
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. The Three-Stage Pipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-stage-1-build-a-preference-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Stage 1 — Build a Preference Dataset
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-stage-2-train-a-reward-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. Stage 2 — Train a Reward Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2. Stage 2 — Train a Reward Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#221-the-loss-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.1. The Loss Function
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#222-why-not-maximise-the-raw-score-difference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.2. Why Not Maximise the Raw Score Difference?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#223-what-the-log-sigmoid-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.3. What the Log-Sigmoid Does
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-stage-3-fine-tune-with-rl-ppo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Stage 3 — Fine-tune with RL (PPO)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-efficient-training-peft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Efficient Training: PEFT
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -531,7 +714,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../dlai/DLAI_Lecture2/" class="md-nav__link">
+      <a href="../DLAI_Lecture2/" class="md-nav__link">
         
   
   
@@ -559,7 +742,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../dlai/DLAI_Lecture3/" class="md-nav__link">
+      <a href="../DLAI_Lecture3/" class="md-nav__link">
         
   
   
@@ -587,7 +770,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../dlai/DLAI_Lecture4/" class="md-nav__link">
+      <a href="../DLAI_Lecture4/" class="md-nav__link">
         
   
   
@@ -684,7 +867,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/ml_workstation_setup_uv/" class="md-nav__link">
+      <a href="../../../reference/ml_workstation_setup_uv/" class="md-nav__link">
         
   
   
@@ -712,7 +895,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/github-pages-setup/" class="md-nav__link">
+      <a href="../../../reference/github-pages-setup/" class="md-nav__link">
         
   
   
@@ -740,7 +923,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/github_cheatsheet_chapter/" class="md-nav__link">
+      <a href="../../../reference/github_cheatsheet_chapter/" class="md-nav__link">
         
   
   
@@ -795,10 +978,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#11-the-markov-decision-process" class="md-nav__link">
+  <a href="#1-the-core-problem" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.1. The Markov Decision Process
+        1. The Core Problem
       
     </span>
   </a>
@@ -806,22 +989,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#12-value-functions" class="md-nav__link">
+  <a href="#2-the-three-stage-pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.2. Value Functions
+        2. The Three-Stage Pipeline
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="1.2. Value Functions">
+    <nav class="md-nav" aria-label="2. The Three-Stage Pipeline">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#121-state-value-function" class="md-nav__link">
+  <a href="#21-stage-1-build-a-preference-dataset" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.2.1. State-Value Function
+        2.1. Stage 1 — Build a Preference Dataset
       
     </span>
   </a>
@@ -829,10 +1012,60 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#122-action-value-function" class="md-nav__link">
+  <a href="#22-stage-2-train-a-reward-model" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.2.2. Action-Value Function
+        2.2. Stage 2 — Train a Reward Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2. Stage 2 — Train a Reward Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#221-the-loss-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.1. The Loss Function
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#222-why-not-maximise-the-raw-score-difference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.2. Why Not Maximise the Raw Score Difference?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#223-what-the-log-sigmoid-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.3. What the Log-Sigmoid Does
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-stage-3-fine-tune-with-rl-ppo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Stage 3 — Fine-tune with RL (PPO)
       
     </span>
   </a>
@@ -845,49 +1078,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#13-bellman-equations" class="md-nav__link">
+  <a href="#3-efficient-training-peft" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.3. Bellman Equations
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="1.3. Bellman Equations">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#131-bellman-expectation-equation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1.3.1. Bellman Expectation Equation
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#132-bellman-optimality-equation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1.3.2. Bellman Optimality Equation
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#14-key-takeaways" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1.4. Key Takeaways
+        3. Efficient Training: PEFT
       
     </span>
   </a>
@@ -895,10 +1089,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#15-references" class="md-nav__link">
+  <a href="#4-summary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.5. References
+        4. Summary
       
     </span>
   </a>
@@ -922,7 +1116,7 @@
 
 
   
-    <a href="https://github.com/nhan-dam/nhan-dam.github.io/edit/main/docs/rlhf/week1-mdp.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/nhan-dam/nhan-dam.github.io/edit/main/docs/rlhf/dlai/DLAI_Lecture1.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -930,57 +1124,97 @@
   
 
 
-<h1 id="1-week-1-mdps-and-bellman-equations">1. Week 1 – MDPs and Bellman Equations<a class="headerlink" href="#1-week-1-mdps-and-bellman-equations" title="Permanent link">&para;</a></h1>
-<h2 id="11-the-markov-decision-process">1.1. The Markov Decision Process<a class="headerlink" href="#11-the-markov-decision-process" title="Permanent link">&para;</a></h2>
-<p>A Markov decision process (MDP) is a mathematical framework for sequential decision-making under uncertainty. It is defined by a tuple <span class="arithmatex">\((S, A, P, R, \gamma)\)</span>:</p>
+<h1 id="rlhf-conceptual-overview">RLHF — Conceptual Overview<a class="headerlink" href="#rlhf-conceptual-overview" title="Permanent link">&para;</a></h1>
+<h2 id="1-the-core-problem">1. The Core Problem<a class="headerlink" href="#1-the-core-problem" title="Permanent link">&para;</a></h2>
+<p>Standard supervised fine-tuning maps an input to a single correct output. For open-ended tasks such as summarisation, however, <strong>there is no single correct answer</strong> — only human preferences. RLHF reframes the problem: instead of asking 'what is the right answer?', it asks 'what do humans prefer?'</p>
+<hr />
+<h2 id="2-the-three-stage-pipeline">2. The Three-Stage Pipeline<a class="headerlink" href="#2-the-three-stage-pipeline" title="Permanent link">&para;</a></h2>
+<h3 id="21-stage-1-build-a-preference-dataset">2.1. Stage 1 — Build a Preference Dataset<a class="headerlink" href="#21-stage-1-build-a-preference-dataset" title="Permanent link">&para;</a></h3>
+<p>The pipeline begins by constructing a dataset of human preferences through three steps.</p>
+<ol>
+<li>Use the base LLM to generate <strong>multiple completions</strong> for the same prompt.</li>
+<li>Show human labellers <strong>two completions side-by-side</strong> and ask which they prefer. Pairwise comparison is preferable to absolute rating scales, which are too subjective and vary across individuals.</li>
+<li>Record the result as a dataset of <code>(prompt, chosen_completion, rejected_completion)</code> triplets.</li>
+</ol>
+<blockquote>
+<p>⚠️ Key nuance: this dataset captures the preferences of <em>your specific labellers</em>, not human preference in general. Defining your <strong>alignment criteria</strong> upfront (e.g. more helpful, less toxic, more concise) is critical.</p>
+</blockquote>
+<hr />
+<h3 id="22-stage-2-train-a-reward-model">2.2. Stage 2 — Train a Reward Model<a class="headerlink" href="#22-stage-2-train-a-reward-model" title="Permanent link">&para;</a></h3>
+<p>The reward model is itself an LLM, repurposed as a <strong>regression model</strong>. It takes a <code>(prompt, completion)</code> pair as input and outputs a single scalar score, where a higher score indicates greater alignment with human preferences.</p>
+<h4 id="221-the-loss-function">2.2.1. The Loss Function<a class="headerlink" href="#221-the-loss-function" title="Permanent link">&para;</a></h4>
+<p>The reward model is trained using a <strong>pairwise ranking loss</strong> derived from the Bradley-Terry model for pairwise comparisons. Given a triplet <code>(prompt x, chosen response y_w, rejected response y_l)</code>, the loss is:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>L = -log( σ( r(x, y_w) - r(x, y_l) ) )
+</code></pre></div>
+<p>where <code>r(x, y)</code> is the scalar score the reward model assigns to a given prompt–completion pair, and <code>σ</code> is the sigmoid function.</p>
+<h4 id="222-why-not-maximise-the-raw-score-difference">2.2.2. Why Not Maximise the Raw Score Difference?<a class="headerlink" href="#222-why-not-maximise-the-raw-score-difference" title="Permanent link">&para;</a></h4>
+<p>A simpler alternative would be <code>L = -(r(y_w) - r(y_l))</code> — directly maximising the gap between the chosen and rejected scores. This fails for two reasons.</p>
+<p>First, the loss is <strong>unbounded below</strong>. The optimiser can always make the loss more negative by widening the gap further, with no natural stopping point. There is no sense of 'confident enough' — gradients never diminish as the model becomes more certain, which makes training unstable.</p>
+<p>Second, the gradients are <strong>constant</strong>. The gradient of the raw difference with respect to the output scores is always ±1, regardless of how confidently right or wrong the model is. A model that barely separates a pair (<code>r(y_w) = 0.51, r(y_l) = 0.50</code>) receives exactly the same gradient update as one that separates them decisively (<code>r(y_w) = 100, r(y_l) = -100</code>). The network cannot tell from the gradient signal alone whether it should be more or less confident.</p>
+<h4 id="223-what-the-log-sigmoid-does">2.2.3. What the Log-Sigmoid Does<a class="headerlink" href="#223-what-the-log-sigmoid-does" title="Permanent link">&para;</a></h4>
+<p>The sigmoid squashes the score difference into a probability between 0 and 1 — specifically, the model's estimated probability that <code>y_w</code> is preferred over <code>y_l</code>. Taking the log then gives the loss two important properties.</p>
+<p>The loss is now <strong>bounded</strong>: as the gap grows large and positive, <code>σ</code> approaches 1 and <code>log(σ)</code> approaches 0. Training naturally saturates once the model is confident, and gradients shrink towards zero — a stable, well-behaved objective.</p>
+<p>The gradients are now <strong>adaptive</strong>: the gradient of <code>L</code> with respect to <code>r(y_w)</code> works out to <code>-(1 - σ(r(y_w) - r(y_l)))</code>. When the model is already confident, the sigmoid is close to 1, so the gradient is nearly zero — a small nudge. When the model is wrong or uncertain, the sigmoid is near 0 or 0.5, the gradient is large, and the network receives a strong corrective signal. Training effort is automatically concentrated where it is most needed.</p>
+<blockquote>
+<p>💡 The Bradley-Terry framing is a natural fit for preference data: the reward model learns a relative 'strength' for each completion — meaningful only in comparison to other completions, never on an absolute scale. This mirrors exactly how human labellers produce the data, always expressing relative rather than absolute judgements.</p>
+</blockquote>
+<hr />
+<h3 id="23-stage-3-fine-tune-with-rl-ppo">2.3. Stage 3 — Fine-tune with RL (PPO)<a class="headerlink" href="#23-stage-3-fine-tune-with-rl-ppo" title="Permanent link">&para;</a></h3>
+<p>The RL framing maps naturally onto the LLM setting, as summarised in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>RL Concept</th>
+<th>RLHF Equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agent</td>
+<td>The LLM being tuned.</td>
+</tr>
+<tr>
+<td>Policy</td>
+<td>LLM weights (maps state → action).</td>
+</tr>
+<tr>
+<td>State</td>
+<td>Current context (prompt + tokens generated so far).</td>
+</tr>
+<tr>
+<td>Action</td>
+<td>Generating the next token.</td>
+</tr>
+<tr>
+<td>Reward</td>
+<td>Score from the reward model.</td>
+</tr>
+</tbody>
+</table>
+<p>The training loop proceeds as follows.</p>
+<ol>
+<li>Sample a prompt from a <strong>prompt-only dataset</strong>.</li>
+<li>The LLM generates a completion.</li>
+<li>The reward model scores the <code>(prompt, completion)</code> pair.</li>
+<li>Update LLM weights via <strong>PPO</strong> (Proximal Policy Optimisation).</li>
+<li>Repeat — the policy gradually produces more preferred outputs.</li>
+</ol>
+<blockquote>
+<p>⚠️ A <strong>KL-divergence penalty</strong> is added in practice to prevent the tuned model from drifting too far from the base model.</p>
+</blockquote>
+<hr />
+<h2 id="3-efficient-training-peft">3. Efficient Training: PEFT<a class="headerlink" href="#3-efficient-training-peft" title="Permanent link">&para;</a></h2>
+<p>Full fine-tuning updates all model weights, which is expensive for large models. <strong>Parameter-Efficient Fine-Tuning (PEFT)</strong> instead trains only a small subset of — or entirely new — parameters. The key benefits are:</p>
 <ul>
-<li><span class="arithmatex">\(S\)</span> — the state space.</li>
-<li><span class="arithmatex">\(A\)</span> — the action space.</li>
-<li><span class="arithmatex">\(P(s' \mid s, a)\)</span> — the transition probability of reaching state <span class="arithmatex">\(s'\)</span> after taking action <span class="arithmatex">\(a\)</span> in state <span class="arithmatex">\(s\)</span>.</li>
-<li><span class="arithmatex">\(R(s, a)\)</span> — the reward function.</li>
-<li><span class="arithmatex">\(\gamma \in [0, 1)\)</span> — the discount factor, which controls how much future rewards are weighted relative to immediate ones.</li>
+<li>Much faster training.</li>
+<li>Simpler serving: one base model with swappable adapter weights per use case.</li>
 </ul>
-<p>The 'Markov' property means the next state depends only on the current state and action, not on the history.</p>
+<p>The course uses a PEFT approach when tuning LLaMA 2.</p>
 <hr />
-<h2 id="12-value-functions">1.2. Value Functions<a class="headerlink" href="#12-value-functions" title="Permanent link">&para;</a></h2>
-<h3 id="121-state-value-function">1.2.1. State-Value Function<a class="headerlink" href="#121-state-value-function" title="Permanent link">&para;</a></h3>
-<p>The state-value function <span class="arithmatex">\(V^\pi(s)\)</span> measures the expected return starting from state <span class="arithmatex">\(s\)</span> and following policy <span class="arithmatex">\(\pi\)</span>:</p>
-<div class="arithmatex">\[
-V^\pi(s) = \mathbb{E}_\pi \left[ \sum_{t=0}^{\infty} \gamma^t R(s_t, a_t) \;\Big|\; s_0 = s \right]
-\]</div>
-<h3 id="122-action-value-function">1.2.2. Action-Value Function<a class="headerlink" href="#122-action-value-function" title="Permanent link">&para;</a></h3>
-<p>The action-value function <span class="arithmatex">\(Q^\pi(s, a)\)</span> additionally conditions on the first action taken:</p>
-<div class="arithmatex">\[
-Q^\pi(s, a) = \mathbb{E}_\pi \left[ \sum_{t=0}^{\infty} \gamma^t R(s_t, a_t) \;\Big|\; s_0 = s,\, a_0 = a \right]
-\]</div>
-<p>The two are related by <span class="arithmatex">\(V^\pi(s) = \sum_a \pi(a \mid s)\, Q^\pi(s, a)\)</span>.</p>
-<hr />
-<h2 id="13-bellman-equations">1.3. Bellman Equations<a class="headerlink" href="#13-bellman-equations" title="Permanent link">&para;</a></h2>
-<p>The Bellman equations express a recursive consistency condition that any valid value function must satisfy.</p>
-<h3 id="131-bellman-expectation-equation">1.3.1. Bellman Expectation Equation<a class="headerlink" href="#131-bellman-expectation-equation" title="Permanent link">&para;</a></h3>
-<div class="arithmatex">\[
-V^\pi(s) = \sum_a \pi(a \mid s) \sum_{s'} P(s' \mid s, a) \left[ R(s, a) + \gamma V^\pi(s') \right]
-\]</div>
-<p>This says: the value of a state is the expected immediate reward plus the discounted value of the next state, averaged over both the policy and the environment dynamics.</p>
-<h3 id="132-bellman-optimality-equation">1.3.2. Bellman Optimality Equation<a class="headerlink" href="#132-bellman-optimality-equation" title="Permanent link">&para;</a></h3>
-<p>The optimal value function <span class="arithmatex">\(V^*(s)\)</span> satisfies:</p>
-<div class="arithmatex">\[
-V^*(s) = \max_a \sum_{s'} P(s' \mid s, a) \left[ R(s, a) + \gamma V^*(s') \right]
-\]</div>
-<p>The optimal policy can be recovered greedily: <span class="arithmatex">\(\pi^*(s) = \arg\max_a Q^*(s, a)\)</span>.</p>
-<hr />
-<h2 id="14-key-takeaways">1.4. Key Takeaways<a class="headerlink" href="#14-key-takeaways" title="Permanent link">&para;</a></h2>
-<ul>
-<li>An MDP is the standard model for RL; understanding it precisely is a prerequisite for everything else.</li>
-<li>Value functions quantify 'how good' a state (or state-action pair) is under a given policy.</li>
-<li>The Bellman equations are the foundation of almost all RL algorithms — both dynamic programming methods (value iteration, policy iteration) and modern deep RL.</li>
-<li>The discount factor <span class="arithmatex">\(\gamma\)</span> is not just a mathematical convenience; it encodes a preference for sooner rewards and ensures convergence in infinite-horizon problems.</li>
-</ul>
-<hr />
-<h2 id="15-references">1.5. References<a class="headerlink" href="#15-references" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Sutton &amp; Barto, <em>Reinforcement Learning: An Introduction</em>, Ch. 3.</li>
-</ul>
+<h2 id="4-summary">4. Summary<a class="headerlink" href="#4-summary" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Collect human preference comparisons → train a reward model to score outputs → use PPO to optimise the LLM towards high-reward completions, efficiently via PEFT.</p>
+</blockquote>
 
 
 
@@ -1036,12 +1270,12 @@ V^*(s) = \max_a \sum_{s'} P(s' \mid s, a) \left[ R(s, a) + \gamma V^*(s') \right
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../javascripts/mathjax.js"></script>
+        <script src="../../../javascripts/mathjax.js"></script>
       
         <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
       

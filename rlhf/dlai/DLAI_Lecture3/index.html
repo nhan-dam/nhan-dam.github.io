@@ -29,7 +29,7 @@
     
     
       
-        <title>Lecture 3 - Datasets - ND's Machine Learning Notes</title>
+        <title>Lecture 3 - Tune an LLM with RLHF - ND's Machine Learning Notes</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#rlhf-datasets" class="md-skip">
+        <a href="#tuning-an-llm-with-rlhf-on-vertex-ai" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Lecture 3 - Datasets
+              Lecture 3 - Tune an LLM with RLHF
             
           </span>
         </div>
@@ -517,6 +517,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../DLAI_Lecture1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 1 - Conceptual Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../DLAI_Lecture2/" class="md-nav__link">
         
   
@@ -524,7 +552,7 @@
   <span class="md-ellipsis">
     
   
-    Lecture 2 - Conceptual Overview
+    Lecture 2 - Datasets
   
 
     
@@ -561,7 +589,7 @@
   <span class="md-ellipsis">
     
   
-    Lecture 3 - Datasets
+    Lecture 3 - Tune an LLM with RLHF
   
 
     
@@ -579,7 +607,7 @@
   <span class="md-ellipsis">
     
   
-    Lecture 3 - Datasets
+    Lecture 3 - Tune an LLM with RLHF
   
 
     
@@ -616,10 +644,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-datasets-required-for-rlhf" class="md-nav__link">
+  <a href="#2-ml-pipelines-and-why-rlhf-uses-them" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Datasets Required for RLHF
+        2. ML Pipelines and Why RLHF Uses Them
       
     </span>
   </a>
@@ -627,22 +655,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-preference-dataset" class="md-nav__link">
+  <a href="#3-compiling-the-pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Preference Dataset
+        3. Compiling the Pipeline
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="3. Preference Dataset">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-configuring-the-pipeline-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Configuring the Pipeline Parameters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Configuring the Pipeline Parameters">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#31-structure" class="md-nav__link">
+  <a href="#41-dataset-paths" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.1. Structure
+        4.1. Dataset Paths
       
     </span>
   </a>
@@ -650,10 +689,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#32-prompt-format-convention" class="md-nav__link">
+  <a href="#42-base-model-selection" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.2. Prompt Format Convention
+        4.2. Base Model Selection
       
     </span>
   </a>
@@ -661,10 +700,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#33-human-preference-labels" class="md-nav__link">
+  <a href="#43-training-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.3. Human Preference Labels
+        4.3. Training Steps
       
     </span>
   </a>
@@ -672,10 +711,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#34-dataset-size-recommendations" class="md-nav__link">
+  <a href="#44-learning-rate-multipliers-and-kl-coefficient" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.4. Dataset Size Recommendations
+        4.4. Learning Rate Multipliers and KL Coefficient
       
     </span>
   </a>
@@ -683,10 +722,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#35-loading-the-data" class="md-nav__link">
+  <a href="#45-task-instruction" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.5. Loading the Data
+        4.5. Task Instruction
       
     </span>
   </a>
@@ -699,60 +738,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-prompt-dataset" class="md-nav__link">
+  <a href="#5-complete-parameter-dictionary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Prompt Dataset
+        5. Complete Parameter Dictionary
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="4. Prompt Dataset">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#41-structure" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4.1. Structure
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#42-role-in-the-rlhf-pipeline" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4.2. Role in the RLHF Pipeline
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#43-loading-the-data" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4.3. Loading the Data
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-key-takeaways" class="md-nav__link">
+  <a href="#6-creating-and-submitting-the-pipeline-job" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Key Takeaways
+        6. Creating and Submitting the Pipeline Job
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-key-concepts-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Key Concepts Summary
       
     </span>
   </a>
@@ -782,7 +793,7 @@
   <span class="md-ellipsis">
     
   
-    Lecture 4 - Tune an LLM with RLHF
+    Lecture 4 - Evaluate an RLHF-Tuned Model
   
 
     
@@ -994,10 +1005,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-datasets-required-for-rlhf" class="md-nav__link">
+  <a href="#2-ml-pipelines-and-why-rlhf-uses-them" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Datasets Required for RLHF
+        2. ML Pipelines and Why RLHF Uses Them
       
     </span>
   </a>
@@ -1005,22 +1016,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-preference-dataset" class="md-nav__link">
+  <a href="#3-compiling-the-pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Preference Dataset
+        3. Compiling the Pipeline
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="3. Preference Dataset">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-configuring-the-pipeline-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Configuring the Pipeline Parameters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Configuring the Pipeline Parameters">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#31-structure" class="md-nav__link">
+  <a href="#41-dataset-paths" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.1. Structure
+        4.1. Dataset Paths
       
     </span>
   </a>
@@ -1028,10 +1050,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#32-prompt-format-convention" class="md-nav__link">
+  <a href="#42-base-model-selection" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.2. Prompt Format Convention
+        4.2. Base Model Selection
       
     </span>
   </a>
@@ -1039,10 +1061,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#33-human-preference-labels" class="md-nav__link">
+  <a href="#43-training-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.3. Human Preference Labels
+        4.3. Training Steps
       
     </span>
   </a>
@@ -1050,10 +1072,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#34-dataset-size-recommendations" class="md-nav__link">
+  <a href="#44-learning-rate-multipliers-and-kl-coefficient" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.4. Dataset Size Recommendations
+        4.4. Learning Rate Multipliers and KL Coefficient
       
     </span>
   </a>
@@ -1061,10 +1083,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#35-loading-the-data" class="md-nav__link">
+  <a href="#45-task-instruction" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.5. Loading the Data
+        4.5. Task Instruction
       
     </span>
   </a>
@@ -1077,60 +1099,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-prompt-dataset" class="md-nav__link">
+  <a href="#5-complete-parameter-dictionary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Prompt Dataset
+        5. Complete Parameter Dictionary
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="4. Prompt Dataset">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#41-structure" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4.1. Structure
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#42-role-in-the-rlhf-pipeline" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4.2. Role in the RLHF Pipeline
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#43-loading-the-data" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4.3. Loading the Data
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-key-takeaways" class="md-nav__link">
+  <a href="#6-creating-and-submitting-the-pipeline-job" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Key Takeaways
+        6. Creating and Submitting the Pipeline Job
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-key-concepts-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Key Concepts Summary
       
     </span>
   </a>
@@ -1162,88 +1156,218 @@
   
 
 
-<h1 id="rlhf-datasets">RLHF Datasets<a class="headerlink" href="#rlhf-datasets" title="Permanent link">&para;</a></h1>
+<h1 id="tuning-an-llm-with-rlhf-on-vertex-ai">Tuning an LLM with RLHF on Vertex AI<a class="headerlink" href="#tuning-an-llm-with-rlhf-on-vertex-ai" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Created on: 20 April 2026</p>
+<p>Updated on: 20 April 2026</p>
+</blockquote>
 <h2 id="1-overview">1. Overview<a class="headerlink" href="#1-overview" title="Permanent link">&para;</a></h2>
-<p>This note summarises Lecture 3 of the RLHF course, which covers the two datasets required before fine-tuning a large language model with Reinforcement Learning from Human Feedback. The worked examples use a Reddit post summarisation task with the OSS LLaMA 2 model.</p>
+<p>This chapter covers the practical steps needed to execute a Reinforcement Learning from Human Feedback (RLHF) tuning job on Google Cloud's Vertex AI platform. The process is encapsulated in a pre-built ML pipeline, which handles the multi-stage workflow — reward model training, reinforcement learning fine-tuning, and evaluation — as a single reproducible unit. The learner does not need to author or modify the pipeline itself; the task is to compile it and configure the job parameters correctly.</p>
 <hr />
-<h2 id="2-datasets-required-for-rlhf">2. Datasets Required for RLHF<a class="headerlink" href="#2-datasets-required-for-rlhf" title="Permanent link">&para;</a></h2>
-<p>RLHF requires two distinct datasets that must be prepared before any model training begins.</p>
-<ul>
-<li>A <strong>preference dataset</strong>, used to train the reward model.</li>
-<li>A <strong>prompt dataset</strong>, used in the reinforcement learning loop to fine-tune the base LLM.</li>
-</ul>
-<p>Both datasets must come from the <strong>same distribution</strong>. In this course, all prompts are drawn from a corpus of Reddit posts.</p>
+<h2 id="2-ml-pipelines-and-why-rlhf-uses-them">2. ML Pipelines and Why RLHF Uses Them<a class="headerlink" href="#2-ml-pipelines-and-why-rlhf-uses-them" title="Permanent link">&para;</a></h2>
+<p>A machine learning pipeline is a portable, scalable workflow composed of sequential <strong>components</strong> (steps where code executes) and <strong>artefacts</strong> (outputs produced by those steps, e.g. datasets, trained models, metrics). Pipelines are a natural fit for RLHF because the process involves multiple interdependent stages:</p>
+<ol>
+<li>A preference dataset is used to train a reward model.</li>
+<li>The reward model is used alongside a prompt dataset in a reinforcement learning loop to fine-tune the base LLM.</li>
+<li>An optional evaluation dataset triggers a batch inference job after tuning completes.</li>
+</ol>
+<p>Vertex AI represents all of these stages visually, with components shown as blue-cube boxes and artefacts as yellow-triangle boxes. Notably, the pipeline contains a <strong>Reward Model Trainer</strong> component and a <strong>Reinforcer</strong> component, the latter being the RL loop that directly fine-tunes the base model.</p>
 <hr />
-<h2 id="3-preference-dataset">3. Preference Dataset<a class="headerlink" href="#3-preference-dataset" title="Permanent link">&para;</a></h2>
-<h3 id="31-structure">3.1. Structure<a class="headerlink" href="#31-structure" title="Permanent link">&para;</a></h3>
-<p>Each example in the preference dataset is a dictionary with four keys.</p>
-<ul>
-<li><code>input_text</code> — the prompt shown to the model (i.e. the Reddit post to be summarised).</li>
-<li><code>candidate_0</code> — one candidate completion generated for the prompt.</li>
-<li><code>candidate_1</code> — a second candidate completion for the same prompt.</li>
-<li><code>choice</code> — an integer (0 or 1) recording which candidate a human labeller preferred.</li>
-</ul>
-<h3 id="32-prompt-format-convention">3.2. Prompt Format Convention<a class="headerlink" href="#32-prompt-format-convention" title="Permanent link">&para;</a></h3>
-<p>All <code>input_text</code> values end with the literal string <code>[summary]:</code>. This is a deliberate formatting choice: the model must encounter the same instruction token at inference time as it did during training, so that it can recognise the pattern and generalise correctly. Mismatching training and inference formats will degrade performance.</p>
-<h3 id="33-human-preference-labels">3.3. Human Preference Labels<a class="headerlink" href="#33-human-preference-labels" title="Permanent link">&para;</a></h3>
-<p>A human labeller is shown both <code>candidate_0</code> and <code>candidate_1</code> and selects the better summary. The selected candidate is the <strong>winning</strong> candidate; the other is the <strong>losing</strong> candidate. For example:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>candidate_0: &quot;When applying through a massive job portal, is just one HR
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>              person seeing ALL of them?&quot;
+<h2 id="3-compiling-the-pipeline">3. Compiling the Pipeline<a class="headerlink" href="#3-compiling-the-pipeline" title="Permanent link">&para;</a></h2>
+<p>The RLHF pipeline is distributed as part of the <code>google-cloud-pipeline-components</code> library (currently in preview). Before it can be executed on Vertex AI, it must be <strong>compiled</strong> into a YAML file — a self-contained, human-readable description of every pipeline step and its inputs. The compiler comes from the <code>kfp</code> (Kubeflow Pipelines) library.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Install dependencies (only needed outside the course environment)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># !pip3 install google-cloud-pipeline-components kfp</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>candidate_1: &quot;When applying to many jobs through a single university jobs
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>              portal, is just one HR person reading ALL my applications?&quot;
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Import the pre-built RLHF pipeline (in preview as of writing)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">google_cloud_pipeline_components.preview.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">rlhf_pipeline</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>choice: 1   →  candidate_1 is preferred
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Import the KFP compiler</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="kn">from</span><span class="w"> </span><span class="nn">kfp</span><span class="w"> </span><span class="kn">import</span> <span class="n">compiler</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Define an output path for the compiled YAML</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="n">RLHF_PIPELINE_PKG_PATH</span> <span class="o">=</span> <span class="s2">&quot;rlhf_pipeline.yaml&quot;</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># Compile: this writes all pipeline metadata and step definitions to the YAML file</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="n">compiler</span><span class="o">.</span><span class="n">Compiler</span><span class="p">()</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="n">pipeline_func</span><span class="o">=</span><span class="n">rlhf_pipeline</span><span class="p">,</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="n">package_path</span><span class="o">=</span><span class="n">RLHF_PIPELINE_PKG_PATH</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="p">)</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="c1"># Inspect the first few lines of the generated file</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="c1"># !head rlhf_pipeline.yaml</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="c1"># To see the full file: !cat rlhf_pipeline.yaml</span>
 </code></pre></div>
-<p>The reward model is trained on triplets of <code>(input_text, winning_candidate, losing_candidate)</code> and learns to output a scalar score indicating response quality.</p>
-<h3 id="34-dataset-size-recommendations">3.4. Dataset Size Recommendations<a class="headerlink" href="#34-dataset-size-recommendations" title="Permanent link">&para;</a></h3>
-<p>The sample file <code>sample_preference.jsonl</code> is a small exploration subset. For production training, approximately 5,000–10,000 labelled examples are recommended.</p>
-<h3 id="35-loading-the-data">3.5. Loading the Data<a class="headerlink" href="#35-loading-the-data" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">preference_data</span> <span class="o">=</span> <span class="p">[]</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;sample_preference.jsonl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        <span class="n">preference_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">sample</span> <span class="o">=</span> <span class="n">preference_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nb">print</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># dict_keys([&#39;input_text&#39;, &#39;candidate_0&#39;, &#39;candidate_1&#39;, &#39;choice&#39;])</span>
+<p>The resulting YAML file is auto-generated and should not be edited manually. It is the artefact that Vertex AI reads to understand what the pipeline should do.</p>
+<hr />
+<h2 id="4-configuring-the-pipeline-parameters">4. Configuring the Pipeline Parameters<a class="headerlink" href="#4-configuring-the-pipeline-parameters" title="Permanent link">&para;</a></h2>
+<p>All job-specific configuration is passed as a Python dictionary called <code>parameter_values</code>. The parameters fall into four logical groups.</p>
+<h3 id="41-dataset-paths">4.1. Dataset Paths<a class="headerlink" href="#41-dataset-paths" title="Permanent link">&para;</a></h3>
+<p>Three datasets are required, all stored in Google Cloud Storage (paths prefixed with <code>gs://</code>). They must all be in JSON Lines (<code>.jsonl</code>) format and reside in the same GCS bucket.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">parameter_values</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="c1"># Human preference comparisons, used to train the reward model</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="s2">&quot;preference_dataset&quot;</span><span class="p">:</span> <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text_small/&quot;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>                          <span class="s2">&quot;summarize_from_feedback_tfds/comparisons/train/*.jsonl&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="c1"># Reddit posts used as prompts during the RL fine-tuning loop</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="s2">&quot;prompt_dataset&quot;</span><span class="p">:</span> <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text_small/&quot;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>                      <span class="s2">&quot;reddit_tfds/train/*.jsonl&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="c1"># Validation prompts; triggers a batch inference job post-tuning</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="s2">&quot;eval_dataset&quot;</span><span class="p">:</span> <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text_small/&quot;</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>                    <span class="s2">&quot;reddit_tfds/val/*.jsonl&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="o">...</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="42-base-model-selection">4.2. Base Model Selection<a class="headerlink" href="#42-base-model-selection" title="Permanent link">&para;</a></h3>
+<p>The <code>large_model_reference</code> parameter specifies which foundational model to fine-tune. Supported options include <code>"llama-2-7b"</code>, <code>"text-bison@001"</code>, and T5x family models.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="s2">&quot;large_model_reference&quot;</span><span class="p">:</span> <span class="s2">&quot;llama-2-7b&quot;</span><span class="p">,</span>
+</code></pre></div>
+<h3 id="43-training-steps">4.3. Training Steps<a class="headerlink" href="#43-training-steps" title="Permanent link">&para;</a></h3>
+<p>The pipeline accepts the number of <strong>training steps</strong> (not epochs) for each of the two training phases. The conversion from epochs to steps uses the formula:</p>
+<div class="arithmatex">\[stepsPerEpoch = \left\lceil \frac{datasetSize}{batchSize} \right\rceil\]</div>
+<div class="arithmatex">\[trainSteps = stepsPerEpoch \times numEpochs\]</div>
+<p>The batch size is fixed at 64 for this pipeline. The recommended epoch ranges are 20–30 for the reward model and 10–20 for the RL loop.</p>
+<p><strong>Reward model training steps:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">PREF_DATASET_SIZE</span> <span class="o">=</span> <span class="mi">3000</span>  <span class="c1"># Size of the preference dataset</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">64</span>           <span class="c1"># Fixed by the pipeline; cannot be changed</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">REWARD_STEPS_PER_EPOCH</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">PREF_DATASET_SIZE</span> <span class="o">/</span> <span class="n">BATCH_SIZE</span><span class="p">)</span>  <span class="c1"># = 47</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">REWARD_NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">30</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">reward_model_train_steps</span> <span class="o">=</span> <span class="n">REWARD_STEPS_PER_EPOCH</span> <span class="o">*</span> <span class="n">REWARD_NUM_EPOCHS</span>  <span class="c1"># = 1410</span>
+</code></pre></div>
+<p><strong>RL fine-tuning steps:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">PROMPT_DATASET_SIZE</span> <span class="o">=</span> <span class="mi">2000</span>  <span class="c1"># Size of the prompt dataset</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">64</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">RL_STEPS_PER_EPOCH</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">PROMPT_DATASET_SIZE</span> <span class="o">/</span> <span class="n">BATCH_SIZE</span><span class="p">)</span>  <span class="c1"># = 32</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">RL_NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">10</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">reinforcement_learning_train_steps</span> <span class="o">=</span> <span class="n">RL_STEPS_PER_EPOCH</span> <span class="o">*</span> <span class="n">RL_NUM_EPOCHS</span>  <span class="c1"># = 320</span>
+</code></pre></div>
+<blockquote>
+<p><strong>Tip:</strong> It is good practice to run the pipeline on a small subset of the data first (e.g. 2,000–3,000 examples) to verify that the job executes without errors before committing to a full run, which can take over a day.</p>
+</blockquote>
+<h3 id="44-learning-rate-multipliers-and-kl-coefficient">4.4. Learning Rate Multipliers and KL Coefficient<a class="headerlink" href="#44-learning-rate-multipliers-and-kl-coefficient" title="Permanent link">&para;</a></h3>
+<p>These are more advanced parameters that can be left at their defaults initially and tuned later.</p>
+<p><strong>Learning rate multipliers</strong> (<code>reward_model_learning_rate_multiplier</code>, <code>reinforcement_learning_rate_multiplier</code>): The absolute learning rate is fixed by the pipeline to match the rate used during the base model's original training (which may not be publicly known). These multipliers scale that fixed rate up or down — values greater than 1 increase the magnitude of gradient updates, values less than 1 decrease it. Both default to <code>1.0</code>.</p>
+<p><strong>KL coefficient</strong> (<code>kl_coeff</code>): This is a regularisation term that guards against <strong>reward hacking</strong> — the tendency for the policy model to exploit the reward signal in unintended ways. For example, the reward model might give high scores to completions filled with positive-sounding words like 'excellent' or 'fantastic', even when the response is otherwise nonsensical. The KL coefficient penalises the tuned model for diverging too far from the original model's output distribution. Setting it to <code>0</code> removes all penalty; larger values impose stronger regularisation. The default is <code>0.1</code>.</p>
+<h3 id="45-task-instruction">4.5. Task Instruction<a class="headerlink" href="#45-task-instruction" title="Permanent link">&para;</a></h3>
+<p>The <code>instruction</code> parameter prepends a task description to every prompt in both the preference and prompt datasets. It should only be set if the instruction is <strong>not</strong> already embedded in the dataset prompts themselves.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="s2">&quot;instruction&quot;</span><span class="p">:</span> <span class="s2">&quot;Summarise in less than 50 words&quot;</span>
 </code></pre></div>
 <hr />
-<h2 id="4-prompt-dataset">4. Prompt Dataset<a class="headerlink" href="#4-prompt-dataset" title="Permanent link">&para;</a></h2>
-<h3 id="41-structure">4.1. Structure<a class="headerlink" href="#41-structure" title="Permanent link">&para;</a></h3>
-<p>Each example in the prompt dataset is a dictionary with a single key.</p>
-<ul>
-<li><code>input_text</code> — a prompt only, with no candidate completions or preference label.</li>
-</ul>
-<p>Like the preference dataset, all prompts end with <code>[summary]:</code>.</p>
-<h3 id="42-role-in-the-rlhf-pipeline">4.2. Role in the RLHF Pipeline<a class="headerlink" href="#42-role-in-the-rlhf-pipeline" title="Permanent link">&para;</a></h3>
-<p>Once the reward model has been trained on the preference dataset, the prompt dataset is fed into the RL loop. At each step, the base LLM generates a completion for a sampled prompt; the reward model scores that completion; and the policy is updated accordingly.</p>
-<h3 id="43-loading-the-data">4.3. Loading the Data<a class="headerlink" href="#43-loading-the-data" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">prompt_data</span> <span class="o">=</span> <span class="p">[]</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;sample_prompt.jsonl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>        <span class="n">prompt_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">prompt_data</span><span class="p">))</span>  <span class="c1"># 6 (exploration sample)</span>
+<h2 id="5-complete-parameter-dictionary">5. Complete Parameter Dictionary<a class="headerlink" href="#5-complete-parameter-dictionary" title="Permanent link">&para;</a></h2>
+<p>Below is the full <code>parameter_values</code> dictionary used for the small-dataset demonstration run:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">parameter_values</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="s2">&quot;preference_dataset&quot;</span><span class="p">:</span> <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text_small/&quot;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>                          <span class="s2">&quot;summarize_from_feedback_tfds/comparisons/train/*.jsonl&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="s2">&quot;prompt_dataset&quot;</span><span class="p">:</span>     <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text_small/&quot;</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>                          <span class="s2">&quot;reddit_tfds/train/*.jsonl&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="s2">&quot;eval_dataset&quot;</span><span class="p">:</span>       <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text_small/&quot;</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>                          <span class="s2">&quot;reddit_tfds/val/*.jsonl&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    <span class="s2">&quot;large_model_reference&quot;</span><span class="p">:</span>                    <span class="s2">&quot;llama-2-7b&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    <span class="s2">&quot;reward_model_train_steps&quot;</span><span class="p">:</span>                 <span class="mi">1410</span><span class="p">,</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    <span class="s2">&quot;reinforcement_learning_train_steps&quot;</span><span class="p">:</span>       <span class="mi">320</span><span class="p">,</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    <span class="s2">&quot;reward_model_learning_rate_multiplier&quot;</span><span class="p">:</span>    <span class="mf">1.0</span><span class="p">,</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    <span class="s2">&quot;reinforcement_learning_rate_multiplier&quot;</span><span class="p">:</span>   <span class="mf">1.0</span><span class="p">,</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    <span class="s2">&quot;kl_coeff&quot;</span><span class="p">:</span>                                 <span class="mf">0.1</span><span class="p">,</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    <span class="s2">&quot;instruction&quot;</span><span class="p">:</span>                              <span class="s2">&quot;Summarise in less than 50 words&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="p">}</span>
 </code></pre></div>
-<p>A helper function for readable inspection:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">print_d</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;key:</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="se">\n</span><span class="s2">val:</span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">print_d</span><span class="p">(</span><span class="n">prompt_data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<p>For a full-dataset run (the configuration used by the course team to produce the evaluation results in the next lesson), the step counts are substantially higher and the RL learning rate multiplier is reduced:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Full dataset configuration (takes ~24 hours on TPUs/GPUs)</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">parameter_values</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="s2">&quot;preference_dataset&quot;</span><span class="p">:</span> <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text/&quot;</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>                          <span class="s2">&quot;summarize_from_feedback_tfds/comparisons/train/*.jsonl&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="s2">&quot;prompt_dataset&quot;</span><span class="p">:</span>     <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text/reddit_tfds/train/*.jsonl&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="s2">&quot;eval_dataset&quot;</span><span class="p">:</span>       <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text/reddit_tfds/val/*.jsonl&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="s2">&quot;large_model_reference&quot;</span><span class="p">:</span>                    <span class="s2">&quot;llama-2-7b&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="s2">&quot;reward_model_train_steps&quot;</span><span class="p">:</span>                 <span class="mi">10000</span><span class="p">,</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    <span class="s2">&quot;reinforcement_learning_train_steps&quot;</span><span class="p">:</span>       <span class="mi">10000</span><span class="p">,</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>    <span class="s2">&quot;reward_model_learning_rate_multiplier&quot;</span><span class="p">:</span>    <span class="mf">1.0</span><span class="p">,</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    <span class="s2">&quot;reinforcement_learning_rate_multiplier&quot;</span><span class="p">:</span>   <span class="mf">0.2</span><span class="p">,</span>  <span class="c1"># Reduced to prevent reward hacking</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>    <span class="s2">&quot;kl_coeff&quot;</span><span class="p">:</span>                                 <span class="mf">0.1</span><span class="p">,</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    <span class="s2">&quot;instruction&quot;</span><span class="p">:</span>                              <span class="s2">&quot;Summarise in less than 50 words&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="p">}</span>
 </code></pre></div>
 <hr />
-<h2 id="5-key-takeaways">5. Key Takeaways<a class="headerlink" href="#5-key-takeaways" title="Permanent link">&para;</a></h2>
-<ul>
-<li>RLHF requires two datasets: a preference dataset (for reward model training) and a prompt dataset (for RL fine-tuning).</li>
-<li>Both datasets must share the same prompt distribution and formatting convention.</li>
-<li>The <code>[summary]:</code> suffix in <code>input_text</code> is a deliberate instruction token that must be preserved at inference time.</li>
-<li>Human preference labels are inherently subjective; careful labeller selection and clear annotation criteria are critical to dataset quality.</li>
-<li>The reward model is trained on <code>(prompt, winner, loser)</code> triplets and produces a scalar reward signal used to guide policy optimisation.</li>
-</ul>
+<h2 id="6-creating-and-submitting-the-pipeline-job">6. Creating and Submitting the Pipeline Job<a class="headerlink" href="#6-creating-and-submitting-the-pipeline-job" title="Permanent link">&para;</a></h2>
+<p>Once the parameters are defined and the YAML file has been compiled, the job is submitted to Vertex AI using the <code>google-cloud-aiplatform</code> SDK.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Authenticate and retrieve project credentials</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">authenticate</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">credentials</span><span class="p">,</span> <span class="n">PROJECT_ID</span><span class="p">,</span> <span class="n">STAGING_BUCKET</span> <span class="o">=</span> <span class="n">authenticate</span><span class="p">()</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="c1"># RLHF pipeline is available in this specific region only (as of writing)</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="n">REGION</span> <span class="o">=</span> <span class="s2">&quot;europe-west4&quot;</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="kn">import</span><span class="w"> </span><span class="nn">google.cloud.aiplatform</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">aiplatform</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="c1"># Initialise the SDK with project and regional settings</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="n">aiplatform</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>    <span class="n">project</span><span class="o">=</span><span class="n">PROJECT_ID</span><span class="p">,</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>    <span class="n">location</span><span class="o">=</span><span class="n">REGION</span><span class="p">,</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>    <span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="p">)</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="c1"># Define the pipeline job</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="n">job</span> <span class="o">=</span> <span class="n">aiplatform</span><span class="o">.</span><span class="n">PipelineJob</span><span class="p">(</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>    <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;tutorial-rlhf-tuning&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>    <span class="n">pipeline_root</span><span class="o">=</span><span class="n">STAGING_BUCKET</span><span class="p">,</span>        <span class="c1"># GCS location for intermediate artefacts</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>    <span class="n">template_path</span><span class="o">=</span><span class="n">RLHF_PIPELINE_PKG_PATH</span><span class="p">,</span> <span class="c1"># Path to the compiled YAML file</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>    <span class="n">parameter_values</span><span class="o">=</span><span class="n">parameter_values</span>    <span class="c1"># Job-specific configuration</span>
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="p">)</span>
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="c1"># Submit the job (runs remotely on Vertex AI, not locally)</span>
+<a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a><span class="n">job</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<p>The job executes on Google Cloud infrastructure — not locally — and requires significant compute resources (i.e. TPUs or GPUs). A full-scale run takes well over 24 hours. For initial experimentation, always begin with a small subset of data.</p>
+<hr />
+<h2 id="7-key-concepts-summary">7. Key Concepts Summary<a class="headerlink" href="#7-key-concepts-summary" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pipeline</strong></td>
+<td>A portable, multi-step ML workflow compiled to YAML and executed on Vertex AI.</td>
+</tr>
+<tr>
+<td><strong>Reward model</strong></td>
+<td>Trained on preference data to score completions; trained for 20–30 epochs.</td>
+</tr>
+<tr>
+<td><strong>Reinforcer</strong></td>
+<td>RL loop component that fine-tunes the base LLM; trained for 10–20 epochs.</td>
+</tr>
+<tr>
+<td><strong>Batch size</strong></td>
+<td>Fixed at 64; used to convert epochs to training steps.</td>
+</tr>
+<tr>
+<td><strong>KL coefficient</strong></td>
+<td>Regularisation term preventing the policy from diverging too far from the original model.</td>
+</tr>
+<tr>
+<td><strong>Reward hacking</strong></td>
+<td>When the policy exploits the reward signal in unintended ways (e.g. generating hollow but highly-scored text).</td>
+</tr>
+<tr>
+<td><strong>GCS</strong></td>
+<td>Google Cloud Storage; all datasets and artefacts must reside here in <code>.jsonl</code> format.</td>
+</tr>
+<tr>
+<td><strong><code>large_model_reference</code></strong></td>
+<td>Specifies which foundational model to tune (e.g. <code>llama-2-7b</code>, <code>text-bison@001</code>).</td>
+</tr>
+</tbody>
+</table>
 
 
 

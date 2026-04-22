@@ -29,7 +29,7 @@
     
     
       
-        <title>Lecture 4 - Tune an LLM with RLHF - ND's Machine Learning Notes</title>
+        <title>Lecture 4 - Evaluate an RLHF-Tuned Model - ND's Machine Learning Notes</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#tuning-an-llm-with-rlhf-on-vertex-ai" class="md-skip">
+        <a href="#evaluating-a-reinforcement-learning-from-human-feedback-tuned-model" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Lecture 4 - Tune an LLM with RLHF
+              Lecture 4 - Evaluate an RLHF-Tuned Model
             
           </span>
         </div>
@@ -517,6 +517,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../DLAI_Lecture1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 1 - Conceptual Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../DLAI_Lecture2/" class="md-nav__link">
         
   
@@ -524,7 +552,7 @@
   <span class="md-ellipsis">
     
   
-    Lecture 2 - Conceptual Overview
+    Lecture 2 - Datasets
   
 
     
@@ -552,7 +580,7 @@
   <span class="md-ellipsis">
     
   
-    Lecture 3 - Datasets
+    Lecture 3 - Tune an LLM with RLHF
   
 
     
@@ -589,7 +617,7 @@
   <span class="md-ellipsis">
     
   
-    Lecture 4 - Tune an LLM with RLHF
+    Lecture 4 - Evaluate an RLHF-Tuned Model
   
 
     
@@ -607,7 +635,7 @@
   <span class="md-ellipsis">
     
   
-    Lecture 4 - Tune an LLM with RLHF
+    Lecture 4 - Evaluate an RLHF-Tuned Model
   
 
     
@@ -644,44 +672,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-ml-pipelines-and-why-rlhf-uses-them" class="md-nav__link">
+  <a href="#2-evaluation-strategies-for-rlhf" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. ML Pipelines and Why RLHF Uses Them
+        2. Evaluation Strategies for RLHF
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-compiling-the-pipeline" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Compiling the Pipeline
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-configuring-the-pipeline-parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Configuring the Pipeline Parameters
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="4. Configuring the Pipeline Parameters">
+    <nav class="md-nav" aria-label="2. Evaluation Strategies for RLHF">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#41-dataset-paths" class="md-nav__link">
+  <a href="#21-training-curves" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.1. Dataset Paths
+        2.1. Training Curves
       
     </span>
   </a>
@@ -689,10 +695,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#42-base-model-selection" class="md-nav__link">
+  <a href="#22-automated-metrics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.2. Base Model Selection
+        2.2. Automated Metrics
       
     </span>
   </a>
@@ -700,32 +706,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#43-training-steps" class="md-nav__link">
+  <a href="#23-side-by-side-sxs-evaluation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.3. Training Steps
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#44-learning-rate-multipliers-and-kl-coefficient" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4.4. Learning Rate Multipliers and KL Coefficient
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#45-task-instruction" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4.5. Task Instruction
+        2.3. Side-by-Side (SxS) Evaluation
       
     </span>
   </a>
@@ -738,10 +722,211 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-complete-parameter-dictionary" class="md-nav__link">
+  <a href="#3-interpreting-tensorboard-training-curves" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Complete Parameter Dictionary
+        3. Interpreting TensorBoard Training Curves
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Interpreting TensorBoard Training Curves">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-reward-model-curves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Reward Model Curves
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-rl-loop-curves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. RL Loop Curves
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2. RL Loop Curves">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#321-why-is-the-rl-loss-increasing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.1. Why Is the RL Loss Increasing?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-diagnosing-underfitting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Diagnosing Underfitting
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-side-by-side-evaluation-in-the-notebook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Side-by-Side Evaluation in the Notebook
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Side-by-Side Evaluation in the Notebook">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-loading-the-evaluation-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Loading the Evaluation Results
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-what-does-pdset_optiondisplaymax_colwidth-none-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. What Does pd.set_option('display.max_colwidth', None) Do?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-qualitative-observations-from-the-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. Qualitative Observations from the Results
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-advanced-evaluation-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Advanced Evaluation Techniques
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Advanced Evaluation Techniques">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-rlaif-reinforcement-learning-from-ai-feedback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1. RLAIF: Reinforcement Learning from AI Feedback
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.1. RLAIF: Reinforcement Learning from AI Feedback">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#511-key-selling-points-of-rlaif" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1.1. Key Selling Points of RLAIF
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#512-is-rlaif-just-fine-tuning-to-mimic-model-y" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1.2. Is RLAIF Just Fine-Tuning to Mimic Model Y?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-autosxs-automated-side-by-side-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2. AutoSxS: Automated Side-by-Side Evaluation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.2. AutoSxS: Automated Side-by-Side Evaluation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#521-does-autosxs-defeat-the-purpose-of-rlhf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.1. Does AutoSxS Defeat the Purpose of RLHF?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-accessing-artefacts-in-google-cloud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Accessing Artefacts in Google Cloud
       
     </span>
   </a>
@@ -749,10 +934,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-creating-and-submitting-the-pipeline-job" class="md-nav__link">
+  <a href="#7-summary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Creating and Submitting the Pipeline Job
+        7. Summary
       
     </span>
   </a>
@@ -760,13 +945,74 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-key-concepts-summary" class="md-nav__link">
+  <a href="#appendix-a-further-discussion-if-the-arbiter-llm-is-that-good-why-do-we-need-rlhf-at-all" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Key Concepts Summary
+        Appendix A: Further Discussion — If the Arbiter LLM Is That Good, Why Do We Need RLHF at All?
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Appendix A: Further Discussion — If the Arbiter LLM Is That Good, Why Do We Need RLHF at All?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a1-judging-is-easier-than-generating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A.1. Judging Is Easier Than Generating
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a2-the-arbiter-cannot-transfer-its-weights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A.2. The Arbiter Cannot Transfer Its Weights
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a3-deployment-economics-and-ownership" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A.3. Deployment Economics and Ownership
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a4-reconciling-the-apparent-circularity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A.4. Reconciling the Apparent Circularity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a5-summary-of-the-argument" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A.5. Summary of the Argument
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -977,44 +1223,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-ml-pipelines-and-why-rlhf-uses-them" class="md-nav__link">
+  <a href="#2-evaluation-strategies-for-rlhf" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. ML Pipelines and Why RLHF Uses Them
+        2. Evaluation Strategies for RLHF
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-compiling-the-pipeline" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Compiling the Pipeline
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-configuring-the-pipeline-parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Configuring the Pipeline Parameters
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="4. Configuring the Pipeline Parameters">
+    <nav class="md-nav" aria-label="2. Evaluation Strategies for RLHF">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#41-dataset-paths" class="md-nav__link">
+  <a href="#21-training-curves" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.1. Dataset Paths
+        2.1. Training Curves
       
     </span>
   </a>
@@ -1022,10 +1246,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#42-base-model-selection" class="md-nav__link">
+  <a href="#22-automated-metrics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.2. Base Model Selection
+        2.2. Automated Metrics
       
     </span>
   </a>
@@ -1033,32 +1257,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#43-training-steps" class="md-nav__link">
+  <a href="#23-side-by-side-sxs-evaluation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.3. Training Steps
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#44-learning-rate-multipliers-and-kl-coefficient" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4.4. Learning Rate Multipliers and KL Coefficient
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#45-task-instruction" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4.5. Task Instruction
+        2.3. Side-by-Side (SxS) Evaluation
       
     </span>
   </a>
@@ -1071,10 +1273,211 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-complete-parameter-dictionary" class="md-nav__link">
+  <a href="#3-interpreting-tensorboard-training-curves" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Complete Parameter Dictionary
+        3. Interpreting TensorBoard Training Curves
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Interpreting TensorBoard Training Curves">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-reward-model-curves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Reward Model Curves
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-rl-loop-curves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. RL Loop Curves
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2. RL Loop Curves">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#321-why-is-the-rl-loss-increasing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.1. Why Is the RL Loss Increasing?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-diagnosing-underfitting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Diagnosing Underfitting
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-side-by-side-evaluation-in-the-notebook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Side-by-Side Evaluation in the Notebook
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Side-by-Side Evaluation in the Notebook">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-loading-the-evaluation-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Loading the Evaluation Results
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-what-does-pdset_optiondisplaymax_colwidth-none-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. What Does pd.set_option('display.max_colwidth', None) Do?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-qualitative-observations-from-the-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. Qualitative Observations from the Results
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-advanced-evaluation-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Advanced Evaluation Techniques
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Advanced Evaluation Techniques">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-rlaif-reinforcement-learning-from-ai-feedback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1. RLAIF: Reinforcement Learning from AI Feedback
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.1. RLAIF: Reinforcement Learning from AI Feedback">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#511-key-selling-points-of-rlaif" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1.1. Key Selling Points of RLAIF
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#512-is-rlaif-just-fine-tuning-to-mimic-model-y" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1.2. Is RLAIF Just Fine-Tuning to Mimic Model Y?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-autosxs-automated-side-by-side-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2. AutoSxS: Automated Side-by-Side Evaluation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.2. AutoSxS: Automated Side-by-Side Evaluation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#521-does-autosxs-defeat-the-purpose-of-rlhf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.1. Does AutoSxS Defeat the Purpose of RLHF?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-accessing-artefacts-in-google-cloud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Accessing Artefacts in Google Cloud
       
     </span>
   </a>
@@ -1082,10 +1485,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-creating-and-submitting-the-pipeline-job" class="md-nav__link">
+  <a href="#7-summary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Creating and Submitting the Pipeline Job
+        7. Summary
       
     </span>
   </a>
@@ -1093,13 +1496,74 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-key-concepts-summary" class="md-nav__link">
+  <a href="#appendix-a-further-discussion-if-the-arbiter-llm-is-that-good-why-do-we-need-rlhf-at-all" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Key Concepts Summary
+        Appendix A: Further Discussion — If the Arbiter LLM Is That Good, Why Do We Need RLHF at All?
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Appendix A: Further Discussion — If the Arbiter LLM Is That Good, Why Do We Need RLHF at All?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a1-judging-is-easier-than-generating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A.1. Judging Is Easier Than Generating
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a2-the-arbiter-cannot-transfer-its-weights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A.2. The Arbiter Cannot Transfer Its Weights
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a3-deployment-economics-and-ownership" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A.3. Deployment Economics and Ownership
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a4-reconciling-the-apparent-circularity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A.4. Reconciling the Apparent Circularity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a5-summary-of-the-argument" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A.5. Summary of the Argument
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1128,218 +1592,179 @@
   
 
 
-<h1 id="tuning-an-llm-with-rlhf-on-vertex-ai">Tuning an LLM with RLHF on Vertex AI<a class="headerlink" href="#tuning-an-llm-with-rlhf-on-vertex-ai" title="Permanent link">&para;</a></h1>
+<h1 id="evaluating-a-reinforcement-learning-from-human-feedback-tuned-model">Evaluating a Reinforcement-Learning-from-Human-Feedback Tuned Model<a class="headerlink" href="#evaluating-a-reinforcement-learning-from-human-feedback-tuned-model" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>Created on: 20 April 2026</p>
-<p>Updated on: 20 April 2026</p>
+<p>Created on: 21 April 2026</p>
+<p>Updated on: 21 April 2026</p>
+<p><em>Appendix A added: 21 April 2026</em></p>
 </blockquote>
 <h2 id="1-overview">1. Overview<a class="headerlink" href="#1-overview" title="Permanent link">&para;</a></h2>
-<p>This chapter covers the practical steps needed to execute a Reinforcement Learning from Human Feedback (RLHF) tuning job on Google Cloud's Vertex AI platform. The process is encapsulated in a pre-built ML pipeline, which handles the multi-stage workflow — reward model training, reinforcement learning fine-tuning, and evaluation — as a single reproducible unit. The learner does not need to author or modify the pipeline itself; the task is to compile it and configure the job parameters correctly.</p>
+<p>The ultimate goal of the RLHF pipeline is not merely to run a training loop, but to produce a large language model (LLM) that performs a target task better than the original base model. Evaluation is therefore the critical closing step: it tells us whether the tuning actually worked, and by how much. This chapter covers the three broad families of evaluation strategy relevant to RLHF, explains what the training curves mean and how to interpret them, and then examines two advanced techniques, RLAIF and Auto Side-by-Side (AutoSxS), that push the frontier of scalable evaluation.</p>
 <hr />
-<h2 id="2-ml-pipelines-and-why-rlhf-uses-them">2. ML Pipelines and Why RLHF Uses Them<a class="headerlink" href="#2-ml-pipelines-and-why-rlhf-uses-them" title="Permanent link">&para;</a></h2>
-<p>A machine learning pipeline is a portable, scalable workflow composed of sequential <strong>components</strong> (steps where code executes) and <strong>artefacts</strong> (outputs produced by those steps, e.g. datasets, trained models, metrics). Pipelines are a natural fit for RLHF because the process involves multiple interdependent stages:</p>
-<ol>
-<li>A preference dataset is used to train a reward model.</li>
-<li>The reward model is used alongside a prompt dataset in a reinforcement learning loop to fine-tune the base LLM.</li>
-<li>An optional evaluation dataset triggers a batch inference job after tuning completes.</li>
-</ol>
-<p>Vertex AI represents all of these stages visually, with components shown as blue-cube boxes and artefacts as yellow-triangle boxes. Notably, the pipeline contains a <strong>Reward Model Trainer</strong> component and a <strong>Reinforcer</strong> component, the latter being the RL loop that directly fine-tunes the base model.</p>
+<h2 id="2-evaluation-strategies-for-rlhf">2. Evaluation Strategies for RLHF<a class="headerlink" href="#2-evaluation-strategies-for-rlhf" title="Permanent link">&para;</a></h2>
+<p>LLM evaluation is an active area of research, but three approaches are most commonly used.</p>
+<h3 id="21-training-curves">2.1. Training Curves<a class="headerlink" href="#21-training-curves" title="Permanent link">&para;</a></h3>
+<p>Training curves are plots of loss and reward against training steps, written to TensorBoard during the training process. They are the cheapest and most immediate signal of whether a model is learning at all. Two separate curves are relevant in the RLHF context: one from the reward model training phase, and one from the reinforcement learning (RL) loop itself.</p>
+<h3 id="22-automated-metrics">2.2. Automated Metrics<a class="headerlink" href="#22-automated-metrics" title="Permanent link">&para;</a></h3>
+<p>Automated metrics are algorithmic measures of output quality that require a ground-truth reference, i.e. a human-written 'gold' completion. Familiar examples include accuracy and F1 for classification tasks, and the ROUGE family of metrics for generative tasks. ROUGE measures how similar a generated summary is to a reference summary, and is widely used in standard supervised summarisation.</p>
+<p>However, ROUGE is a poor fit for evaluating RLHF. The reason is subtle but important: RLHF is not trying to produce text that is close to any particular reference text. It is trying to produce text that humans prefer, which is a different objective entirely. Research has shown that aggressively optimising for ROUGE can actually degrade the quality of an RLHF-tuned model, because the metric does not capture what RLHF aims to maximise.</p>
+<h3 id="23-side-by-side-sxs-evaluation">2.3. Side-by-Side (SxS) Evaluation<a class="headerlink" href="#23-side-by-side-sxs-evaluation" title="Permanent link">&para;</a></h3>
+<p>Side-by-side evaluation presents completions from two models, the base (untuned) model and the RLHF-tuned model, for the same set of input prompts. A human (or an automated judge; see Section 5.2) then decides which completion they prefer. The result is expressed as a <strong>win rate</strong>, i.e. the proportion of prompts for which the tuned model produced the preferred completion. Alongside training curves, side-by-side evaluation is the most informative approach for RLHF.</p>
 <hr />
-<h2 id="3-compiling-the-pipeline">3. Compiling the Pipeline<a class="headerlink" href="#3-compiling-the-pipeline" title="Permanent link">&para;</a></h2>
-<p>The RLHF pipeline is distributed as part of the <code>google-cloud-pipeline-components</code> library (currently in preview). Before it can be executed on Vertex AI, it must be <strong>compiled</strong> into a YAML file — a self-contained, human-readable description of every pipeline step and its inputs. The compiler comes from the <code>kfp</code> (Kubeflow Pipelines) library.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Install dependencies (only needed outside the course environment)</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># !pip3 install google-cloud-pipeline-components kfp</span>
+<h2 id="3-interpreting-tensorboard-training-curves">3. Interpreting TensorBoard Training Curves<a class="headerlink" href="#3-interpreting-tensorboard-training-curves" title="Permanent link">&para;</a></h2>
+<h3 id="31-reward-model-curves">3.1. Reward Model Curves<a class="headerlink" href="#31-reward-model-curves" title="Permanent link">&para;</a></h3>
+<p>The reward model is trained using a pairwise ranking objective, and the relevant loss is called the <strong>rank loss</strong>. Like any well-behaved loss, you want to see it decrease over training steps and then plateau (converge). In the notebook, the reward-model TensorBoard log shows exactly this pattern: the rank loss falls steadily and then flattens well before training ends, suggesting that fewer steps would have been sufficient and no additional data was wasted.</p>
+<h3 id="32-rl-loop-curves">3.2. RL Loop Curves<a class="headerlink" href="#32-rl-loop-curves" title="Permanent link">&para;</a></h3>
+<p>The RL loop produces two key metrics: the <strong>KL loss</strong> and the <strong>reward</strong>.</p>
+<p>The <strong>KL loss</strong> (Kullback–Leibler divergence) measures how far the tuned model's output distribution has drifted from the original base model's distribution. A small KL means the models behave similarly; a large KL means the tuned model has diverged significantly. In a healthy training run, you expect the KL loss to increase gradually and then plateau: the model is allowed to drift away from the base model in order to improve reward, but eventually the KL penalty in the objective prevents it from drifting too far.</p>
+<p>The <strong>reward</strong> measures the score assigned by the reward model to the tuned model's completions. You want this to increase monotonically across training and then plateau, indicating that the model has learned to produce outputs that the reward model rates highly.</p>
+<h4 id="321-why-is-the-rl-loss-increasing">3.2.1. Why Is the RL Loss Increasing?<a class="headerlink" href="#321-why-is-the-rl-loss-increasing" title="Permanent link">&para;</a></h4>
+<p>A common point of confusion is the 'rl_loss' curve, which is also visible in TensorBoard and appears to <strong>increase</strong> rather than decrease. This surprises learners who expect all losses to go down. The explanation lies in what 'rl_loss' actually represents.</p>
+<p>In the Vertex AI RLHF pipeline, the reported <code>rl_loss</code> is essentially the <strong>negative reward</strong> (often derived from the policy gradient objective). Because the optimiser is maximising reward, it is simultaneously minimising the negative reward. As the reward climbs upward, the negative of that reward climbs downward in absolute terms, which appears on the plot as an increasing curve when the sign convention flips or when the pipeline logs <code>−reward</code> directly. In short, the rl_loss increasing is the <strong>mirror image</strong> of the reward increasing, and is the expected, healthy behaviour for a model that is genuinely learning to produce higher-quality outputs. If both the reward and rl_loss were flat or erratic, that would indicate underfitting, which is exactly what the small-data (1 % subset) logs showed.</p>
+<h3 id="33-diagnosing-underfitting">3.3. Diagnosing Underfitting<a class="headerlink" href="#33-diagnosing-underfitting" title="Permanent link">&para;</a></h3>
+<p>In the notebook, the RL logs from training on only 1 % of the data show neither a clear upward trend in reward nor a clear upward trend in KL loss. Both curves are essentially flat and noisy. This is the signature of <strong>underfitting</strong>: the model has not seen enough data to find a coherent direction in which to improve. The full-data logs, by contrast, show the reward climbing steadily and the KL loss rising and then levelling off, which is the expected healthy pattern.</p>
+<hr />
+<h2 id="4-side-by-side-evaluation-in-the-notebook">4. Side-by-Side Evaluation in the Notebook<a class="headerlink" href="#4-side-by-side-evaluation-in-the-notebook" title="Permanent link">&para;</a></h2>
+<h3 id="41-loading-the-evaluation-results">4.1. Loading the Evaluation Results<a class="headerlink" href="#41-loading-the-evaluation-results" title="Permanent link">&para;</a></h3>
+<p>The pipeline accepts an evaluation dataset of prompts (no completions) and, once tuning is complete, runs a bulk inference job that generates completions for each prompt using both the base model and the tuned model. These results are written to a JSONL file in Google Cloud Storage, accessible via the 'Bulk Infer' component in the Vertex AI Pipelines console.</p>
+<p>In the notebook, two JSONL files are loaded into Python lists, one for the untuned model and one for the tuned model. Each record in both files is a dictionary with the following structure.</p>
+<ul>
+<li><code>inputs</code> → <code>inputs_pretokenized</code>: the full prompt string sent to the model.</li>
+<li><code>prediction</code>: the completion produced by the model for that prompt.</li>
+</ul>
+<p>Prompts are extracted from the tuned-model list (both files share identical prompts), and completions are extracted separately from each list. Everything is then assembled into a three-column pandas DataFrame. The full code is shown below.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Import the pre-built RLHF pipeline (in preview as of writing)</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">google_cloud_pipeline_components.preview.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">rlhf_pipeline</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Import the KFP compiler</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="kn">from</span><span class="w"> </span><span class="nn">kfp</span><span class="w"> </span><span class="kn">import</span> <span class="n">compiler</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># --- Load the JSONL files ---</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">eval_data_tuned</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;eval_results_tuned.jsonl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        <span class="n">eval_data_tuned</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Define an output path for the compiled YAML</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="n">RLHF_PIPELINE_PKG_PATH</span> <span class="o">=</span> <span class="s2">&quot;rlhf_pipeline.yaml&quot;</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># Compile: this writes all pipeline metadata and step definitions to the YAML file</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="n">compiler</span><span class="o">.</span><span class="n">Compiler</span><span class="p">()</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="n">pipeline_func</span><span class="o">=</span><span class="n">rlhf_pipeline</span><span class="p">,</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="n">package_path</span><span class="o">=</span><span class="n">RLHF_PIPELINE_PKG_PATH</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="p">)</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="c1"># Inspect the first few lines of the generated file</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="c1"># !head rlhf_pipeline.yaml</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="c1"># To see the full file: !cat rlhf_pipeline.yaml</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="n">eval_data_untuned</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;eval_results_untuned.jsonl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        <span class="n">eval_data_untuned</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="c1"># --- Extract prompts and completions ---</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="c1"># Prompts are identical in both files; use the tuned list as the source.</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="n">prompts</span> <span class="o">=</span> <span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;inputs&#39;</span><span class="p">][</span><span class="s1">&#39;inputs_pretokenized&#39;</span><span class="p">]</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>           <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">eval_data_tuned</span><span class="p">]</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="n">untuned_completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>                       <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">eval_data_untuned</span><span class="p">]</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="n">tuned_completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>                     <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">eval_data_tuned</span><span class="p">]</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="c1"># --- Assemble the side-by-side DataFrame ---</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    <span class="s1">&#39;prompt&#39;</span><span class="p">:</span>      <span class="n">prompts</span><span class="p">,</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    <span class="s1">&#39;base_model&#39;</span><span class="p">:</span>  <span class="n">untuned_completions</span><span class="p">,</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    <span class="s1">&#39;tuned_model&#39;</span><span class="p">:</span> <span class="n">tuned_completions</span><span class="p">,</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="p">})</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="c1"># Disable cell truncation so full completions are visible in the notebook.</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_colwidth&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a><span class="n">results</span>
 </code></pre></div>
-<p>The resulting YAML file is auto-generated and should not be edited manually. It is the artefact that Vertex AI reads to understand what the pipeline should do.</p>
+<p>Each row of <code>results</code> corresponds to one evaluation prompt and shows the completions from both models side by side, making qualitative comparison straightforward.</p>
+<h3 id="42-what-does-pdset_optiondisplaymax_colwidth-none-do">4.2. What Does <code>pd.set_option('display.max_colwidth', None)</code> Do?<a class="headerlink" href="#42-what-does-pdset_optiondisplaymax_colwidth-none-do" title="Permanent link">&para;</a></h3>
+<p>By default, pandas truncates the text in any DataFrame cell that exceeds a certain character limit (typically 50 characters), replacing the overflow with an ellipsis (<code>...</code>). This is useful for compact display but disastrous for side-by-side text comparison, where you need to read the full completion.</p>
+<p>Calling <code>pd.set_option('display.max_colwidth', None)</code> removes this truncation limit entirely, instructing pandas to render every cell at its full width, regardless of length. The <code>None</code> argument means 'no limit'. The practical effect is that the entire prompt and both completions become visible in the notebook output, making it possible to actually read and compare them. Without this setting, the most informative parts of long completions would be invisible.</p>
+<h3 id="43-qualitative-observations-from-the-results">4.3. Qualitative Observations from the Results<a class="headerlink" href="#43-qualitative-observations-from-the-results" title="Permanent link">&para;</a></h3>
+<p>One revealing difference visible in the results is the narrative <strong>person</strong> of the summaries. The tuned model tends to summarise Reddit posts in the first person, mirroring the voice of the original poster (e.g. 'Want to surprise my girlfriend with roses...'). The base model, by contrast, summarises in the third person (e.g. 'The author wants to surprise his girlfriend...'). This suggests the RLHF process, trained on human preference data from a Reddit summarisation task, has picked up on the stylistic convention that human raters preferred a summary that preserved the poster's own voice.</p>
 <hr />
-<h2 id="4-configuring-the-pipeline-parameters">4. Configuring the Pipeline Parameters<a class="headerlink" href="#4-configuring-the-pipeline-parameters" title="Permanent link">&para;</a></h2>
-<p>All job-specific configuration is passed as a Python dictionary called <code>parameter_values</code>. The parameters fall into four logical groups.</p>
-<h3 id="41-dataset-paths">4.1. Dataset Paths<a class="headerlink" href="#41-dataset-paths" title="Permanent link">&para;</a></h3>
-<p>Three datasets are required, all stored in Google Cloud Storage (paths prefixed with <code>gs://</code>). They must all be in JSON Lines (<code>.jsonl</code>) format and reside in the same GCS bucket.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">parameter_values</span> <span class="o">=</span> <span class="p">{</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="c1"># Human preference comparisons, used to train the reward model</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="s2">&quot;preference_dataset&quot;</span><span class="p">:</span> <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text_small/&quot;</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>                          <span class="s2">&quot;summarize_from_feedback_tfds/comparisons/train/*.jsonl&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="c1"># Reddit posts used as prompts during the RL fine-tuning loop</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="s2">&quot;prompt_dataset&quot;</span><span class="p">:</span> <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text_small/&quot;</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>                      <span class="s2">&quot;reddit_tfds/train/*.jsonl&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="c1"># Validation prompts; triggers a batch inference job post-tuning</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="s2">&quot;eval_dataset&quot;</span><span class="p">:</span> <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text_small/&quot;</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>                    <span class="s2">&quot;reddit_tfds/val/*.jsonl&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="o">...</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="p">}</span>
-</code></pre></div>
-<h3 id="42-base-model-selection">4.2. Base Model Selection<a class="headerlink" href="#42-base-model-selection" title="Permanent link">&para;</a></h3>
-<p>The <code>large_model_reference</code> parameter specifies which foundational model to fine-tune. Supported options include <code>"llama-2-7b"</code>, <code>"text-bison@001"</code>, and T5x family models.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="s2">&quot;large_model_reference&quot;</span><span class="p">:</span> <span class="s2">&quot;llama-2-7b&quot;</span><span class="p">,</span>
-</code></pre></div>
-<h3 id="43-training-steps">4.3. Training Steps<a class="headerlink" href="#43-training-steps" title="Permanent link">&para;</a></h3>
-<p>The pipeline accepts the number of <strong>training steps</strong> (not epochs) for each of the two training phases. The conversion from epochs to steps uses the formula:</p>
-<div class="arithmatex">\[stepsPerEpoch = \left\lceil \frac{datasetSize}{batchSize} \right\rceil\]</div>
-<div class="arithmatex">\[trainSteps = stepsPerEpoch \times numEpochs\]</div>
-<p>The batch size is fixed at 64 for this pipeline. The recommended epoch ranges are 20–30 for the reward model and 10–20 for the RL loop.</p>
-<p><strong>Reward model training steps:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">PREF_DATASET_SIZE</span> <span class="o">=</span> <span class="mi">3000</span>  <span class="c1"># Size of the preference dataset</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">64</span>           <span class="c1"># Fixed by the pipeline; cannot be changed</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">REWARD_STEPS_PER_EPOCH</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">PREF_DATASET_SIZE</span> <span class="o">/</span> <span class="n">BATCH_SIZE</span><span class="p">)</span>  <span class="c1"># = 47</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">REWARD_NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">30</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">reward_model_train_steps</span> <span class="o">=</span> <span class="n">REWARD_STEPS_PER_EPOCH</span> <span class="o">*</span> <span class="n">REWARD_NUM_EPOCHS</span>  <span class="c1"># = 1410</span>
-</code></pre></div>
-<p><strong>RL fine-tuning steps:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">PROMPT_DATASET_SIZE</span> <span class="o">=</span> <span class="mi">2000</span>  <span class="c1"># Size of the prompt dataset</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">64</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">RL_STEPS_PER_EPOCH</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">PROMPT_DATASET_SIZE</span> <span class="o">/</span> <span class="n">BATCH_SIZE</span><span class="p">)</span>  <span class="c1"># = 32</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">RL_NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">10</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">reinforcement_learning_train_steps</span> <span class="o">=</span> <span class="n">RL_STEPS_PER_EPOCH</span> <span class="o">*</span> <span class="n">RL_NUM_EPOCHS</span>  <span class="c1"># = 320</span>
-</code></pre></div>
-<blockquote>
-<p><strong>Tip:</strong> It is good practice to run the pipeline on a small subset of the data first (e.g. 2,000–3,000 examples) to verify that the job executes without errors before committing to a full run, which can take over a day.</p>
-</blockquote>
-<h3 id="44-learning-rate-multipliers-and-kl-coefficient">4.4. Learning Rate Multipliers and KL Coefficient<a class="headerlink" href="#44-learning-rate-multipliers-and-kl-coefficient" title="Permanent link">&para;</a></h3>
-<p>These are more advanced parameters that can be left at their defaults initially and tuned later.</p>
-<p><strong>Learning rate multipliers</strong> (<code>reward_model_learning_rate_multiplier</code>, <code>reinforcement_learning_rate_multiplier</code>): The absolute learning rate is fixed by the pipeline to match the rate used during the base model's original training (which may not be publicly known). These multipliers scale that fixed rate up or down — values greater than 1 increase the magnitude of gradient updates, values less than 1 decrease it. Both default to <code>1.0</code>.</p>
-<p><strong>KL coefficient</strong> (<code>kl_coeff</code>): This is a regularisation term that guards against <strong>reward hacking</strong> — the tendency for the policy model to exploit the reward signal in unintended ways. For example, the reward model might give high scores to completions filled with positive-sounding words like 'excellent' or 'fantastic', even when the response is otherwise nonsensical. The KL coefficient penalises the tuned model for diverging too far from the original model's output distribution. Setting it to <code>0</code> removes all penalty; larger values impose stronger regularisation. The default is <code>0.1</code>.</p>
-<h3 id="45-task-instruction">4.5. Task Instruction<a class="headerlink" href="#45-task-instruction" title="Permanent link">&para;</a></h3>
-<p>The <code>instruction</code> parameter prepends a task description to every prompt in both the preference and prompt datasets. It should only be set if the instruction is <strong>not</strong> already embedded in the dataset prompts themselves.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="s2">&quot;instruction&quot;</span><span class="p">:</span> <span class="s2">&quot;Summarise in less than 50 words&quot;</span>
-</code></pre></div>
+<h2 id="5-advanced-evaluation-techniques">5. Advanced Evaluation Techniques<a class="headerlink" href="#5-advanced-evaluation-techniques" title="Permanent link">&para;</a></h2>
+<h3 id="51-rlaif-reinforcement-learning-from-ai-feedback">5.1. RLAIF: Reinforcement Learning from AI Feedback<a class="headerlink" href="#51-rlaif-reinforcement-learning-from-ai-feedback" title="Permanent link">&para;</a></h3>
+<p><strong>RLAIF</strong> (Reinforcement Learning from AI Feedback) is a technique in which the preference dataset, traditionally labelled by human annotators, is instead generated by a capable off-the-shelf LLM acting as a labeller. The LLM is prompted to compare two completions and indicate which it prefers, producing the same (prompt, chosen, rejected) triples that a human would.</p>
+<h4 id="511-key-selling-points-of-rlaif">5.1.1. Key Selling Points of RLAIF<a class="headerlink" href="#511-key-selling-points-of-rlaif" title="Permanent link">&para;</a></h4>
+<p>The primary advantage of RLAIF is <strong>scalability</strong>. Human annotation is expensive, slow, and difficult to scale: recruiting, training, and quality-controlling thousands of human labellers is a significant organisational and financial undertaking. An LLM labeller can generate preference labels orders of magnitude faster and at a fraction of the cost, making it possible to produce much larger preference datasets than would be practical with humans alone.</p>
+<p>A secondary advantage is <strong>consistency</strong>. Human annotators vary in their preferences and can be influenced by fatigue, cultural background, or ambiguous guidelines. An LLM labeller applies the same underlying model, resulting in more uniform labels (though this consistency can also encode the LLM's own biases, which is a known limitation).</p>
+<h4 id="512-is-rlaif-just-fine-tuning-to-mimic-model-y">5.1.2. Is RLAIF Just Fine-Tuning to Mimic Model Y?<a class="headerlink" href="#512-is-rlaif-just-fine-tuning-to-mimic-model-y" title="Permanent link">&para;</a></h4>
+<p>This is a genuinely subtle question, and the short answer is: not quite, but the concern is valid and worth taking seriously.</p>
+<p>If model Y were used to directly generate completions and those completions were used as supervised fine-tuning (SFT) targets, then yes, you would simply be distilling model Y into the base LLM. The resulting model would try to copy model Y's outputs.</p>
+<p>RLAIF is different because model Y is used to produce <strong>preference labels</strong>, not output targets. The base LLM still generates its own completions; model Y only says which of two completions it prefers. Those preference signals are then used to train a reward model, which is used in the PPO loop to adjust the base LLM's behaviour incrementally. The base LLM is therefore learning to improve within its own output space, guided by a signal derived from model Y's judgements, rather than being forced to copy model Y's outputs verbatim.</p>
+<p>In practice, however, there is a real risk that the resulting model converges towards outputs that model Y would itself produce, since model Y's preferences naturally reflect its own style and knowledge. The hope is that if model Y is a good general-purpose judge of quality (e.g. clear, factual, helpful), the preferences it produces will capture broadly human-desirable properties rather than idiosyncratic stylistic quirks. The extent to which this hope is realised is an open empirical question, and it is one of the active research challenges in the RLAIF literature.</p>
+<p>The practical payoff is substantial even if RLAIF is an imperfect substitute for human feedback: a model trained with AI-generated preference labels is likely to be considerably better than the untuned base model, especially when human labelling would simply be infeasible at the required scale.</p>
+<h3 id="52-autosxs-automated-side-by-side-evaluation">5.2. AutoSxS: Automated Side-by-Side Evaluation<a class="headerlink" href="#52-autosxs-automated-side-by-side-evaluation" title="Permanent link">&para;</a></h3>
+<p><strong>AutoSxS</strong> (Auto Side-by-Side) replaces the human judge in side-by-side evaluation with a third LLM, sometimes called an 'arbiter' or 'judge' model. The arbiter is given the prompt, the base model's completion, and the tuned model's completion, and is asked to decide which completion is better, along with a natural-language explanation of its reasoning. The result is a win rate that can be computed automatically over thousands of examples without any human involvement.</p>
+<h4 id="521-does-autosxs-defeat-the-purpose-of-rlhf">5.2.1. Does AutoSxS Defeat the Purpose of RLHF?<a class="headerlink" href="#521-does-autosxs-defeat-the-purpose-of-rlhf" title="Permanent link">&para;</a></h4>
+<p>This is another pointed and important question. The concern is: if we trained the model to satisfy human preferences, but then evaluate it using another LLM's preferences, have we not simply gone in a circle?</p>
+<p>The answer requires distinguishing between the <strong>training objective</strong> and the <strong>evaluation method</strong>. The goal of RLHF remains to produce a model whose outputs better match human preferences. AutoSxS is a practical tool for measuring whether that goal has been achieved, not a substitute for it. The implicit assumption is that a capable arbiter LLM is a reasonable proxy for human judgement, in the same way that ROUGE was once assumed to be a reasonable proxy for summarisation quality (though, as discussed, ROUGE turned out to be a poor proxy for RLHF specifically).</p>
+<p>Several considerations support the use of AutoSxS as a useful evaluation tool even if it is imperfect. First, human SxS evaluation is expensive and slow, and often cannot be run at the scale needed to get statistically reliable win rates. AutoSxS enables evaluation on thousands of examples in minutes. Second, if the arbiter model is itself a strong, general-purpose model (e.g. a frontier model prompted with a careful rubric), its preferences are likely to correlate reasonably well with average human preferences, at least for well-defined tasks like summarisation. Third, AutoSxS does not replace human evaluation entirely: it is used as a fast, scalable <strong>screening</strong> tool, with human evaluation reserved for final validation or for ambiguous cases where the arbiter is uncertain.</p>
+<p>The deeper philosophical point is that 'human preference' is not monolithic. Even human evaluators disagree with each other substantially. Using a strong LLM as a judge is no more circular than using one group of humans to train a reward model and a different group to evaluate the final model: the signal is noisy and approximate in both cases, and the question is whether it is good enough to be directionally useful. Current evidence suggests that, for many tasks, it is.</p>
 <hr />
-<h2 id="5-complete-parameter-dictionary">5. Complete Parameter Dictionary<a class="headerlink" href="#5-complete-parameter-dictionary" title="Permanent link">&para;</a></h2>
-<p>Below is the full <code>parameter_values</code> dictionary used for the small-dataset demonstration run:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">parameter_values</span> <span class="o">=</span> <span class="p">{</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="s2">&quot;preference_dataset&quot;</span><span class="p">:</span> <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text_small/&quot;</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>                          <span class="s2">&quot;summarize_from_feedback_tfds/comparisons/train/*.jsonl&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="s2">&quot;prompt_dataset&quot;</span><span class="p">:</span>     <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text_small/&quot;</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>                          <span class="s2">&quot;reddit_tfds/train/*.jsonl&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="s2">&quot;eval_dataset&quot;</span><span class="p">:</span>       <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text_small/&quot;</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>                          <span class="s2">&quot;reddit_tfds/val/*.jsonl&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    <span class="s2">&quot;large_model_reference&quot;</span><span class="p">:</span>                    <span class="s2">&quot;llama-2-7b&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    <span class="s2">&quot;reward_model_train_steps&quot;</span><span class="p">:</span>                 <span class="mi">1410</span><span class="p">,</span>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    <span class="s2">&quot;reinforcement_learning_train_steps&quot;</span><span class="p">:</span>       <span class="mi">320</span><span class="p">,</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    <span class="s2">&quot;reward_model_learning_rate_multiplier&quot;</span><span class="p">:</span>    <span class="mf">1.0</span><span class="p">,</span>
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    <span class="s2">&quot;reinforcement_learning_rate_multiplier&quot;</span><span class="p">:</span>   <span class="mf">1.0</span><span class="p">,</span>
-<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    <span class="s2">&quot;kl_coeff&quot;</span><span class="p">:</span>                                 <span class="mf">0.1</span><span class="p">,</span>
-<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    <span class="s2">&quot;instruction&quot;</span><span class="p">:</span>                              <span class="s2">&quot;Summarise in less than 50 words&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="p">}</span>
-</code></pre></div>
-<p>For a full-dataset run (the configuration used by the course team to produce the evaluation results in the next lesson), the step counts are substantially higher and the RL learning rate multiplier is reduced:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Full dataset configuration (takes ~24 hours on TPUs/GPUs)</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">parameter_values</span> <span class="o">=</span> <span class="p">{</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="s2">&quot;preference_dataset&quot;</span><span class="p">:</span> <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text/&quot;</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>                          <span class="s2">&quot;summarize_from_feedback_tfds/comparisons/train/*.jsonl&quot;</span><span class="p">,</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="s2">&quot;prompt_dataset&quot;</span><span class="p">:</span>     <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text/reddit_tfds/train/*.jsonl&quot;</span><span class="p">,</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="s2">&quot;eval_dataset&quot;</span><span class="p">:</span>       <span class="s2">&quot;gs://vertex-ai/generative-ai/rlhf/text/reddit_tfds/val/*.jsonl&quot;</span><span class="p">,</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="s2">&quot;large_model_reference&quot;</span><span class="p">:</span>                    <span class="s2">&quot;llama-2-7b&quot;</span><span class="p">,</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="s2">&quot;reward_model_train_steps&quot;</span><span class="p">:</span>                 <span class="mi">10000</span><span class="p">,</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    <span class="s2">&quot;reinforcement_learning_train_steps&quot;</span><span class="p">:</span>       <span class="mi">10000</span><span class="p">,</span>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>    <span class="s2">&quot;reward_model_learning_rate_multiplier&quot;</span><span class="p">:</span>    <span class="mf">1.0</span><span class="p">,</span>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    <span class="s2">&quot;reinforcement_learning_rate_multiplier&quot;</span><span class="p">:</span>   <span class="mf">0.2</span><span class="p">,</span>  <span class="c1"># Reduced to prevent reward hacking</span>
-<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>    <span class="s2">&quot;kl_coeff&quot;</span><span class="p">:</span>                                 <span class="mf">0.1</span><span class="p">,</span>
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    <span class="s2">&quot;instruction&quot;</span><span class="p">:</span>                              <span class="s2">&quot;Summarise in less than 50 words&quot;</span><span class="p">,</span>
-<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="p">}</span>
-</code></pre></div>
+<h2 id="6-accessing-artefacts-in-google-cloud">6. Accessing Artefacts in Google Cloud<a class="headerlink" href="#6-accessing-artefacts-in-google-cloud" title="Permanent link">&para;</a></h2>
+<p>For completeness, the following describes how to retrieve the relevant TensorBoard logs and evaluation outputs from the Vertex AI Pipelines console.</p>
+<p>To find TensorBoard logs, navigate to the pipeline run in the Cloud Console under Vertex AI &gt; Pipelines &gt; Runs, select the RLHF Train Template run, and click on either the 'reward model trainer' component (for reward model logs) or the 'reinforcer' component (for RL loop logs). Each component exposes a 'TensorBoard Metrics' output artefact whose URI points to a Google Cloud Storage path containing the log files, which can be downloaded and visualised locally.</p>
+<p>To find bulk inference results, click on the 'Perform Inference' component and then the 'Bulk Infer' sub-component. The output parameter <code>output_prediction_gcs_path</code> provides a GCS path to the JSONL file containing the evaluation completions.</p>
 <hr />
-<h2 id="6-creating-and-submitting-the-pipeline-job">6. Creating and Submitting the Pipeline Job<a class="headerlink" href="#6-creating-and-submitting-the-pipeline-job" title="Permanent link">&para;</a></h2>
-<p>Once the parameters are defined and the YAML file has been compiled, the job is submitted to Vertex AI using the <code>google-cloud-aiplatform</code> SDK.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Authenticate and retrieve project credentials</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">authenticate</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">credentials</span><span class="p">,</span> <span class="n">PROJECT_ID</span><span class="p">,</span> <span class="n">STAGING_BUCKET</span> <span class="o">=</span> <span class="n">authenticate</span><span class="p">()</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="c1"># RLHF pipeline is available in this specific region only (as of writing)</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="n">REGION</span> <span class="o">=</span> <span class="s2">&quot;europe-west4&quot;</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="kn">import</span><span class="w"> </span><span class="nn">google.cloud.aiplatform</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">aiplatform</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>
-<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="c1"># Initialise the SDK with project and regional settings</span>
-<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="n">aiplatform</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
-<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>    <span class="n">project</span><span class="o">=</span><span class="n">PROJECT_ID</span><span class="p">,</span>
-<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>    <span class="n">location</span><span class="o">=</span><span class="n">REGION</span><span class="p">,</span>
-<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>    <span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span>
-<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="p">)</span>
-<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>
-<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="c1"># Define the pipeline job</span>
-<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="n">job</span> <span class="o">=</span> <span class="n">aiplatform</span><span class="o">.</span><span class="n">PipelineJob</span><span class="p">(</span>
-<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>    <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;tutorial-rlhf-tuning&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>    <span class="n">pipeline_root</span><span class="o">=</span><span class="n">STAGING_BUCKET</span><span class="p">,</span>        <span class="c1"># GCS location for intermediate artefacts</span>
-<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>    <span class="n">template_path</span><span class="o">=</span><span class="n">RLHF_PIPELINE_PKG_PATH</span><span class="p">,</span> <span class="c1"># Path to the compiled YAML file</span>
-<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>    <span class="n">parameter_values</span><span class="o">=</span><span class="n">parameter_values</span>    <span class="c1"># Job-specific configuration</span>
-<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="p">)</span>
-<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>
-<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="c1"># Submit the job (runs remotely on Vertex AI, not locally)</span>
-<a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a><span class="n">job</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</code></pre></div>
-<p>The job executes on Google Cloud infrastructure — not locally — and requires significant compute resources (i.e. TPUs or GPUs). A full-scale run takes well over 24 hours. For initial experimentation, always begin with a small subset of data.</p>
-<hr />
-<h2 id="7-key-concepts-summary">7. Key Concepts Summary<a class="headerlink" href="#7-key-concepts-summary" title="Permanent link">&para;</a></h2>
+<h2 id="7-summary">7. Summary<a class="headerlink" href="#7-summary" title="Permanent link">&para;</a></h2>
+<p>The table below maps each evaluation approach to its practical role in an RLHF workflow.</p>
 <table>
 <thead>
 <tr>
-<th>Concept</th>
-<th>Description</th>
+<th>Approach</th>
+<th>What it measures</th>
+<th>Suitable for RLHF?</th>
+<th>Key limitation</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Pipeline</strong></td>
-<td>A portable, multi-step ML workflow compiled to YAML and executed on Vertex AI.</td>
+<td>Training curves (reward, KL)</td>
+<td>Whether the model is learning at all.</td>
+<td>Yes, highly useful.</td>
+<td>Does not measure final output quality directly.</td>
 </tr>
 <tr>
-<td><strong>Reward model</strong></td>
-<td>Trained on preference data to score completions; trained for 20–30 epochs.</td>
+<td>ROUGE / automated metrics</td>
+<td>Similarity to a reference text.</td>
+<td>No, poorly suited.</td>
+<td>Does not capture human preference alignment.</td>
 </tr>
 <tr>
-<td><strong>Reinforcer</strong></td>
-<td>RL loop component that fine-tunes the base LLM; trained for 10–20 epochs.</td>
+<td>Human SxS evaluation</td>
+<td>Direct human preference between two models.</td>
+<td>Yes, gold standard.</td>
+<td>Expensive and slow at scale.</td>
 </tr>
 <tr>
-<td><strong>Batch size</strong></td>
-<td>Fixed at 64; used to convert epochs to training steps.</td>
+<td>AutoSxS (LLM arbiter)</td>
+<td>LLM-proxy of human preference.</td>
+<td>Yes, scalable screening.</td>
+<td>Arbiter may not perfectly reflect human preferences.</td>
 </tr>
 <tr>
-<td><strong>KL coefficient</strong></td>
-<td>Regularisation term preventing the policy from diverging too far from the original model.</td>
-</tr>
-<tr>
-<td><strong>Reward hacking</strong></td>
-<td>When the policy exploits the reward signal in unintended ways (e.g. generating hollow but highly-scored text).</td>
-</tr>
-<tr>
-<td><strong>GCS</strong></td>
-<td>Google Cloud Storage; all datasets and artefacts must reside here in <code>.jsonl</code> format.</td>
-</tr>
-<tr>
-<td><strong><code>large_model_reference</code></strong></td>
-<td>Specifies which foundational model to tune (e.g. <code>llama-2-7b</code>, <code>text-bison@001</code>).</td>
+<td>RLAIF (LLM-labelled preference data)</td>
+<td>Enables RLHF without human annotators.</td>
+<td>Yes, scalable training.</td>
+<td>Risk of encoding the labeller LLM's own biases.</td>
 </tr>
 </tbody>
 </table>
+<hr />
+<h2 id="appendix-a-further-discussion-if-the-arbiter-llm-is-that-good-why-do-we-need-rlhf-at-all">Appendix A: Further Discussion — If the Arbiter LLM Is That Good, Why Do We Need RLHF at All?<a class="headerlink" href="#appendix-a-further-discussion-if-the-arbiter-llm-is-that-good-why-do-we-need-rlhf-at-all" title="Permanent link">&para;</a></h2>
+<p>Sections 5.1.2 and 5.2.1 raise a natural follow-up question: if a frontier LLM is capable enough to reliably judge output quality (for RLAIF) or evaluate model performance (for AutoSxS), why not simply use that frontier model directly and skip fine-tuning the base model altogether?</p>
+<p>This appendix unpacks why the answer is not as straightforward as it might seem, by distinguishing between three separate concepts that are easy to conflate: the ability to <em>judge</em> quality, the ability to <em>generate</em> quality, and the economics of <em>deploying</em> quality at scale.</p>
+<h3 id="a1-judging-is-easier-than-generating">A.1. Judging Is Easier Than Generating<a class="headerlink" href="#a1-judging-is-easier-than-generating" title="Permanent link">&para;</a></h3>
+<p>The most fundamental point is that evaluating whether an output is good is a substantially easier cognitive task than producing a good output in the first place. A food critic who has eaten at ten thousand restaurants can reliably tell you whether a dish is well-executed, even if they could not cook it themselves. A skilled editor can spot a weak paragraph in seconds even if writing an equally strong replacement would take them considerably longer.</p>
+<p>The same asymmetry applies to LLMs. A frontier model can reliably identify which of two Llama 2 summaries is more faithful, concise, and natural, even in cases where Llama 2 itself could not have generated the better one unprompted. RLHF exploits this asymmetry deliberately: it uses the <em>easier</em> task of judging to provide a training signal for the <em>harder</em> task of generating. Crucially, the arbiter does not need to know <em>how</em> to produce a better output; it only needs to recognise <em>which</em> of two candidate outputs is better. That is a considerably lower bar, which is why a frontier model can serve as a useful judge even for a model that is significantly weaker than it.</p>
+<h3 id="a2-the-arbiter-cannot-transfer-its-weights">A.2. The Arbiter Cannot Transfer Its Weights<a class="headerlink" href="#a2-the-arbiter-cannot-transfer-its-weights" title="Permanent link">&para;</a></h3>
+<p>A second, more practical point is that knowing the right answer does not automatically make the base model capable of producing it. Even if a frontier LLM could perfectly articulate what a good summary looks like, the base model cannot absorb that knowledge through description alone. The base model's behaviour is determined by its weights, and those weights can only be updated through training. RLHF is precisely the mechanism that translates the arbiter's preference judgements into concrete weight updates via the reward model and the PPO loop. The arbiter provides the compass; RLHF is the engine that moves the model in the indicated direction.</p>
+<p>An analogy: a GPS can tell you with perfect accuracy that you need to turn left in 200 metres. But the GPS cannot drive the car. Something still has to do the moving.</p>
+<h3 id="a3-deployment-economics-and-ownership">A.3. Deployment Economics and Ownership<a class="headerlink" href="#a3-deployment-economics-and-ownership" title="Permanent link">&para;</a></h3>
+<p>Even if you were willing to accept the theoretical circularity, using a frontier model directly at inference time raises serious practical obstacles. Frontier models are expensive to call, introduce latency, are subject to rate limits, and, critically, are owned by a third party. Organisations that need low-latency, low-cost, on-premises, or domain-specialised behaviour cannot rely on an external API for every user request. The goal of fine-tuning a smaller base model with RLHF is to <em>internalise</em> improved behaviour into a model you own and can deploy freely, without ongoing dependency on a third-party service.</p>
+<p>This is also why distillation, i.e. generating completions from the frontier model and using them as supervised fine-tuning targets, is a related but distinct strategy. Distillation teaches the base model to copy the frontier model's outputs for the prompts it has seen. RLHF, by contrast, teaches the base model a more general disposition towards quality, which can generalise better to novel prompts not seen during training.</p>
+<h3 id="a4-reconciling-the-apparent-circularity">A.4. Reconciling the Apparent Circularity<a class="headerlink" href="#a4-reconciling-the-apparent-circularity" title="Permanent link">&para;</a></h3>
+<p>It is worth being precise about what the apparent circularity actually is. The concern is roughly: 'We train the base model using an LLM's preferences (RLAIF), then evaluate it using an LLM's preferences (AutoSxS). Are we just measuring whether the base model has learned to satisfy the LLM, rather than whether it has learned to satisfy humans?'</p>
+<p>This concern is legitimate but not fatal, for two reasons. First, the assumption underlying both RLAIF and AutoSxS is that a capable frontier model's preferences are a <em>reasonable proxy</em> for average human preferences, at least for well-defined tasks with relatively unambiguous quality criteria (e.g. factuality, conciseness, grammaticality in summarisation). If this assumption holds, then satisfying the LLM's preferences and satisfying human preferences are approximately the same objective, and there is no real circularity. Second, even if the proxy is imperfect, the question is not whether it is perfect but whether it is <em>good enough to be directionally useful</em>. A model trained and evaluated using an imperfect proxy can still be substantially better than the untuned base model, which is the comparison that matters in practice.</p>
+<p>The deeper insight is that 'human preference' is not a monolithic gold standard either. Human annotators disagree with each other substantially, are subject to fatigue and cultural bias, and often cannot articulate why they prefer one output over another. Using a frontier LLM as a judge is not obviously worse than using a panel of crowdsourced human annotators; it is simply a different, more scalable, and arguably more consistent approximation of the same underlying signal.</p>
+<h3 id="a5-summary-of-the-argument">A.5. Summary of the Argument<a class="headerlink" href="#a5-summary-of-the-argument" title="Permanent link">&para;</a></h3>
+<p>The three points above can be restated concisely. The arbiter LLM is good at judging but that judgement does not automatically improve the base model, so RLHF is still needed to translate judgements into weight updates. The base model after fine-tuning is cheaper and faster to deploy than calling the frontier model at inference time, and is owned outright by the organisation. And the apparent circularity of using an LLM to train and evaluate is not fatal, because the frontier model's preferences are a reasonable and scalable proxy for human preferences for many tasks. RLHF with AI feedback is therefore best understood not as a replacement for the idea of human-preference alignment, but as a practical engineering solution for achieving that alignment at a scale and cost that would be impossible with human annotators alone.</p>
 
 
 

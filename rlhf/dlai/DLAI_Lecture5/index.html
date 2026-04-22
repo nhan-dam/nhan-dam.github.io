@@ -12,27 +12,31 @@
         <meta name="author" content="Nhan Dam">
       
       
-        <link rel="canonical" href="https://nhan-dam.github.io/rlhf/week1-mdp/">
+        <link rel="canonical" href="https://nhan-dam.github.io/rlhf/dlai/DLAI_Lecture5/">
       
       
+        <link rel="prev" href="../DLAI_Lecture4/">
+      
+      
+        <link rel="next" href="../../../reference/ml_workstation_setup_uv/">
       
       
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>1. Week 1 – MDPs and Bellman Equations - ND's Machine Learning Notes</title>
+        <title>Lecture 5 - Google Cloud Setup - ND's Machine Learning Notes</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -51,7 +55,7 @@
       
     
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#1-week-1-mdps-and-bellman-equations" class="md-skip">
+        <a href="#google-cloud-setup" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +96,7 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="ND&#39;s Machine Learning Notes" class="md-header__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
+    <a href="../../.." title="ND&#39;s Machine Learning Notes" class="md-header__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -112,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              1. Week 1 – MDPs and Bellman Equations
+              Lecture 5 - Google Cloud Setup
             
           </span>
         </div>
@@ -219,7 +223,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href="../../.." class="md-tabs__link">
         
   
   
@@ -236,6 +240,8 @@
   
   
   
+    
+  
   
     
     
@@ -243,11 +249,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../dlai/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -270,7 +278,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../reference/ml_workstation_setup_uv/" class="md-tabs__link">
+        <a href="../../../reference/ml_workstation_setup_uv/" class="md-tabs__link">
           
   
   
@@ -310,7 +318,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="ND&#39;s Machine Learning Notes" class="md-nav__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
+    <a href="../../.." title="ND&#39;s Machine Learning Notes" class="md-nav__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -340,7 +348,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -364,28 +372,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -403,7 +414,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -418,28 +429,31 @@
                 
   
   
+    
   
   
+  
     
     
     
     
       
       
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
         
           
+          
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_1" >
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
         
           
-          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
             
   
   
@@ -457,7 +471,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2_1">
             <span class="md-nav__icon md-icon"></span>
             
@@ -475,7 +489,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../dlai/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   
@@ -503,7 +517,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../dlai/DLAI_Lecture1/" class="md-nav__link">
+      <a href="../DLAI_Lecture1/" class="md-nav__link">
         
   
   
@@ -531,7 +545,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../dlai/DLAI_Lecture2/" class="md-nav__link">
+      <a href="../DLAI_Lecture2/" class="md-nav__link">
         
   
   
@@ -559,7 +573,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../dlai/DLAI_Lecture3/" class="md-nav__link">
+      <a href="../DLAI_Lecture3/" class="md-nav__link">
         
   
   
@@ -587,7 +601,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../dlai/DLAI_Lecture4/" class="md-nav__link">
+      <a href="../DLAI_Lecture4/" class="md-nav__link">
         
   
   
@@ -612,10 +626,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../dlai/DLAI_Lecture5/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 5 - Google Cloud Setup
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -631,6 +672,153 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-creating-a-google-cloud-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Creating a Google Cloud Project
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-enabling-billing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Enabling Billing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-enabling-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Enabling APIs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-creating-a-service-account" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Creating a Service Account
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Creating a Service Account">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-creating-an-account" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1. Creating an Account
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-granting-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2. Granting Permissions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-creating-a-json-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3. Creating a JSON Key
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-authenticating-with-the-credentials-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Authenticating with the Credentials File
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-setting-up-a-cloud-storage-bucket" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Setting Up a Cloud Storage Bucket
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-initialising-vertex-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Initialising Vertex AI
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -712,7 +900,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/ml_workstation_setup_uv/" class="md-nav__link">
+      <a href="../../../reference/ml_workstation_setup_uv/" class="md-nav__link">
         
   
   
@@ -740,7 +928,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/github-pages-setup/" class="md-nav__link">
+      <a href="../../../reference/github-pages-setup/" class="md-nav__link">
         
   
   
@@ -768,7 +956,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/github_cheatsheet_chapter/" class="md-nav__link">
+      <a href="../../../reference/github_cheatsheet_chapter/" class="md-nav__link">
         
   
   
@@ -823,10 +1011,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#11-the-markov-decision-process" class="md-nav__link">
+  <a href="#1-overview" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.1. The Markov Decision Process
+        1. Overview
       
     </span>
   </a>
@@ -834,22 +1022,55 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#12-value-functions" class="md-nav__link">
+  <a href="#2-creating-a-google-cloud-project" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.2. Value Functions
+        2. Creating a Google Cloud Project
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="1.2. Value Functions">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-enabling-billing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Enabling Billing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-enabling-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Enabling APIs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-creating-a-service-account" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Creating a Service Account
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Creating a Service Account">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#121-state-value-function" class="md-nav__link">
+  <a href="#51-creating-an-account" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.2.1. State-Value Function
+        5.1. Creating an Account
       
     </span>
   </a>
@@ -857,10 +1078,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#122-action-value-function" class="md-nav__link">
+  <a href="#52-granting-permissions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.2.2. Action-Value Function
+        5.2. Granting Permissions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-creating-a-json-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3. Creating a JSON Key
       
     </span>
   </a>
@@ -873,49 +1105,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#13-bellman-equations" class="md-nav__link">
+  <a href="#6-authenticating-with-the-credentials-file" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.3. Bellman Equations
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="1.3. Bellman Equations">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#131-bellman-expectation-equation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1.3.1. Bellman Expectation Equation
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#132-bellman-optimality-equation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1.3.2. Bellman Optimality Equation
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#14-key-takeaways" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1.4. Key Takeaways
+        6. Authenticating with the Credentials File
       
     </span>
   </a>
@@ -923,10 +1116,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#15-references" class="md-nav__link">
+  <a href="#7-setting-up-a-cloud-storage-bucket" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.5. References
+        7. Setting Up a Cloud Storage Bucket
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-initialising-vertex-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Initialising Vertex AI
       
     </span>
   </a>
@@ -950,7 +1154,7 @@
 
 
   
-    <a href="https://github.com/nhan-dam/nhan-dam.github.io/edit/main/docs/rlhf/week1-mdp.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/nhan-dam/nhan-dam.github.io/edit/main/docs/rlhf/dlai/DLAI_Lecture5.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -958,57 +1162,79 @@
   
 
 
-<h1 id="1-week-1-mdps-and-bellman-equations">1. Week 1 – MDPs and Bellman Equations<a class="headerlink" href="#1-week-1-mdps-and-bellman-equations" title="Permanent link">&para;</a></h1>
-<h2 id="11-the-markov-decision-process">1.1. The Markov Decision Process<a class="headerlink" href="#11-the-markov-decision-process" title="Permanent link">&para;</a></h2>
-<p>A Markov decision process (MDP) is a mathematical framework for sequential decision-making under uncertainty. It is defined by a tuple <span class="arithmatex">\((S, A, P, R, \gamma)\)</span>:</p>
+<h1 id="google-cloud-setup">Google Cloud Setup<a class="headerlink" href="#google-cloud-setup" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Created on: 22 April 2026</p>
+<p>Updated on: 22 April 2026</p>
+</blockquote>
+<h2 id="1-overview">1. Overview<a class="headerlink" href="#1-overview" title="Permanent link">&para;</a></h2>
+<p>This chapter describes how to configure Google Cloud and Vertex AI for use in machine learning projects. The setup involves creating a project, enabling billing and APIs, provisioning a service account with the appropriate permissions, and initialising the Vertex AI client.</p>
+<hr />
+<h2 id="2-creating-a-google-cloud-project">2. Creating a Google Cloud Project<a class="headerlink" href="#2-creating-a-google-cloud-project" title="Permanent link">&para;</a></h2>
+<p>All usage of Google Cloud services is associated with a project. Projects form the basis for managing APIs, billing, collaborators, and resource permissions.</p>
+<p>To create a project, visit the <a href="https://console.cloud.google.com">Cloud Console</a>, where you will be prompted to create one on first login. A <a href="https://cloud.google.com/free/docs/gcp-free-tier">free tier</a> is available, which includes a 90-day, $300 trial credit.</p>
+<hr />
+<h2 id="3-enabling-billing">3. Enabling Billing<a class="headerlink" href="#3-enabling-billing" title="Permanent link">&para;</a></h2>
+<p>A Cloud Billing account defines who pays for a given set of resources and must be linked to the project before any services can be used. Within your project, navigate to <strong>Billing</strong> in the left-hand menu and follow the prompts to attach a billing account. Detailed instructions are available in the <a href="https://cloud.google.com/billing/docs/how-to/modify-project">Google Cloud documentation</a>.</p>
+<hr />
+<h2 id="4-enabling-apis">4. Enabling APIs<a class="headerlink" href="#4-enabling-apis" title="Permanent link">&para;</a></h2>
+<p>Once billing is active, enable the required APIs by visiting the <a href="https://console.cloud.google.com/flows/enableapi?apiid=aiplatform,iam,bigquery.googleapis.com">API enablement page</a>. The three APIs required for this setup are:</p>
 <ul>
-<li><span class="arithmatex">\(S\)</span> — the state space.</li>
-<li><span class="arithmatex">\(A\)</span> — the action space.</li>
-<li><span class="arithmatex">\(P(s' \mid s, a)\)</span> — the transition probability of reaching state <span class="arithmatex">\(s'\)</span> after taking action <span class="arithmatex">\(a\)</span> in state <span class="arithmatex">\(s\)</span>.</li>
-<li><span class="arithmatex">\(R(s, a)\)</span> — the reward function.</li>
-<li><span class="arithmatex">\(\gamma \in [0, 1)\)</span> — the discount factor, which controls how much future rewards are weighted relative to immediate ones.</li>
-</ul>
-<p>The 'Markov' property means the next state depends only on the current state and action, not on the history.</p>
-<hr />
-<h2 id="12-value-functions">1.2. Value Functions<a class="headerlink" href="#12-value-functions" title="Permanent link">&para;</a></h2>
-<h3 id="121-state-value-function">1.2.1. State-Value Function<a class="headerlink" href="#121-state-value-function" title="Permanent link">&para;</a></h3>
-<p>The state-value function <span class="arithmatex">\(V^\pi(s)\)</span> measures the expected return starting from state <span class="arithmatex">\(s\)</span> and following policy <span class="arithmatex">\(\pi\)</span>:</p>
-<div class="arithmatex">\[
-V^\pi(s) = \mathbb{E}_\pi \left[ \sum_{t=0}^{\infty} \gamma^t R(s_t, a_t) \;\Big|\; s_0 = s \right]
-\]</div>
-<h3 id="122-action-value-function">1.2.2. Action-Value Function<a class="headerlink" href="#122-action-value-function" title="Permanent link">&para;</a></h3>
-<p>The action-value function <span class="arithmatex">\(Q^\pi(s, a)\)</span> additionally conditions on the first action taken:</p>
-<div class="arithmatex">\[
-Q^\pi(s, a) = \mathbb{E}_\pi \left[ \sum_{t=0}^{\infty} \gamma^t R(s_t, a_t) \;\Big|\; s_0 = s,\, a_0 = a \right]
-\]</div>
-<p>The two are related by <span class="arithmatex">\(V^\pi(s) = \sum_a \pi(a \mid s)\, Q^\pi(s, a)\)</span>.</p>
-<hr />
-<h2 id="13-bellman-equations">1.3. Bellman Equations<a class="headerlink" href="#13-bellman-equations" title="Permanent link">&para;</a></h2>
-<p>The Bellman equations express a recursive consistency condition that any valid value function must satisfy.</p>
-<h3 id="131-bellman-expectation-equation">1.3.1. Bellman Expectation Equation<a class="headerlink" href="#131-bellman-expectation-equation" title="Permanent link">&para;</a></h3>
-<div class="arithmatex">\[
-V^\pi(s) = \sum_a \pi(a \mid s) \sum_{s'} P(s' \mid s, a) \left[ R(s, a) + \gamma V^\pi(s') \right]
-\]</div>
-<p>This says: the value of a state is the expected immediate reward plus the discounted value of the next state, averaged over both the policy and the environment dynamics.</p>
-<h3 id="132-bellman-optimality-equation">1.3.2. Bellman Optimality Equation<a class="headerlink" href="#132-bellman-optimality-equation" title="Permanent link">&para;</a></h3>
-<p>The optimal value function <span class="arithmatex">\(V^*(s)\)</span> satisfies:</p>
-<div class="arithmatex">\[
-V^*(s) = \max_a \sum_{s'} P(s' \mid s, a) \left[ R(s, a) + \gamma V^*(s') \right]
-\]</div>
-<p>The optimal policy can be recovered greedily: <span class="arithmatex">\(\pi^*(s) = \arg\max_a Q^*(s, a)\)</span>.</p>
-<hr />
-<h2 id="14-key-takeaways">1.4. Key Takeaways<a class="headerlink" href="#14-key-takeaways" title="Permanent link">&para;</a></h2>
-<ul>
-<li>An MDP is the standard model for RL; understanding it precisely is a prerequisite for everything else.</li>
-<li>Value functions quantify 'how good' a state (or state-action pair) is under a given policy.</li>
-<li>The Bellman equations are the foundation of almost all RL algorithms — both dynamic programming methods (value iteration, policy iteration) and modern deep RL.</li>
-<li>The discount factor <span class="arithmatex">\(\gamma\)</span> is not just a mathematical convenience; it encodes a preference for sooner rewards and ensures convergence in infinite-horizon problems.</li>
+<li>Vertex AI.</li>
+<li>BigQuery.</li>
+<li>IAM.</li>
 </ul>
 <hr />
-<h2 id="15-references">1.5. References<a class="headerlink" href="#15-references" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Sutton &amp; Barto, <em>Reinforcement Learning: An Introduction</em>, Ch. 3.</li>
-</ul>
+<h2 id="5-creating-a-service-account">5. Creating a Service Account<a class="headerlink" href="#5-creating-a-service-account" title="Permanent link">&para;</a></h2>
+<p>A service account is a non-human identity used by applications and compute workloads to authenticate with Google Cloud services. It is identified by a unique email address.</p>
+<h3 id="51-creating-an-account">5.1. Creating an Account<a class="headerlink" href="#51-creating-an-account" title="Permanent link">&para;</a></h3>
+<p>Navigate to the <a href="https://console.cloud.google.com/projectselector/iam-admin/serviceaccounts/create">Create Service Account</a> page, select your project, and give the account a name of your choosing.</p>
+<h3 id="52-granting-permissions">5.2. Granting Permissions<a class="headerlink" href="#52-granting-permissions" title="Permanent link">&para;</a></h3>
+<p>During creation, grant the service account the permissions required for Vertex AI, BigQuery, and IAM access. The exact roles will depend on the scope of your project; refer to the IAM permissions panel in the Cloud Console for guidance.</p>
+<h3 id="53-creating-a-json-key">5.3. Creating a JSON Key<a class="headerlink" href="#53-creating-a-json-key" title="Permanent link">&para;</a></h3>
+<p>After creating the account, generate a key by selecting <strong>ADD KEY → Create new key</strong> and choosing the <strong>JSON</strong> format. The key file will be downloaded immediately. Note that it cannot be downloaded again after this point, so store it securely.</p>
+<hr />
+<h2 id="6-authenticating-with-the-credentials-file">6. Authenticating with the Credentials File<a class="headerlink" href="#6-authenticating-with-the-credentials-file" title="Permanent link">&para;</a></h2>
+<p>With the JSON key file in hand, create a credentials object using the <code>google-auth</code> library. This object is subsequently passed to the Vertex AI client.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">google.auth.transport.requests</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">google.oauth2.service_account</span><span class="w"> </span><span class="kn">import</span> <span class="n">Credentials</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Path to the downloaded JSON key file</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">key_path</span> <span class="o">=</span> <span class="s1">&#39;your_key.json&#39;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">credentials</span> <span class="o">=</span> <span class="n">Credentials</span><span class="o">.</span><span class="n">from_service_account_file</span><span class="p">(</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">key_path</span><span class="p">,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">scopes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;https://www.googleapis.com/auth/cloud-platform&#39;</span><span class="p">]</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">)</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="k">if</span> <span class="n">credentials</span><span class="o">.</span><span class="n">expired</span><span class="p">:</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="n">credentials</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">Request</span><span class="p">())</span>
+</code></pre></div>
+<hr />
+<h2 id="7-setting-up-a-cloud-storage-bucket">7. Setting Up a Cloud Storage Bucket<a class="headerlink" href="#7-setting-up-a-cloud-storage-bucket" title="Permanent link">&para;</a></h2>
+<p>Cloud Storage is Google Cloud's object storage service and can hold arbitrary file types (e.g. images, CSVs, saved model artefacts). Data is organised into 'buckets', and every object within Cloud Storage is addressed by a path of the form <code>gs://{bucket_name}/{path/to/object}</code>.</p>
+<p>To create a bucket:</p>
+<ol>
+<li>Navigate to <a href="https://console.cloud.google.com/storage/browser">Cloud Storage → Buckets</a> in the Cloud Console.</li>
+<li>Click <strong>CREATE</strong>.</li>
+<li>Provide a unique bucket name and select a region. US or EU multiregion are sensible defaults for most projects.</li>
+</ol>
+<p>Once created, the bucket is accessible at <code>gs://{name_of_your_bucket}</code>.</p>
+<hr />
+<h2 id="8-initialising-vertex-ai">8. Initialising Vertex AI<a class="headerlink" href="#8-initialising-vertex-ai" title="Permanent link">&para;</a></h2>
+<p>With credentials and a project ID available, initialise the Vertex AI client as follows. Copy your project ID from the <a href="https://cloud.google.com/resource-manager/docs/creating-managing-projects">Cloud Console</a> and substitute it below.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">google.cloud.aiplatform</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">aiplatform</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">PROJECT_ID</span> <span class="o">=</span> <span class="s1">&#39;your_project_ID&#39;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">REGION</span> <span class="o">=</span> <span class="s1">&#39;us-central1&#39;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">aiplatform</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">project</span><span class="o">=</span><span class="n">PROJECT_ID</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">location</span><span class="o">=</span><span class="n">REGION</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">)</span>
+</code></pre></div>
+<p>After this call, the Vertex AI SDK is authenticated and ready for use within the specified project and region.</p>
 
 
 
@@ -1064,12 +1290,12 @@ V^*(s) = \max_a \sum_{s'} P(s' \mid s, a) \left[ R(s, a) + \gamma V^*(s') \right
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../javascripts/mathjax.js"></script>
+        <script src="../../../javascripts/mathjax.js"></script>
       
         <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
       

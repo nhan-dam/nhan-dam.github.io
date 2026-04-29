@@ -12,9 +12,13 @@
         <meta name="author" content="Nhan Dam">
       
       
-        <link rel="canonical" href="https://nhan-dam.github.io/rlhf/week2-ppo/">
+        <link rel="canonical" href="https://nhan-dam.github.io/rlhf/curriculum/">
       
       
+        <link rel="prev" href="../..">
+      
+      
+        <link rel="next" href="phase01/">
       
       
         
@@ -25,7 +29,7 @@
     
     
       
-        <title>1. Week 2 – Policy Gradients and PPO - ND's Machine Learning Notes</title>
+        <title>Overview - ND's Machine Learning Notes</title>
       
     
     
@@ -76,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#1-week-2-policy-gradients-and-ppo" class="md-skip">
+        <a href="#reinforcement-learning-from-human-feedback-a-course-for-ml-practitioners" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              1. Week 2 – Policy Gradients and PPO
+              Overview
             
           </span>
         </div>
@@ -236,6 +240,8 @@
   
   
   
+    
+  
   
     
     
@@ -243,11 +249,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../curriculum/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
           
   
   
@@ -364,28 +372,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -403,7 +414,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -418,28 +429,31 @@
                 
   
   
+    
   
   
+  
     
     
     
     
       
       
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
         
           
+          
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_1" >
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
         
           
-          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
             
   
   
@@ -457,7 +471,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2_1">
             <span class="md-nav__icon md-icon"></span>
             
@@ -472,10 +486,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../curriculum/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -491,6 +532,37 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction-and-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction and Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -503,7 +575,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../curriculum/phase01/" class="md-nav__link">
+      <a href="phase01/" class="md-nav__link">
         
   
   
@@ -545,10 +617,13 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
@@ -557,7 +632,7 @@
         <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
         
           
-          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
             
   
   
@@ -941,21 +1016,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#11-planned-topics" class="md-nav__link">
+  <a href="#introduction-and-scope" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.1. Planned Topics
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#12-references" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1.2. References
+        Introduction and Scope
       
     </span>
   </a>
@@ -979,7 +1043,7 @@
 
 
   
-    <a href="https://github.com/nhan-dam/nhan-dam.github.io/edit/main/docs/rlhf/week2-ppo.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/nhan-dam/nhan-dam.github.io/edit/main/docs/rlhf/curriculum/index.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -987,28 +1051,14 @@
   
 
 
-<h1 id="1-week-2-policy-gradients-and-ppo">1. Week 2 – Policy Gradients and PPO<a class="headerlink" href="#1-week-2-policy-gradients-and-ppo" title="Permanent link">&para;</a></h1>
-<div class="admonition note">
-<p class="admonition-title">In progress</p>
-<p>This page will cover the REINFORCE algorithm, the policy gradient theorem, actor-critic methods, and proximal policy optimisation (PPO).</p>
-</div>
-<hr />
-<h2 id="11-planned-topics">1.1. Planned Topics<a class="headerlink" href="#11-planned-topics" title="Permanent link">&para;</a></h2>
-<ul>
-<li>The policy gradient theorem.</li>
-<li>REINFORCE and its high-variance problem.</li>
-<li>Baselines and the advantage function.</li>
-<li>Actor-critic architectures.</li>
-<li>Trust region policy optimisation (TRPO).</li>
-<li>PPO: clipped objective and implementation details.</li>
-</ul>
-<hr />
-<h2 id="12-references">1.2. References<a class="headerlink" href="#12-references" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Sutton &amp; Barto, <em>Reinforcement Learning: An Introduction</em>, Ch. 13.</li>
-<li>Schulman et al., 'Proximal Policy Optimisation Algorithms' (2017). <a href="https://arxiv.org/abs/1707.06347">arXiv:1707.06347</a>.</li>
-<li>Schulman et al., 'Trust Region Policy Optimisation' (2015). <a href="https://arxiv.org/abs/1502.05477">arXiv:1502.05477</a>.</li>
-</ul>
+<h1 id="reinforcement-learning-from-human-feedback-a-course-for-ml-practitioners">Reinforcement Learning from Human Feedback: A Course for ML Practitioners<a class="headerlink" href="#reinforcement-learning-from-human-feedback-a-course-for-ml-practitioners" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Created on: 22 April 2026</p>
+<p>Updated on: 28 April 2026</p>
+</blockquote>
+<h2 id="introduction-and-scope">Introduction and Scope<a class="headerlink" href="#introduction-and-scope" title="Permanent link">&para;</a></h2>
+<p>This course is written for a machine learning (ML) practitioner with a solid background in supervised learning, neural network training, and standard deep learning tooling, but with no prior exposure to reinforcement learning (RL). The goal is threefold: to build sufficient theoretical understanding to reason about why RL and reinforcement learning from human feedback (RLHF) behave as they do; to develop the debugging intuitions needed to diagnose training failures; and to produce working, non-trivial implementations on the Mac workstation.</p>
+<p>The course is divided into three phases. Phase 1 covers the RL foundations that underpin RLHF. Phase 2 covers the classical three-step RLHF pipeline. Phase 3 covers the modern alternatives that have displaced proximal policy optimisation (PPO)-based RLHF in most practical settings. Each module contains a theory section, a set of design intuitions aimed specifically at debugging and training stability, and a hands-on project with concrete implementation guidance for the local hardware.</p>
 
 
 

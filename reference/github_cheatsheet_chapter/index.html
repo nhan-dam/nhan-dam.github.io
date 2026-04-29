@@ -1073,6 +1073,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#12-add-gitignore-to-an-existing-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Add .gitignore to an Existing Repository
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Add .gitignore to an Existing Repository">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121-create-the-gitignore-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1. Create the .gitignore file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#122-clear-the-index-and-re-stage-all-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2. Clear the index and re-stage all files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#123-commit-and-push" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.3. Commit and push
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1236,6 +1286,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#12-add-gitignore-to-an-existing-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Add .gitignore to an Existing Repository
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Add .gitignore to an Existing Repository">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121-create-the-gitignore-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1. Create the .gitignore file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#122-clear-the-index-and-re-stage-all-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2. Clear the index and re-stage all files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#123-commit-and-push" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.3. Commit and push
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1264,7 +1364,7 @@
 <h1 id="github-task-oriented-cheatsheet">GitHub Task-Oriented Cheatsheet<a class="headerlink" href="#github-task-oriented-cheatsheet" title="Permanent link">&para;</a></h1>
 <blockquote>
 <p>Created on: 20 April 2026</p>
-<p>Updated on: 20 April 2026</p>
+<p>Updated on: 28 April 2026</p>
 </blockquote>
 <h2 id="1-create-a-new-local-repository">1. Create a New Local Repository<a class="headerlink" href="#1-create-a-new-local-repository" title="Permanent link">&para;</a></h2>
 <p><strong>Note for <code>uv</code> projects:</strong> <code>uv init</code> automatically runs <code>git init</code> and creates a <code>.gitignore</code> pre-populated with <code>.venv/</code> and <code>.python-version</code>. If you are scaffolding a project with <code>uv</code>, skip <code>git init</code> — the repository already exists.</p>
@@ -1385,6 +1485,30 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>git<span class="w"> </span>switch<span class="w"> </span>&lt;original-branch&gt;
 <a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>git<span class="w"> </span>stash<span class="w"> </span>pop
 </code></pre></div>
+<hr />
+<h2 id="12-add-gitignore-to-an-existing-repository">12. Add <code>.gitignore</code> to an Existing Repository<a class="headerlink" href="#12-add-gitignore-to-an-existing-repository" title="Permanent link">&para;</a></h2>
+<p>Adding a <code>.gitignore</code> after the initial commit requires an extra step. Git only respects <code>.gitignore</code> rules for <strong>untracked</strong> files; files that were already committed remain tracked regardless of any ignore rules added later. To untrack them, the Git index (i.e. the staging area) must be cleared and rebuilt.</p>
+<h3 id="121-create-the-gitignore-file">12.1. Create the <code>.gitignore</code> file<a class="headerlink" href="#121-create-the-gitignore-file" title="Permanent link">&para;</a></h3>
+<p>Create <code>.gitignore</code> in the repository root and add the desired patterns, one per line. For example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>__pycache__/
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>*.pyc
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>.env
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>.venv/
+</code></pre></div>
+<h3 id="122-clear-the-index-and-re-stage-all-files">12.2. Clear the index and re-stage all files<a class="headerlink" href="#122-clear-the-index-and-re-stage-all-files" title="Permanent link">&para;</a></h3>
+<p>Remove all files from the index without deleting them from the local working directory, then re-add everything so that the new <code>.gitignore</code> rules are applied:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>git<span class="w"> </span>rm<span class="w"> </span>-r<span class="w"> </span>--cached<span class="w"> </span>.
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>git<span class="w"> </span>add<span class="w"> </span>.
+</code></pre></div>
+<p><code>git rm --cached</code> removes a file from the index only, leaving the local copy intact. The <code>-r</code> flag (i.e. recursive) is required when the target is a directory (<code>.</code> refers to the entire repository root). After re-running <code>git add .</code>, any path matching a pattern in <code>.gitignore</code> is excluded from the index.</p>
+<h3 id="123-commit-and-push">12.3. Commit and push<a class="headerlink" href="#123-commit-and-push" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add .gitignore and untrack ignored files&quot;</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>git<span class="w"> </span>push
+</code></pre></div>
+<p><strong>Note:</strong> if only specific files need to be untracked rather than the entire repository, replace the broad <code>git rm -r --cached .</code> with a targeted call:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>git<span class="w"> </span>rm<span class="w"> </span>--cached<span class="w"> </span>&lt;path/to/file&gt;
+</code></pre></div>
+<p>This avoids unnecessarily re-staging every file in the repository.</p>
 
 
 

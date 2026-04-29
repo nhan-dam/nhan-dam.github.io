@@ -1,0 +1,1117 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Nhan Dam's Technical Notes on Machine Learning.">
+      
+      
+        <meta name="author" content="Nhan Dam">
+      
+      
+        <link rel="canonical" href="https://nhan-dam.github.io/rlhf/curriculum/rlhf_course/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>RLHF: A Course for ML Practitioners - ND's Machine Learning Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rlhf-a-course-for-ml-practitioners" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="ND&#39;s Machine Learning Notes" class="md-header__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ND's Machine Learning Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              RLHF: A Course for ML Practitioners
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nhan-dam/nhan-dam.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nhan-dam/nhan-dam.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../dlai/" class="md-tabs__link">
+          
+  
+  
+  RLHF Curriculum
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../reference/ml_workstation_setup_uv/" class="md-tabs__link">
+          
+  
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="ND&#39;s Machine Learning Notes" class="md-nav__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ND's Machine Learning Notes
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nhan-dam/nhan-dam.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nhan-dam/nhan-dam.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLHF Curriculum
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RLHF Curriculum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DLAI Course
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    DLAI Course
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/DLAI_Lecture1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 1 - Conceptual Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/DLAI_Lecture2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 2 - Datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/DLAI_Lecture3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 3 - Tune an LLM with RLHF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/DLAI_Lecture4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 4 - Evaluate an RLHF-Tuned Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/DLAI_Lecture5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 5 - Google Cloud Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/ml_workstation_setup_uv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mac ML Workstation Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/github-pages-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitHub Pages Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/github_cheatsheet_chapter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitHub Task-Oriented Cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/nhan-dam/nhan-dam.github.io/edit/main/docs/rlhf/curriculum/rlhf_course.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="rlhf-a-course-for-ml-practitioners">RLHF: A Course for ML Practitioners<a class="headerlink" href="#rlhf-a-course-for-ml-practitioners" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Created on: 22 April 2026</p>
+<p>Updated on: 28 April 2026</p>
+</blockquote>
+<h1 id="1-introduction-and-scope">1. Introduction and Scope<a class="headerlink" href="#1-introduction-and-scope" title="Permanent link">&para;</a></h1>
+<p>This course is written for a machine learning (ML) practitioner with a solid background in supervised learning, neural network training, and standard deep learning tooling, but with no prior exposure to reinforcement learning (RL). The goal is threefold: to build sufficient theoretical understanding to reason about why RL and reinforcement learning from human feedback (RLHF) behave as they do; to develop the debugging intuitions needed to diagnose training failures; and to produce working, non-trivial implementations on the Mac workstation.</p>
+<p>The course is divided into three phases. Phase 1 covers the RL foundations that underpin RLHF. Phase 2 covers the classical three-step RLHF pipeline. Phase 3 covers the modern alternatives that have displaced proximal policy optimisation (PPO)-based RLHF in most practical settings. Each module contains a theory section, a set of design intuitions aimed specifically at debugging and training stability, and a hands-on project with concrete implementation guidance for the local hardware.</p>
+<hr />
+<h1 id="2-phase-1-reinforcement-learning-foundations">2. Phase 1 — Reinforcement Learning Foundations<a class="headerlink" href="#2-phase-1-reinforcement-learning-foundations" title="Permanent link">&para;</a></h1>
+<h2 id="21-module-1-the-rl-problem">2.1. Module 1: The RL Problem<a class="headerlink" href="#21-module-1-the-rl-problem" title="Permanent link">&para;</a></h2>
+<h3 id="211-theory">2.1.1. Theory<a class="headerlink" href="#211-theory" title="Permanent link">&para;</a></h3>
+<p>Reinforcement learning studies agents that learn by interacting with an environment.</p>
+<figure id="fig-ae-loop" style="text-align:center;">
+  <img src="AE_loop.png" alt="The agent-environment interaction loop in reinforcement learning." style="width: 40%;">
+  <figcaption>Figure 1: Agent-environment interaction in RL. Source: https://gymnasium.farama.org/_images/AE_loop.png</figcaption>
+</figure>
+
+<p>As shown in <a href="#fig-ae-loop">Figure 1</a>, at each time step the agent observes the current state of the environment and receives a scalar reward; it then selects an action, which causes the environment to transition to a new state. This cycle of observation, action, and reward is the fundamental unit of interaction in every RL algorithm covered in this course, from Q-learning in <a href="#21-module-1-the-rl-problem">Section 2.1</a> to PPO-based RLHF in <a href="#33-module-5-the-full-ppo-rlhf-loop">Section 3.3</a>. In the language model setting, the 'environment' is the human (or reward model) that evaluates the generated response, and the 'action' at each step is the next token emitted by the policy.</p>
+<p>The standard formalism of RL is the <strong>Markov Decision Process (MDP)</strong>, a tuple <span class="arithmatex">\((S, A, P, R, \gamma)\)</span>.</p>
+<ul>
+<li><span class="arithmatex">\(S\)</span> is the state space, the complete description of the world at a given time step.</li>
+<li><span class="arithmatex">\(A\)</span> is the action space, the set of choices available to the agent.</li>
+<li><span class="arithmatex">\(P(s' \mid s, a)\)</span> is the transition dynamics, the probability of landing in state <span class="arithmatex">\(s'\)</span> after taking action <span class="arithmatex">\(a\)</span> from state <span class="arithmatex">\(s\)</span>.</li>
+<li><span class="arithmatex">\(R(s, a, s')\)</span> is the reward function, a scalar signal that encodes what the agent should maximise.</li>
+<li><span class="arithmatex">\(\gamma \in [0, 1)\)</span> is the discount factor, which down-weights future rewards relative to immediate ones.</li>
+</ul>
+<p>The most general definition of the reward function is <span class="arithmatex">\(R(s, a, s')\)</span>: the reward depends on the state the agent was in, the action it took, and the state it landed in. In many formulations this is simplified to <span class="arithmatex">\(R(s, a)\)</span> by marginalising out <span class="arithmatex">\(s'\)</span> under the transition dynamics, <span class="arithmatex">\(R(s, a) = \mathbb{E}_{s' \sim P(\cdot \mid s, a)}[R(s, a, s')]\)</span>, and occasionally further to <span class="arithmatex">\(R(s)\)</span> when the reward depends only on the destination state. All three conventions are equivalent in expressiveness; the choice is a matter of notational convenience. In the RLHF setting, the reward collapses to <span class="arithmatex">\(r_\phi(x, y)\)</span>, a function of the full (prompt, response) pair, which maps cleanly onto the <span class="arithmatex">\(R(s, a)\)</span> convention.</p>
+<p>The discount factor <span class="arithmatex">\(\gamma\)</span> serves three related purposes. First, it ensures the infinite-horizon return <span class="arithmatex">\(\sum_{t=0}^\infty \gamma^t R_t\)</span> is bounded by <span class="arithmatex">\(R_{\max}/(1-\gamma)\)</span>, making the optimisation problem well-posed; without discounting, the sum may diverge. Second, it encodes a preference for earlier rewards over later ones: a reward received <span class="arithmatex">\(k\)</span> steps in the future is worth only <span class="arithmatex">\(\gamma^k\)</span> of its face value today, reflecting the intuition that future outcomes are less certain and that earlier rewards reduce the variance of the return estimator. Third, <span class="arithmatex">\(\gamma\)</span> implicitly defines an effective planning horizon of approximately <span class="arithmatex">\(1/(1-\gamma)\)</span> steps, beyond which future rewards contribute negligibly. This is a useful design lever: tasks requiring long-horizon credit assignment need <span class="arithmatex">\(\gamma\)</span> close to 1, but higher <span class="arithmatex">\(\gamma\)</span> also increases the variance of return estimates. In the short-episode setting of RLHF, where a single (prompt, response) pair constitutes an entire episode, <span class="arithmatex">\(\gamma\)</span> is typically set to 1.0 or 0.99.</p>
+<p>The core structural assumption of an MDP is the <strong>Markov property</strong>: the future depends only on the present, not on the history of how the present was reached. Formally:</p>
+<div class="arithmatex">\[
+P(s_{t+1} \mid s_t, a_t, s_{t-1}, a_{t-1}, \ldots) = P(s_{t+1} \mid s_t, a_t).
+\]</div>
+<p>The current state <span class="arithmatex">\(s_t\)</span> is a sufficient statistic for all future states, i.e. knowing the full trajectory history gives no additional predictive power beyond knowing <span class="arithmatex">\(s_t\)</span> alone. Everything else in the MDP framework, including the Bellman equations, Q-learning convergence, and policy optimisation, is a consequence of this property holding. In practice the Markov property is often violated (large language model (LLM) generation is non-Markovian in the strict sense, since the full token history constitutes the state), but the approximation is usually workable.</p>
+<p>The agent's behaviour is described by a <strong>policy</strong> <span class="arithmatex">\(\pi(a \mid s)\)</span>, a distribution over actions conditioned on the current state. The objective is to find a policy that maximises the expected discounted return:</p>
+<div class="arithmatex">\[
+J(\pi) = \mathbb{E}_{\tau \sim \pi} \left[ \sum_{t=0}^{T} \gamma^t R(s_t, a_t) \right],
+\]</div>
+<p>where <span class="arithmatex">\(\tau = (s_0, a_0, s_1, a_1, \ldots)\)</span> is a trajectory sampled by running the policy in the environment.</p>
+<p>Two quantities are central to almost every RL algorithm.</p>
+<p>The <strong>state-value function</strong> <span class="arithmatex">\(V^\pi(s)\)</span> estimates the expected return starting from state <span class="arithmatex">\(s\)</span> and following policy <span class="arithmatex">\(\pi\)</span> thereafter:</p>
+<div class="arithmatex">\[
+V^\pi(s) = \mathbb{E}_{\tau \sim \pi} \left[ \sum_{t=0}^T \gamma^t R(s_t, a_t) \mid s_0 = s \right].
+\]</div>
+<p>The <strong>action-value function</strong> <span class="arithmatex">\(Q^\pi(s, a)\)</span> estimates the expected return starting from state <span class="arithmatex">\(s\)</span>, taking action <span class="arithmatex">\(a\)</span>, and then following <span class="arithmatex">\(\pi\)</span>:</p>
+<div class="arithmatex">\[
+Q^\pi(s, a) = \mathbb{E}_{\tau \sim \pi} \left[ \sum_{t=0}^T \gamma^t R(s_t, a_t) \mid s_0 = s, a_0 = a \right].
+\]</div>
+<p>The relationship <span class="arithmatex">\(V^\pi(s) = \mathbb{E}_{a \sim \pi}[Q^\pi(s, a)]\)</span> connects the two. The <strong>advantage function</strong>:</p>
+<div class="arithmatex">\[
+A^\pi(s, a) = Q^\pi(s, a) - V^\pi(s)
+\]</div>
+<p>is particularly important. It measures how much better (or worse) action <span class="arithmatex">\(a\)</span> is relative to the average action under the current policy. A positive advantage means the action was better than expected; a negative advantage means it was worse. The advantage is the right signal to use when updating the policy.</p>
+<p><strong>Connection to deep learning.</strong> In modern RL, the policy <span class="arithmatex">\(\pi_\theta(a \mid s)\)</span> is a neural network with parameters <span class="arithmatex">\(\theta\)</span>. For a discrete action space, the output is a softmax over actions. For a continuous action space, the output parameterises a distribution (e.g. a Gaussian). In the LLM setting, the 'state' is the token sequence so far, the 'action' is the next token, and the policy is precisely the language model's conditional distribution over the vocabulary.</p>
+<h4 id="2111-value-based-methods-q-learning-and-deep-q-network">2.1.1.1. Value-Based Methods: Q-Learning and Deep Q-Network<a class="headerlink" href="#2111-value-based-methods-q-learning-and-deep-q-network" title="Permanent link">&para;</a></h4>
+<p>Q-learning is a <strong>model-free</strong>, <strong>off-policy</strong> algorithm that learns <span class="arithmatex">\(Q^*(s, a)\)</span>, the optimal action-value function, by iteratively applying the <strong>Bellman optimality equation</strong>:</p>
+<div class="arithmatex">\[
+Q^*(s, a) = \mathbb{E}_{s' \sim P(\cdot \mid s, a)} \left[ R(s, a, s') + \gamma \max_{a'} Q^*(s', a') \right].
+\]</div>
+<p>This equation expresses a self-consistency condition: the value of taking action <span class="arithmatex">\(a\)</span> in state <span class="arithmatex">\(s\)</span> must equal the immediate reward plus the discounted value of acting optimally from every possible next state <span class="arithmatex">\(s'\)</span>, weighted by the transition probability. The expectation over <span class="arithmatex">\(s'\)</span> is what makes the equation exact; computing it analytically requires a known model <span class="arithmatex">\(P\)</span>, which is the defining property of model-based, dynamic programming (DP) methods such as value iteration. Q-learning dispenses with the model by replacing the expectation with a single sampled transition: rather than summing over all possible <span class="arithmatex">\(s'\)</span>, the agent simply observes the <span class="arithmatex">\(s'\)</span> that actually occurs and uses it as an unbiased estimate of the target. The Q-learning update rule is therefore:</p>
+<div class="arithmatex">\[
+Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha_t \left[ r_t + \gamma \max_{a'} Q(s_{t+1}, a') - Q(s_t, a_t) \right],
+\]</div>
+<p>where the bracketed term is the <strong>temporal-difference (TD) error</strong>, the difference between the current estimate and the single-sample Bellman target, and <span class="arithmatex">\(\alpha_t\)</span> is a step-dependent learning rate.</p>
+<p>This single-sample approximation is valid because the observed <span class="arithmatex">\(s_{t+1}\)</span> is drawn from <span class="arithmatex">\(P(\cdot \mid s_t, a_t)\)</span>, so the target <span class="arithmatex">\(r_t + \gamma \max_{a'} Q(s_{t+1}, a')\)</span> is a noisy but unbiased estimate of the true Bellman target. The <span class="arithmatex">\(\alpha_t\)</span>-weighted update nudges <span class="arithmatex">\(Q(s_t, a_t)\)</span> a small step towards this noisy target. Every subsequent visit to the same <span class="arithmatex">\((s, a)\)</span> pair yields a fresh independent sample of the target, and the sequence of updates averages out the noise over time, by the same mechanism that makes stochastic gradient descent converge to the same minimum as full-batch gradient descent.</p>
+<p>Formally, convergence to <span class="arithmatex">\(Q^*\)</span> is guaranteed provided every <span class="arithmatex">\((s, a)\)</span> pair is visited infinitely often and <span class="arithmatex">\(\alpha_t\)</span> satisfies the <strong>Robbins-Monro conditions</strong>:</p>
+<div class="arithmatex">\[
+\sum_t \alpha_t = \infty \qquad \text{and} \qquad \sum_t \alpha_t^2 &lt; \infty.
+\]</div>
+<p>The two conditions answer complementary questions about how <span class="arithmatex">\(\alpha_t\)</span> should decay. The first condition requires that the steps never shrink so aggressively that the algorithm effectively stops learning before it has corrected its early estimation errors; if the total step size were finite, updates would freeze prematurely. The second condition requires that steps eventually become small enough for the noise in each single-sample update to average out rather than accumulate; if steps stayed large forever, the estimate would keep bouncing and never settle. A concrete schedule satisfying both is <span class="arithmatex">\(\alpha_t = 1/t\)</span>: the harmonic series <span class="arithmatex">\(\sum 1/t\)</span> diverges (first condition met), while <span class="arithmatex">\(\sum 1/t^2 = \pi^2/6\)</span> is finite (second condition met).</p>
+<p>In practice, Deep Q-Network (DQN) uses a constant learning rate <span class="arithmatex">\(\alpha_t = \alpha\)</span>, which violates the second condition and therefore lacks the tabular convergence guarantee. This is acceptable because the target network and replay buffer provide stability through other means, and because neural network function approximation introduces approximation error that a decaying learning rate cannot eliminate anyway.</p>
+<p>Q-learning is therefore best understood as <strong>stochastic dynamic programming</strong>: it applies the Bellman operator sample-by-sample rather than in full sweeps, inheriting the fixed-point guarantee of DP while requiring no model of the environment.</p>
+<p>Once <span class="arithmatex">\(Q^*\)</span> has been learned, the connection to the original RL objective <span class="arithmatex">\(J(\pi)\)</span> is immediate. The optimal policy is recovered greedily:</p>
+<div class="arithmatex">\[
+\pi^*(s) = \arg\max_a Q^*(s, a),
+\]</div>
+<p>and this greedy policy provably maximises <span class="arithmatex">\(J(\pi)\)</span>. Q-learning thus solves the RL objective indirectly: rather than differentiating through <span class="arithmatex">\(J(\pi)\)</span> as policy gradient methods do, it learns <span class="arithmatex">\(Q^*\)</span> as an intermediate object from which the optimal policy is read off for free.</p>
+<p>In the tabular setting, <span class="arithmatex">\(Q(s, a)\)</span> is a lookup table with one entry per <span class="arithmatex">\((s, a)\)</span> pair, and the update touches exactly one cell per transition. Deep Q-Networks (DQN) replace the table with a neural network and add two stabilising tricks that are worth understanding because they recur in later algorithms: <em>experience replay</em> and <em>target network</em>.</p>
+<p><strong>Experience replay.</strong> Without intervention, the transitions <span class="arithmatex">\((s_t, a_t, r_t, s_{t+1})\)</span> fed to the network arrive in temporal order, meaning consecutive samples are highly correlated, as the same region of state space is visited for many steps in a row. Training a neural network on correlated samples violates the i.i.d. assumption that gradient descent relies on, producing biased gradient estimates and causing the network to overfit to the current region of the environment while catastrophically forgetting others. Experience replay breaks this correlation by storing every observed transition in a fixed-size circular buffer <span class="arithmatex">\(\mathcal{D}\)</span> and sampling uniformly at random from it at each update step.</p>
+<p>Action selection at each step follows an <strong><span class="arithmatex">\(\varepsilon\)</span>-greedy policy</strong>, a simple strategy for balancing exploration (trying actions whose Q-values are uncertain) and exploitation (taking the action the current network considers best). At each step the agent draws <span class="arithmatex">\(u \sim \text{Uniform}(0, 1)\)</span>: if <span class="arithmatex">\(u &lt; \varepsilon\)</span> it selects a random action; otherwise it selects <span class="arithmatex">\(\arg\max_a Q(s_t, a; \theta)\)</span>. <span class="arithmatex">\(\varepsilon\)</span> is annealed from 1.0 at the start of training, when the network knows nothing and pure exploration is warranted, down to a small value such as 0.05 once the network has learned a reasonable policy. Without this exploration mechanism, the agent may never visit large parts of the state space, violating the condition that every <span class="arithmatex">\((s, a)\)</span> pair must be visited sufficiently often for Q-learning to converge.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Input:  Q(·; θ)  — online Q-network with parameters θ
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>        N        — replay buffer capacity
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        k        — mini-batch size
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        ε        — exploration rate (annealed over training)
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>Output: θ        — updated Q-network parameters
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>Initialise replay buffer D with capacity N
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>For each time step t:
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    Draw u ~ Uniform(0, 1)
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    If u &lt; ε:
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        a_t = random action from A           # explore
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    Else:
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>        a_t = argmax_a Q(s_t, a; θ)         # exploit
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    Execute a_t, observe r_t and s_{t+1}
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    Store (s_t, a_t, r_t, s_{t+1}) in D     # overwrite oldest entry if full
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    Sample a random mini-batch of k transitions from D
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    Compute Bellman targets and update Q-network
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>Return θ
+</code></pre></div>
+<p>The buffer decouples data collection from data consumption. A transition collected early in training may be replayed many times later, improving sample efficiency. The random sampling ensures each mini-batch approximates an i.i.d. draw from the agent's historical experience, recovering the regime in which supervised learning is well-behaved.</p>
+<p><strong>Target network.</strong> The Bellman target for a given transition is <span class="arithmatex">\(r_t + \gamma \max_{a'} Q(s_{t+1}, a'; \theta)\)</span>, which depends on the same parameters <span class="arithmatex">\(\theta\)</span> being updated. This creates a moving-target problem: every gradient step changes not only the Q-value being corrected but also the target it is being corrected towards, producing oscillations or divergence. The target network resolves this by maintaining a separate copy of the Q-network with parameters <span class="arithmatex">\(\theta^-\)</span>, held frozen for <span class="arithmatex">\(C\)</span> update steps at a time. The Bellman target is computed using <span class="arithmatex">\(\theta^-\)</span>, not <span class="arithmatex">\(\theta\)</span>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Input:  Q(·; θ)  — online Q-network with parameters θ
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>        D        — replay buffer populated by experience replay
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>        k        — mini-batch size
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>        C        — target network update frequency (steps)
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        γ        — discount factor
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>Output: θ        — updated Q-network parameters
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>Initialise online network Q(·; θ) and target network Q(·; θ⁻) with θ⁻ ← θ
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>For each update step:
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    Sample mini-batch of k transitions from D
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    For each transition (s, a, r, s&#39;):
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>        y = r + γ · max_a&#39; Q(s&#39;, a&#39;; θ⁻)     # frozen target network
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    Loss = MSE(Q(s, a; θ), y)
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    Update θ via gradient descent on Loss
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    Every C steps: θ⁻ ← θ                    # periodic hard copy
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>Return θ
+</code></pre></div>
+<p>During the <span class="arithmatex">\(C\)</span> steps between copies, the target is stationary, giving the online network a stable regression objective. The periodic hard copy then refreshes the target to track the latest policy. A soft update variant, <span class="arithmatex">\(\theta^- \leftarrow \tau\theta + (1-\tau)\theta^-\)</span> with <span class="arithmatex">\(\tau \ll 1\)</span> (e.g. <span class="arithmatex">\(\tau = 0.005\)</span>), is common in continuous-control algorithms such as DDPG and SAC. Unlike the hard copy, the soft update is applied at every step rather than every <span class="arithmatex">\(C\)</span> steps, so the target is never fully stationary; instead it drifts imperceptibly slowly, trading the clean frozen window of the hard copy for smoother, continuous target evolution.</p>
+<p>Both tricks are instances of a general principle: RL training is destabilised by correlation and non-stationarity in the targets. Recognising this is the single most useful debugging intuition for all of Phase 1.</p>
+<h4 id="2112-best-practices-for-decay-in-q-learning">2.1.1.2. Best Practices for ε-Decay in Q-Learning<a class="headerlink" href="#2112-best-practices-for-decay-in-q-learning" title="Permanent link">&para;</a></h4>
+<p><strong>Overview</strong></p>
+<p>In Q-learning, ε (epsilon) controls the balance between exploration, taking random actions to discover new information, and exploitation, selecting the action with the highest known Q-value. As training progresses, the agent should gradually shift from exploring to exploiting. The rate at which ε is reduced, i.e. the decay schedule, meaningfully affects both the speed and stability of learning.</p>
+<p><strong>Decay Schedule</strong></p>
+<p>Exponential decay is generally preferred over linear decay. Because exponential decay reduces ε multiplicatively each episode, </p>
+<div class="arithmatex">\[\varepsilon \leftarrow \max(\varepsilon_{\min},\ \varepsilon \cdot \lambda),\]</div>
+<p>where <span class="arithmatex">\(\lambda \in (0, 1)\)</span> is the decay rate (e.g. <span class="arithmatex">\(\lambda = 0.9995\)</span>), it frontloads exploration into the early phase of training, where the Q-table is largely uninformed and random actions are most valuable. Linear decay, by contrast, reduces exploration at a constant rate regardless of how much the agent has already learnt, which can leave the agent over-exploring in later episodes when exploitation would be more productive.</p>
+<p><strong>Minimum Epsilon</strong></p>
+<p>ε should never be decayed to zero. Retaining a small minimum value, typically <span class="arithmatex">\(\varepsilon_{\min} \in [0.05, 0.1]\)</span>, ensures the agent continues to explore occasionally throughout training. A fully greedy policy is brittle: any errors remaining in the Q-table will never be corrected if the agent stops exploring entirely.</p>
+<p><strong>Timing of Decay</strong></p>
+<p>A widely used heuristic is to finish the decay schedule approximately halfway through training, leaving the second half predominantly for exploitation-based refinement of the Q-values already acquired. This can be configured by choosing <span class="arithmatex">\(\lambda\)</span> such that <span class="arithmatex">\(\varepsilon\)</span> reaches <span class="arithmatex">\(\varepsilon_{\min}\)</span> at episode <span class="arithmatex">\(N/2\)</span>, where <span class="arithmatex">\(N\)</span> is the total number of training episodes.</p>
+<p><strong>Granularity of Decay</strong></p>
+<p>Decay should be applied per episode rather than per step, unless episodes vary substantially in length. In environments where episode lengths are highly inconsistent, per-step decay prevents the agent from losing exploration capacity too rapidly during long episodes.</p>
+<h3 id="212-intuitions-for-when-rl-works">2.1.2. Intuitions for When RL Works<a class="headerlink" href="#212-intuitions-for-when-rl-works" title="Permanent link">&para;</a></h3>
+<p>RL tends to be reliable when the reward signal is dense (frequent feedback per step), unambiguous, and cheap to compute. It tends to fail when rewards are sparse (the agent must stumble upon the correct behaviour before it can learn from it), when the reward function is misspecified (the agent learns to optimise a proxy that diverges from true intent), or when the environment dynamics are highly stochastic. These conditions map directly onto failure modes in RLHF.</p>
+<h3 id="213-suggested-reading">2.1.3. Suggested Reading<a class="headerlink" href="#213-suggested-reading" title="Permanent link">&para;</a></h3>
+<p>Mnih et al. (2015), 'Human-level control through deep reinforcement learning.' Read before the project; the paper introduces the exact architecture and training procedure you are about to implement.</p>
+<h4 id="2131-overview">2.1.3.1. Overview<a class="headerlink" href="#2131-overview" title="Permanent link">&para;</a></h4>
+<p>Mnih et al. (2015) introduced the Deep Q-Network (DQN), a reinforcement learning (RL) agent capable of learning to play 49 Atari 2600 games at human-level performance from raw pixel input and game scores alone, with no hand-crafted features or game-specific knowledge. The work represented a significant milestone in demonstrating that deep neural networks could serve as stable, general-purpose function approximators within an RL framework.</p>
+<h4 id="2132-problem">2.1.3.2. Problem<a class="headerlink" href="#2132-problem" title="Permanent link">&para;</a></h4>
+<p>Prior RL methods were ill-suited to high-dimensional sensory inputs such as raw video frames. Naïvely combining deep neural networks with RL leads to training instability, due to two structural problems: strong temporal correlations between consecutive training samples, and non-stationary learning targets, i.e. the Q-value targets shift as the network parameters are updated.</p>
+<h4 id="2133-key-innovations">2.1.3.3. Key Innovations<a class="headerlink" href="#2133-key-innovations" title="Permanent link">&para;</a></h4>
+<p>DQN addressed both instabilities with two complementary techniques.</p>
+<ul>
+<li><strong>Experience replay.</strong> Agent transitions (state, action, reward, next state) are stored in a replay buffer and sampled uniformly at random during training. This breaks temporal correlations between samples and enables data reuse.</li>
+<li><strong>Target network.</strong> A separate copy of the Q-network, updated only periodically, is used to compute temporal-difference (TD) targets. This stabilises training by holding the targets fixed across multiple gradient updates.</li>
+</ul>
+<h4 id="2134-architecture">2.1.3.4. Architecture<a class="headerlink" href="#2134-architecture" title="Permanent link">&para;</a></h4>
+<p>The network receives the four most recent game frames as input, preprocessed to 84×84 grayscale. These pass through convolutional layers that extract spatial features, followed by fully connected layers that output a Q-value for each possible action. Crucially, the same architecture and hyperparameters were applied across all 49 games without modification.</p>
+<figure id="alg-dqn">
+
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Algorithm: DQN Training
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Input:
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  env        Atari game environment
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  N          replay buffer capacity
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  C          target network update frequency
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  γ ∈ (0,1]  discount factor
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>Output:
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>  θ          trained Q-network parameters
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>Initialise replay buffer D with capacity N
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>Initialise Q-network with parameters θ
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>Initialise target network with parameters θ⁻ ← θ
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>For each episode:
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>  Observe initial state s
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>  While s is not terminal:
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    Select action a via ε-greedy policy under Q(s, ·; θ)
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>    Execute a; observe reward r and next state s&#39;
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    Store (s, a, r, s&#39;) in D
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    Sample random minibatch from D
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    Compute TD target: y = r + γ max_{a&#39;} Q(s&#39;, a&#39;; θ⁻)
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>    Update θ by minimising (y − Q(s, a; θ))²
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>    Every C steps: θ⁻ ← θ
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>    s ← s&#39;
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>Return θ
+</code></pre></div>
+
+<figcaption>Algorithm 1: DQN training loop with experience replay and a target network.</figcaption>
+</figure>
+
+<h4 id="2135-results">2.1.3.5. Results<a class="headerlink" href="#2135-results" title="Permanent link">&para;</a></h4>
+<p>DQN outperformed all prior RL methods and achieved human-level or superhuman performance on the majority of the 49 games tested. Performance was strongest on games requiring visual pattern recognition (e.g. Breakout, Pong) and weakest on games demanding long-horizon planning (e.g. Montezuma's Revenge), where sparse rewards make credit assignment difficult.</p>
+<h4 id="2136-significance">2.1.3.6. Significance<a class="headerlink" href="#2136-significance" title="Permanent link">&para;</a></h4>
+<p>The paper established that end-to-end learning from raw sensory data is feasible at scale using a single, fixed architecture. It laid the foundation for much of modern deep RL research, directly motivating subsequent advances including Double DQN, Duelling DQN, and Prioritised Experience Replay.</p>
+<h3 id="214-hands-on-project-dqn-on-cartpole">2.1.4. Hands-on Project: DQN on CartPole<a class="headerlink" href="#214-hands-on-project-dqn-on-cartpole" title="Permanent link">&para;</a></h3>
+<p><strong>Objective.</strong> Implement DQN from scratch using PyTorch and solve the <code>CartPole-v1</code> environment from Gymnasium.</p>
+<p><strong>Setup.</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">cd</span><span class="w"> </span>/Volumes/ML_Workspace/projects/
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>mkdir<span class="w"> </span>rl-foundations<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>rl-foundations
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>uv<span class="w"> </span>init<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>uv<span class="w"> </span>add<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>gymnasium<span class="w"> </span>numpy<span class="w"> </span>matplotlib<span class="w"> </span>rich
+</code></pre></div>
+<p><strong>Implementation outline.</strong></p>
+<ol>
+<li>Define a two-hidden-layer MLP <code>QNetwork(obs_dim, n_actions)</code> that outputs per-action Q-values.</li>
+<li>Implement a <code>ReplayBuffer</code> storing <span class="arithmatex">\((s, a, r, s', \text{done})\)</span> tuples, supporting random mini-batch sampling.</li>
+<li>Implement the DQN training loop:</li>
+<li>Collect transitions by running the <span class="arithmatex">\(\epsilon\)</span>-greedy policy (anneal <span class="arithmatex">\(\epsilon\)</span> from 1.0 to 0.05 over 10 000 steps).</li>
+<li>Sample a mini-batch and compute the Bellman target using the target network.</li>
+<li>Compute the MSE loss against the online network's Q-value for the taken action.</li>
+<li>Update the online network with Adam; copy weights to the target network every 100 steps.</li>
+<li>Log episodic return with <code>rich</code> and plot the learning curve.</li>
+</ol>
+<p><strong>What to observe.</strong> CartPole should solve (mean return &gt; 475 over 100 episodes) within approximately 50 000 environment steps. If training is unstable, the first thing to check is whether the replay buffer is large enough (at least 10 000 transitions) and whether <span class="arithmatex">\(\epsilon\)</span> is decaying too quickly.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

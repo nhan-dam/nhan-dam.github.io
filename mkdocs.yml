@@ -54,11 +54,12 @@ extra_javascript:
 
 nav:
   - Home: index.md
-  - RLHF Curriculum:
-    # - Overview: rlhf/index.md
-    # - Week 1 – MDPs & Bellman Equations: rlhf/week1-mdp.md
+  - Learning:
+    - RLHF Curriculum:
+      - Overview: rlhf/curriculum/index.md
+      - Phase 1 - Reinforcement Learning Foundations: rlhf/curriculum/phase01.md
     # - Week 2 – Policy Gradients & PPO: rlhf/week2-ppo.md
-    - DLAI Course:
+    - DLAI RLHF Course:
       - Overview: rlhf/dlai/index.md
       - Lecture 1 - Conceptual Overview: rlhf/dlai/DLAI_Lecture1.md
       - Lecture 2 - Datasets: rlhf/dlai/DLAI_Lecture2.md

@@ -12,31 +12,29 @@
         <meta name="author" content="Nhan Dam">
       
       
-        <link rel="canonical" href="https://nhan-dam.github.io/rlhf/dlai/DLAI_Lecture5/">
+        <link rel="canonical" href="https://nhan-dam.github.io/reference/claude-code-reference/">
       
       
-        <link rel="prev" href="../DLAI_Lecture4/">
+        <link rel="prev" href="../github_cheatsheet_chapter/">
       
-      
-        <link rel="next" href="../../../reference/ml_workstation_setup_uv/">
       
       
         
       
       
-      <link rel="icon" href="../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>Lecture 5 - Google Cloud Setup - ND's Machine Learning Notes</title>
+        <title>Claude Code Cheatsheet - ND's Machine Learning Notes</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -55,7 +53,7 @@
       
     
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -80,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#google-cloud-setup" class="md-skip">
+        <a href="#claude-code-terminal-quick-reference" class="md-skip">
           Skip to content
         </a>
       
@@ -96,7 +94,7 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="ND&#39;s Machine Learning Notes" class="md-header__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
+    <a href="../.." title="ND&#39;s Machine Learning Notes" class="md-header__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -116,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Lecture 5 - Google Cloud Setup
+              Claude Code Cheatsheet
             
           </span>
         </div>
@@ -223,7 +221,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../.." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -240,8 +238,6 @@
   
   
   
-    
-  
   
     
     
@@ -249,13 +245,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../curriculum/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../rlhf/curriculum/" class="md-tabs__link">
           
   
   
@@ -274,11 +268,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../../reference/ml_workstation_setup_uv/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../ml_workstation_setup_uv/" class="md-tabs__link">
           
   
   
@@ -318,7 +314,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="ND&#39;s Machine Learning Notes" class="md-nav__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
+    <a href="../.." title="ND&#39;s Machine Learning Notes" class="md-nav__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -348,7 +344,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -372,31 +368,28 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
             
   
   
@@ -414,7 +407,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -438,13 +431,10 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
@@ -453,7 +443,7 @@
         <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_1" >
         
           
-          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
             
   
   
@@ -489,7 +479,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../curriculum/" class="md-nav__link">
+      <a href="../../rlhf/curriculum/" class="md-nav__link">
         
   
   
@@ -517,7 +507,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../curriculum/phase01/" class="md-nav__link">
+      <a href="../../rlhf/curriculum/phase01/" class="md-nav__link">
         
   
   
@@ -550,31 +540,28 @@
                 
   
   
-    
   
   
-  
     
     
     
     
       
       
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
         
           
-          
         
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
         
           
-          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
             
   
   
@@ -592,7 +579,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -610,7 +597,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
+      <a href="../../rlhf/dlai/" class="md-nav__link">
         
   
   
@@ -638,7 +625,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../DLAI_Lecture1/" class="md-nav__link">
+      <a href="../../rlhf/dlai/DLAI_Lecture1/" class="md-nav__link">
         
   
   
@@ -666,7 +653,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../DLAI_Lecture2/" class="md-nav__link">
+      <a href="../../rlhf/dlai/DLAI_Lecture2/" class="md-nav__link">
         
   
   
@@ -694,7 +681,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../DLAI_Lecture3/" class="md-nav__link">
+      <a href="../../rlhf/dlai/DLAI_Lecture3/" class="md-nav__link">
         
   
   
@@ -722,7 +709,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../DLAI_Lecture4/" class="md-nav__link">
+      <a href="../../rlhf/dlai/DLAI_Lecture4/" class="md-nav__link">
         
   
   
@@ -730,6 +717,190 @@
     
   
     Lecture 4 - Evaluate an RLHF-Tuned Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/dlai/DLAI_Lecture5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 5 - Google Cloud Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ml_workstation_setup_uv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mac ML Workstation Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../github-pages-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitHub Pages Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../github_cheatsheet_chapter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitHub Task-Oriented Cheatsheet
   
 
     
@@ -766,7 +937,7 @@
   <span class="md-ellipsis">
     
   
-    Lecture 5 - Google Cloud Setup
+    Claude Code Cheatsheet
   
 
     
@@ -784,7 +955,7 @@
   <span class="md-ellipsis">
     
   
-    Lecture 5 - Google Cloud Setup
+    Claude Code Cheatsheet
   
 
     
@@ -810,10 +981,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-overview" class="md-nav__link">
+  <a href="#1-starting-a-session" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Overview
+        1. Starting a Session
       
     </span>
   </a>
@@ -821,10 +992,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-creating-a-google-cloud-project" class="md-nav__link">
+  <a href="#2-resuming-a-previous-session" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Creating a Google Cloud Project
+        2. Resuming a Previous Session
       
     </span>
   </a>
@@ -832,44 +1003,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-enabling-billing" class="md-nav__link">
+  <a href="#3-managing-context-within-a-session" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Enabling Billing
+        3. Managing Context Within a Session
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-enabling-apis" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Enabling APIs
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#5-creating-a-service-account" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Creating a Service Account
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="5. Creating a Service Account">
+    <nav class="md-nav" aria-label="3. Managing Context Within a Session">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#51-creating-an-account" class="md-nav__link">
+  <a href="#31-commands" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5.1. Creating an Account
+        3.1. Commands
       
     </span>
   </a>
@@ -877,21 +1026,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#52-granting-permissions" class="md-nav__link">
+  <a href="#32-when-to-use-each-command" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5.2. Granting Permissions
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#53-creating-a-json-key" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5.3. Creating a JSON Key
+        3.2. When to Use Each Command
       
     </span>
   </a>
@@ -904,10 +1042,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-authenticating-with-the-credentials-file" class="md-nav__link">
+  <a href="#4-switching-models" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Authenticating with the Credentials File
+        4. Switching Models
       
     </span>
   </a>
@@ -915,10 +1053,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-setting-up-a-cloud-storage-bucket" class="md-nav__link">
+  <a href="#5-persistent-memory-and-project-context" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Setting Up a Cloud Storage Bucket
+        5. Persistent Memory and Project Context
       
     </span>
   </a>
@@ -926,10 +1064,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-initialising-vertex-ai" class="md-nav__link">
+  <a href="#6-general-slash-commands" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. Initialising Vertex AI
+        6. General Slash Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-keyboard-shortcuts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Keyboard Shortcuts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-tips-for-token-efficiency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Tips for Token Efficiency
       
     </span>
   </a>
@@ -940,187 +1100,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Reference
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Reference
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../reference/ml_workstation_setup_uv/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Mac ML Workstation Setup
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../reference/github-pages-setup/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    GitHub Pages Setup
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../reference/github_cheatsheet_chapter/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    GitHub Task-Oriented Cheatsheet
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../reference/claude-code-reference/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Claude Code Cheatsheet
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -1160,10 +1139,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-overview" class="md-nav__link">
+  <a href="#1-starting-a-session" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Overview
+        1. Starting a Session
       
     </span>
   </a>
@@ -1171,10 +1150,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-creating-a-google-cloud-project" class="md-nav__link">
+  <a href="#2-resuming-a-previous-session" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Creating a Google Cloud Project
+        2. Resuming a Previous Session
       
     </span>
   </a>
@@ -1182,44 +1161,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-enabling-billing" class="md-nav__link">
+  <a href="#3-managing-context-within-a-session" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Enabling Billing
+        3. Managing Context Within a Session
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-enabling-apis" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Enabling APIs
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#5-creating-a-service-account" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Creating a Service Account
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="5. Creating a Service Account">
+    <nav class="md-nav" aria-label="3. Managing Context Within a Session">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#51-creating-an-account" class="md-nav__link">
+  <a href="#31-commands" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5.1. Creating an Account
+        3.1. Commands
       
     </span>
   </a>
@@ -1227,21 +1184,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#52-granting-permissions" class="md-nav__link">
+  <a href="#32-when-to-use-each-command" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5.2. Granting Permissions
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#53-creating-a-json-key" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5.3. Creating a JSON Key
+        3.2. When to Use Each Command
       
     </span>
   </a>
@@ -1254,10 +1200,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-authenticating-with-the-credentials-file" class="md-nav__link">
+  <a href="#4-switching-models" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Authenticating with the Credentials File
+        4. Switching Models
       
     </span>
   </a>
@@ -1265,10 +1211,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-setting-up-a-cloud-storage-bucket" class="md-nav__link">
+  <a href="#5-persistent-memory-and-project-context" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Setting Up a Cloud Storage Bucket
+        5. Persistent Memory and Project Context
       
     </span>
   </a>
@@ -1276,10 +1222,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-initialising-vertex-ai" class="md-nav__link">
+  <a href="#6-general-slash-commands" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. Initialising Vertex AI
+        6. General Slash Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-keyboard-shortcuts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Keyboard Shortcuts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-tips-for-token-efficiency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Tips for Token Efficiency
       
     </span>
   </a>
@@ -1303,7 +1271,7 @@
 
 
   
-    <a href="https://github.com/nhan-dam/nhan-dam.github.io/edit/main/docs/rlhf/dlai/DLAI_Lecture5.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/nhan-dam/nhan-dam.github.io/edit/main/docs/reference/claude-code-reference.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1311,79 +1279,259 @@
   
 
 
-<h1 id="google-cloud-setup">Google Cloud Setup<a class="headerlink" href="#google-cloud-setup" title="Permanent link">&para;</a></h1>
+<h1 id="claude-code-terminal-quick-reference">Claude Code Terminal — Quick Reference<a class="headerlink" href="#claude-code-terminal-quick-reference" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>Created on: 22 April 2026</p>
-<p>Updated on: 22 April 2026</p>
+<p>Created on: 4 May 2026</p>
+<p>Updated on: 4 May 2026</p>
 </blockquote>
-<h2 id="1-overview">1. Overview<a class="headerlink" href="#1-overview" title="Permanent link">&para;</a></h2>
-<p>This chapter describes how to configure Google Cloud and Vertex AI for use in machine learning projects. The setup involves creating a project, enabling billing and APIs, provisioning a service account with the appropriate permissions, and initialising the Vertex AI client.</p>
-<hr />
-<h2 id="2-creating-a-google-cloud-project">2. Creating a Google Cloud Project<a class="headerlink" href="#2-creating-a-google-cloud-project" title="Permanent link">&para;</a></h2>
-<p>All usage of Google Cloud services is associated with a project. Projects form the basis for managing APIs, billing, collaborators, and resource permissions.</p>
-<p>To create a project, visit the <a href="https://console.cloud.google.com">Cloud Console</a>, where you will be prompted to create one on first login. A <a href="https://cloud.google.com/free/docs/gcp-free-tier">free tier</a> is available, which includes a 90-day, $300 trial credit.</p>
-<hr />
-<h2 id="3-enabling-billing">3. Enabling Billing<a class="headerlink" href="#3-enabling-billing" title="Permanent link">&para;</a></h2>
-<p>A Cloud Billing account defines who pays for a given set of resources and must be linked to the project before any services can be used. Within your project, navigate to <strong>Billing</strong> in the left-hand menu and follow the prompts to attach a billing account. Detailed instructions are available in the <a href="https://cloud.google.com/billing/docs/how-to/modify-project">Google Cloud documentation</a>.</p>
-<hr />
-<h2 id="4-enabling-apis">4. Enabling APIs<a class="headerlink" href="#4-enabling-apis" title="Permanent link">&para;</a></h2>
-<p>Once billing is active, enable the required APIs by visiting the <a href="https://console.cloud.google.com/flows/enableapi?apiid=aiplatform,iam,bigquery.googleapis.com">API enablement page</a>. The three APIs required for this setup are:</p>
+<h2 id="1-starting-a-session">1. Starting a Session<a class="headerlink" href="#1-starting-a-session" title="Permanent link">&para;</a></h2>
+<p>Launch Claude Code by running <code>claude</code> from within your project directory. The session is scoped to the directory from which it is launched, so always <code>cd</code> into the project first.</p>
+<p>The table below lists the available startup options.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>claude</code></td>
+<td>Start a new session in the current directory.</td>
+</tr>
+<tr>
+<td><code>claude "explain this project"</code></td>
+<td>Start a new session with an opening prompt.</td>
+</tr>
+<tr>
+<td><code>claude --model opus</code></td>
+<td>Start with a specific model (<code>opus</code>, <code>sonnet</code>, or <code>haiku</code>).</td>
+</tr>
+<tr>
+<td><code>claude --model opusplan</code></td>
+<td>Hybrid mode, i.e. Opus plans and Sonnet executes.</td>
+</tr>
+<tr>
+<td><code>claude -n "my-session-name"</code></td>
+<td>Start and name the session for easier retrieval.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-resuming-a-previous-session">2. Resuming a Previous Session<a class="headerlink" href="#2-resuming-a-previous-session" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>claude -c</code> / <code>claude --continue</code></td>
+<td>Resume the most recent session in the current directory.</td>
+</tr>
+<tr>
+<td><code>claude -r</code> / <code>claude --resume</code></td>
+<td>Open an interactive picker to browse and select a session.</td>
+</tr>
+<tr>
+<td><code>claude --from-pr &lt;number&gt;</code></td>
+<td>Resume the session linked to a specific pull request.</td>
+</tr>
+<tr>
+<td><code>/resume</code></td>
+<td>Switch sessions from inside a running session.</td>
+</tr>
+</tbody>
+</table>
+<p>Session data is stored at two locations.</p>
 <ul>
-<li>Vertex AI.</li>
-<li>BigQuery.</li>
-<li>IAM.</li>
+<li><code>~/.claude/projects/&lt;project&gt;/</code>, containing per-project session transcripts.</li>
+<li><code>~/.claude/history.jsonl</code>, a global log of every prompt sent across all projects.</li>
 </ul>
-<hr />
-<h2 id="5-creating-a-service-account">5. Creating a Service Account<a class="headerlink" href="#5-creating-a-service-account" title="Permanent link">&para;</a></h2>
-<p>A service account is a non-human identity used by applications and compute workloads to authenticate with Google Cloud services. It is identified by a unique email address.</p>
-<h3 id="51-creating-an-account">5.1. Creating an Account<a class="headerlink" href="#51-creating-an-account" title="Permanent link">&para;</a></h3>
-<p>Navigate to the <a href="https://console.cloud.google.com/projectselector/iam-admin/serviceaccounts/create">Create Service Account</a> page, select your project, and give the account a name of your choosing.</p>
-<h3 id="52-granting-permissions">5.2. Granting Permissions<a class="headerlink" href="#52-granting-permissions" title="Permanent link">&para;</a></h3>
-<p>During creation, grant the service account the permissions required for Vertex AI, BigQuery, and IAM access. The exact roles will depend on the scope of your project; refer to the IAM permissions panel in the Cloud Console for guidance.</p>
-<h3 id="53-creating-a-json-key">5.3. Creating a JSON Key<a class="headerlink" href="#53-creating-a-json-key" title="Permanent link">&para;</a></h3>
-<p>After creating the account, generate a key by selecting <strong>ADD KEY → Create new key</strong> and choosing the <strong>JSON</strong> format. The key file will be downloaded immediately. Note that it cannot be downloaded again after this point, so store it securely.</p>
-<hr />
-<h2 id="6-authenticating-with-the-credentials-file">6. Authenticating with the Credentials File<a class="headerlink" href="#6-authenticating-with-the-credentials-file" title="Permanent link">&para;</a></h2>
-<p>With the JSON key file in hand, create a credentials object using the <code>google-auth</code> library. This object is subsequently passed to the Vertex AI client.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">google.auth.transport.requests</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">google.oauth2.service_account</span><span class="w"> </span><span class="kn">import</span> <span class="n">Credentials</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Path to the downloaded JSON key file</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">key_path</span> <span class="o">=</span> <span class="s1">&#39;your_key.json&#39;</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">credentials</span> <span class="o">=</span> <span class="n">Credentials</span><span class="o">.</span><span class="n">from_service_account_file</span><span class="p">(</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">key_path</span><span class="p">,</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">scopes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;https://www.googleapis.com/auth/cloud-platform&#39;</span><span class="p">]</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">)</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="k">if</span> <span class="n">credentials</span><span class="o">.</span><span class="n">expired</span><span class="p">:</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="n">credentials</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">Request</span><span class="p">())</span>
+<h2 id="3-managing-context-within-a-session">3. Managing Context Within a Session<a class="headerlink" href="#3-managing-context-within-a-session" title="Permanent link">&para;</a></h2>
+<h3 id="31-commands">3.1. Commands<a class="headerlink" href="#31-commands" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/context</code></td>
+<td>Display a live breakdown of token usage by category.</td>
+</tr>
+<tr>
+<td><code>/cost</code></td>
+<td>Show token consumption and cost for the current session.</td>
+</tr>
+<tr>
+<td><code>/compact</code></td>
+<td>Summarise conversation history to free up context.</td>
+</tr>
+<tr>
+<td><code>/compact &lt;instructions&gt;</code></td>
+<td>Steer the summary, e.g. <code>/compact focus on auth, drop test debugging</code>.</td>
+</tr>
+<tr>
+<td><code>/clear</code></td>
+<td>Hard reset, i.e. wipe conversation history (CLAUDE.md still loads).</td>
+</tr>
+<tr>
+<td><code>/rewind</code> or double-tap <code>Esc</code></td>
+<td>Jump back to a previous message and re-prompt from there.</td>
+</tr>
+<tr>
+<td><code>/memory</code></td>
+<td>View and edit memory files for the current project.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-when-to-use-each-command">3.2. When to Use Each Command<a class="headerlink" href="#32-when-to-use-each-command" title="Permanent link">&para;</a></h3>
+<p>The three main context-management commands serve distinct purposes.</p>
+<ul>
+<li><code>/compact</code> — use when finishing a subtask but continuing the session; retains a summary of prior turns.</li>
+<li><code>/clear</code> — use when switching to a completely unrelated task; provides a full clean slate.</li>
+<li><code>/rewind</code> — use when Claude has taken the wrong approach; reverts to a prior message without carrying forward the bad turns.</li>
+</ul>
+<h2 id="4-switching-models">4. Switching Models<a class="headerlink" href="#4-switching-models" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/model</code></td>
+<td>Open the interactive model picker.</td>
+</tr>
+<tr>
+<td><code>/model sonnet</code></td>
+<td>Switch to Sonnet, the default on most plans.</td>
+</tr>
+<tr>
+<td><code>/model opus</code></td>
+<td>Switch to Opus, best for complex reasoning tasks.</td>
+</tr>
+<tr>
+<td><code>/model haiku</code></td>
+<td>Switch to Haiku, optimised for fast and simple tasks.</td>
+</tr>
+<tr>
+<td><code>/model opusplan</code></td>
+<td>Hybrid mode, i.e. Opus for planning and Sonnet for execution.</td>
+</tr>
+<tr>
+<td><code>/effort high</code></td>
+<td>Set reasoning depth (<code>low</code>, <code>medium</code>, <code>high</code>, or <code>xhigh</code>).</td>
+</tr>
+</tbody>
+</table>
+<p>To set a permanent default model, add the following export to <code>~/.zshrc</code> or <code>~/.bashrc</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">ANTHROPIC_MODEL</span><span class="o">=</span><span class="s2">&quot;claude-sonnet-4-6&quot;</span>
 </code></pre></div>
-<hr />
-<h2 id="7-setting-up-a-cloud-storage-bucket">7. Setting Up a Cloud Storage Bucket<a class="headerlink" href="#7-setting-up-a-cloud-storage-bucket" title="Permanent link">&para;</a></h2>
-<p>Cloud Storage is Google Cloud's object storage service and can hold arbitrary file types (e.g. images, CSVs, saved model artefacts). Data is organised into 'buckets', and every object within Cloud Storage is addressed by a path of the form <code>gs://{bucket_name}/{path/to/object}</code>.</p>
-<p>To create a bucket:</p>
-<ol>
-<li>Navigate to <a href="https://console.cloud.google.com/storage/browser">Cloud Storage → Buckets</a> in the Cloud Console.</li>
-<li>Click <strong>CREATE</strong>.</li>
-<li>Provide a unique bucket name and select a region. US or EU multiregion are sensible defaults for most projects.</li>
-</ol>
-<p>Once created, the bucket is accessible at <code>gs://{name_of_your_bucket}</code>.</p>
-<hr />
-<h2 id="8-initialising-vertex-ai">8. Initialising Vertex AI<a class="headerlink" href="#8-initialising-vertex-ai" title="Permanent link">&para;</a></h2>
-<p>With credentials and a project ID available, initialise the Vertex AI client as follows. Copy your project ID from the <a href="https://cloud.google.com/resource-manager/docs/creating-managing-projects">Cloud Console</a> and substitute it below.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">google.cloud.aiplatform</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">aiplatform</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">PROJECT_ID</span> <span class="o">=</span> <span class="s1">&#39;your_project_ID&#39;</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">REGION</span> <span class="o">=</span> <span class="s1">&#39;us-central1&#39;</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">aiplatform</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">project</span><span class="o">=</span><span class="n">PROJECT_ID</span><span class="p">,</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">location</span><span class="o">=</span><span class="n">REGION</span><span class="p">,</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">)</span>
+<h2 id="5-persistent-memory-and-project-context">5. Persistent Memory and Project Context<a class="headerlink" href="#5-persistent-memory-and-project-context" title="Permanent link">&para;</a></h2>
+<p>Claude Code supports three mechanisms for persisting instructions and preferences across sessions.</p>
+<table>
+<thead>
+<tr>
+<th>Mechanism</th>
+<th>Description</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CLAUDE.md</code> (project)</td>
+<td>Instructions written by the user; loaded every session.</td>
+<td><code>./CLAUDE.md</code> in the repository root.</td>
+</tr>
+<tr>
+<td><code>CLAUDE.md</code> (global)</td>
+<td>Cross-project preferences written by the user.</td>
+<td><code>~/.claude/CLAUDE.md</code>.</td>
+</tr>
+<tr>
+<td>Auto memory</td>
+<td>Notes written by Claude automatically (on by default).</td>
+<td><code>~/.claude/projects/&lt;project&gt;/memory/</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Auto memory captures build commands, debugging fixes, code style preferences, and workflow habits. The files can be reviewed or edited directly. To instruct Claude to remember something explicitly, use natural language, e.g.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>remember that we use pnpm, not npm
 </code></pre></div>
-<p>After this call, the Vertex AI SDK is authenticated and ready for use within the specified project and region.</p>
+<h2 id="6-general-slash-commands">6. General Slash Commands<a class="headerlink" href="#6-general-slash-commands" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/status</code></td>
+<td>Show the current model, context usage, and session info.</td>
+</tr>
+<tr>
+<td><code>/rename</code></td>
+<td>Rename the current session.</td>
+</tr>
+<tr>
+<td><code>/model</code></td>
+<td>Change the model mid-session.</td>
+</tr>
+<tr>
+<td><code>/help</code></td>
+<td>List all available slash commands.</td>
+</tr>
+<tr>
+<td><code>/bug</code></td>
+<td>Report a bug directly to Anthropic.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-keyboard-shortcuts">7. Keyboard Shortcuts<a class="headerlink" href="#7-keyboard-shortcuts" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Shortcut</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Ctrl+C</code></td>
+<td>Cancel the current generation.</td>
+</tr>
+<tr>
+<td><code>Ctrl+R</code></td>
+<td>Search prompt history, analogous to shell history search.</td>
+</tr>
+<tr>
+<td><code>Esc</code> <code>Esc</code></td>
+<td>Rewind to the previous message.</td>
+</tr>
+<tr>
+<td><code>Shift+Tab</code></td>
+<td>Toggle plan mode, i.e. Claude reads and plans but does not edit.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-tips-for-token-efficiency">8. Tips for Token Efficiency<a class="headerlink" href="#8-tips-for-token-efficiency" title="Permanent link">&para;</a></h2>
+<p>Managing context window usage reduces cost and keeps responses focused.</p>
+<ul>
+<li>Be explicit about scope, i.e. name the specific file rather than asking Claude to 'look at the codebase'.</li>
+<li>Use subagents for isolation, e.g. 'spin off a subagent to summarise this module', to keep heavy reads out of the main context.</li>
+<li>Run <code>/clear</code> between unrelated tasks, treating each as a new session.</li>
+<li>Monitor the status bar, where token percentage is displayed; aim to run <code>/compact</code> before reaching 80%.</li>
+<li>Name sessions with <code>-n</code> to make them easier to locate later using <code>claude -r</code>.</li>
+</ul>
 
 
 
@@ -1439,12 +1587,12 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../../javascripts/mathjax.js"></script>
+        <script src="../../javascripts/mathjax.js"></script>
       
         <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
       

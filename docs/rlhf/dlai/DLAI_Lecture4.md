@@ -46,9 +46,9 @@ The **reward** measures the score assigned by the reward model to the tuned mode
 
 #### 3.2.1. Why Is the RL Loss Increasing?
 
-A common point of confusion is the 'rl_loss' curve, which is also visible in TensorBoard and appears to **increase** rather than decrease. This surprises learners who expect all losses to go down. The explanation lies in what 'rl_loss' actually represents.
+A common point of confusion is the `rl_loss` curve, which is also visible in TensorBoard and appears to **increase** rather than decrease. This surprises learners who expect all losses to go down. The explanation lies in what `rl_loss` actually represents.
 
-In the Vertex AI RLHF pipeline, the reported `rl_loss` is essentially the **negative reward** (often derived from the policy gradient objective). Because the optimiser is maximising reward, it is simultaneously minimising the negative reward. As the reward climbs upward, the negative of that reward climbs downward in absolute terms, which appears on the plot as an increasing curve when the sign convention flips or when the pipeline logs `−reward` directly. In short, the rl_loss increasing is the **mirror image** of the reward increasing, and is the expected, healthy behaviour for a model that is genuinely learning to produce higher-quality outputs. If both the reward and rl_loss were flat or erratic, that would indicate underfitting, which is exactly what the small-data (1% subset) logs showed.
+In the Vertex AI RLHF pipeline, the reported `rl_loss` is essentially the **negative reward** (often derived from the policy gradient objective). Because the optimiser is maximising reward, it is simultaneously minimising the negative reward. As the reward climbs upward, the negative of that reward climbs downward in absolute terms, which appears on the plot as an increasing curve when the sign convention flips or when the pipeline logs `−reward` directly. In short, the `rl_loss` increasing is the **mirror image** of the reward increasing, and is the expected, healthy behaviour for a model that is genuinely learning to produce higher-quality outputs. If both the reward and `rl_loss` were flat or erratic, that would indicate underfitting, which is exactly what the small-data (1% subset) logs showed.
 
 ### 3.3. Diagnosing Underfitting
 

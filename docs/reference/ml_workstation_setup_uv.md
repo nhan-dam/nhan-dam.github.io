@@ -1,5 +1,9 @@
 # ML Workstation Setup: Mac Mini M4 Pro with uv
 
+> Created on: 3 April 2026
+>
+> Updated on: 4 May 2026
+
 **Machine:** Mac mini M4 Pro · 64 GB RAM · internal 512 GB SSD.
 
 **External drive:** Samsung 990 Pro 2 TB in OWC M.2 Express (Thunderbolt/USB4).
@@ -15,7 +19,7 @@ The storage split between drives is as follows.
 - **Internal SSD** → macOS, Homebrew, `uv` CLI (~10 MB), shell config, VS Code extensions.
 - **External NVMe** → Python installs, virtual environments, all caches, model weights, datasets, source code, Ollama models.
 
-`uv` uses per-project virtual environments — each project or competition has its own isolated `.venv`, stored inside the project folder on the external drive.
+`uv` uses per-project virtual environments, i.e. each project or competition has its own isolated `.venv`, stored inside the project folder on the external drive.
 
 ---
 
@@ -31,7 +35,7 @@ The storage split between drives is as follows.
    - **Scheme:** `GUID Partition Map`.
 4. Click **Erase** to confirm.
 
-> **Why APFS?** Native macOS filesystem — supports snapshots, efficient space sharing, and fast metadata operations. Better than exFAT for a Mac-only workflow.
+> **Why APFS?** Native macOS filesystem, supporting snapshots, efficient space sharing, and fast metadata operations. Better than exFAT for a Mac-only workflow.
 >
 > **Why `ML_Workspace` and not `ML Workspace`?** Spaces in volume names require quoting or escaping in every shell command (`/Volumes/ML\ Workspace`), which is constant friction. An underscore is equally readable with zero shell complexity.
 
@@ -111,7 +115,7 @@ The Xcode Command Line Tools provide the compiler toolchain (`clang`, `make`) th
 xcode-select -p
 ```
 
-- If it returns a path like `/Library/Developer/CommandLineTools` — already installed, skip to 4.2.
+- If it returns a path like `/Library/Developer/CommandLineTools` — already installed, skip to [Section 4.2](#42-install-homebrew).
 - If it returns an error — install it:
 
 ```bash
@@ -122,7 +126,7 @@ Accept the dialog. Takes approximately five minutes.
 
 ### 4.2. Install Homebrew
 
-Homebrew is a package manager for macOS — it lets you install command-line tools with a single command rather than downloading installers manually. It is the standard way to get system-level tools that are not Python packages and cannot be installed via `uv`.
+Homebrew is a package manager for macOS, letting you install command-line tools with a single command rather than downloading installers manually. It is the standard way to get system-level tools that are not Python packages and cannot be installed via `uv`.
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -145,8 +149,8 @@ eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 ```
 
 > **Why `~/.zprofile` and not `~/.zshrc`?**
-> - `~/.zprofile` runs once at login — the right place for PATH setup.
-> - `~/.zshrc` runs on every new shell instance — the right place for aliases and env vars (used in Section 6).
+> - `~/.zprofile` runs once at login, the right place for PATH setup.
+> - `~/.zshrc` runs on every new shell instance, the right place for aliases and environment variables (used in [Section 6](#6-shell-environment-variables)).
 >
 > Homebrew intentionally targets `~/.zprofile` for this reason. Everything else in this guide goes into `~/.zshrc`.
 
@@ -259,17 +263,17 @@ source ~/.zshrc
 >
 > **`OLLAMA_FLASH_ATTENTION` and `OLLAMA_KV_CACHE_TYPE`** are Apple Silicon memory optimisations for Ollama.
 > - `OLLAMA_FLASH_ATTENTION="1"` — enables Flash Attention, reducing memory usage during inference.
-> - `OLLAMA_KV_CACHE_TYPE="q8_0"` — quantises the KV cache (temporary attention scratch space) to 8-bit instead of 16-bit, cutting its memory footprint roughly in half. This does **not** affect model weight precision — only the intermediate computation buffer. Output quality difference is imperceptible in practice.
+> - `OLLAMA_KV_CACHE_TYPE="q8_0"` — quantises the KV cache (i.e. the temporary attention scratch space) to 8-bit instead of 16-bit, cutting its memory footprint roughly in half. This does **not** affect model weight precision, only the intermediate computation buffer. Output quality difference is imperceptible in practice.
 >
 > **`KAGGLE_USERNAME` and `KAGGLE_API_TOKEN`** — Kaggle's current authentication method. The CLI reads these environment variables directly; no credentials file on disk is needed. Replace the placeholder values with your actual username and API token from kaggle.com → Settings → API.
 >
-> **Do this before installing any Python or packages.** These env vars ensure `uv` downloads Python and caches wheels to the external drive from the very first install.
+> **Do this before installing any Python or packages.** These environment variables ensure `uv` downloads Python and caches wheels to the external drive from the very first install.
 
 ---
 
 ## 7. Install Python via `uv`
 
-`uv` manages its own Python downloads — no need for `pyenv` or Homebrew Python.
+`uv` manages its own Python downloads, with no need for `pyenv` or Homebrew Python.
 
 ```bash
 # Python 3.12 — recommended for Apple Silicon ML as of April 2026
@@ -354,13 +358,13 @@ uv add jupyterlab ipywidgets ipykernel
 >
 > **Note on PyTorch size on Apple Silicon:** PyTorch installs much smaller than on Linux (~400 MB vs ~2 GB) because the macOS arm64 wheel excludes all CUDA tooling. GPU acceleration goes through Apple's Metal/MPS backend instead, which is already part of macOS — so no CUDA runtime needs to be bundled.
 >
-> **Note on `huggingface_hub`:** The CLI entry point shipped with this package was renamed from `huggingface-cli` to `hf` in recent versions. The login command is now `uv run hf auth login` (see Section 14). If you ever need to check what CLI commands a package registers, inspect `.venv/lib/python3.12/site-packages/<package>.dist-info/entry_points.txt`.
+> **Note on `huggingface_hub`:** The CLI entry point shipped with this package was renamed from `huggingface-cli` to `hf` in recent versions. The login command is now `uv run hf auth login` (see [Section 14](#14-huggingface--wb-login)). If you ever need to check what CLI commands a package registers, inspect `.venv/lib/python3.12/site-packages/<package>.dist-info/entry_points.txt`.
 
 ### 8.3. Reproducing the Environment on Another Machine
 
 When you run `uv add`, two files are automatically maintained.
 
-- **`pyproject.toml`** — your declared dependencies (e.g. `torch`, `trl`). The source of truth — human-readable, can be edited directly. `uv` always resolves `uv.lock` from this file, never the other way around.
+- **`pyproject.toml`** — your declared dependencies (e.g. `torch`, `trl`). The source of truth, human-readable, and editable directly. `uv` always resolves `uv.lock` from this file, never the other way around.
 - **`uv.lock`** — the fully resolved dependency tree with exact versions for every package and sub-dependency. Auto-generated by `uv`, never edited manually.
 
 The relationship between them is as follows.
@@ -387,7 +391,7 @@ cd rlhf-course
 uv sync
 ```
 
-`uv sync` reads `uv.lock` and recreates `.venv` with exactly the same versions — no resolution step needed, which is why it is fast. If the other machine is a different architecture (e.g. Linux x86 instead of Apple Silicon), `uv sync` re-resolves platform-specific wheels automatically while keeping all versions consistent where possible.
+`uv sync` reads `uv.lock` and recreates `.venv` with exactly the same versions, with no resolution step needed, which is why it is fast. If the other machine is a different architecture (e.g. Linux x86 instead of Apple Silicon), `uv sync` re-resolves platform-specific wheels automatically while keeping all versions consistent where possible.
 
 If you ever need a traditional `requirements.txt` for compatibility with tools that do not understand `uv.lock`:
 
@@ -395,7 +399,7 @@ If you ever need a traditional `requirements.txt` for compatibility with tools t
 uv pip freeze > requirements.txt
 ```
 
-For your own projects between machines, `uv.lock` + `uv sync` is the better mechanism — it is more precise and fully automated.
+For your own projects between machines, `uv.lock` + `uv sync` is the better mechanism, being more precise and fully automated.
 
 ### 8.4. Run Commands in the Project Environment
 
@@ -419,7 +423,7 @@ uv init --python 3.12
 uv add pandas scikit-learn xgboost lightgbm matplotlib seaborn jupyterlab
 ```
 
-Each project gets its own isolated `.venv`. Wheels are cached in `/Volumes/ML_Workspace/cache/uv` and hard-linked — no redundant downloads across projects.
+Each project gets its own isolated `.venv`. Wheels are cached in `/Volumes/ML_Workspace/cache/uv` and hard-linked, with no redundant downloads across projects.
 
 ---
 
@@ -427,7 +431,7 @@ Each project gets its own isolated `.venv`. Wheels are cached in `/Volumes/ML_Wo
 
 ### 9.1. When to Register a Jupyter Kernel
 
-If you launch Jupyter Lab via `uv run` from inside the project directory, the correct environment is used automatically — no kernel registration needed:
+If you launch Jupyter Lab via `uv run` from inside the project directory, the correct environment is used automatically, with no kernel registration needed:
 
 ```bash
 cd /Volumes/ML_Workspace/projects/rlhf-course
@@ -460,11 +464,11 @@ Cursor ($20/month) is a popular AI-native IDE, but given you already have Claude
 - **VS Code** — free, handles daily editing: writing notebooks, browsing code, running scripts.
 - **Claude.ai** — theory explanations, paper walkthroughs, architecture discussions.
 
-Cursor's main advantage is fast inline autocomplete while actively typing. For ML work — writing training loops, running experiments, iterating on RLHF pipelines — you spend more time thinking and running code than typing boilerplate, so that advantage matters less.
+Cursor's main advantage is fast inline autocomplete while actively typing. For ML work, writing training loops, running experiments, and iterating on RLHF pipelines, you spend more time thinking and running code than typing boilerplate, so that advantage matters less.
 
 ### 10.2. Install VS Code
 
-Download from https://code.visualstudio.com — drag to Applications.
+Download from https://code.visualstudio.com and drag to Applications.
 
 Install the `code` CLI so you can control VS Code from the terminal: `Cmd+Shift+P` → 'Shell Command: Install 'code' command in PATH'.
 
@@ -476,9 +480,9 @@ code myfile.py                                      # open a specific file
 code /Volumes/ML_Workspace/projects/rlhf-course     # open a project
 ```
 
-> **Where extensions are stored:** VS Code installs extensions to `~/.vscode/extensions/` on your internal SSD — not the external drive. This is intentional: extensions are small (a few MB each) and tied to VS Code itself, not to any specific project. Unlike model weights or package caches, they do not grow large enough to warrant moving to the external NVMe.
+> **Where extensions are stored:** VS Code installs extensions to `~/.vscode/extensions/` on your internal SSD, not the external drive. This is intentional: extensions are small (a few MB each) and tied to VS Code itself, not to any specific project. Unlike model weights or package caches, they do not grow large enough to warrant moving to the external NVMe.
 >
-> **macOS permission prompt:** When running `code --install-extension` for the first time, macOS will ask for permission to access the external drive. This is triggered by VS Code scanning connected volumes to detect project environments — not because extensions are being installed there. Grant the permission; without it VS Code cannot detect your `.venv` folders on the external drive. You will only be asked once.
+> **macOS permission prompt:** When running `code --install-extension` for the first time, macOS will ask for permission to access the external drive. This is triggered by VS Code scanning connected volumes to detect project environments, not because extensions are being installed there. Grant the permission; without it VS Code cannot detect your `.venv` folders on the external drive. You will only be asked once.
 
 ### 10.3. Install Extensions
 
@@ -498,11 +502,11 @@ What each extension does.
 - **`eamodio.gitlens`** — enhances git support. Most useful feature: inline git blame showing who last changed each line of code and when.
 - **`charliermarsh.ruff`** — fast Python linter and formatter written in Rust. Catches style issues and common bugs as you type, auto-formats on save. Replaces `flake8`, `black`, and `isort` in one extension.
 
-> **Note on a `uv` extension:** There is no official `uv` VS Code extension from Astral. The core Python extension (`ms-python.python`) already detects `uv`-managed `.venv` folders automatically — no additional extension is needed.
+> **Note on a `uv` extension:** There is no official `uv` VS Code extension from Astral. The core Python extension (`ms-python.python`) already detects `uv`-managed `.venv` folders automatically, with no additional extension needed.
 
 ### 10.4. Auto-Detection of uv Environments
 
-When you open `/Volumes/ML_Workspace/projects/rlhf-course` in VS Code, it automatically detects the `.venv` folder and selects the correct Python interpreter. No manual configuration needed.
+When you open `/Volumes/ML_Workspace/projects/rlhf-course` in VS Code, it automatically detects the `.venv` folder and selects the correct Python interpreter. No manual configuration is needed.
 
 ---
 
@@ -515,7 +519,7 @@ git config --global init.defaultBranch main
 git config --global core.editor "code --wait"
 ```
 
-> **What `core.editor "code --wait"` does:** This sets VS Code as the editor git opens when it needs you to write something interactively — most commonly when you run `git commit` without the `-m` flag, `git rebase -i`, or `git merge`. Git opens the file in VS Code, then waits for you to write your message and close the tab before continuing. The `--wait` flag is essential: without it, git would open VS Code and immediately proceed without waiting, since VS Code is a GUI app that opens in its own window. Without this setting, git falls back to `vim` or `nano` in the terminal.
+> **What `core.editor "code --wait"` does:** This sets VS Code as the editor git opens when it needs you to write something interactively, most commonly when you run `git commit` without the `-m` flag, `git rebase -i`, or `git merge`. Git opens the file in VS Code, then waits for you to write your message and close the tab before continuing. The `--wait` flag is essential: without it, git would open VS Code and immediately proceed without waiting, since VS Code is a GUI app that opens in its own window. Without this setting, git falls back to `vim` or `nano` in the terminal.
 >
 > **Why the `noreply` email?** GitHub blocks pushes that expose your real email address if the 'Block command line pushes that expose my email' privacy setting is enabled (Settings → Emails). Using your GitHub-provided no-reply address (`123456789+your-username@users.noreply.github.com`) prevents this. Find your exact no-reply address at GitHub → Settings → Emails.
 
@@ -556,7 +560,7 @@ cd /Volumes/ML_Workspace/projects/kaggle-titanic
 uv add kaggle
 ```
 
-Kaggle authenticates via two environment variables already set in Section 6:
+Kaggle authenticates via two environment variables already set in [Section 6](#6-shell-environment-variables):
 
 ```bash
 export KAGGLE_USERNAME="YOUR_KAGGLE_USERNAME"
@@ -565,9 +569,9 @@ export KAGGLE_API_TOKEN="YOUR_API_TOKEN_HERE"
 
 To get these values: kaggle.com → Settings → API → Create New API Token. The current Kaggle UI displays your token as a string on screen rather than downloading a file — copy it and paste it as `KAGGLE_API_TOKEN` in your `~/.zshrc`. Your username is your Kaggle account username.
 
-> **Why environment variables instead of `~/.kaggle/kaggle.json`?** Kaggle's current recommended approach is the `KAGGLE_API_TOKEN` environment variable. The older `kaggle.json` file approach still works but is no longer the default flow in the UI. Both methods are equivalent; the env var approach is cleaner since credentials stay in `~/.zshrc` alongside all other ML tooling config.
+> **Why environment variables instead of `~/.kaggle/kaggle.json`?** Kaggle's current recommended approach is the `KAGGLE_API_TOKEN` environment variable. The older `kaggle.json` file approach still works but is no longer the default flow in the UI. Both methods are equivalent; the environment variable approach is cleaner since credentials stay in `~/.zshrc` alongside all other ML tooling config.
 >
-> **Persistence:** These variables are in `~/.zshrc`, so they are available in every terminal session automatically — no need to re-authenticate after reboots.
+> **Persistence:** These variables are in `~/.zshrc`, so they are available in every terminal session automatically, with no need to re-authenticate after reboots.
 
 Verify and download a competition dataset:
 
@@ -583,7 +587,7 @@ uv run kaggle competitions download -c titanic -p /Volumes/ML_Workspace/kaggle/t
 
 ## 13. Ollama (Local LLM Inference)
 
-Ollama model blobs are large (4–70 GB each) — storing them on the external NVMe is essential.
+Ollama model blobs are large (4–70 GB each), making storing them on the external NVMe essential.
 
 ### 13.1. Install Ollama
 
@@ -601,7 +605,7 @@ brew services start ollama
 
 ### 13.2. Redirect Model Storage to External Drive
 
-Background services launched by `brew services` run in a separate environment from your terminal and do not read `~/.zshrc`. This means the `OLLAMA_MODELS` path set in Section 6 is invisible to the service — models will default to `~/.ollama/models/` on your internal SSD.
+Background services launched by `brew services` run in a separate environment from your terminal and do not read `~/.zshrc`. This means the `OLLAMA_MODELS` path set in [Section 6](#6-shell-environment-variables) is invisible to the service — models will default to `~/.ollama/models/` on your internal SSD.
 
 Fix this by creating a launchd plist that sets the required environment variables for the background service:
 
@@ -677,7 +681,7 @@ uv run hf auth login
 
 > **Note on the CLI name:** The HuggingFace CLI entry point was renamed from `huggingface-cli` to `hf` in recent versions of `huggingface_hub`. The login subcommand moved under the `auth` group: `hf auth login`. If you ever see `huggingface-cli` in older guides or documentation, substitute `hf auth` accordingly.
 >
-> **Where tokens are stored:** Both of the following paths are on your external NVMe because of the `HF_HOME` env var set in Section 6. If you cannot remember the paths, `echo $HF_HOME` points you to the right directory.
+> **Where tokens are stored:** Both of the following paths are on your external NVMe because of the `HF_HOME` environment variable set in [Section 6](#6-shell-environment-variables). If you cannot remember the paths, `echo $HF_HOME` points you to the right directory.
 > - `$HF_HOME/token` — active token used by the HuggingFace library.
 > - `$HF_HOME/stored_tokens` — all named tokens you have logged in with.
 > - macOS Keychain (`osxkeychain`) — used for git credential authentication.
@@ -694,7 +698,7 @@ uv run wandb login
 >   login user
 >   password YOUR_API_KEY
 > ```
-> `~/.netrc` is a standard Unix credentials file used by many CLI tools. Its permissions are `600` (owner read/write only), same as any credentials file.
+> `~/.netrc` is a standard Unix credentials file used by many CLI tools. Its permissions are `600` (owner read/write only), the same as any credentials file.
 
 ---
 

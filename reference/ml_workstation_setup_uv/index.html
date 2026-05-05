@@ -2160,6 +2160,10 @@
 
 
 <h1 id="ml-workstation-setup-mac-mini-m4-pro-with-uv">ML Workstation Setup: Mac Mini M4 Pro with uv<a class="headerlink" href="#ml-workstation-setup-mac-mini-m4-pro-with-uv" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Created on: 3 April 2026</p>
+<p>Updated on: 4 May 2026</p>
+</blockquote>
 <p><strong>Machine:</strong> Mac mini M4 Pro · 64 GB RAM · internal 512 GB SSD.</p>
 <p><strong>External drive:</strong> Samsung 990 Pro 2 TB in OWC M.2 Express (Thunderbolt/USB4).</p>
 <p><strong>Purpose:</strong> set up a workstation for ML projects (e.g. Kaggle challenges and RLHF).</p>
@@ -2170,7 +2174,7 @@
 <li><strong>Internal SSD</strong> → macOS, Homebrew, <code>uv</code> CLI (~10 MB), shell config, VS Code extensions.</li>
 <li><strong>External NVMe</strong> → Python installs, virtual environments, all caches, model weights, datasets, source code, Ollama models.</li>
 </ul>
-<p><code>uv</code> uses per-project virtual environments — each project or competition has its own isolated <code>.venv</code>, stored inside the project folder on the external drive.</p>
+<p><code>uv</code> uses per-project virtual environments, i.e. each project or competition has its own isolated <code>.venv</code>, stored inside the project folder on the external drive.</p>
 <hr />
 <h2 id="2-prepare-the-external-drive">2. Prepare the External Drive<a class="headerlink" href="#2-prepare-the-external-drive" title="Permanent link">&para;</a></h2>
 <h3 id="21-format-as-apfs">2.1. Format as APFS<a class="headerlink" href="#21-format-as-apfs" title="Permanent link">&para;</a></h3>
@@ -2184,7 +2188,7 @@
 <li>Click <strong>Erase</strong> to confirm.</li>
 </ol>
 <blockquote>
-<p><strong>Why APFS?</strong> Native macOS filesystem — supports snapshots, efficient space sharing, and fast metadata operations. Better than exFAT for a Mac-only workflow.</p>
+<p><strong>Why APFS?</strong> Native macOS filesystem, supporting snapshots, efficient space sharing, and fast metadata operations. Better than exFAT for a Mac-only workflow.</p>
 <p><strong>Why <code>ML_Workspace</code> and not <code>ML Workspace</code>?</strong> Spaces in volume names require quoting or escaping in every shell command (<code>/Volumes/ML\ Workspace</code>), which is constant friction. An underscore is equally readable with zero shell complexity.</p>
 </blockquote>
 <h3 id="22-verify-mount-point">2.2. Verify Mount Point<a class="headerlink" href="#22-verify-mount-point" title="Permanent link">&para;</a></h3>
@@ -2241,14 +2245,14 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>xcode-select<span class="w"> </span>-p
 </code></pre></div>
 <ul>
-<li>If it returns a path like <code>/Library/Developer/CommandLineTools</code> — already installed, skip to 4.2.</li>
+<li>If it returns a path like <code>/Library/Developer/CommandLineTools</code> — already installed, skip to <a href="#42-install-homebrew">Section 4.2</a>.</li>
 <li>If it returns an error — install it:</li>
 </ul>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>xcode-select<span class="w"> </span>--install
 </code></pre></div>
 <p>Accept the dialog. Takes approximately five minutes.</p>
 <h3 id="42-install-homebrew">4.2. Install Homebrew<a class="headerlink" href="#42-install-homebrew" title="Permanent link">&para;</a></h3>
-<p>Homebrew is a package manager for macOS — it lets you install command-line tools with a single command rather than downloading installers manually. It is the standard way to get system-level tools that are not Python packages and cannot be installed via <code>uv</code>.</p>
+<p>Homebrew is a package manager for macOS, letting you install command-line tools with a single command rather than downloading installers manually. It is the standard way to get system-level tools that are not Python packages and cannot be installed via <code>uv</code>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>/bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="k">)</span><span class="s2">&quot;</span>
 </code></pre></div>
 <p>After installation, Homebrew will print two commands to run. Run both exactly as printed — they will look like:</p>
@@ -2263,8 +2267,8 @@
 </code></pre></div>
 <blockquote>
 <p><strong>Why <code>~/.zprofile</code> and not <code>~/.zshrc</code>?</strong>
-- <code>~/.zprofile</code> runs once at login — the right place for PATH setup.
-- <code>~/.zshrc</code> runs on every new shell instance — the right place for aliases and env vars (used in Section 6).</p>
+- <code>~/.zprofile</code> runs once at login, the right place for PATH setup.
+- <code>~/.zshrc</code> runs on every new shell instance, the right place for aliases and environment variables (used in <a href="#6-shell-environment-variables">Section 6</a>).</p>
 <p>Homebrew intentionally targets <code>~/.zprofile</code> for this reason. Everything else in this guide goes into <code>~/.zshrc</code>.</p>
 </blockquote>
 <p>Verify:</p>
@@ -2357,13 +2361,13 @@
 - The closing <code>EOF</code> signals the end of the block.</p>
 <p><strong><code>OLLAMA_FLASH_ATTENTION</code> and <code>OLLAMA_KV_CACHE_TYPE</code></strong> are Apple Silicon memory optimisations for Ollama.
 - <code>OLLAMA_FLASH_ATTENTION="1"</code> — enables Flash Attention, reducing memory usage during inference.
-- <code>OLLAMA_KV_CACHE_TYPE="q8_0"</code> — quantises the KV cache (temporary attention scratch space) to 8-bit instead of 16-bit, cutting its memory footprint roughly in half. This does <strong>not</strong> affect model weight precision — only the intermediate computation buffer. Output quality difference is imperceptible in practice.</p>
+- <code>OLLAMA_KV_CACHE_TYPE="q8_0"</code> — quantises the KV cache (i.e. the temporary attention scratch space) to 8-bit instead of 16-bit, cutting its memory footprint roughly in half. This does <strong>not</strong> affect model weight precision, only the intermediate computation buffer. Output quality difference is imperceptible in practice.</p>
 <p><strong><code>KAGGLE_USERNAME</code> and <code>KAGGLE_API_TOKEN</code></strong> — Kaggle's current authentication method. The CLI reads these environment variables directly; no credentials file on disk is needed. Replace the placeholder values with your actual username and API token from kaggle.com → Settings → API.</p>
-<p><strong>Do this before installing any Python or packages.</strong> These env vars ensure <code>uv</code> downloads Python and caches wheels to the external drive from the very first install.</p>
+<p><strong>Do this before installing any Python or packages.</strong> These environment variables ensure <code>uv</code> downloads Python and caches wheels to the external drive from the very first install.</p>
 </blockquote>
 <hr />
 <h2 id="7-install-python-via-uv">7. Install Python via <code>uv</code><a class="headerlink" href="#7-install-python-via-uv" title="Permanent link">&para;</a></h2>
-<p><code>uv</code> manages its own Python downloads — no need for <code>pyenv</code> or Homebrew Python.</p>
+<p><code>uv</code> manages its own Python downloads, with no need for <code>pyenv</code> or Homebrew Python.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Python 3.12 — recommended for Apple Silicon ML as of April 2026</span>
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>uv<span class="w"> </span>python<span class="w"> </span>install<span class="w"> </span><span class="m">3</span>.12
 <a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
@@ -2429,12 +2433,12 @@
 <blockquote>
 <p><strong>Why packages are grouped rather than combined into one command:</strong> grouping by purpose makes it clear which package belongs to which role. Each <code>uv add</code> group resolves and installs immediately, with packages cached in <code>/Volumes/ML_Workspace/cache/uv</code> and hard-linked into <code>.venv</code>.</p>
 <p><strong>Note on PyTorch size on Apple Silicon:</strong> PyTorch installs much smaller than on Linux (~400 MB vs ~2 GB) because the macOS arm64 wheel excludes all CUDA tooling. GPU acceleration goes through Apple's Metal/MPS backend instead, which is already part of macOS — so no CUDA runtime needs to be bundled.</p>
-<p><strong>Note on <code>huggingface_hub</code>:</strong> The CLI entry point shipped with this package was renamed from <code>huggingface-cli</code> to <code>hf</code> in recent versions. The login command is now <code>uv run hf auth login</code> (see Section 14). If you ever need to check what CLI commands a package registers, inspect <code>.venv/lib/python3.12/site-packages/&lt;package&gt;.dist-info/entry_points.txt</code>.</p>
+<p><strong>Note on <code>huggingface_hub</code>:</strong> The CLI entry point shipped with this package was renamed from <code>huggingface-cli</code> to <code>hf</code> in recent versions. The login command is now <code>uv run hf auth login</code> (see <a href="#14-huggingface--wb-login">Section 14</a>). If you ever need to check what CLI commands a package registers, inspect <code>.venv/lib/python3.12/site-packages/&lt;package&gt;.dist-info/entry_points.txt</code>.</p>
 </blockquote>
 <h3 id="83-reproducing-the-environment-on-another-machine">8.3. Reproducing the Environment on Another Machine<a class="headerlink" href="#83-reproducing-the-environment-on-another-machine" title="Permanent link">&para;</a></h3>
 <p>When you run <code>uv add</code>, two files are automatically maintained.</p>
 <ul>
-<li><strong><code>pyproject.toml</code></strong> — your declared dependencies (e.g. <code>torch</code>, <code>trl</code>). The source of truth — human-readable, can be edited directly. <code>uv</code> always resolves <code>uv.lock</code> from this file, never the other way around.</li>
+<li><strong><code>pyproject.toml</code></strong> — your declared dependencies (e.g. <code>torch</code>, <code>trl</code>). The source of truth, human-readable, and editable directly. <code>uv</code> always resolves <code>uv.lock</code> from this file, never the other way around.</li>
 <li><strong><code>uv.lock</code></strong> — the fully resolved dependency tree with exact versions for every package and sub-dependency. Auto-generated by <code>uv</code>, never edited manually.</li>
 </ul>
 <p>The relationship between them is as follows.</p>
@@ -2454,11 +2458,11 @@
 <a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="nb">cd</span><span class="w"> </span>rlhf-course
 <a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>uv<span class="w"> </span>sync
 </code></pre></div>
-<p><code>uv sync</code> reads <code>uv.lock</code> and recreates <code>.venv</code> with exactly the same versions — no resolution step needed, which is why it is fast. If the other machine is a different architecture (e.g. Linux x86 instead of Apple Silicon), <code>uv sync</code> re-resolves platform-specific wheels automatically while keeping all versions consistent where possible.</p>
+<p><code>uv sync</code> reads <code>uv.lock</code> and recreates <code>.venv</code> with exactly the same versions, with no resolution step needed, which is why it is fast. If the other machine is a different architecture (e.g. Linux x86 instead of Apple Silicon), <code>uv sync</code> re-resolves platform-specific wheels automatically while keeping all versions consistent where possible.</p>
 <p>If you ever need a traditional <code>requirements.txt</code> for compatibility with tools that do not understand <code>uv.lock</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>uv<span class="w"> </span>pip<span class="w"> </span>freeze<span class="w"> </span>&gt;<span class="w"> </span>requirements.txt
 </code></pre></div>
-<p>For your own projects between machines, <code>uv.lock</code> + <code>uv sync</code> is the better mechanism — it is more precise and fully automated.</p>
+<p>For your own projects between machines, <code>uv.lock</code> + <code>uv sync</code> is the better mechanism, being more precise and fully automated.</p>
 <h3 id="84-run-commands-in-the-project-environment">8.4. Run Commands in the Project Environment<a class="headerlink" href="#84-run-commands-in-the-project-environment" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># Option A: prefix commands with `uv run` (no activation needed — preferred)</span>
 <a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>my_script.py
@@ -2475,11 +2479,11 @@
 <a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>uv<span class="w"> </span>init<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12
 <a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>uv<span class="w"> </span>add<span class="w"> </span>pandas<span class="w"> </span>scikit-learn<span class="w"> </span>xgboost<span class="w"> </span>lightgbm<span class="w"> </span>matplotlib<span class="w"> </span>seaborn<span class="w"> </span>jupyterlab
 </code></pre></div>
-<p>Each project gets its own isolated <code>.venv</code>. Wheels are cached in <code>/Volumes/ML_Workspace/cache/uv</code> and hard-linked — no redundant downloads across projects.</p>
+<p>Each project gets its own isolated <code>.venv</code>. Wheels are cached in <code>/Volumes/ML_Workspace/cache/uv</code> and hard-linked, with no redundant downloads across projects.</p>
 <hr />
 <h2 id="9-jupyter-lab-setup">9. Jupyter Lab Setup<a class="headerlink" href="#9-jupyter-lab-setup" title="Permanent link">&para;</a></h2>
 <h3 id="91-when-to-register-a-jupyter-kernel">9.1. When to Register a Jupyter Kernel<a class="headerlink" href="#91-when-to-register-a-jupyter-kernel" title="Permanent link">&para;</a></h3>
-<p>If you launch Jupyter Lab via <code>uv run</code> from inside the project directory, the correct environment is used automatically — no kernel registration needed:</p>
+<p>If you launch Jupyter Lab via <code>uv run</code> from inside the project directory, the correct environment is used automatically, with no kernel registration needed:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="nb">cd</span><span class="w"> </span>/Volumes/ML_Workspace/projects/rlhf-course
 <a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>uv<span class="w"> </span>run<span class="w"> </span>jupyter<span class="w"> </span>lab
 </code></pre></div>
@@ -2500,9 +2504,9 @@
 <li><strong>VS Code</strong> — free, handles daily editing: writing notebooks, browsing code, running scripts.</li>
 <li><strong>Claude.ai</strong> — theory explanations, paper walkthroughs, architecture discussions.</li>
 </ul>
-<p>Cursor's main advantage is fast inline autocomplete while actively typing. For ML work — writing training loops, running experiments, iterating on RLHF pipelines — you spend more time thinking and running code than typing boilerplate, so that advantage matters less.</p>
+<p>Cursor's main advantage is fast inline autocomplete while actively typing. For ML work, writing training loops, running experiments, and iterating on RLHF pipelines, you spend more time thinking and running code than typing boilerplate, so that advantage matters less.</p>
 <h3 id="102-install-vs-code">10.2. Install VS Code<a class="headerlink" href="#102-install-vs-code" title="Permanent link">&para;</a></h3>
-<p>Download from https://code.visualstudio.com — drag to Applications.</p>
+<p>Download from https://code.visualstudio.com and drag to Applications.</p>
 <p>Install the <code>code</code> CLI so you can control VS Code from the terminal: <code>Cmd+Shift+P</code> → 'Shell Command: Install 'code' command in PATH'.</p>
 <p>Common uses of the <code>code</code> CLI:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>code<span class="w"> </span>.<span class="w">                                              </span><span class="c1"># open current directory</span>
@@ -2510,8 +2514,8 @@
 <a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>code<span class="w"> </span>/Volumes/ML_Workspace/projects/rlhf-course<span class="w">     </span><span class="c1"># open a project</span>
 </code></pre></div>
 <blockquote>
-<p><strong>Where extensions are stored:</strong> VS Code installs extensions to <code>~/.vscode/extensions/</code> on your internal SSD — not the external drive. This is intentional: extensions are small (a few MB each) and tied to VS Code itself, not to any specific project. Unlike model weights or package caches, they do not grow large enough to warrant moving to the external NVMe.</p>
-<p><strong>macOS permission prompt:</strong> When running <code>code --install-extension</code> for the first time, macOS will ask for permission to access the external drive. This is triggered by VS Code scanning connected volumes to detect project environments — not because extensions are being installed there. Grant the permission; without it VS Code cannot detect your <code>.venv</code> folders on the external drive. You will only be asked once.</p>
+<p><strong>Where extensions are stored:</strong> VS Code installs extensions to <code>~/.vscode/extensions/</code> on your internal SSD, not the external drive. This is intentional: extensions are small (a few MB each) and tied to VS Code itself, not to any specific project. Unlike model weights or package caches, they do not grow large enough to warrant moving to the external NVMe.</p>
+<p><strong>macOS permission prompt:</strong> When running <code>code --install-extension</code> for the first time, macOS will ask for permission to access the external drive. This is triggered by VS Code scanning connected volumes to detect project environments, not because extensions are being installed there. Grant the permission; without it VS Code cannot detect your <code>.venv</code> folders on the external drive. You will only be asked once.</p>
 </blockquote>
 <h3 id="103-install-extensions">10.3. Install Extensions<a class="headerlink" href="#103-install-extensions" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>code<span class="w"> </span>--install-extension<span class="w"> </span>ms-python.python
@@ -2529,10 +2533,10 @@
 <li><strong><code>charliermarsh.ruff</code></strong> — fast Python linter and formatter written in Rust. Catches style issues and common bugs as you type, auto-formats on save. Replaces <code>flake8</code>, <code>black</code>, and <code>isort</code> in one extension.</li>
 </ul>
 <blockquote>
-<p><strong>Note on a <code>uv</code> extension:</strong> There is no official <code>uv</code> VS Code extension from Astral. The core Python extension (<code>ms-python.python</code>) already detects <code>uv</code>-managed <code>.venv</code> folders automatically — no additional extension is needed.</p>
+<p><strong>Note on a <code>uv</code> extension:</strong> There is no official <code>uv</code> VS Code extension from Astral. The core Python extension (<code>ms-python.python</code>) already detects <code>uv</code>-managed <code>.venv</code> folders automatically, with no additional extension needed.</p>
 </blockquote>
 <h3 id="104-auto-detection-of-uv-environments">10.4. Auto-Detection of uv Environments<a class="headerlink" href="#104-auto-detection-of-uv-environments" title="Permanent link">&para;</a></h3>
-<p>When you open <code>/Volumes/ML_Workspace/projects/rlhf-course</code> in VS Code, it automatically detects the <code>.venv</code> folder and selects the correct Python interpreter. No manual configuration needed.</p>
+<p>When you open <code>/Volumes/ML_Workspace/projects/rlhf-course</code> in VS Code, it automatically detects the <code>.venv</code> folder and selects the correct Python interpreter. No manual configuration is needed.</p>
 <hr />
 <h2 id="11-git-configuration">11. Git Configuration<a class="headerlink" href="#11-git-configuration" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">&quot;Your Name&quot;</span>
@@ -2541,7 +2545,7 @@
 <a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>core.editor<span class="w"> </span><span class="s2">&quot;code --wait&quot;</span>
 </code></pre></div>
 <blockquote>
-<p><strong>What <code>core.editor "code --wait"</code> does:</strong> This sets VS Code as the editor git opens when it needs you to write something interactively — most commonly when you run <code>git commit</code> without the <code>-m</code> flag, <code>git rebase -i</code>, or <code>git merge</code>. Git opens the file in VS Code, then waits for you to write your message and close the tab before continuing. The <code>--wait</code> flag is essential: without it, git would open VS Code and immediately proceed without waiting, since VS Code is a GUI app that opens in its own window. Without this setting, git falls back to <code>vim</code> or <code>nano</code> in the terminal.</p>
+<p><strong>What <code>core.editor "code --wait"</code> does:</strong> This sets VS Code as the editor git opens when it needs you to write something interactively, most commonly when you run <code>git commit</code> without the <code>-m</code> flag, <code>git rebase -i</code>, or <code>git merge</code>. Git opens the file in VS Code, then waits for you to write your message and close the tab before continuing. The <code>--wait</code> flag is essential: without it, git would open VS Code and immediately proceed without waiting, since VS Code is a GUI app that opens in its own window. Without this setting, git falls back to <code>vim</code> or <code>nano</code> in the terminal.</p>
 <p><strong>Why the <code>noreply</code> email?</strong> GitHub blocks pushes that expose your real email address if the 'Block command line pushes that expose my email' privacy setting is enabled (Settings → Emails). Using your GitHub-provided no-reply address (<code>123456789+your-username@users.noreply.github.com</code>) prevents this. Find your exact no-reply address at GitHub → Settings → Emails.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="c1"># SSH key for GitHub — use the same no-reply address as the comment</span>
@@ -2573,14 +2577,14 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="nb">cd</span><span class="w"> </span>/Volumes/ML_Workspace/projects/kaggle-titanic
 <a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>uv<span class="w"> </span>add<span class="w"> </span>kaggle
 </code></pre></div>
-<p>Kaggle authenticates via two environment variables already set in Section 6:</p>
+<p>Kaggle authenticates via two environment variables already set in <a href="#6-shell-environment-variables">Section 6</a>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">KAGGLE_USERNAME</span><span class="o">=</span><span class="s2">&quot;YOUR_KAGGLE_USERNAME&quot;</span>
 <a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">KAGGLE_API_TOKEN</span><span class="o">=</span><span class="s2">&quot;YOUR_API_TOKEN_HERE&quot;</span>
 </code></pre></div>
 <p>To get these values: kaggle.com → Settings → API → Create New API Token. The current Kaggle UI displays your token as a string on screen rather than downloading a file — copy it and paste it as <code>KAGGLE_API_TOKEN</code> in your <code>~/.zshrc</code>. Your username is your Kaggle account username.</p>
 <blockquote>
-<p><strong>Why environment variables instead of <code>~/.kaggle/kaggle.json</code>?</strong> Kaggle's current recommended approach is the <code>KAGGLE_API_TOKEN</code> environment variable. The older <code>kaggle.json</code> file approach still works but is no longer the default flow in the UI. Both methods are equivalent; the env var approach is cleaner since credentials stay in <code>~/.zshrc</code> alongside all other ML tooling config.</p>
-<p><strong>Persistence:</strong> These variables are in <code>~/.zshrc</code>, so they are available in every terminal session automatically — no need to re-authenticate after reboots.</p>
+<p><strong>Why environment variables instead of <code>~/.kaggle/kaggle.json</code>?</strong> Kaggle's current recommended approach is the <code>KAGGLE_API_TOKEN</code> environment variable. The older <code>kaggle.json</code> file approach still works but is no longer the default flow in the UI. Both methods are equivalent; the environment variable approach is cleaner since credentials stay in <code>~/.zshrc</code> alongside all other ML tooling config.</p>
+<p><strong>Persistence:</strong> These variables are in <code>~/.zshrc</code>, so they are available in every terminal session automatically, with no need to re-authenticate after reboots.</p>
 </blockquote>
 <p>Verify and download a competition dataset:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="c1"># Verify authentication works</span>
@@ -2591,7 +2595,7 @@
 </code></pre></div>
 <hr />
 <h2 id="13-ollama-local-llm-inference">13. Ollama (Local LLM Inference)<a class="headerlink" href="#13-ollama-local-llm-inference" title="Permanent link">&para;</a></h2>
-<p>Ollama model blobs are large (4–70 GB each) — storing them on the external NVMe is essential.</p>
+<p>Ollama model blobs are large (4–70 GB each), making storing them on the external NVMe essential.</p>
 <h3 id="131-install-ollama">13.1. Install Ollama<a class="headerlink" href="#131-install-ollama" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>brew<span class="w"> </span>install<span class="w"> </span>ollama
 </code></pre></div>
@@ -2602,7 +2606,7 @@
 <p><strong>Do not run <code>ollama serve</code> manually.</strong> Once the background service is running, <code>ollama serve</code> will fail with 'address already in use' because the service already owns port 11434. The background service is always running — just use <code>ollama</code> commands directly.</p>
 </blockquote>
 <h3 id="132-redirect-model-storage-to-external-drive">13.2. Redirect Model Storage to External Drive<a class="headerlink" href="#132-redirect-model-storage-to-external-drive" title="Permanent link">&para;</a></h3>
-<p>Background services launched by <code>brew services</code> run in a separate environment from your terminal and do not read <code>~/.zshrc</code>. This means the <code>OLLAMA_MODELS</code> path set in Section 6 is invisible to the service — models will default to <code>~/.ollama/models/</code> on your internal SSD.</p>
+<p>Background services launched by <code>brew services</code> run in a separate environment from your terminal and do not read <code>~/.zshrc</code>. This means the <code>OLLAMA_MODELS</code> path set in <a href="#6-shell-environment-variables">Section 6</a> is invisible to the service — models will default to <code>~/.ollama/models/</code> on your internal SSD.</p>
 <p>Fix this by creating a launchd plist that sets the required environment variables for the background service:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="c1"># Stop the service first</span>
 <a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a>brew<span class="w"> </span>services<span class="w"> </span>stop<span class="w"> </span>ollama
@@ -2660,7 +2664,7 @@
 </code></pre></div>
 <blockquote>
 <p><strong>Note on the CLI name:</strong> The HuggingFace CLI entry point was renamed from <code>huggingface-cli</code> to <code>hf</code> in recent versions of <code>huggingface_hub</code>. The login subcommand moved under the <code>auth</code> group: <code>hf auth login</code>. If you ever see <code>huggingface-cli</code> in older guides or documentation, substitute <code>hf auth</code> accordingly.</p>
-<p><strong>Where tokens are stored:</strong> Both of the following paths are on your external NVMe because of the <code>HF_HOME</code> env var set in Section 6. If you cannot remember the paths, <code>echo $HF_HOME</code> points you to the right directory.
+<p><strong>Where tokens are stored:</strong> Both of the following paths are on your external NVMe because of the <code>HF_HOME</code> environment variable set in <a href="#6-shell-environment-variables">Section 6</a>. If you cannot remember the paths, <code>echo $HF_HOME</code> points you to the right directory.
 - <code>$HF_HOME/token</code> — active token used by the HuggingFace library.
 - <code>$HF_HOME/stored_tokens</code> — all named tokens you have logged in with.
 - macOS Keychain (<code>osxkeychain</code>) — used for git credential authentication.</p>
@@ -2675,7 +2679,7 @@
 <a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a>  login user
 <a id="__codelineno-44-3" name="__codelineno-44-3" href="#__codelineno-44-3"></a>  password YOUR_API_KEY
 </code></pre></div>
-<code>~/.netrc</code> is a standard Unix credentials file used by many CLI tools. Its permissions are <code>600</code> (owner read/write only), same as any credentials file.</p>
+<code>~/.netrc</code> is a standard Unix credentials file used by many CLI tools. Its permissions are <code>600</code> (owner read/write only), the same as any credentials file.</p>
 </blockquote>
 <hr />
 <h2 id="15-smoke-test">15. Smoke Test<a class="headerlink" href="#15-smoke-test" title="Permanent link">&para;</a></h2>

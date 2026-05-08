@@ -39,7 +39,8 @@ Bin ranges are set to cover the region the agent actually visits rather than the
 
 The core training loop is standard:
 
-<figure id="alg-qlearning-cartpole" style="text-align:left;">
+<figure id="alg-qlearning-cartpole" style="text-align:center;">
+<div style="text-align:left;">
 
 ```
 Algorithm: Tabular Q-Learning (CartPole)
@@ -71,6 +72,7 @@ Restore Q from best checkpoint
 Return Q
 ```
 
+</div>
 <figcaption>Algorithm 1: Tabular Q-learning with best-checkpoint tracking for CartPole-v1.</figcaption>
 </figure>
 

@@ -113,7 +113,8 @@ In the tabular setting, $Q(s, a)$ is a lookup table with one entry per $(s, a)$ 
 
 Action selection at each step follows an **$\varepsilon$-greedy policy**, a simple strategy for balancing exploration (trying actions whose Q-values are uncertain) and exploitation (taking the action the current network considers best). At each step the agent draws $u \sim \text{Uniform}(0, 1)$: if $u < \varepsilon$ it selects a random action; otherwise it selects $\arg\max_a Q(s_t, a; \theta)$. $\varepsilon$ is annealed from 1.0 at the start of training, when the network knows nothing and pure exploration is warranted, down to a small value such as 0.05 once the network has learned a reasonable policy. Without this exploration mechanism, the agent may never visit large parts of the state space, violating the condition that every $(s, a)$ pair must be visited sufficiently often for Q-learning to converge.
 
-<figure id="alg-exp-rep" style="text-align:left;">
+<figure id="alg-exp-rep" style="text-align:center;">
+<div style="text-align:left;">
 
 ```
 Input:  Q(·; θ)  — online Q-network with parameters θ
@@ -137,6 +138,7 @@ For each time step t:
 Return θ
 ```
 
+</div>
 <figcaption>Algorithm 1: DQN training loop with experience replay.</figcaption>
 </figure>
 
@@ -144,7 +146,8 @@ The buffer decouples data collection from data consumption. A transition collect
 
 **Target network.** The Bellman target for a given transition is $r_t + \gamma \max_{a'} Q(s_{t+1}, a'; \theta)$, which depends on the same parameters $\theta$ being updated. This creates a moving-target problem: every gradient step changes not only the Q-value being corrected but also the target it is being corrected towards, producing oscillations or divergence. The target network resolves this by maintaining a separate copy of the Q-network with parameters $\theta^-$, held frozen for $C$ update steps at a time. The Bellman target is computed using $\theta^-$, not $\theta$. This training technique is shown in [Algorithm 2](#alg-target-net).
 
-<figure id="alg-target-net" style="text-align:left;">
+<figure id="alg-target-net" style="text-align:center;">
+<div style="text-align:left;">
 
 ```
 Input:  Q(·; θ)  — online Q-network with parameters θ
@@ -166,6 +169,7 @@ For each update step:
 Return θ
 ```
 
+</div>
 <figcaption>Algorithm 2: DQN training loop with target network.</figcaption>
 </figure>
 
@@ -226,7 +230,8 @@ DQN addressed both instabilities with two complementary techniques.
 
 The network receives the four most recent game frames as input, preprocessed to 84×84 grayscale. These pass through convolutional layers that extract spatial features, followed by fully connected layers that output a Q-value for each possible action. Crucially, the same architecture and hyperparameters were applied across all 49 games without modification. [Algorithm 3](#alg-dqn) shows the training loop of DQN.
 
-<figure id="alg-dqn" style="text-align:left;">
+<figure id="alg-dqn" style="text-align:center;">
+<div style="text-align:left;">
 
 ```
 Algorithm: DQN Training
@@ -258,6 +263,7 @@ For each episode:
 Return θ
 ```
 
+</div>
 <figcaption>Algorithm 3: DQN training loop with experience replay and target network.</figcaption>
 </figure>
 
@@ -287,10 +293,10 @@ uv add torch torchvision gymnasium numpy matplotlib rich
 1. Define a two-hidden-layer MLP `QNetwork(obs_dim, n_actions)` that outputs per-action Q-values.
 2. Implement a `ReplayBuffer` storing $(s, a, r, s', \text{done})$ tuples, supporting random mini-batch sampling.
 3. Implement the DQN training loop:
-   - Collect transitions by running the $\epsilon$-greedy policy (anneal $\epsilon$ from 1.0 to 0.05 over 10 000 steps).
+   - Collect transitions by running the $\varepsilon$-greedy policy (anneal $\varepsilon$ from 1.0 to 0.05 over 10 000 steps).
    - Sample a mini-batch and compute the Bellman target using the target network.
    - Compute the MSE loss against the online network's Q-value for the taken action.
    - Update the online network with Adam; copy weights to the target network every 100 steps.
 4. Log episodic return with `rich` and plot the learning curve.
 
-**What to observe.** CartPole should solve (mean return > 475 over 100 episodes) within approximately 50 000 environment steps. If training is unstable, the first thing to check is whether the replay buffer is large enough (at least 10 000 transitions) and whether $\epsilon$ is decaying too quickly.
+**What to observe.** CartPole should solve (mean return > 475 over 100 episodes) within approximately 50 000 environment steps. If training is unstable, the first thing to check is whether the replay buffer is large enough (at least 10 000 transitions) and whether $\varepsilon$ is decaying too quickly.

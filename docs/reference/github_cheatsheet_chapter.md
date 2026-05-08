@@ -2,7 +2,7 @@
 
 > Created on: 20 April 2026
 >
-> Updated on: 28 April 2026
+> Updated on: 8 May 2026
 
 ## 1. Create a New Local Repository
 
@@ -23,13 +23,28 @@ git commit -m "Initial commit"
 Link the local repository to a newly created remote (e.g. on GitHub), then push all commits.
 
 ```bash
-git remote add origin https://github.com/<user>/<repo>.git
+git remote add origin git@github.com:<user>/<repo>.git
 git branch -M main
 git push -u origin main
 ```
 
+If the remote was already added with an HTTPS URL (which prompts for credentials even when an SSH key is configured), switch it to SSH:
+
+```bash
+git remote set-url origin git@github.com:<user>/<repo>.git
+```
+
 - `git branch -M main` renames the current branch to `main`, forcing the rename even if a branch called `main` already exists (`-M` is shorthand for `--move --force`). This is necessary because `git init` may create a default branch named `master` depending on the Git version or local configuration.
 - `-u` sets the upstream tracking reference so that subsequent `git push` and `git pull` calls require no additional arguments.
+
+If the push is rejected with a 'fetch first' error, the remote contains commits not present locally (e.g. a `LICENSE` or `README.md` auto-created by GitHub). Pull with rebase to merge those commits onto the local history, then push:
+
+```bash
+git pull origin main --rebase
+git push -u origin main
+```
+
+Using `--rebase` replays local commits on top of the remote commits, producing a clean linear history. Without it, `git pull` would insert an extra merge commit joining the two histories.
 
 ---
 
@@ -226,46 +241,3 @@ To bring the stashed changes back after returning to the original branch:
 git switch <original-branch>
 git stash pop
 ```
-
----
-
-## 12. Add `.gitignore` to an Existing Repository
-
-Adding a `.gitignore` after the initial commit requires an extra step. Git only respects `.gitignore` rules for **untracked** files; files that were already committed remain tracked regardless of any ignore rules added later. To untrack them, the Git index (i.e. the staging area) must be cleared and rebuilt.
-
-### 12.1. Create the `.gitignore` file
-
-Create `.gitignore` in the repository root and add the desired patterns, one per line. For example:
-
-```
-__pycache__/
-*.pyc
-.env
-.venv/
-```
-
-### 12.2. Clear the index and re-stage all files
-
-Remove all files from the index without deleting them from the local working directory, then re-add everything so that the new `.gitignore` rules are applied:
-
-```bash
-git rm -r --cached .
-git add .
-```
-
-`git rm --cached` removes a file from the index only, leaving the local copy intact. The `-r` flag (i.e. recursive) is required when the target is a directory (`.` refers to the entire repository root). After re-running `git add .`, any path matching a pattern in `.gitignore` is excluded from the index.
-
-### 12.3. Commit and push
-
-```bash
-git commit -m "Add .gitignore and untrack ignored files"
-git push
-```
-
-**Note:** if only specific files need to be untracked rather than the entire repository, replace the broad `git rm -r --cached .` with a targeted call:
-
-```bash
-git rm --cached <path/to/file>
-```
-
-This avoids unnecessarily re-staging every file in the repository.

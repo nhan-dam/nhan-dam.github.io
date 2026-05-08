@@ -1,3 +1,12 @@
 .md-content p {
   text-align: justify;
 }
+
+.md-typeset__scrollwrap {
+  display: flex;
+  justify-content: center;
+}
+
+.md-typeset__table {
+  width: auto;
+}

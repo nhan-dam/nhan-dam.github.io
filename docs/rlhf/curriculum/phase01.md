@@ -11,7 +11,7 @@
 Reinforcement learning studies agents that learn by interacting with an environment.
 
 <figure markdown="span" id="fig-ae-loop" style="text-align:center;">
-  ![The agent-environment interaction loop in reinforcement learning.](../../assets/images/AE_loop.png){ width="40%" }
+  <img src="/assets/images/AE_loop.png" alt="The agent-environment interaction loop in reinforcement learning." style="width: 40%;">
   <figcaption>Figure 1: Agent-environment interaction in RL. Source: https://gymnasium.farama.org/_images/AE_loop.png.</figcaption>
 </figure>
 

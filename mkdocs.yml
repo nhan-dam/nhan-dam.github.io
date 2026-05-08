@@ -60,7 +60,9 @@ nav:
   - Learning:
     - RLHF Curriculum:
       - Overview: rlhf/curriculum/index.md
-      - Phase 1 - Reinforcement Learning Foundations: rlhf/curriculum/phase01.md
+      - Phase 1 - Reinforcement Learning Foundations:
+        - Theory: rlhf/curriculum/phase01.md
+        - Project 1 - Tabular Q-Learning on Gymnasium Blackjack: rlhf/curriculum/report_qlearning_blackjack.md
     # - Week 2 – Policy Gradients & PPO: rlhf/week2-ppo.md
     - DLAI RLHF Course:
       - Overview: rlhf/dlai/index.md

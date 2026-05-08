@@ -1465,7 +1465,7 @@
 <p>Updated on: 7 May 2025</p>
 </blockquote>
 <h2 id="1-overview">1. Overview<a class="headerlink" href="#1-overview" title="Permanent link">&para;</a></h2>
-<p>This chapter documents the implementation and evaluation of a tabular Q-learning agent on the <code>Blackjack-v1</code> environment from <a href="https://gymnasium.farama.org/">Gymnasium</a>. The work covers a clean implementation of the Q-learning update rule, an epsilon-decay sweep across learning rates and decay strategies, and an analysis of the resulting policy. The full source is available in <code>qlearning_blackjack.py</code>.</p>
+<p>This article documents the implementation and evaluation of a tabular Q-learning agent on the <code>Blackjack-v1</code> environment from <a href="https://gymnasium.farama.org/">Gymnasium</a>. The work covers a clean implementation of the Q-learning update rule, an epsilon-decay sweep across learning rates and decay strategies, and an analysis of the resulting policy.</p>
 <hr />
 <h2 id="2-environment">2. Environment<a class="headerlink" href="#2-environment" title="Permanent link">&para;</a></h2>
 <p>The <code>Blackjack-v1</code> environment models a simplified, single-player game of Blackjack against a fixed dealer. Key properties:</p>
@@ -1608,7 +1608,7 @@
 <li><code>lr=0.05</code> with exponential decay is a notable outlier: it performs well with linear decay but drops to 41.9% with exponential. The faster early decay under exponential may cause the agent to commit to a suboptimal policy before the Q-table is sufficiently populated.</li>
 </ul>
 <h3 id="42-training-curves-best-configuration">4.2. Training Curves (Best Configuration)<a class="headerlink" href="#42-training-curves-best-configuration" title="Permanent link">&para;</a></h3>
-<p><a href="#fig-training">Figure 1</a> shows the smoothed training statistics for the best configuration (<code>lr=0.05</code>, linear decay, label <code>6b1a67a6</code>), averaged over a 500-episode rolling window.</p>
+<p><a href="#fig-training">Figure 1</a> shows the smoothed training statistics for the best configuration (<code>lr=0.05</code>, linear decay), averaged over a 500-episode rolling window.</p>
 <figure id="fig-training" style="text-align: center;">
   <img src="/assets/images/blackjack_training_stats_6b1a67a6.png" alt="Training statistics for the best configuration." style="width: 100%;">
   <figcaption>Figure 1: Training statistics for the best configuration (lr=0.05, linear decay). Left: episode reward. Centre: episode length. Right: TD error.</figcaption>

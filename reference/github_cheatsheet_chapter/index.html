@@ -1195,56 +1195,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#12-add-gitignore-to-an-existing-repository" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        12. Add .gitignore to an Existing Repository
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="12. Add .gitignore to an Existing Repository">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#121-create-the-gitignore-file" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        12.1. Create the .gitignore file
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#122-clear-the-index-and-re-stage-all-files" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        12.2. Clear the index and re-stage all files
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#123-commit-and-push" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        12.3. Commit and push
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -1436,56 +1386,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#12-add-gitignore-to-an-existing-repository" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        12. Add .gitignore to an Existing Repository
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="12. Add .gitignore to an Existing Repository">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#121-create-the-gitignore-file" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        12.1. Create the .gitignore file
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#122-clear-the-index-and-re-stage-all-files" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        12.2. Clear the index and re-stage all files
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#123-commit-and-push" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        12.3. Commit and push
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -1512,9 +1412,9 @@
 
 
 <h1 id="github-task-oriented-cheatsheet">GitHub Task-Oriented Cheatsheet<a class="headerlink" href="#github-task-oriented-cheatsheet" title="Permanent link">&para;</a></h1>
-<blockquote>
 <p>Created on: 20 April 2026</p>
-<p>Updated on: 28 April 2026</p>
+<blockquote>
+<p>Updated on: 8 May 2026</p>
 </blockquote>
 <h2 id="1-create-a-new-local-repository">1. Create a New Local Repository<a class="headerlink" href="#1-create-a-new-local-repository" title="Permanent link">&para;</a></h2>
 <p><strong>Note for <code>uv</code> projects:</strong> <code>uv init</code> automatically runs <code>git init</code> and creates a <code>.gitignore</code> pre-populated with <code>.venv/</code> and <code>.python-version</code>. If you are scaffolding a project with <code>uv</code>, skip <code>git init</code> — the repository already exists.</p>
@@ -1526,139 +1426,123 @@
 <hr />
 <h2 id="2-push-a-local-repository-to-a-new-remote-repository">2. Push a Local Repository to a New Remote Repository<a class="headerlink" href="#2-push-a-local-repository-to-a-new-remote-repository" title="Permanent link">&para;</a></h2>
 <p>Link the local repository to a newly created remote (e.g. on GitHub), then push all commits.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>https://github.com/&lt;user&gt;/&lt;repo&gt;.git
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>git@github.com:&lt;user&gt;/&lt;repo&gt;.git
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>git<span class="w"> </span>branch<span class="w"> </span>-M<span class="w"> </span>main
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>main
+</code></pre></div>
+<p>If the remote was already added with an HTTPS URL (which prompts for credentials even when an SSH key is configured), switch it to SSH:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>git<span class="w"> </span>remote<span class="w"> </span>set-url<span class="w"> </span>origin<span class="w"> </span>git@github.com:&lt;user&gt;/&lt;repo&gt;.git
 </code></pre></div>
 <ul>
 <li><code>git branch -M main</code> renames the current branch to <code>main</code>, forcing the rename even if a branch called <code>main</code> already exists (<code>-M</code> is shorthand for <code>--move --force</code>). This is necessary because <code>git init</code> may create a default branch named <code>master</code> depending on the Git version or local configuration.</li>
 <li><code>-u</code> sets the upstream tracking reference so that subsequent <code>git push</code> and <code>git pull</code> calls require no additional arguments.</li>
 </ul>
+<p>If the push is rejected with a 'fetch first' error, the remote contains commits not present locally (e.g. a <code>LICENSE</code> or <code>README.md</code> auto-created by GitHub). Pull with rebase to merge those commits onto the local history, then push:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>main<span class="w"> </span>--rebase
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>main
+</code></pre></div>
+<p>Using <code>--rebase</code> replays local commits on top of the remote commits, producing a clean linear history. Without it, <code>git pull</code> would insert an extra merge commit joining the two histories.</p>
 <hr />
 <h2 id="3-create-a-local-branch">3. Create a Local Branch<a class="headerlink" href="#3-create-a-local-branch" title="Permanent link">&para;</a></h2>
 <p>Create a new branch and switch to it immediately.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>&lt;branch-name&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
 <p>The <code>-c</code> flag (shorthand for <code>--create</code>) creates the branch and switches to it in one step; it is equivalent to the older <code>git checkout -b &lt;branch-name&gt;</code>.</p>
 <p>To create the branch without switching to it:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>git<span class="w"> </span>branch<span class="w"> </span>&lt;branch-name&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>git<span class="w"> </span>branch<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
 <hr />
 <h2 id="4-show-all-local-and-remote-branches">4. Show All Local and Remote Branches<a class="headerlink" href="#4-show-all-local-and-remote-branches" title="Permanent link">&para;</a></h2>
 <p>List local branches only:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>git<span class="w"> </span>branch
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>git<span class="w"> </span>branch
 </code></pre></div>
 <p>List remote branches only:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>git<span class="w"> </span>branch<span class="w"> </span>-r
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>git<span class="w"> </span>branch<span class="w"> </span>-r
 </code></pre></div>
 <p>List all local and remote branches together:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>git<span class="w"> </span>branch<span class="w"> </span>-a
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>git<span class="w"> </span>branch<span class="w"> </span>-a
 </code></pre></div>
 <hr />
 <h2 id="5-delete-a-local-or-remote-branch">5. Delete a Local or Remote Branch<a class="headerlink" href="#5-delete-a-local-or-remote-branch" title="Permanent link">&para;</a></h2>
 <p>Delete a local branch (safe — refuses if the branch has unmerged changes):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>git<span class="w"> </span>branch<span class="w"> </span>-d<span class="w"> </span>&lt;branch-name&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>git<span class="w"> </span>branch<span class="w"> </span>-d<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
 <p>Force-delete a local branch regardless of merge status:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>git<span class="w"> </span>branch<span class="w"> </span>-D<span class="w"> </span>&lt;branch-name&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>git<span class="w"> </span>branch<span class="w"> </span>-D<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
 <p>Delete a remote branch:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--delete<span class="w"> </span>&lt;branch-name&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--delete<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
 <hr />
 <h2 id="6-sync-the-branch-list-between-local-and-remote">6. Sync the Branch List Between Local and Remote<a class="headerlink" href="#6-sync-the-branch-list-between-local-and-remote" title="Permanent link">&para;</a></h2>
 <p>Remote branches that have been deleted on the server are not automatically removed from the local reference list. To prune stale remote-tracking references:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>git<span class="w"> </span>fetch<span class="w"> </span>--prune
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>git<span class="w"> </span>fetch<span class="w"> </span>--prune
 </code></pre></div>
 <p>To make pruning the default behaviour on every fetch, set it once globally:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>fetch.prune<span class="w"> </span><span class="nb">true</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>fetch.prune<span class="w"> </span><span class="nb">true</span>
 </code></pre></div>
 <hr />
 <h2 id="7-squash-commits">7. Squash Commits<a class="headerlink" href="#7-squash-commits" title="Permanent link">&para;</a></h2>
 <p>'Squashing' collapses multiple commits into a single commit. Before squashing, inspect the recent commit log to determine how many commits to include:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>-&lt;n&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>-&lt;n&gt;
 </code></pre></div>
 <p>By default, <code>git log --oneline</code> prints all commits (paginated via <code>less</code>; press <code>q</code> to quit). Passing <code>-&lt;n&gt;</code> limits the output to the <code>&lt;n&gt;</code> most recent commits. For most squash decisions, <code>-10</code> or <code>-20</code> is sufficient, e.g.:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>-10
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>-10
 </code></pre></div>
 <p>The output shows one line per commit with the short hash and subject message, e.g.:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>e3f1a2b Fix tokeniser edge case
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>9c4d7f0 Add reward model training loop
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>3b8a1c5 Initial dataset preprocessing
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>e3f1a2b Fix tokeniser edge case
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>9c4d7f0 Add reward model training loop
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>3b8a1c5 Initial dataset preprocessing
 </code></pre></div>
 <p>Once you have identified the target range, run an interactive rebase where <code>&lt;n&gt;</code> is the number of commits to include:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>git<span class="w"> </span>rebase<span class="w"> </span>-i<span class="w"> </span>HEAD~&lt;n&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>git<span class="w"> </span>rebase<span class="w"> </span>-i<span class="w"> </span>HEAD~&lt;n&gt;
 </code></pre></div>
 <p>In the editor that opens, leave the first entry as <code>pick</code> and change the remaining entries to <code>squash</code> (or <code>s</code>). Save and close; Git will then prompt for a combined commit message.</p>
 <p><strong>Note:</strong> squashing rewrites history, so if any of the squashed commits were already on the remote, a normal <code>git push</code> will be rejected because the local <code>HEAD</code> is now behind the remote. Force-push to overwrite the remote history:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>git<span class="w"> </span>push<span class="w"> </span>--force-with-lease
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>git<span class="w"> </span>push<span class="w"> </span>--force-with-lease
 </code></pre></div>
 <p>Prefer <code>--force-with-lease</code> over <code>--force</code>; it refuses the push if the remote has received commits since the last fetch, guarding against accidentally overwriting others' work. Coordinate with collaborators before force-pushing to any shared branch.</p>
 <hr />
 <h2 id="8-permanently-discard-current-changes-and-revert-to-a-prior-commit">8. Permanently Discard Current Changes and Revert to a Prior Commit<a class="headerlink" href="#8-permanently-discard-current-changes-and-revert-to-a-prior-commit" title="Permanent link">&para;</a></h2>
 <p>First, identify the target commit hash using the one-line log (also useful for counting commits to squash; see Section 7):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>-&lt;n&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>-&lt;n&gt;
 </code></pre></div>
 <p>Copy the short hash of the desired target commit, then perform a hard reset. This moves <code>HEAD</code> to the specified commit and discards all subsequent commits and uncommitted changes. The operation is irreversible.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>&lt;commit-hash&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>&lt;commit-hash&gt;
 </code></pre></div>
 <p>If the branch has already been pushed to a remote, force-push to overwrite the remote history:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>git<span class="w"> </span>push<span class="w"> </span>--force-with-lease
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>git<span class="w"> </span>push<span class="w"> </span>--force-with-lease
 </code></pre></div>
 <p>Prefer <code>--force-with-lease</code> over <code>--force</code>; it refuses the push if the remote has received commits since the last fetch, guarding against accidentally overwriting others' work.</p>
 <hr />
 <h2 id="9-temporarily-discard-current-changes-and-revert-to-a-prior-commit">9. Temporarily Discard Current Changes and Revert to a Prior Commit<a class="headerlink" href="#9-temporarily-discard-current-changes-and-revert-to-a-prior-commit" title="Permanent link">&para;</a></h2>
 <p>'Stashing' saves uncommitted changes to a temporary stack and restores a clean working directory, without permanently discarding anything.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;&lt;description&gt;&quot;</span>
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>&lt;commit-hash&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;&lt;description&gt;&quot;</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>&lt;commit-hash&gt;
 </code></pre></div>
 <p>To restore the stashed changes later:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>git<span class="w"> </span>stash<span class="w"> </span>pop
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>git<span class="w"> </span>stash<span class="w"> </span>pop
 </code></pre></div>
 <p><code>git stash pop</code> applies the most recent stash entry and removes it from the stack. To apply without removing it, use <code>git stash apply</code> instead.</p>
 <hr />
 <h2 id="10-permanently-discard-current-changes-and-switch-branch">10. Permanently Discard Current Changes and Switch Branch<a class="headerlink" href="#10-permanently-discard-current-changes-and-switch-branch" title="Permanent link">&para;</a></h2>
 <p>Discard all uncommitted changes in the working directory and index, then switch to another branch. This is irreversible.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>HEAD
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>git<span class="w"> </span>switch<span class="w"> </span>&lt;branch-name&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>HEAD
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>git<span class="w"> </span>switch<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
 <p>Or, equivalently, in a single step using the <code>--discard-changes</code> flag:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>git<span class="w"> </span>switch<span class="w"> </span>--discard-changes<span class="w"> </span>&lt;branch-name&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>git<span class="w"> </span>switch<span class="w"> </span>--discard-changes<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
 <hr />
 <h2 id="11-temporarily-discard-current-changes-and-switch-branch">11. Temporarily Discard Current Changes and Switch Branch<a class="headerlink" href="#11-temporarily-discard-current-changes-and-switch-branch" title="Permanent link">&para;</a></h2>
 <p>Stash uncommitted changes before switching, preserving them for later retrieval.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;&lt;description&gt;&quot;</span>
-<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>git<span class="w"> </span>switch<span class="w"> </span>&lt;branch-name&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;&lt;description&gt;&quot;</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>git<span class="w"> </span>switch<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
 <p>To bring the stashed changes back after returning to the original branch:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>git<span class="w"> </span>switch<span class="w"> </span>&lt;original-branch&gt;
-<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>git<span class="w"> </span>stash<span class="w"> </span>pop
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>git<span class="w"> </span>switch<span class="w"> </span>&lt;original-branch&gt;
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>git<span class="w"> </span>stash<span class="w"> </span>pop
 </code></pre></div>
-<hr />
-<h2 id="12-add-gitignore-to-an-existing-repository">12. Add <code>.gitignore</code> to an Existing Repository<a class="headerlink" href="#12-add-gitignore-to-an-existing-repository" title="Permanent link">&para;</a></h2>
-<p>Adding a <code>.gitignore</code> after the initial commit requires an extra step. Git only respects <code>.gitignore</code> rules for <strong>untracked</strong> files; files that were already committed remain tracked regardless of any ignore rules added later. To untrack them, the Git index (i.e. the staging area) must be cleared and rebuilt.</p>
-<h3 id="121-create-the-gitignore-file">12.1. Create the <code>.gitignore</code> file<a class="headerlink" href="#121-create-the-gitignore-file" title="Permanent link">&para;</a></h3>
-<p>Create <code>.gitignore</code> in the repository root and add the desired patterns, one per line. For example:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>__pycache__/
-<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>*.pyc
-<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>.env
-<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>.venv/
-</code></pre></div>
-<h3 id="122-clear-the-index-and-re-stage-all-files">12.2. Clear the index and re-stage all files<a class="headerlink" href="#122-clear-the-index-and-re-stage-all-files" title="Permanent link">&para;</a></h3>
-<p>Remove all files from the index without deleting them from the local working directory, then re-add everything so that the new <code>.gitignore</code> rules are applied:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>git<span class="w"> </span>rm<span class="w"> </span>-r<span class="w"> </span>--cached<span class="w"> </span>.
-<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>git<span class="w"> </span>add<span class="w"> </span>.
-</code></pre></div>
-<p><code>git rm --cached</code> removes a file from the index only, leaving the local copy intact. The <code>-r</code> flag (i.e. recursive) is required when the target is a directory (<code>.</code> refers to the entire repository root). After re-running <code>git add .</code>, any path matching a pattern in <code>.gitignore</code> is excluded from the index.</p>
-<h3 id="123-commit-and-push">12.3. Commit and push<a class="headerlink" href="#123-commit-and-push" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add .gitignore and untrack ignored files&quot;</span>
-<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>git<span class="w"> </span>push
-</code></pre></div>
-<p><strong>Note:</strong> if only specific files need to be untracked rather than the entire repository, replace the broad <code>git rm -r --cached .</code> with a targeted call:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>git<span class="w"> </span>rm<span class="w"> </span>--cached<span class="w"> </span>&lt;path/to/file&gt;
-</code></pre></div>
-<p>This avoids unnecessarily re-staging every file in the repository.</p>
 
 
 

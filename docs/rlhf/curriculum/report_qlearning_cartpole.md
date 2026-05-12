@@ -117,7 +117,7 @@ Observations:
 [Figure 1](#fig-training) shows the training dynamics of the best configuration (learning rate 0.1, linear decay).
 
 <figure id="fig-training" style="text-align: center;">
-  <img src="/assets/images/cartpole_training_20c69788.png" alt="Training curves for config 20c69788." style="width: 90%;">
+  <img src="/assets/images/cartpole_training_20c69788.png" alt="Training curves for config 20c69788." style="width: 100%;">
   <figcaption>Figure 1: Training curves for the best configuration (learning rate 0.1, linear decay). Left: episode returns (500-episode rolling mean). Centre: episode lengths. Right: TD error per step.</figcaption>
 </figure>
 
@@ -133,7 +133,7 @@ Observations:
 [Figure 2](#fig-policy) shows a 2-D slice of the learned policy projected onto the two dimensions most relevant to the balancing task: pole angle and pole angular velocity. Cart position and cart velocity are fixed at their centre bins.
 
 <figure id="fig-policy" style="text-align: center;">
-  <img src="/assets/images/cartpole_policy_20c69788.png" alt="Policy slice for config 20c69788." style="width: 70%;">
+  <img src="/assets/images/cartpole_policy_20c69788.png" alt="Policy slice for config 20c69788." style="width: 90%;">
   <figcaption>Figure 2: Learned policy slice (0 = push left, 1 = push right) for the best configuration, projected onto pole angle × pole angular velocity with cart dimensions fixed at centre bins.</figcaption>
 </figure>
 

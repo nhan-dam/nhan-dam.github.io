@@ -226,7 +226,57 @@ DQN addressed both instabilities with two complementary techniques.
 - **Experience replay.** Agent transitions (state, action, reward, next state) are stored in a replay buffer and sampled uniformly at random during training. This breaks temporal correlations between samples and enables data reuse.
 - **Target network.** A separate copy of the Q-network, updated only periodically, is used to compute temporal-difference (TD) targets. This stabilises training by holding the targets fixed across multiple gradient updates.
 
-#### 1.3.4. Architecture
+#### 1.3.4. Loss Function and Gradient - Errata
+
+This section identifies and corrects two errors in the paper's mathematical presentation: an incorrect sign in the variance term of the loss function, and an unexplained omission in the gradient derivation.
+
+The paper formulates the loss using the expected TD target, integrating out the stochastic next state $s'$,
+
+$$L_i(\theta_i) = \mathbb{E}_{s,a,r}\!\left[\Bigl(\mathbb{E}_{s'}[y_i \mid s,a,r] - Q(s,a;\theta_i)\Bigr)^2\right],$$
+
+where $y_i = r + \gamma \max_{a'} Q(s', a'; \theta_i^-)$ is the TD target computed with the frozen target network. Since $\mathbb{E}_{s'}[y_i]$ is intractable in practice, training minimises the surrogate loss,
+
+$$\tilde{L}_i(\theta_i) = \mathbb{E}_{s,a,r,s'}\!\left[(y_i - Q(s,a;\theta_i))^2\right],$$
+
+obtained by sampling $s'$ rather than integrating over it.
+
+**Relationship between $L_i$ and $\tilde{L}_i$.** Let $\bar{y}_i = \mathbb{E}_{s'}[y_i \mid s,a,r]$. Expanding the inner expectation of $\tilde{L}_i$ by adding and subtracting $\bar{y}_i$ yields
+
+$$\mathbb{E}_{s'}\!\left[(y_i - Q)^2\right] = \mathbb{E}_{s'}\!\left[(y_i - \bar{y}_i)^2\right] + 2(\bar{y}_i - Q)\underbrace{\mathbb{E}_{s'}[y_i - \bar{y}_i]}_{=\,0} + (\bar{y}_i - Q)^2.$$
+
+The cross-term vanishes since $\mathbb{E}_{s'}[y_i] = \bar{y}_i$ by definition. Taking the outer expectation over $(s,a,r)$,
+
+$$\tilde{L}_i(\theta_i) = \mathbb{E}_{s,a,r}\!\left[\operatorname{Var}_{s'}(y_i)\right] + L_i(\theta_i).$$
+
+Rearranging gives the correct relationship,
+
+$$L_i(\theta_i) = \tilde{L}_i(\theta_i) - \mathbb{E}_{s,a,r}\!\left[\operatorname{Var}_{s'}(y_i)\right].$$
+
+The paper states the variance term with the opposite sign, which is incorrect. The negative sign is necessary: the surrogate $\tilde{L}_i$ includes extra noise from sampling $s'$, so the true loss must be strictly smaller than $\tilde{L}_i$ by the expected variance of the target. Since $\operatorname{Var}_{s'}(y_i)$ depends only on $\theta_i^-$, which is frozen, it does not vary with $\theta_i$. Both losses therefore share the same gradient,
+
+$$\nabla_{\theta_i} L_i(\theta_i) = \nabla_{\theta_i} \tilde{L}_i(\theta_i),$$
+
+which justifies optimising the tractable $\tilde{L}_i$ in practice.
+
+**Gradient derivation.** Applying the chain rule to a single sample with $\delta_i = y_i - Q(s,a;\theta_i)$,
+
+$$\nabla_{\theta_i}\,\delta_i^2 = 2\delta_i \cdot \nabla_{\theta_i}\,\delta_i = 2\delta_i \cdot \Bigl(\underbrace{\nabla_{\theta_i} y_i}_{=\,0} - \nabla_{\theta_i} Q(s,a;\theta_i)\Bigr).$$
+
+Since $y_i$ depends on $\theta_i^-$ rather than $\theta_i$, the first term vanishes. Taking the expectation over $(s,a,r,s')$,
+
+$$\nabla_{\theta_i} L_i(\theta_i) = -2\,\mathbb{E}\!\left[\delta_i \cdot \nabla_{\theta_i} Q(s,a;\theta_i)\right].$$
+
+The paper reports this result without the factor of $-2$. The scalar $2$ is absorbed into the learning rate $\alpha$, and the negative sign is absorbed into the gradient descent update $\theta \leftarrow \theta - \alpha\nabla_\theta L$, which already descends in the negative gradient direction. Neither omission changes the algorithm, but both are made without remark, making the paper's gradient appear inconsistent with a direct application of the chain rule.
+
+#### 1.3.5. Error Clipping
+
+The TD error $\delta_i = y_i - Q(s,a;\theta_i)$ can be very large early in training when Q-values are poorly initialised, producing large gradients that destabilise parameter updates. The paper addresses this by clipping $\delta_i$ to $[-1, 1]$, which is equivalent to using the Huber loss in place of mean squared error (MSE).
+
+The mechanism is grounded in the derivative of the absolute value loss $|\delta_i|$, which equals $\pm 1$ everywhere except at zero. This constant derivative is precisely what bounds the gradient: for any $|\delta_i| > 1$, the gradient contribution is fixed at unit magnitude regardless of how large the error is. The Huber loss exploits this by combining both regimes: it behaves as MSE for $|\delta_i| \leq 1$, where the gradient is proportional to the error and allows precise convergence near the optimum, and as the absolute value loss for $|\delta_i| > 1$, where the constant-magnitude gradient prevents any single outlier transition from dominating the update.
+
+A practical consequence is that the bounded gradient removes the need for game-specific reward scaling. Since the gradient magnitude is capped by construction, the same learning rate generalises across all 49 Atari games without per-game tuning.
+
+#### 1.3.6. Architecture
 
 The network receives the four most recent game frames as input, preprocessed to 84×84 grayscale. These pass through convolutional layers that extract spatial features, followed by fully connected layers that output a Q-value for each possible action. Crucially, the same architecture and hyperparameters were applied across all 49 games without modification. [Algorithm 3](#alg-dqn) shows the training loop of DQN.
 
@@ -267,11 +317,11 @@ Return θ
 <figcaption>Algorithm 3: DQN training loop with experience replay and target network.</figcaption>
 </figure>
 
-#### 1.3.5. Results
+#### 1.3.7. Results
 
 DQN outperformed all prior RL methods and achieved human-level or superhuman performance on the majority of the 49 games tested. Performance was strongest on games requiring visual pattern recognition (e.g. Breakout, Pong) and weakest on games demanding long-horizon planning (e.g. Montezuma's Revenge), where sparse rewards make credit assignment difficult.
 
-#### 1.3.6. Significance
+#### 1.3.8. Significance
 
 The paper established that end-to-end learning from raw sensory data is feasible at scale using a single, fixed architecture. It laid the foundation for much of modern deep RL research, directly motivating subsequent advances including Double DQN, Duelling DQN, and Prioritised Experience Replay.
 

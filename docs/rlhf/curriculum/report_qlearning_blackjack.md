@@ -1,8 +1,8 @@
 # Tabular Q-Learning on Gymnasium Blackjack-v1
 
-> Created on: 29 April 2025
+> Created on: 29 April 2026
 >
-> Updated on: 7 May 2025
+> Updated on: 7 May 2026
 
 ## 1. Overview
 

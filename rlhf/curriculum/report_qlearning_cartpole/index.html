@@ -1456,7 +1456,7 @@
 </blockquote>
 <h2 id="1-overview">1. Overview<a class="headerlink" href="#1-overview" title="Permanent link">&para;</a></h2>
 <p>This note documents an implementation of tabular Q-learning on <code>CartPole-v1</code> environment from <a href="https://gymnasium.farama.org/">Gymnasium</a>. The primary challenge relative to a discrete environment such as Blackjack is that CartPole exposes a <strong>continuous, four-dimensional observation space</strong>, which must be discretised before a Q-table can be indexed. The experiment includes a hyperparameter sweep over learning rate and <span class="arithmatex">\(\varepsilon\)</span>-decay strategy, and analyses the learned policy via 2-D slices of the Q-table.</p>
-<p>The full source code can be found in: https://github.com/nhan-dam/rl-foundations/blob/main/src/qlearning_cartpole.py.</p>
+<p>The full source code can be found at: https://github.com/nhan-dam/rl-foundations/blob/main/src/qlearning_cartpole.py.</p>
 <hr />
 <h2 id="2-implementation">2. Implementation<a class="headerlink" href="#2-implementation" title="Permanent link">&para;</a></h2>
 <h3 id="21-the-discretisation-challenge">2.1. The Discretisation Challenge<a class="headerlink" href="#21-the-discretisation-challenge" title="Permanent link">&para;</a></h3>

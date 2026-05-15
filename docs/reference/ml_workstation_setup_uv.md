@@ -2,7 +2,7 @@
 
 > Created on: 3 April 2026
 >
-> Updated on: 4 May 2026
+> Updated on: 15 May 2026
 
 **Machine:** Mac mini M4 Pro · 64 GB RAM · internal 512 GB SSD.
 
@@ -358,7 +358,7 @@ uv add jupyterlab ipywidgets ipykernel
 >
 > **Note on PyTorch size on Apple Silicon:** PyTorch installs much smaller than on Linux (~400 MB vs ~2 GB) because the macOS arm64 wheel excludes all CUDA tooling. GPU acceleration goes through Apple's Metal/MPS backend instead, which is already part of macOS — so no CUDA runtime needs to be bundled.
 >
-> **Note on `huggingface_hub`:** The CLI entry point shipped with this package was renamed from `huggingface-cli` to `hf` in recent versions. The login command is now `uv run hf auth login` (see [Section 14](#14-huggingface--wb-login)). If you ever need to check what CLI commands a package registers, inspect `.venv/lib/python3.12/site-packages/<package>.dist-info/entry_points.txt`.
+> **Note on `huggingface_hub`:** The CLI entry point shipped with this package was renamed from `huggingface-cli` to `hf` in recent versions. The login command is now `uv run hf auth login` (see [Section 14](#hf-wandb-login)). If you ever need to check what CLI commands a package registers, inspect `.venv/lib/python3.12/site-packages/<package>.dist-info/entry_points.txt`.
 
 ### 8.3. Reproducing the Environment on Another Machine
 
@@ -664,7 +664,7 @@ ollama list
 
 ---
 
-## 14. HuggingFace & W&B Login
+## 14. HuggingFace & W&B Login {: #hf-wandb-login}
 
 These are one-time setup steps. Credentials are stored persistently on disk and survive terminal restarts and reboots — you do not need to repeat these logins.
 

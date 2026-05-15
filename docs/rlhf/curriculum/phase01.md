@@ -2,7 +2,7 @@
 
 > Created on: 22 April 2026
 >
-> Updated on: 28 April 2026
+> Updated on: 11 May 2026
 
 ## 1. Module 1: The RL Problem
 
@@ -325,7 +325,7 @@ DQN outperformed all prior RL methods and achieved human-level or superhuman per
 
 The paper established that end-to-end learning from raw sensory data is feasible at scale using a single, fixed architecture. It laid the foundation for much of modern deep RL research, directly motivating subsequent advances including Double DQN, Duelling DQN, and Prioritised Experience Replay.
 
-### 1.4. Hands-on Project: DQN on CartPole
+### 1.4. Hands-on Project: DQN on CartPole {: #project-req-dqn-cartpole}
 
 **Objective.** Implement DQN from scratch using PyTorch and solve the `CartPole-v1` environment from Gymnasium.
 

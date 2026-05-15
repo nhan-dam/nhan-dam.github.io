@@ -8,6 +8,8 @@
 
 This note documents an implementation of tabular Q-learning on `CartPole-v1` environment from [Gymnasium](https://gymnasium.farama.org/). The primary challenge relative to a discrete environment such as Blackjack is that CartPole exposes a **continuous, four-dimensional observation space**, which must be discretised before a Q-table can be indexed. The experiment includes a hyperparameter sweep over learning rate and $\varepsilon$-decay strategy, and analyses the learned policy via 2-D slices of the Q-table.
 
+The full source code can be found on [GitHub](https://github.com/nhan-dam/rl-foundations/blob/main/src/qlearning_cartpole.py).
+
 ---
 
 ## 2. Implementation

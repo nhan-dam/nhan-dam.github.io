@@ -8,6 +8,8 @@
 
 This article documents the implementation and evaluation of a tabular Q-learning agent on the `Blackjack-v1` environment from [Gymnasium](https://gymnasium.farama.org/). The work covers a clean implementation of the Q-learning update rule, an epsilon-decay sweep across learning rates and decay strategies, and an analysis of the resulting policy.
 
+The full source code can be found on [GitHub](https://github.com/nhan-dam/rl-foundations/blob/main/src/qlearning_blackjack.py).
+
 ---
 
 ## 2. Environment

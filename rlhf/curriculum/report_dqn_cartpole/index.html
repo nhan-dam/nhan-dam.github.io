@@ -2032,7 +2032,8 @@
 </blockquote>
 <hr />
 <p>This note documents an implementation of the hands-on project described in <a href="../phase01/#project-req-dqn-cartpole">Section 1.4</a>: deep Q-network on <code>CartPole-v1</code> environment from <a href="https://gymnasium.farama.org/">Gymnasium</a>.</p>
-<p>The full source code can be found at: https://github.com/nhan-dam/rl-foundations/blob/main/src/dqn_cartpole.py.</p>
+<p>The full source code can be found on <a href="https://github.com/nhan-dam/rl-foundations/blob/main/src/dqn_cartpole.py">GitHub</a>.</p>
+<hr />
 <h2 id="1-implementation-and-design-choices">1. Implementation and Design Choices<a class="headerlink" href="#1-implementation-and-design-choices" title="Permanent link">&para;</a></h2>
 <h3 id="11-core-dqn-mechanisms">1.1. Core DQN Mechanisms<a class="headerlink" href="#11-core-dqn-mechanisms" title="Permanent link">&para;</a></h3>
 <p>Vanilla Q-learning diverges when the Q-function is approximated by a neural network, because the training signal is both non-stationary (targets move as the network updates) and temporally correlated (consecutive transitions share state). The Deep Q-Network (DQN) algorithm (Mnih et al., 2015) stabilises training through two mechanisms.</p>

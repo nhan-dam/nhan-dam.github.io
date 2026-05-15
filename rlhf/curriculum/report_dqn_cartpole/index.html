@@ -1,0 +1,2367 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Nhan Dam's Technical Notes on Machine Learning.">
+      
+      
+        <meta name="author" content="Nhan Dam">
+      
+      
+        <link rel="canonical" href="https://nhan-dam.github.io/rlhf/curriculum/report_dqn_cartpole/">
+      
+      
+        <link rel="prev" href="../report_qlearning_cartpole/">
+      
+      
+        <link rel="next" href="../../dlai/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Project 3 - Deep Q-Network on Gymnasium CartPole - ND's Machine Learning Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#deep-q-network-on-gymnasium-cartpole-v1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="ND&#39;s Machine Learning Notes" class="md-header__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ND's Machine Learning Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Project 3 - Deep Q-Network on Gymnasium CartPole
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nhan-dam/nhan-dam.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nhan-dam/nhan-dam.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  Learning
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../reference/ml_workstation_setup_uv/" class="md-tabs__link">
+          
+  
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="ND&#39;s Machine Learning Notes" class="md-nav__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ND's Machine Learning Notes
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nhan-dam/nhan-dam.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nhan-dam/nhan-dam.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Learning
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Learning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLHF Curriculum
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RLHF Curriculum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1_2" id="__nav_2_1_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 1 - Reinforcement Learning Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phase 1 - Reinforcement Learning Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report_qlearning_blackjack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 1 - Tabular Q-Learning on Gymnasium Blackjack
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report_qlearning_cartpole/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 2 - Tabular Q-Learning on Gymnasium CartPole
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 3 - Deep Q-Network on Gymnasium CartPole
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 3 - Deep Q-Network on Gymnasium CartPole
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-implementation-and-design-choices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Implementation and Design Choices
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Implementation and Design Choices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-core-dqn-mechanisms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1. Core DQN Mechanisms
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-varepsilon-decay-per-step-rather-than-per-episode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2. \(\varepsilon\) Decay: Per-Step Rather Than Per-Episode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-evaluation-policy-retaining-varepsilon-005" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3. Evaluation Policy: Retaining \(\varepsilon = 0.05\)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-experimental-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Experimental Setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-sweep-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Sweep Results
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Sweep Results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-overall-outcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Overall Outcome
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-the-dominant-factor-learning-rate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. The Dominant Factor: Learning Rate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-batch-size-secondary-and-inconclusive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Batch Size: Secondary and Inconclusive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-decay-strategy-minor-advantage-for-exponential-at-higher-lrs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4. Decay Strategy: Minor Advantage for Exponential at Higher LRs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-best-and-worst-configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5. Best and Worst Configurations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-transferable-lessons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6. Transferable Lessons
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-training-curves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Training Curves
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Training Curves">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-success-config-66e09612-lr-5-times-10-4-batch-64-exponential" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Success: Config 66e09612 (lr \(= 5 \times 10^{-4}\), batch 64, exponential)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-failure-config-690440aa-lr-5-times-10-3-batch-32-exponential" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Failure: Config 690440aa (lr \(= 5 \times 10^{-3}\), batch 32, exponential)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix-a-double-dqn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Appendix A. Double DQN
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Appendix A. Double DQN">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a1-motivation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A.1. Motivation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a2-key-implementation-difference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A.2. Key Implementation Difference
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix-b-parallelising-the-hyperparameter-sweep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Appendix B. Parallelising the Hyperparameter Sweep
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Appendix B. Parallelising the Hyperparameter Sweep">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#b1-motivation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.1. Motivation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b2-why-processes-not-threads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.2. Why Processes, Not Threads
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b3-process-start-method-spawn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.3. Process Start Method: spawn
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b4-device-assignment-cpu-per-worker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.4. Device Assignment: CPU per Worker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b5-suppressing-per-worker-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.5. Suppressing Per-Worker Output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b6-worker-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.6. Worker Count
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b7-result-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.7. Result Collection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b8-memory-estimate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.8. Memory Estimate
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="B.8. Memory Estimate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#b81-model-weights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.8.1. Model Weights
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b82-replay-buffer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.8.2. Replay Buffer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b83-python-heap-and-imported-libraries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.8.3. Python Heap and Imported Libraries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b84-per-worker-total-private-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.8.4. Per-Worker Total (Private Memory)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b85-shared-library-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.8.5. Shared Library Pages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b86-total-for-10-workers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.8.6. Total for 10 Workers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DLAI RLHF Course
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    DLAI RLHF Course
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/DLAI_Lecture1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 1 - Conceptual Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/DLAI_Lecture2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 2 - Datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/DLAI_Lecture3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 3 - Tune an LLM with RLHF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/DLAI_Lecture4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 4 - Evaluate an RLHF-Tuned Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/DLAI_Lecture5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 5 - Google Cloud Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/ml_workstation_setup_uv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mac ML Workstation Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/github-pages-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitHub Pages Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/github_cheatsheet_chapter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitHub Task-Oriented Cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/claude-code-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude Code Cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-implementation-and-design-choices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Implementation and Design Choices
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Implementation and Design Choices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-core-dqn-mechanisms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1. Core DQN Mechanisms
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-varepsilon-decay-per-step-rather-than-per-episode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2. \(\varepsilon\) Decay: Per-Step Rather Than Per-Episode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-evaluation-policy-retaining-varepsilon-005" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3. Evaluation Policy: Retaining \(\varepsilon = 0.05\)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-experimental-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Experimental Setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-sweep-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Sweep Results
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Sweep Results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-overall-outcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Overall Outcome
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-the-dominant-factor-learning-rate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. The Dominant Factor: Learning Rate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-batch-size-secondary-and-inconclusive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Batch Size: Secondary and Inconclusive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-decay-strategy-minor-advantage-for-exponential-at-higher-lrs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4. Decay Strategy: Minor Advantage for Exponential at Higher LRs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-best-and-worst-configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5. Best and Worst Configurations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-transferable-lessons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6. Transferable Lessons
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-training-curves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Training Curves
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Training Curves">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-success-config-66e09612-lr-5-times-10-4-batch-64-exponential" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Success: Config 66e09612 (lr \(= 5 \times 10^{-4}\), batch 64, exponential)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-failure-config-690440aa-lr-5-times-10-3-batch-32-exponential" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Failure: Config 690440aa (lr \(= 5 \times 10^{-3}\), batch 32, exponential)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix-a-double-dqn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Appendix A. Double DQN
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Appendix A. Double DQN">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a1-motivation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A.1. Motivation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a2-key-implementation-difference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A.2. Key Implementation Difference
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix-b-parallelising-the-hyperparameter-sweep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Appendix B. Parallelising the Hyperparameter Sweep
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Appendix B. Parallelising the Hyperparameter Sweep">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#b1-motivation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.1. Motivation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b2-why-processes-not-threads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.2. Why Processes, Not Threads
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b3-process-start-method-spawn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.3. Process Start Method: spawn
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b4-device-assignment-cpu-per-worker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.4. Device Assignment: CPU per Worker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b5-suppressing-per-worker-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.5. Suppressing Per-Worker Output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b6-worker-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.6. Worker Count
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b7-result-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.7. Result Collection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b8-memory-estimate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.8. Memory Estimate
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="B.8. Memory Estimate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#b81-model-weights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.8.1. Model Weights
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b82-replay-buffer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.8.2. Replay Buffer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b83-python-heap-and-imported-libraries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.8.3. Python Heap and Imported Libraries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b84-per-worker-total-private-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.8.4. Per-Worker Total (Private Memory)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b85-shared-library-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.8.5. Shared Library Pages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b86-total-for-10-workers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B.8.6. Total for 10 Workers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/nhan-dam/nhan-dam.github.io/edit/main/docs/rlhf/curriculum/report_dqn_cartpole.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="deep-q-network-on-gymnasium-cartpole-v1">Deep Q-Network on Gymnasium CartPole-v1<a class="headerlink" href="#deep-q-network-on-gymnasium-cartpole-v1" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Created on: 9 May 2026</p>
+<p>Updated on: 14 May 2026</p>
+</blockquote>
+<hr />
+<p>This note documents an implementation of deep Q-network on <code>CartPole-v1</code> environment from <a href="https://gymnasium.farama.org/">Gymnasium</a>.</p>
+<h2 id="1-implementation-and-design-choices">1. Implementation and Design Choices<a class="headerlink" href="#1-implementation-and-design-choices" title="Permanent link">&para;</a></h2>
+<h3 id="11-core-dqn-mechanisms">1.1. Core DQN Mechanisms<a class="headerlink" href="#11-core-dqn-mechanisms" title="Permanent link">&para;</a></h3>
+<p>Vanilla Q-learning diverges when the Q-function is approximated by a neural network, because the training signal is both non-stationary (targets move as the network updates) and temporally correlated (consecutive transitions share state). The Deep Q-Network (DQN) algorithm (Mnih et al., 2015) stabilises training through two mechanisms.</p>
+<p><strong>Experience replay.</strong> Transitions <span class="arithmatex">\((s, a, r, s')\)</span> are stored in a circular replay buffer of capacity 50,000 and sampled in random mini-batches during training. This breaks temporal correlation, producing approximately independent and identically distributed (i.i.d.) training samples, and allows each transition to contribute to multiple gradient updates, improving sample efficiency.</p>
+<p><strong>Target network.</strong> A separate copy of the Q-network, whose weights are frozen for <span class="arithmatex">\(N\)</span> steps, computes the Bellman targets <span class="arithmatex">\(r + \gamma \max_{a'} Q_{\text{target}}(s', a')\)</span>. Without this, the network chases a target that shifts every gradient step, a feedback loop that causes divergence. This implementation uses a hard update every 100 steps, copying the online network's weights wholesale. The alternative, a soft update <span class="arithmatex">\(\theta_{\text{target}} \leftarrow \tau \theta_{\text{online}} + (1 - \tau)\theta_{\text{target}}\)</span>, smooths the target trajectory continuously but means the online network always has some influence over the target. The hard update provides a cleaner separation between prediction and target, and is sufficient for a low-dimensional task such as CartPole.</p>
+<h3 id="12-varepsilon-decay-per-step-rather-than-per-episode">1.2. <span class="arithmatex">\(\varepsilon\)</span> Decay: Per-Step Rather Than Per-Episode<a class="headerlink" href="#12-varepsilon-decay-per-step-rather-than-per-episode" title="Permanent link">&para;</a></h3>
+<p>In tabular Q-learning, <span class="arithmatex">\(\varepsilon\)</span> is decayed per episode. This reflects the structure of discretised state spaces: each bin in the Q-table is an independent estimate that only becomes reliable after repeated visits to that bin specifically. An episode boundary is a natural checkpoint by which the agent has traversed enough of the discretised space to justify reducing exploration pressure.</p>
+<p>DQN operates on the raw, continuous state representation and approximates Q-values with a neural network that generalises across nearby states via gradient descent. A single transition in one region of the state space propagates useful updates to the Q-values of neighbouring states, hence no state needs to be revisited repeatedly for its estimate to improve. The individual transition is therefore the natural unit at which to reduce <span class="arithmatex">\(\varepsilon\)</span>, making per-step decay the appropriate choice for DQN.</p>
+<h3 id="13-evaluation-policy-retaining-varepsilon-005">1.3. Evaluation Policy: Retaining <span class="arithmatex">\(\varepsilon = 0.05\)</span><a class="headerlink" href="#13-evaluation-policy-retaining-varepsilon-005" title="Permanent link">&para;</a></h3>
+<p>In tabular Q-learning, setting <span class="arithmatex">\(\varepsilon = 0\)</span> during evaluation is appropriate because each <span class="arithmatex">\(Q(s, a)\)</span> entry is updated independently with no generalisation across states. Estimation errors remain local and a fully greedy policy gives an unbiased readout of the learned values.</p>
+<p>DQN's neural network generalises across states, which is precisely what makes it scalable but also introduces an overfitting risk: the network is exposed to some states far more than others during training, and its Q-value estimates for frequently visited states can become confident but brittle. Mnih et al. (2015) retain <span class="arithmatex">\(\varepsilon = 0.05\)</span> during evaluation to guard against this, producing a more conservative and honest estimate of the policy's generalisation ability. This implementation follows the same practice.</p>
+<hr />
+<h2 id="2-experimental-setup">2. Experimental Setup<a class="headerlink" href="#2-experimental-setup" title="Permanent link">&para;</a></h2>
+<p>The sweep evaluates a DQN agent on <code>CartPole-v1</code> across a <span class="arithmatex">\(5 \times 3 \times 2 = 30\)</span> config grid: five learning rates (<span class="arithmatex">\(10^{-4}\)</span>, <span class="arithmatex">\(5 \times 10^{-4}\)</span>, <span class="arithmatex">\(10^{-3}\)</span>, <span class="arithmatex">\(3 \times 10^{-3}\)</span>, <span class="arithmatex">\(5 \times 10^{-3}\)</span>), three batch sizes (32, 64, 128), and two <span class="arithmatex">\(\varepsilon\)</span> decay strategies (linear and exponential). The solve criterion is mean return &gt; 475 evaluated over 100 episodes within 50,000 environment steps, i.e. the agent must balance the pole near-perfectly before it has seen 50,000 transitions.</p>
+<p>All other hyperparameters are held fixed: discount factor <span class="arithmatex">\(\gamma = 0.99\)</span>, replay buffer capacity 50,000, minimum buffer fill 1,000 steps before training begins, target network hard-update every 100 steps, hidden dimension 128, <span class="arithmatex">\(\varepsilon\)</span> decay completing at 10,000 steps, and 1,000 training episodes per config. The final reported mean return is computed over 1,000 evaluation episodes using the best checkpoint from mid-training probes.</p>
+<hr />
+<h2 id="3-sweep-results">3. Sweep Results<a class="headerlink" href="#3-sweep-results" title="Permanent link">&para;</a></h2>
+<h3 id="31-overall-outcome">3.1. Overall Outcome<a class="headerlink" href="#31-overall-outcome" title="Permanent link">&para;</a></h3>
+<p>There are 14 of 30 configs that satisfy the solve criterion. The 16 failures are not total failures; most eventually achieve high mean return but take longer than 50,000 steps to do so. The core question is therefore what drives early-phase learning speed and stability.</p>
+<h3 id="32-the-dominant-factor-learning-rate">3.2. The Dominant Factor: Learning Rate<a class="headerlink" href="#32-the-dominant-factor-learning-rate" title="Permanent link">&para;</a></h3>
+<p>Learning rate is the single most influential hyperparameter. Every config with <span class="arithmatex">\(\text{lr} = 10^{-4}\)</span> fails the 50,000-step criterion, and most take 100,000–225,000 steps to first cross the threshold, around two to four times the budget. By contrast, configs with <span class="arithmatex">\(\text{lr} \geq 5 \times 10^{-4}\)</span> overwhelmingly pass, with the sole clear exception being <code>690440aa</code> (<span class="arithmatex">\(\text{lr} = 5 \times 10^{-3}\)</span>, batch 32, exponential), which never achieves reliable performance at all.</p>
+<p>The effective learning rate range for this task and architecture is approximately <span class="arithmatex">\([5 \times 10^{-4},\, 5 \times 10^{-3}]\)</span>: fast enough to update Q-values meaningfully from each mini-batch but not so large that gradient steps destabilise the function approximator against the non-stationary temporal-difference (TD) targets.</p>
+<h3 id="33-batch-size-secondary-and-inconclusive">3.3. Batch Size: Secondary and Inconclusive<a class="headerlink" href="#33-batch-size-secondary-and-inconclusive" title="Permanent link">&para;</a></h3>
+<p>Batch size has no monotonic relationship with performance. All three sizes (32, 64, 128) appear in the top-performing tier. Batch 64 is slightly over-represented among the perfect-score configs (mean = 500, std = 0), but there is no clean mechanistic explanation for this: both gradient variance and sample diversity from the replay draw improve with larger batch, so neither factor predicts a middle-batch advantage. The most likely explanation is sampling noise from a single-seed sweep. The practical conclusion is that batch size does not drive success or failure here; the strongest predictor of failure is always learning rate.</p>
+<h3 id="34-decay-strategy-minor-advantage-for-exponential-at-higher-lrs">3.4. Decay Strategy: Minor Advantage for Exponential at Higher LRs<a class="headerlink" href="#34-decay-strategy-minor-advantage-for-exponential-at-higher-lrs" title="Permanent link">&para;</a></h3>
+<p>Across matched (LR, batch) pairs, exponential decay tends to reach <code>solved_step</code> slightly earlier than linear. The most likely reason is that exponential decay is front-loaded: the agent's exploration rate falls faster in the early steps, accelerating the transition to exploitation when the Q-network starts producing useful estimates. Linear decay is uniform, keeping <span class="arithmatex">\(\varepsilon\)</span> higher for longer. The difference rarely changes whether a config passes the criterion, but it noticeably affects <em>when</em> it first passes.</p>
+<h3 id="35-best-and-worst-configurations">3.5. Best and Worst Configurations<a class="headerlink" href="#35-best-and-worst-configurations" title="Permanent link">&para;</a></h3>
+<p>The table below summarises the six perfect-score configs and the single clear failure.</p>
+<table>
+<thead>
+<tr>
+<th>Config</th>
+<th>LR</th>
+<th>Batch</th>
+<th>Decay</th>
+<th>Solved step</th>
+<th>Mean</th>
+<th>Std</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>66e09612</code></td>
+<td><span class="arithmatex">\(5 \times 10^{-4}\)</span></td>
+<td>64</td>
+<td>exp</td>
+<td>50,000</td>
+<td><span style="color: green;">500.0</span></td>
+<td><span style="color: green;">0.0</span></td>
+</tr>
+<tr>
+<td><code>ab7edcd5</code></td>
+<td><span class="arithmatex">\(3 \times 10^{-3}\)</span></td>
+<td>32</td>
+<td>exp</td>
+<td>25,000</td>
+<td><span style="color: green;">500.0</span></td>
+<td><span style="color: green;">0.0</span></td>
+</tr>
+<tr>
+<td><code>9aae1900</code></td>
+<td><span class="arithmatex">\(5 \times 10^{-4}\)</span></td>
+<td>128</td>
+<td>linear</td>
+<td>50,000</td>
+<td><span style="color: green;">500.0</span></td>
+<td><span style="color: green;">0.0</span></td>
+</tr>
+<tr>
+<td><code>d7733cbc</code></td>
+<td><span class="arithmatex">\(10^{-3}\)</span></td>
+<td>64</td>
+<td>exp</td>
+<td>25,000</td>
+<td><span style="color: green;">500.0</span></td>
+<td><span style="color: green;">0.0</span></td>
+</tr>
+<tr>
+<td><code>9aaebea6</code></td>
+<td><span class="arithmatex">\(3 \times 10^{-3}\)</span></td>
+<td>64</td>
+<td>linear</td>
+<td>25,000</td>
+<td><span style="color: green;">500.0</span></td>
+<td><span style="color: green;">0.0</span></td>
+</tr>
+<tr>
+<td><code>88694cf2</code></td>
+<td><span class="arithmatex">\(5 \times 10^{-3}\)</span></td>
+<td>32</td>
+<td>linear</td>
+<td>50,000</td>
+<td><span style="color: green;">500.0</span></td>
+<td><span style="color: green;">0.0</span></td>
+</tr>
+<tr>
+<td><code>690440aa</code></td>
+<td><span class="arithmatex">\(5 \times 10^{-3}\)</span></td>
+<td>32</td>
+<td><strong>exp</strong></td>
+<td>N/A</td>
+<td><span style="color: red;">437.1</span></td>
+<td><span style="color: red;">160.1</span></td>
+</tr>
+</tbody>
+</table>
+<p>The juxtaposition of <code>88694cf2</code> and <code>690440aa</code> is instructive: the same learning rate and batch size, with only the decay strategy differing. Linear decay succeeds; exponential fails. At <span class="arithmatex">\(\text{lr} = 5 \times 10^{-3}\)</span>, the gradient updates are already large. Exponential decay removes exploration more aggressively in the early steps, committing the agent to a noisy, high-LR policy before the Q-network has stabilised. The result is self-reinforcing instability.</p>
+<h3 id="36-transferable-lessons">3.6. Transferable Lessons<a class="headerlink" href="#36-transferable-lessons" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Start with <span class="arithmatex">\(\text{lr} \in [5 \times 10^{-4}, 2 \times 10^{-3}]\)</span> for MLP-based DQN.</strong> Both extremes of the swept range fail or are fragile. The failure mode of too-low LR is slow convergence; the failure mode of too-high LR is catastrophic forgetting and Q-value divergence.</li>
+<li><strong><span class="arithmatex">\(\varepsilon\)</span> decay strategy matters more at extreme learning rates.</strong> In the moderate-LR regime (<span class="arithmatex">\(10^{-3}\)</span> to <span class="arithmatex">\(3 \times 10^{-3}\)</span>), both strategies succeed. Exponential is a safer default when LR is moderate because it accelerates early exploitation. At high LR, prefer linear decay to avoid overcommitting before the Q-network is reliable.</li>
+<li><strong>Batch size is a secondary concern at this scale.</strong> Do not spend sweep budget on fine-grained batch search until learning rate is bracketed.</li>
+<li><strong>Std of zero is a meaningful signal.</strong> Configs achieving mean = 500, std = 0 over 1,000 evaluation episodes have converged to a deterministic near-optimal policy; high std (&gt; 50) signals persistent instability even if the mean looks adequate.</li>
+</ul>
+<hr />
+<h2 id="4-training-curves">4. Training Curves<a class="headerlink" href="#4-training-curves" title="Permanent link">&para;</a></h2>
+<p>Training plots show three panels: a 50-episode rolling mean of episode return, the same for episode length (which is identical to return in CartPole since reward is +1 per step), and a 2,000-step rolling mean of the TD loss.</p>
+<h3 id="41-success-config-66e09612-lr-5-times-10-4-batch-64-exponential">4.1. Success: Config <code>66e09612</code> (lr <span class="arithmatex">\(= 5 \times 10^{-4}\)</span>, batch 64, exponential)<a class="headerlink" href="#41-success-config-66e09612-lr-5-times-10-4-batch-64-exponential" title="Permanent link">&para;</a></h3>
+<p><a href="#fig-66e09612">Figure 1</a> shows the training curves for this config, the cleanest successful run in the sweep.</p>
+<figure id="fig-66e09612" style="text-align: center;">
+  <img src="/assets/images/cartpole_dqn_training_66e09612.png" alt="Training curves for config 66e09612." style="width: 90%;">
+  <figcaption>Figure 1: Training curves for config <code>66e09612</code> (lr = 5 × 10⁻⁴, batch 64, exponential decay). Episode returns (left), episode lengths (centre), and TD loss (right).</figcaption>
+</figure>
+
+<p><strong>Episodes 1–100 (buffer fill).</strong> Return sits near the random baseline (<span class="arithmatex">\(\approx 20–30\)</span> steps). The replay buffer requires 1,000 steps before training begins; given that early episodes are short, roughly 25–50 episodes pass in pure data collection. TD loss is near zero because no gradient updates have occurred.</p>
+<p><strong>Episodes 100–300 (rapid learning).</strong> Return climbs steeply from <span class="arithmatex">\(\approx 50\)</span> to <span class="arithmatex">\(\approx 350\)</span> steps. The Q-network begins to correctly rank actions, distinguishing 'push toward the pole lean' from 'push away'. Simultaneously, <span class="arithmatex">\(\varepsilon\)</span> is decaying and the buffer accumulates diverse transitions across a range of pole angles. TD loss rises to <span class="arithmatex">\(\approx 10–20\)</span>, reflecting growing Q-value magnitudes rather than deteriorating fit.</p>
+<p><strong>Episodes 300–900 (plateau with bounded variance).</strong> Return oscillates between <span class="arithmatex">\(\approx 350\)</span> and <span class="arithmatex">\(\approx 500\)</span> around a stable high mean. TD loss continues rising to <span class="arithmatex">\(\approx 30–40\)</span> as the discounted returns the network must represent grow, but the rate of increase is gradual and the loss does not diverge. The training procedure saves the best checkpoint, so the terminal drop at episodes <span class="arithmatex">\(\approx 900–950\)</span> (after the best point has passed) does not affect the evaluated policy.</p>
+<p>Most other successful configs follow the same three phases, differing only in the speed of the rise: configs with <span class="arithmatex">\(\text{lr} \in \{10^{-3},\, 3 \times 10^{-3}\}\)</span> reach the plateau roughly 100 episodes earlier. Configs with <span class="arithmatex">\(\text{lr} = 10^{-4}\)</span> exhibit a slow ramp, taking 300–400 episodes to arrive where successful configs arrive by episode 200, because the per-update gradient step is too small to overcome noise in the single-sample Bellman targets quickly enough.</p>
+<h3 id="42-failure-config-690440aa-lr-5-times-10-3-batch-32-exponential">4.2. Failure: Config <code>690440aa</code> (lr <span class="arithmatex">\(= 5 \times 10^{-3}\)</span>, batch 32, exponential)<a class="headerlink" href="#42-failure-config-690440aa-lr-5-times-10-3-batch-32-exponential" title="Permanent link">&para;</a></h3>
+<p><a href="#fig-690440aa">Figure 2</a> shows the training curves for this config, the only one that never achieves reliable performance.</p>
+<figure id="fig-690440aa" style="text-align: center;">
+  <img src="/assets/images/cartpole_dqn_training_690440aa.png" alt="Training curves for config 690440aa." style="width: 90%;">
+  <figcaption>Figure 2: Training curves for config <code>690440aa</code> (lr = 5 × 10⁻³, batch 32, exponential decay). Episode returns (left), episode lengths (centre), and TD loss (right).</figcaption>
+</figure>
+
+<p><strong>Episodes 1–100 (fast initial rise).</strong> Return climbs to <span class="arithmatex">\(\approx 200\)</span> steps faster than most configs, as the high learning rate moves Q-values substantially per update and exponential decay removes exploration quickly.</p>
+<p><strong>Episodes 100 onward (repeated collapse).</strong> In contrast to successful configs, where TD loss rises gradually and return stabilises, here TD loss diverges to <span class="arithmatex">\(&gt; 400\)</span> and return cycles repeatedly between <span class="arithmatex">\(\approx 300–350\)</span> and near-random levels. The underlying mechanism is compounding Q-value overestimation. High LR causes the online network to develop inflated Q-values through large, noisy gradient updates: each mini-batch update overshoots the true Bellman target, and with a constantly shifting data distribution the corrections never converge. When the target network syncs, it copies these already-inflated values and holds them fixed as regression targets for the next 100 steps; the online network is then trained to match inflated targets, pushing its Q-values higher still, ready to seed the next sync. The early exhaustion of exploration from exponential decay exacerbates this, as the near-deterministic trajectories that result reduce buffer diversity and deprive the network of the varied Bellman targets that would otherwise dampen overestimation. The contrast with <code>88694cf2</code> (same LR, same batch, linear decay; <a href="#fig-88694cf2">Figure 3</a>) confirms the diagnosis: linear decay keeps <span class="arithmatex">\(\varepsilon\)</span> higher for longer, breaking the feedback loop between premature exploitation and diverging Q-values.</p>
+<figure id="fig-88694cf2" style="text-align: center;">
+  <img src="/assets/images/cartpole_dqn_training_88694cf2.png" alt="Training curves for config 88694cf2." style="width: 90%;">
+  <figcaption>Figure 3: Training curves for config <code>88694cf2</code> (lr = 5 × 10⁻³, batch 32, linear decay). Episode returns (left), episode lengths (centre), and TD loss (right). Identical to <code>690440aa</code> in every hyperparameter except decay strategy; the stable plateau and bounded TD loss confirm that keeping exploration higher for longer prevents the overestimation cycle.</figcaption>
+</figure>
+
+<p>The key distinction between this failure mode and the bounded oscillation in successful runs is therefore not the presence of performance dips, since all DQN runs exhibit some variance, but whether the TD loss diverges. A TD loss that plateaus signals healthy learning, whereas one that compounds without bound signals overestimation taking hold.</p>
+<hr />
+<h2 id="5-summary">5. Summary<a class="headerlink" href="#5-summary" title="Permanent link">&para;</a></h2>
+<p>The sweep demonstrates that DQN on CartPole is more sensitive to learning rate than to any other hyperparameter in the swept grid. The sweet spot is <span class="arithmatex">\(5 \times 10^{-4}\)</span> to <span class="arithmatex">\(3 \times 10^{-3}\)</span>. Below this range the algorithm is too slow to meet a 50,000-step criterion. Above it, specifically <span class="arithmatex">\(5 \times 10^{-3}\)</span> with exponential decay, the high learning rate drives Q-value overestimation into a divergent cycle. Batch size and decay strategy are secondary, since their effects are most visible at the edges of the learning rate range, where small changes in gradient noise or exploration schedule tip the balance between stability and divergence.</p>
+<p>The most important training-curve diagnostic is the TD loss scale. Values in the range 10–80 indicate healthy learning, whilst values above 100 and still rising at training end are a reliable predictor of the overestimation cycle and should prompt reducing the learning rate or switching to Double DQN.</p>
+<hr />
+<h2 id="appendix-a-double-dqn">Appendix A. Double DQN<a class="headerlink" href="#appendix-a-double-dqn" title="Permanent link">&para;</a></h2>
+<h3 id="a1-motivation">A.1. Motivation<a class="headerlink" href="#a1-motivation" title="Permanent link">&para;</a></h3>
+<p>Standard DQN computes the Bellman target as <span class="arithmatex">\(r + \gamma \max_{a'} Q_{\text{target}}(s', a')\)</span>. The <span class="arithmatex">\(\max\)</span> operator performs two operations with the same network: it selects the highest-valued next action and evaluates it. Because the same weights drive both steps, any action whose Q-value is overestimated is both preferentially selected and assigned that inflated value as the regression target. This feeds back into subsequent target computations, causing overestimation to compound across training. The effect is mild on short, simple tasks but becomes a meaningful source of policy degradation in environments with large action spaces, long horizons, or sparse rewards.</p>
+<h3 id="a2-key-implementation-difference">A.2. Key Implementation Difference<a class="headerlink" href="#a2-key-implementation-difference" title="Permanent link">&para;</a></h3>
+<p>Double DQN (van Hasselt et al., 2016) decouples the two operations across the two networks that already exist in standard DQN. The online network selects the greedy next action, then the target network evaluates it:</p>
+<div class="arithmatex">\[
+y = r + \gamma \, Q_{\text{target}}\!\left(s',\, \arg\max_{a'} Q_{\text{online}}(s', a')\right)
+\]</div>
+<p>Because the two networks carry different weights, an action that the online network overestimates tends to receive a more conservative value from the target network, breaking the self-reinforcing bias. The change touches only the TD target computation. Everything else, including environment-interaction action selection via the online network, the replay buffer, and the target network sync schedule, is identical to standard DQN. No additional parameters or computational cost are introduced.</p>
+<hr />
+<h2 id="appendix-b-parallelising-the-hyperparameter-sweep">Appendix B. Parallelising the Hyperparameter Sweep<a class="headerlink" href="#appendix-b-parallelising-the-hyperparameter-sweep" title="Permanent link">&para;</a></h2>
+<h3 id="b1-motivation">B.1. Motivation<a class="headerlink" href="#b1-motivation" title="Permanent link">&para;</a></h3>
+<p>A grid search over learning rate, batch size, and <span class="arithmatex">\(\varepsilon\)</span> decay strategy produces 30 configurations. Running these sequentially is wasteful: each configuration is independent of the others, and the M4 Pro workstation provides 12 central processing unit (CPU) cores that would otherwise sit idle. Distributing the sweep across worker processes allows multiple configurations to train simultaneously, reducing wall-clock time by roughly an order of magnitude.</p>
+<h3 id="b2-why-processes-not-threads">B.2. Why Processes, Not Threads<a class="headerlink" href="#b2-why-processes-not-threads" title="Permanent link">&para;</a></h3>
+<p>Python's global interpreter lock (GIL) prevents multiple threads from executing Python bytecode in parallel. For CPU-bound workloads such as neural network training on small models, multithreading provides no throughput gain. The correct primitive is <code>multiprocessing</code>, which spawns independent OS-level processes, each with its own Python interpreter and memory space, and therefore unaffected by the GIL.</p>
+<h3 id="b3-process-start-method-spawn">B.3. Process Start Method: <code>spawn</code><a class="headerlink" href="#b3-process-start-method-spawn" title="Permanent link">&para;</a></h3>
+<p>Python's <code>multiprocessing</code> module supports two process start methods: <code>fork</code> and <code>spawn</code>.</p>
+<p><code>fork</code> creates a child process by duplicating the parent's entire memory space using the UNIX <code>fork()</code> system call. The child inherits all open file descriptors, locks, and library state. Because the copy is performed at the OS level via copy-on-write, <code>fork</code> is fast. However, it is inherently unsafe when the parent holds internal state that is not designed to be duplicated, such as OS-level locks, GPU contexts, or Objective-C runtime objects; duplicating such state produces two processes that each believe they hold exclusive ownership, leading to undefined behaviour.</p>
+<p><code>spawn</code> creates a child process by launching a fresh Python interpreter from scratch. The child starts with a clean slate, re-imports only the modules it needs, and receives its task via inter-process communication (IPC). This is slower to start than <code>fork</code> but safe in all contexts.</p>
+<p>macOS prohibits the <code>fork</code> start method when PyTorch is in use: the Objective-C runtime and Metal Performance Shaders (MPS) contexts are not fork-safe, and forking a process that has already initialised these subsystems produces undefined behaviour. The <code>spawn</code> start method must therefore be set explicitly before any pool is created:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">multiprocessing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mp</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">mp</span><span class="o">.</span><span class="n">set_start_method</span><span class="p">(</span><span class="s2">&quot;spawn&quot;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+<p>Under <code>spawn</code>, each subprocess is a fresh Python interpreter that re-imports all modules from scratch. This has two consequences. First, the worker function must be defined at module level rather than as a local function or lambda, because <code>spawn</code> pickles the function by name and unpickling requires the function to be importable. Second, all code in <code>__main__</code> must be guarded by <code>if __name__ == "__main__":</code> to prevent recursive subprocess spawning.</p>
+<h3 id="b4-device-assignment-cpu-per-worker">B.4. Device Assignment: CPU per Worker<a class="headerlink" href="#b4-device-assignment-cpu-per-worker" title="Permanent link">&para;</a></h3>
+<p>A natural question is whether worker processes can exploit the M4 Pro's GPU via MPS to accelerate training. They cannot, for two reasons.</p>
+<p>First, GPU shader cores are single instruction, multiple data (SIMD) lanes that execute the same instruction across many data elements in lockstep. They have no independent program counters and no OS-level process isolation. Multiple processes submitting MPS commands therefore serialise on the hardware, providing no parallelism over sequential execution.</p>
+<p>Second, even in a sequential setting, MPS is slower than CPU for this workload. The Q-network is a two-hidden-layer multilayer perceptron (MLP) of width 128 with approximately 17,000 parameters. At this scale, Metal shader compilation and dispatch overhead exceeds the compute time saved by the GPU. The crossover point at which MPS outperforms CPU lies in the millions-of-parameters regime for the batch sizes used here.</p>
+<p>Each worker process is therefore pinned explicitly to CPU:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">worker_device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>This ensures that all 12 CPU cores are utilised for compute, and the GPU is left idle rather than becoming a bottleneck.</p>
+<h3 id="b5-suppressing-per-worker-output">B.5. Suppressing Per-Worker Output<a class="headerlink" href="#b5-suppressing-per-worker-output" title="Permanent link">&para;</a></h3>
+<p>When multiple worker processes write to <code>stdout</code> simultaneously, <code>tqdm</code> progress bars and console output from different workers interleave and become unreadable. The <code>train</code> function accepts a <code>silent</code> flag that suppresses its inner <code>tqdm</code> bar and mid-training evaluation prints when called from a worker process. Each worker instead emits a single one-line summary upon completion, which is short enough to remain legible even if lines from different workers interleave.</p>
+<h3 id="b6-worker-count">B.6. Worker Count<a class="headerlink" href="#b6-worker-count" title="Permanent link">&para;</a></h3>
+<p>With 12 CPU cores and 30 configurations, the number of workers is set to:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">n_workers</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="ow">or</span> <span class="mi">4</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
+</code></pre></div>
+<p>Subtracting 2 from the core count reserves headroom for the OS scheduler and the main process, which handles progress tracking and result collection. With 12 cores this gives 10 workers, completing the 30-configuration sweep in three rounds.</p>
+<h3 id="b7-result-collection">B.7. Result Collection<a class="headerlink" href="#b7-result-collection" title="Permanent link">&para;</a></h3>
+<p>The worker function <code>run_one_config</code> is mapped over the configuration list using <code>pool.imap_unordered</code>, which yields results as each worker finishes rather than waiting for the entire pool. A <code>tqdm</code> bar wrapping the iterator tracks how many of the 30 configurations have completed. Results are collected into a list and written to a CSV file for inspection after the sweep finishes.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">with</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">n_workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>        <span class="n">tqdm</span><span class="p">(</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>            <span class="n">pool</span><span class="o">.</span><span class="n">imap_unordered</span><span class="p">(</span><span class="n">run_one_config</span><span class="p">,</span> <span class="n">configs</span><span class="p">),</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>            <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">),</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>            <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Sweep&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>        <span class="p">)</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="p">)</span>
+</code></pre></div>
+<h3 id="b8-memory-estimate">B.8. Memory Estimate<a class="headerlink" href="#b8-memory-estimate" title="Permanent link">&para;</a></h3>
+<h4 id="b81-model-weights">B.8.1. Model Weights<a class="headerlink" href="#b81-model-weights" title="Permanent link">&para;</a></h4>
+<p>The Q-network is a three-layer MLP with input dimension 4 (the CartPole observation), two hidden layers of width 128, and output dimension 2 (one Q-value per action). The parameter count per layer is the weight matrix plus the bias vector.</p>
+<ul>
+<li>Layer 1 (input → hidden): <span class="arithmatex">\((4 \times 128) + 128 = 640\)</span> parameters.</li>
+<li>Layer 2 (hidden → hidden): <span class="arithmatex">\((128 \times 128) + 128 = 16{,}512\)</span> parameters.</li>
+<li>Layer 3 (hidden → output): <span class="arithmatex">\((128 \times 2) + 2 = 258\)</span> parameters.</li>
+<li>Total per network: <span class="arithmatex">\(640 + 16{,}512 + 258 = 17{,}410\)</span> parameters.</li>
+</ul>
+<p>Each parameter is stored as a 32-bit float (float32), occupying 4 bytes. One network therefore requires <span class="arithmatex">\(17{,}410 \times 4 = 69{,}640\)</span> bytes, approximately 68 KB. Each worker holds two networks (online and target), giving <span class="arithmatex">\(2 \times 68 \approx 136\)</span> KB for weights.</p>
+<p>The Adam optimiser maintains two additional float32 tensors per parameter (the first moment estimate <span class="arithmatex">\(m\)</span> and the second moment estimate <span class="arithmatex">\(v\)</span>), applied only to the online network. This adds a further <span class="arithmatex">\(2 \times 17{,}410 \times 4 = 139{,}280\)</span> bytes, approximately 136 KB.</p>
+<p>Total for weights and optimiser state: <span class="arithmatex">\(136 + 136 \approx 272\)</span> KB, i.e. well under 1 MB.</p>
+<h4 id="b82-replay-buffer">B.8.2. Replay Buffer<a class="headerlink" href="#b82-replay-buffer" title="Permanent link">&para;</a></h4>
+<p>Each transition is a 5-tuple <code>(obs, action, reward, next_obs, done)</code> stored as Python objects in a <code>collections.deque</code>. The two observation arrays each have shape <code>(4,)</code> and dtype float32. A NumPy array of this size carries a fixed object header of approximately 96 bytes plus <span class="arithmatex">\(4 \times 4 = 16\)</span> bytes of data, totalling 112 bytes per array.</p>
+<p>The remaining three fields are CPython heap-allocated objects. In CPython, scalar types store their value inline within the object structure. The total object size (header plus inline value) for each type is:</p>
+<ul>
+<li><code>action</code> as <code>int</code>: 16-byte PyObject header + 4-byte digit field + 8-byte alignment padding = <strong>28 bytes</strong>.</li>
+<li><code>reward</code> as <code>float</code>: 16-byte PyObject header + 8-byte IEEE 754 <code>double</code> = <strong>24 bytes</strong>.</li>
+<li><code>done</code> as <code>bool</code>: <code>bool</code> is a subclass of <code>int</code> in CPython and shares its layout = <strong>28 bytes</strong>.</li>
+</ul>
+<p>The enclosing 5-tuple container holds five 8-byte pointers to the above objects, plus a 40-byte base tuple header, totalling <span class="arithmatex">\(40 + 5 \times 8 = 80\)</span> bytes.</p>
+<p>Per-transition cost:</p>
+<div class="arithmatex">\[\underbrace{2 \times 112}_{\text{obs, next_obs}} + \underbrace{28}_{\text{action}} + \underbrace{24}_{\text{reward}} + \underbrace{28}_{\text{done}} + \underbrace{80}_{\text{tuple}} = 384 \text{ bytes.}\]</div>
+<p>At capacity, the buffer holds 50,000 transitions:</p>
+<div class="arithmatex">\[50{,}000 \times 384 = 19{,}200{,}000 \text{ bytes} \approx 19 \text{ MB.}\]</div>
+<h4 id="b83-python-heap-and-imported-libraries">B.8.3. Python Heap and Imported Libraries<a class="headerlink" href="#b83-python-heap-and-imported-libraries" title="Permanent link">&para;</a></h4>
+<p>Under <code>spawn</code>, each subprocess re-imports PyTorch, NumPy, Gymnasium, and the other dependencies into its own heap. The private, writable portion of this (interpreter state, module objects, Python-level caches) amounts to approximately 60 MB per process. This figure excludes the read-only code pages of shared libraries, which are accounted for in <a href="#b85-shared-library-pages">Section B.8.5</a>.</p>
+<h4 id="b84-per-worker-total-private-memory">B.8.4. Per-Worker Total (Private Memory)<a class="headerlink" href="#b84-per-worker-total-private-memory" title="Permanent link">&para;</a></h4>
+<p>Summing the components above:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model weights (online + target)</td>
+<td>136 KB</td>
+</tr>
+<tr>
+<td>Adam optimiser state</td>
+<td>136 KB</td>
+</tr>
+<tr>
+<td>Replay buffer (50k transitions)</td>
+<td>~19 MB</td>
+</tr>
+<tr>
+<td>Python heap and per-process state</td>
+<td>~60 MB</td>
+</tr>
+<tr>
+<td>Environment wrappers, loss history, misc</td>
+<td>~5 MB</td>
+</tr>
+<tr>
+<td><strong>Total private per worker</strong></td>
+<td><strong>~84 MB</strong></td>
+</tr>
+</tbody>
+</table>
+<h4 id="b85-shared-library-pages">B.8.5. Shared Library Pages<a class="headerlink" href="#b85-shared-library-pages" title="Permanent link">&para;</a></h4>
+<p>The PyTorch and NumPy dynamic libraries are memory-mapped files. The macOS kernel loads their read-only code pages once into physical memory and maps them into each process's virtual address space via copy-on-write. The physical cost of these pages is therefore paid once regardless of worker count, at approximately 350 MB.</p>
+<h4 id="b86-total-for-10-workers">B.8.6. Total for 10 Workers<a class="headerlink" href="#b86-total-for-10-workers" title="Permanent link">&para;</a></h4>
+<div class="arithmatex">\[350 \text{ MB (shared)} + 10 \times 84 \text{ MB (private)} = 1{,}190 \text{ MB} \approx 1.2 \text{ GB.}\]</div>
+<p>Adding a 20% headroom for allocation peaks during mini-batch sampling and Matplotlib plot generation gives a comfortable ceiling of approximately 1.5 GB.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

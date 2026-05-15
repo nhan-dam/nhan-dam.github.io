@@ -642,6 +642,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/curriculum/report_dqn_cartpole/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 3 - Deep Q-Network on Gymnasium CartPole
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1435,7 +1463,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#14-huggingface-wb-login" class="md-nav__link">
+  <a href="#hf-wandb-login" class="md-nav__link">
     <span class="md-ellipsis">
       
         14. HuggingFace &amp; W&amp;B Login
@@ -2115,7 +2143,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#14-huggingface-wb-login" class="md-nav__link">
+  <a href="#hf-wandb-login" class="md-nav__link">
     <span class="md-ellipsis">
       
         14. HuggingFace &amp; W&amp;B Login
@@ -2280,7 +2308,7 @@
 <h1 id="ml-workstation-setup-mac-mini-m4-pro-with-uv">ML Workstation Setup: Mac Mini M4 Pro with uv<a class="headerlink" href="#ml-workstation-setup-mac-mini-m4-pro-with-uv" title="Permanent link">&para;</a></h1>
 <blockquote>
 <p>Created on: 3 April 2026</p>
-<p>Updated on: 4 May 2026</p>
+<p>Updated on: 15 May 2026</p>
 </blockquote>
 <p><strong>Machine:</strong> Mac mini M4 Pro · 64 GB RAM · internal 512 GB SSD.</p>
 <p><strong>External drive:</strong> Samsung 990 Pro 2 TB in OWC M.2 Express (Thunderbolt/USB4).</p>
@@ -2551,7 +2579,7 @@
 <blockquote>
 <p><strong>Why packages are grouped rather than combined into one command:</strong> grouping by purpose makes it clear which package belongs to which role. Each <code>uv add</code> group resolves and installs immediately, with packages cached in <code>/Volumes/ML_Workspace/cache/uv</code> and hard-linked into <code>.venv</code>.</p>
 <p><strong>Note on PyTorch size on Apple Silicon:</strong> PyTorch installs much smaller than on Linux (~400 MB vs ~2 GB) because the macOS arm64 wheel excludes all CUDA tooling. GPU acceleration goes through Apple's Metal/MPS backend instead, which is already part of macOS — so no CUDA runtime needs to be bundled.</p>
-<p><strong>Note on <code>huggingface_hub</code>:</strong> The CLI entry point shipped with this package was renamed from <code>huggingface-cli</code> to <code>hf</code> in recent versions. The login command is now <code>uv run hf auth login</code> (see <a href="#14-huggingface--wb-login">Section 14</a>). If you ever need to check what CLI commands a package registers, inspect <code>.venv/lib/python3.12/site-packages/&lt;package&gt;.dist-info/entry_points.txt</code>.</p>
+<p><strong>Note on <code>huggingface_hub</code>:</strong> The CLI entry point shipped with this package was renamed from <code>huggingface-cli</code> to <code>hf</code> in recent versions. The login command is now <code>uv run hf auth login</code> (see <a href="#hf-wandb-login">Section 14</a>). If you ever need to check what CLI commands a package registers, inspect <code>.venv/lib/python3.12/site-packages/&lt;package&gt;.dist-info/entry_points.txt</code>.</p>
 </blockquote>
 <h3 id="83-reproducing-the-environment-on-another-machine">8.3. Reproducing the Environment on Another Machine<a class="headerlink" href="#83-reproducing-the-environment-on-another-machine" title="Permanent link">&para;</a></h3>
 <p>When you run <code>uv add</code>, two files are automatically maintained.</p>
@@ -2769,7 +2797,7 @@
 <a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="c1"># Should show llama3.2:3b</span>
 </code></pre></div>
 <hr />
-<h2 id="14-huggingface-wb-login">14. HuggingFace &amp; W&amp;B Login<a class="headerlink" href="#14-huggingface-wb-login" title="Permanent link">&para;</a></h2>
+<h2 id="hf-wandb-login">14. HuggingFace &amp; W&amp;B Login<a class="headerlink" href="#hf-wandb-login" title="Permanent link">&para;</a></h2>
 <p>These are one-time setup steps. Credentials are stored persistently on disk and survive terminal restarts and reboots — you do not need to repeat these logins.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="nb">cd</span><span class="w"> </span>/Volumes/ML_Workspace/projects/rlhf-course
 <a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a>

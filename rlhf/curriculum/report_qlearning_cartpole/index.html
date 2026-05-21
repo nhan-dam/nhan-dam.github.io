@@ -784,10 +784,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#33-learned-policy-best-configuration" class="md-nav__link">
+  <a href="#33-learnt-policy-best-configuration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.3. Learned Policy (Best Configuration)
+        3.3. Learnt Policy (Best Configuration)
       
     </span>
   </a>
@@ -1398,10 +1398,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#33-learned-policy-best-configuration" class="md-nav__link">
+  <a href="#33-learnt-policy-best-configuration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.3. Learned Policy (Best Configuration)
+        3.3. Learnt Policy (Best Configuration)
       
     </span>
   </a>
@@ -1455,7 +1455,7 @@
 <p>Updated on: 7 May 2026</p>
 </blockquote>
 <h2 id="1-overview">1. Overview<a class="headerlink" href="#1-overview" title="Permanent link">&para;</a></h2>
-<p>This note documents an implementation of tabular Q-learning on <code>CartPole-v1</code> environment from <a href="https://gymnasium.farama.org/">Gymnasium</a>. The primary challenge relative to a discrete environment such as Blackjack is that CartPole exposes a <strong>continuous, four-dimensional observation space</strong>, which must be discretised before a Q-table can be indexed. The experiment includes a hyperparameter sweep over learning rate and <span class="arithmatex">\(\varepsilon\)</span>-decay strategy, and analyses the learned policy via 2-D slices of the Q-table.</p>
+<p>This note documents an implementation of tabular Q-learning on <code>CartPole-v1</code> environment from <a href="https://gymnasium.farama.org/">Gymnasium</a>. The primary challenge relative to a discrete environment such as Blackjack is that CartPole exposes a <strong>continuous, four-dimensional observation space</strong>, which must be discretised before a Q-table can be indexed. The experiment includes a hyperparameter sweep over learning rate and <span class="arithmatex">\(\varepsilon\)</span>-decay strategy, and analyses the learnt policy via 2-D slices of the Q-table.</p>
 <p>The full source code can be found on <a href="https://github.com/nhan-dam/rl-foundations/blob/main/src/qlearning_cartpole.py">GitHub</a>.</p>
 <hr />
 <h2 id="2-implementation">2. Implementation<a class="headerlink" href="#2-implementation" title="Permanent link">&para;</a></h2>
@@ -1500,12 +1500,12 @@
 <li><strong>Q-table representation.</strong> A <code>defaultdict</code> keyed by the discretised state tuple, initialised to zero vectors. This is memory-efficient as only visited states are allocated.</li>
 <li><strong>Learning rule.</strong> Standard Q-learning (Bellman optimality backup) with a scalar learning rate <span class="arithmatex">\(\alpha\)</span> and discount factor <span class="arithmatex">\(\gamma = 0.99\)</span>.</li>
 <li><strong><span class="arithmatex">\(\varepsilon\)</span>-greedy exploration.</strong> Epsilon decays from <span class="arithmatex">\(1.0\)</span> to <span class="arithmatex">\(0.01\)</span> over the first half of training. Both linear and exponential schedules are compared.</li>
-<li><strong>Best-checkpoint tracking.</strong> The agent is evaluated every 500 episodes from the halfway point of training; the Q-values achieving the highest mean return over 200 evaluation episodes are deep-copied and restored before returning, so the sweep records peak rather than end-of-training performance.</li>
+<li><strong>Best-checkpoint tracking.</strong> The agent is evaluated every 500 episodes from the halfway point of training. The Q-values achieving the highest mean return over 200 evaluation episodes are deep-copied and restored before returning, so the sweep records peak rather than end-of-training performance.</li>
 <li><strong>Final evaluation.</strong> After training, the restored best-checkpoint agent is evaluated over 1,000 greedy episodes to obtain statistically reliable mean, max, and standard deviation of return.</li>
 </ul>
 <p>The core training loop is standard:</p>
-<figure id="alg-qlearning-cartpole" style="text-align:center;">
-<div style="text-align:left;">
+<figure id="alg-qlearning-cartpole" style="text-align: center;">
+<div style="text-align: left;">
 
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Algorithm: Tabular Q-Learning (CartPole)
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
@@ -1517,7 +1517,7 @@
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  B         bin edges per observation dimension
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>Output:
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  Q         learned action-value table
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  Q         learnt action-value table
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>Initialise Q(s, a) = 0 for all s, a (via defaultdict)
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>For episode e = 1, …, T:
@@ -1647,26 +1647,26 @@
 <p>Observations:</p>
 <ul>
 <li><strong>Rapid performance improvement around episode 20,000.</strong> Returns climb sharply from ~100 to the 500-step ceiling within a few thousand episodes, coinciding with the final phase of <span class="arithmatex">\(\varepsilon\)</span>-decay.</li>
-<li><strong>Episode lengths mirror returns exactly.</strong> In CartPole the reward is +1 per step, so episode length and return are identical; the two left panels are therefore redundant, but confirm internal consistency.</li>
+<li><strong>Episode lengths mirror returns exactly.</strong> In CartPole the reward is +1 per step, so episode length and return are identical. The two left panels are therefore redundant, but confirm internal consistency.</li>
 <li><strong>TD error shrinks and stabilises.</strong> The temporal-difference (TD) error begins with large magnitude during early exploration and contracts to a low-amplitude oscillation around zero by roughly <span class="arithmatex">\(10^7\)</span> steps, indicating the Q-values have largely converged.</li>
-<li><strong>Persistent variance in returns after convergence.</strong> Even after episode 25,000 the smoothed return fluctuates slightly below 500; the std = 0 in the <em>evaluation</em> phase (<span class="arithmatex">\(\varepsilon = 0\)</span>) confirms these dips are caused by residual exploration noise during training rather than policy instability.</li>
+<li><strong>Persistent variance in returns after convergence.</strong> Even after episode 25,000 the smoothed return fluctuates slightly below 500. The std = 0 in the <em>evaluation</em> phase (<span class="arithmatex">\(\varepsilon = 0\)</span>) confirms these dips are caused by residual exploration noise during training rather than policy instability.</li>
 </ul>
-<h3 id="33-learned-policy-best-configuration">3.3. Learned Policy (Best Configuration)<a class="headerlink" href="#33-learned-policy-best-configuration" title="Permanent link">&para;</a></h3>
-<p><a href="#fig-policy">Figure 2</a> shows a 2-D slice of the learned policy projected onto the two dimensions most relevant to the balancing task: pole angle and pole angular velocity. Cart position and cart velocity are fixed at their centre bins.</p>
+<h3 id="33-learnt-policy-best-configuration">3.3. Learnt Policy (Best Configuration)<a class="headerlink" href="#33-learnt-policy-best-configuration" title="Permanent link">&para;</a></h3>
+<p><a href="#fig-policy">Figure 2</a> shows a 2-D slice of the learnt policy projected onto the two dimensions most relevant to the balancing task: pole angle and pole angular velocity. Cart position and cart velocity are fixed at their centre bins.</p>
 <figure id="fig-policy" style="text-align: center;">
-  <img src="/assets/images/cartpole_policy_20c69788.png" alt="Policy slice for config 20c69788." style="width: 90%;">
+  <img src="/assets/images/cartpole_policy_20c69788.png" alt="Policy slice for config 20c69788." style="width: 70%;">
   <figcaption>Figure 2: Learned policy slice (0 = push left, 1 = push right) for the best configuration, projected onto pole angle × pole angular velocity with cart dimensions fixed at centre bins.</figcaption>
 </figure>
 
 <p>Observations:</p>
 <ul>
-<li><strong>The policy is physically interpretable in the central angular-velocity band.</strong> For moderate <span class="arithmatex">\(|\omega|\)</span>, the agent pushes right (green) when the pole angle is positive (leaning right) and left (red) when negative — consistent with the correct corrective strategy of pushing in the direction of the lean.</li>
+<li><strong>The policy is physically interpretable in the central angular-velocity band.</strong> For moderate <span class="arithmatex">\(|\omega|\)</span>, the agent pushes right (green) when the pole angle is positive (leaning right) and left (red) when negative, consistent with the correct corrective strategy of pushing in the direction of the lean.</li>
 <li><strong>Extreme angular velocities map uniformly to 'push left'.</strong> Both the top (<span class="arithmatex">\(\omega \approx −3.1 rad/s\)</span>) and bottom (<span class="arithmatex">\(\omega \approx +3.1 rad/s\)</span>) bands are uniformly red. The top band is physically sensible: a pole spinning fast leftward is unrecoverable. The bottom band is less interpretable and likely reflects a discretisation artefact, i.e. these near-terminal states are rarely visited during successful episodes, so Q-values there are poorly estimated.</li>
 <li><strong>The staircase boundary</strong> between red and green regions is a direct consequence of the 8-bin discretisation: smooth optimal decision boundaries can only be approximated as piecewise-constant step functions over the discrete state space.</li>
 </ul>
 <hr />
 <h2 id="4-summary">4. Summary<a class="headerlink" href="#4-summary" title="Permanent link">&para;</a></h2>
-<p>Tabular Q-learning solves CartPole-v1 despite the continuous state space, provided the observation space is discretised appropriately. The key implementation challenge is choosing bin granularity and ranges that balance coverage against table size; 8 bins per dimension (<span class="arithmatex">\(8^4 = 4{,}096\)</span> states) proved sufficient. The sweep identifies <span class="arithmatex">\(\alpha = 0.1\)</span> with linear <span class="arithmatex">\(\varepsilon\)</span>-decay as the most reliable configuration, converging to a perfect mean return of 500 by episode 25,000 with zero evaluation variance. Linear decay consistently outperforms exponential decay in this setting, and the learned policy exhibits physically interpretable structure in the angle–angular velocity plane despite the constraints of discrete state representation.</p>
+<p>Tabular Q-learning solves CartPole-v1 despite the continuous state space, provided the observation space is discretised appropriately. The key implementation challenge is choosing bin granularity and ranges that balance coverage against table size. 8 bins per dimension (<span class="arithmatex">\(8^4 = 4{,}096\)</span> states) proved sufficient. The sweep identifies <span class="arithmatex">\(\alpha = 0.1\)</span> with linear <span class="arithmatex">\(\varepsilon\)</span>-decay as the most reliable configuration, converging to a perfect mean return of 500 by episode 25,000 with zero evaluation variance. Linear decay consistently outperforms exponential decay in this setting, and the learnt policy exhibits physically interpretable structure in the angle–angular velocity plane despite the constraints of discrete state representation.</p>
 
 
 

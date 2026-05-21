@@ -1528,7 +1528,7 @@
 <p>The <code>Blackjack-v1</code> environment models a simplified, single-player game of Blackjack against a fixed dealer. Key properties:</p>
 <ul>
 <li><strong>State space:</strong> a 3-tuple <code>(player_sum, dealer_showing, usable_ace)</code>, where <code>player_sum ∈ [4, 21]</code>, <code>dealer_showing ∈ [1, 10]</code>, and <code>usable_ace ∈ {True, False}</code>.</li>
-<li><strong>Action space:</strong> binary — <code>0</code> (stick) or <code>1</code> (hit).</li>
+<li><strong>Action space:</strong> binary, <code>0</code> (stick) or <code>1</code> (hit).</li>
 <li><strong>Rewards:</strong> <code>+1</code> for a win, <code>-1</code> for a bust or loss, <code>0</code> for a draw. Blackjack pays the same as a regular win (i.e. no 1.5× bonus) by default.</li>
 <li><strong><code>sab=False</code>:</strong> the natural blackjack flag is disabled, so all wins yield <code>+1</code>.</li>
 </ul>
@@ -1544,8 +1544,8 @@
 <h3 id="33-epsilon-decay">3.3. Epsilon Decay<a class="headerlink" href="#33-epsilon-decay" title="Permanent link">&para;</a></h3>
 <p>Two decay strategies were compared:</p>
 <ul>
-<li><strong>Linear decay:</strong> <span class="arithmatex">\(\varepsilon_{t+1} = \max(\varepsilon_\text{min},\; \varepsilon_t - \delta)\)</span>, where <span class="arithmatex">\(\delta = (\varepsilon_0 - \varepsilon_\text{min}) / (N/2)\)</span>.</li>
-<li><strong>Exponential decay:</strong> <span class="arithmatex">\(\varepsilon_{t+1} = \max(\varepsilon_\text{min},\; \varepsilon_t \cdot \rho)\)</span>, where <span class="arithmatex">\(\rho = (\varepsilon_\text{min} / \varepsilon_0)^{2/N}\)</span>.</li>
+<li><strong>Linear decay:</strong> <span class="arithmatex">\(\varepsilon_{t+1} = \max(\varepsilon_\text{min}, \varepsilon_t - \delta)\)</span>, where <span class="arithmatex">\(\delta = (\varepsilon_0 - \varepsilon_\text{min}) / (N/2)\)</span>.</li>
+<li><strong>Exponential decay:</strong> <span class="arithmatex">\(\varepsilon_{t+1} = \max(\varepsilon_\text{min}, \varepsilon_t \cdot \rho)\)</span>, where <span class="arithmatex">\(\rho = (\varepsilon_\text{min} / \varepsilon_0)^{2/N}\)</span>.</li>
 </ul>
 <p>Both strategies are calibrated so that <span class="arithmatex">\(\varepsilon\)</span> reaches <code>final_epsilon</code> at the halfway point of training (<span class="arithmatex">\(N/2\)</span> episodes), leaving the second half for near-greedy exploitation and fine-tuning.</p>
 <p>Key parameter values:</p>
@@ -1667,7 +1667,7 @@
 <h3 id="42-training-curves-best-configuration">4.2. Training Curves (Best Configuration)<a class="headerlink" href="#42-training-curves-best-configuration" title="Permanent link">&para;</a></h3>
 <p><a href="#fig-training">Figure 1</a> shows the smoothed training statistics for the best configuration (<code>lr=0.05</code>, linear decay), averaged over a 500-episode rolling window.</p>
 <figure id="fig-training" style="text-align: center;">
-  <img src="/assets/images/blackjack_training_stats_6b1a67a6.png" alt="Training statistics for the best configuration." style="width: 100%;">
+  <img src="/assets/images/blackjack_training_stats_6b1a67a6.png" alt="Training statistics for the best configuration." style="width: 90%;">
   <figcaption>Figure 1: Training statistics for the best configuration (lr=0.05, linear decay). Left: episode reward. Centre: episode length. Right: TD error.</figcaption>
 </figure>
 
@@ -1680,12 +1680,12 @@
 <h3 id="43-learnt-policy-best-configuration">4.3. Learnt Policy (Best Configuration)<a class="headerlink" href="#43-learnt-policy-best-configuration" title="Permanent link">&para;</a></h3>
 <p><a href="#fig-policy-ace">Figure 2</a> and <a href="#fig-policy-noace">Figure 3</a> show the learnt state values and greedy policy for the best configuration, split by whether the player holds a usable ace.</p>
 <figure id="fig-policy-ace" style="text-align: center;">
-  <img src="/assets/images/blackjack_policy_ace_6b1a67a6.png" alt="Learnt policy with a usable ace." style="width: 100%;">
+  <img src="/assets/images/blackjack_policy_ace_6b1a67a6.png" alt="Learnt policy with a usable ace." style="width: 90%;">
   <figcaption>Figure 2: Learnt state values (left) and greedy policy (right) when the player holds a usable ace.</figcaption>
 </figure>
 
 <figure id="fig-policy-noace" style="text-align: center;">
-  <img src="/assets/images/blackjack_policy_noace_6b1a67a6.png" alt="Learnt policy without a usable ace." style="width: 100%;">
+  <img src="/assets/images/blackjack_policy_noace_6b1a67a6.png" alt="Learnt policy without a usable ace." style="width: 90%;">
   <figcaption>Figure 3: Learnt state values (left) and greedy policy (right) when the player does not hold a usable ace.</figcaption>
 </figure>
 
@@ -1693,7 +1693,7 @@
 <ul>
 <li><strong>With a usable ace (<a href="#fig-policy-ace">Figure 2</a>):</strong> the agent consistently hits on all hands up to player sum 17, regardless of the dealer's card, and sticks on 18–21. This is broadly consistent with basic strategy: a usable ace makes hitting less risky because the ace can revert from 11 to 1 to avoid a bust.</li>
 <li><strong>Without a usable ace (<a href="#fig-policy-noace">Figure 3</a>):</strong> the policy is more conservative and noisy. The agent sticks more aggressively, particularly at sums of 13–16 against a weak dealer (2–6), and hits more against a strong dealer (7–10). The policy partially recovers the classical basic-strategy boundary but retains some irregular cells, characteristic of residual Q-table noise at states visited infrequently.</li>
-<li><strong>State values:</strong> the value surfaces are qualitatively correct — values rise with player sum and are higher when holding a usable ace, reflecting reduced bust risk. The no-ace surface shows a steeper gradient, consistent with the harder position of hard totals near the bust threshold.</li>
+<li><strong>State values:</strong> the value surfaces are qualitatively correct, i.e. values rise with player sum and are higher when holding a usable ace, reflecting reduced bust risk. The no-ace surface shows a steeper gradient, consistent with the harder position of hard totals near the bust threshold.</li>
 </ul>
 <hr />
 <h2 id="5-summary">5. Summary<a class="headerlink" href="#5-summary" title="Permanent link">&para;</a></h2>

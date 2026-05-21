@@ -6,7 +6,7 @@
 
 ## 1. Overview
 
-This note documents an implementation of tabular Q-learning on `CartPole-v1` environment from [Gymnasium](https://gymnasium.farama.org/). The primary challenge relative to a discrete environment such as Blackjack is that CartPole exposes a **continuous, four-dimensional observation space**, which must be discretised before a Q-table can be indexed. The experiment includes a hyperparameter sweep over learning rate and $\varepsilon$-decay strategy, and analyses the learned policy via 2-D slices of the Q-table.
+This note documents an implementation of tabular Q-learning on `CartPole-v1` environment from [Gymnasium](https://gymnasium.farama.org/). The primary challenge relative to a discrete environment such as Blackjack is that CartPole exposes a **continuous, four-dimensional observation space**, which must be discretised before a Q-table can be indexed. The experiment includes a hyperparameter sweep over learning rate and $\varepsilon$-decay strategy, and analyses the learnt policy via 2-D slices of the Q-table.
 
 The full source code can be found on [GitHub](https://github.com/nhan-dam/rl-foundations/blob/main/src/qlearning_cartpole.py).
 
@@ -36,13 +36,13 @@ Bin ranges are set to cover the region the agent actually visits rather than the
 - **Q-table representation.** A `defaultdict` keyed by the discretised state tuple, initialised to zero vectors. This is memory-efficient as only visited states are allocated.
 - **Learning rule.** Standard Q-learning (Bellman optimality backup) with a scalar learning rate $\alpha$ and discount factor $\gamma = 0.99$.
 - **$\varepsilon$-greedy exploration.** Epsilon decays from $1.0$ to $0.01$ over the first half of training. Both linear and exponential schedules are compared.
-- **Best-checkpoint tracking.** The agent is evaluated every 500 episodes from the halfway point of training; the Q-values achieving the highest mean return over 200 evaluation episodes are deep-copied and restored before returning, so the sweep records peak rather than end-of-training performance.
+- **Best-checkpoint tracking.** The agent is evaluated every 500 episodes from the halfway point of training. The Q-values achieving the highest mean return over 200 evaluation episodes are deep-copied and restored before returning, so the sweep records peak rather than end-of-training performance.
 - **Final evaluation.** After training, the restored best-checkpoint agent is evaluated over 1,000 greedy episodes to obtain statistically reliable mean, max, and standard deviation of return.
 
 The core training loop is standard:
 
-<figure id="alg-qlearning-cartpole" style="text-align:center;">
-<div style="text-align:left;">
+<figure id="alg-qlearning-cartpole" style="text-align: center;">
+<div style="text-align: left;">
 
 ```
 Algorithm: Tabular Q-Learning (CartPole)
@@ -55,7 +55,7 @@ Input:
   B         bin edges per observation dimension
 
 Output:
-  Q         learned action-value table
+  Q         learnt action-value table
 
 Initialise Q(s, a) = 0 for all s, a (via defaultdict)
 For episode e = 1, …, T:
@@ -126,22 +126,22 @@ Observations:
 Observations:
 
 - **Rapid performance improvement around episode 20,000.** Returns climb sharply from ~100 to the 500-step ceiling within a few thousand episodes, coinciding with the final phase of $\varepsilon$-decay.
-- **Episode lengths mirror returns exactly.** In CartPole the reward is +1 per step, so episode length and return are identical; the two left panels are therefore redundant, but confirm internal consistency.
+- **Episode lengths mirror returns exactly.** In CartPole the reward is +1 per step, so episode length and return are identical. The two left panels are therefore redundant, but confirm internal consistency.
 - **TD error shrinks and stabilises.** The temporal-difference (TD) error begins with large magnitude during early exploration and contracts to a low-amplitude oscillation around zero by roughly $10^7$ steps, indicating the Q-values have largely converged.
-- **Persistent variance in returns after convergence.** Even after episode 25,000 the smoothed return fluctuates slightly below 500; the std = 0 in the *evaluation* phase ($\varepsilon = 0$) confirms these dips are caused by residual exploration noise during training rather than policy instability.
+- **Persistent variance in returns after convergence.** Even after episode 25,000 the smoothed return fluctuates slightly below 500. The std = 0 in the *evaluation* phase ($\varepsilon = 0$) confirms these dips are caused by residual exploration noise during training rather than policy instability.
 
-### 3.3. Learned Policy (Best Configuration)
+### 3.3. Learnt Policy (Best Configuration)
 
-[Figure 2](#fig-policy) shows a 2-D slice of the learned policy projected onto the two dimensions most relevant to the balancing task: pole angle and pole angular velocity. Cart position and cart velocity are fixed at their centre bins.
+[Figure 2](#fig-policy) shows a 2-D slice of the learnt policy projected onto the two dimensions most relevant to the balancing task: pole angle and pole angular velocity. Cart position and cart velocity are fixed at their centre bins.
 
 <figure id="fig-policy" style="text-align: center;">
-  <img src="/assets/images/cartpole_policy_20c69788.png" alt="Policy slice for config 20c69788." style="width: 90%;">
+  <img src="/assets/images/cartpole_policy_20c69788.png" alt="Policy slice for config 20c69788." style="width: 70%;">
   <figcaption>Figure 2: Learned policy slice (0 = push left, 1 = push right) for the best configuration, projected onto pole angle × pole angular velocity with cart dimensions fixed at centre bins.</figcaption>
 </figure>
 
 Observations:
 
-- **The policy is physically interpretable in the central angular-velocity band.** For moderate $|\omega|$, the agent pushes right (green) when the pole angle is positive (leaning right) and left (red) when negative — consistent with the correct corrective strategy of pushing in the direction of the lean.
+- **The policy is physically interpretable in the central angular-velocity band.** For moderate $|\omega|$, the agent pushes right (green) when the pole angle is positive (leaning right) and left (red) when negative, consistent with the correct corrective strategy of pushing in the direction of the lean.
 - **Extreme angular velocities map uniformly to 'push left'.** Both the top ($\omega \approx −3.1 rad/s$) and bottom ($\omega \approx +3.1 rad/s$) bands are uniformly red. The top band is physically sensible: a pole spinning fast leftward is unrecoverable. The bottom band is less interpretable and likely reflects a discretisation artefact, i.e. these near-terminal states are rarely visited during successful episodes, so Q-values there are poorly estimated.
 - **The staircase boundary** between red and green regions is a direct consequence of the 8-bin discretisation: smooth optimal decision boundaries can only be approximated as piecewise-constant step functions over the discrete state space.
 
@@ -149,4 +149,4 @@ Observations:
 
 ## 4. Summary
 
-Tabular Q-learning solves CartPole-v1 despite the continuous state space, provided the observation space is discretised appropriately. The key implementation challenge is choosing bin granularity and ranges that balance coverage against table size; 8 bins per dimension ($8^4 = 4{,}096$ states) proved sufficient. The sweep identifies $\alpha = 0.1$ with linear $\varepsilon$-decay as the most reliable configuration, converging to a perfect mean return of 500 by episode 25,000 with zero evaluation variance. Linear decay consistently outperforms exponential decay in this setting, and the learned policy exhibits physically interpretable structure in the angle–angular velocity plane despite the constraints of discrete state representation.
+Tabular Q-learning solves CartPole-v1 despite the continuous state space, provided the observation space is discretised appropriately. The key implementation challenge is choosing bin granularity and ranges that balance coverage against table size. 8 bins per dimension ($8^4 = 4{,}096$ states) proved sufficient. The sweep identifies $\alpha = 0.1$ with linear $\varepsilon$-decay as the most reliable configuration, converging to a perfect mean return of 500 by episode 25,000 with zero evaluation variance. Linear decay consistently outperforms exponential decay in this setting, and the learnt policy exhibits physically interpretable structure in the angle–angular velocity plane despite the constraints of discrete state representation.

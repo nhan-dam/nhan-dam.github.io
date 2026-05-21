@@ -17,7 +17,7 @@ The full source code can be found on [GitHub](https://github.com/nhan-dam/rl-fou
 The `Blackjack-v1` environment models a simplified, single-player game of Blackjack against a fixed dealer. Key properties:
 
 - **State space:** a 3-tuple `(player_sum, dealer_showing, usable_ace)`, where `player_sum ∈ [4, 21]`, `dealer_showing ∈ [1, 10]`, and `usable_ace ∈ {True, False}`.
-- **Action space:** binary — `0` (stick) or `1` (hit).
+- **Action space:** binary, `0` (stick) or `1` (hit).
 - **Rewards:** `+1` for a win, `-1` for a bust or loss, `0` for a draw. Blackjack pays the same as a regular win (i.e. no 1.5× bonus) by default.
 - **`sab=False`:** the natural blackjack flag is disabled, so all wins yield `+1`.
 
@@ -43,8 +43,8 @@ The agent uses an $\varepsilon$-greedy policy: with probability $\varepsilon$ it
 
 Two decay strategies were compared:
 
-- **Linear decay:** $\varepsilon_{t+1} = \max(\varepsilon_\text{min},\; \varepsilon_t - \delta)$, where $\delta = (\varepsilon_0 - \varepsilon_\text{min}) / (N/2)$.
-- **Exponential decay:** $\varepsilon_{t+1} = \max(\varepsilon_\text{min},\; \varepsilon_t \cdot \rho)$, where $\rho = (\varepsilon_\text{min} / \varepsilon_0)^{2/N}$.
+- **Linear decay:** $\varepsilon_{t+1} = \max(\varepsilon_\text{min}, \varepsilon_t - \delta)$, where $\delta = (\varepsilon_0 - \varepsilon_\text{min}) / (N/2)$.
+- **Exponential decay:** $\varepsilon_{t+1} = \max(\varepsilon_\text{min}, \varepsilon_t \cdot \rho)$, where $\rho = (\varepsilon_\text{min} / \varepsilon_0)^{2/N}$.
 
 Both strategies are calibrated so that $\varepsilon$ reaches `final_epsilon` at the halfway point of training ($N/2$ episodes), leaving the second half for near-greedy exploitation and fine-tuning.
 
@@ -101,7 +101,7 @@ Key observations:
 [Figure 1](#fig-training) shows the smoothed training statistics for the best configuration (`lr=0.05`, linear decay), averaged over a 500-episode rolling window.
 
 <figure id="fig-training" style="text-align: center;">
-  <img src="/assets/images/blackjack_training_stats_6b1a67a6.png" alt="Training statistics for the best configuration." style="width: 100%;">
+  <img src="/assets/images/blackjack_training_stats_6b1a67a6.png" alt="Training statistics for the best configuration." style="width: 90%;">
   <figcaption>Figure 1: Training statistics for the best configuration (lr=0.05, linear decay). Left: episode reward. Centre: episode length. Right: TD error.</figcaption>
 </figure>
 
@@ -116,12 +116,12 @@ Observations:
 [Figure 2](#fig-policy-ace) and [Figure 3](#fig-policy-noace) show the learnt state values and greedy policy for the best configuration, split by whether the player holds a usable ace.
 
 <figure id="fig-policy-ace" style="text-align: center;">
-  <img src="/assets/images/blackjack_policy_ace_6b1a67a6.png" alt="Learnt policy with a usable ace." style="width: 100%;">
+  <img src="/assets/images/blackjack_policy_ace_6b1a67a6.png" alt="Learnt policy with a usable ace." style="width: 90%;">
   <figcaption>Figure 2: Learnt state values (left) and greedy policy (right) when the player holds a usable ace.</figcaption>
 </figure>
 
 <figure id="fig-policy-noace" style="text-align: center;">
-  <img src="/assets/images/blackjack_policy_noace_6b1a67a6.png" alt="Learnt policy without a usable ace." style="width: 100%;">
+  <img src="/assets/images/blackjack_policy_noace_6b1a67a6.png" alt="Learnt policy without a usable ace." style="width: 90%;">
   <figcaption>Figure 3: Learnt state values (left) and greedy policy (right) when the player does not hold a usable ace.</figcaption>
 </figure>
 
@@ -129,7 +129,7 @@ Observations:
 
 - **With a usable ace ([Figure 2](#fig-policy-ace)):** the agent consistently hits on all hands up to player sum 17, regardless of the dealer's card, and sticks on 18–21. This is broadly consistent with basic strategy: a usable ace makes hitting less risky because the ace can revert from 11 to 1 to avoid a bust.
 - **Without a usable ace ([Figure 3](#fig-policy-noace)):** the policy is more conservative and noisy. The agent sticks more aggressively, particularly at sums of 13–16 against a weak dealer (2–6), and hits more against a strong dealer (7–10). The policy partially recovers the classical basic-strategy boundary but retains some irregular cells, characteristic of residual Q-table noise at states visited infrequently.
-- **State values:** the value surfaces are qualitatively correct — values rise with player sum and are higher when holding a usable ace, reflecting reduced bust risk. The no-ace surface shows a steeper gradient, consistent with the harder position of hard totals near the bust threshold.
+- **State values:** the value surfaces are qualitatively correct, i.e. values rise with player sum and are higher when holding a usable ace, reflecting reduced bust risk. The no-ace surface shows a steeper gradient, consistent with the harder position of hard totals near the bust threshold.
 
 ---
 

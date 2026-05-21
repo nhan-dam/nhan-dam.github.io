@@ -4,13 +4,9 @@
 >
 > Updated on: 14 May 2026
 
----
-
-This note documents an implementation of the hands-on project described in [Section 1.4](phase01.md#project-req-dqn-cartpole): deep Q-network on `CartPole-v1` environment from [Gymnasium](https://gymnasium.farama.org/).
+This note documents an implementation of deep Q-network on `CartPole-v1` environment from [Gymnasium](https://gymnasium.farama.org/).
 
 The full source code can be found on [GitHub](https://github.com/nhan-dam/rl-foundations/blob/main/src/dqn_cartpole.py).
-
----
 
 ## 1. Implementation and Design Choices
 
@@ -30,7 +26,7 @@ DQN operates on the raw, continuous state representation and approximates Q-valu
 
 ### 1.3. Evaluation Policy: Retaining $\varepsilon = 0.05$
 
-In tabular Q-learning, setting $\varepsilon = 0$ during evaluation is appropriate because each $Q(s, a)$ entry is updated independently with no generalisation across states. Estimation errors remain local and a fully greedy policy gives an unbiased readout of the learned values.
+In tabular Q-learning, setting $\varepsilon = 0$ during evaluation is appropriate because each $Q(s, a)$ entry is updated independently with no generalisation across states. Estimation errors remain local and a fully greedy policy gives an unbiased readout of the learnt values.
 
 DQN's neural network generalises across states, which is precisely what makes it scalable but also introduces an overfitting risk: the network is exposed to some states far more than others during training, and its Q-value estimates for frequently visited states can become confident but brittle. Mnih et al. (2015) retain $\varepsilon = 0.05$ during evaluation to guard against this, producing a more conservative and honest estimate of the policy's generalisation ability. This implementation follows the same practice.
 
@@ -48,7 +44,7 @@ All other hyperparameters are held fixed: discount factor $\gamma = 0.99$, repla
 
 ### 3.1. Overall Outcome
 
-There are 14 of 30 configs that satisfy the solve criterion. The 16 failures are not total failures; most eventually achieve high mean return but take longer than 50,000 steps to do so. The core question is therefore what drives early-phase learning speed and stability.
+There are 14 of 30 configs that satisfy the solve criterion. The 16 failures are not total failures. Most eventually achieve high mean return but take longer than 50,000 steps to do so. The core question is therefore what drives early-phase learning speed and stability.
 
 ### 3.2. The Dominant Factor: Learning Rate
 
@@ -58,7 +54,7 @@ The effective learning rate range for this task and architecture is approximatel
 
 ### 3.3. Batch Size: Secondary and Inconclusive
 
-Batch size has no monotonic relationship with performance. All three sizes (32, 64, 128) appear in the top-performing tier. Batch 64 is slightly over-represented among the perfect-score configs (mean = 500, std = 0), but there is no clean mechanistic explanation for this: both gradient variance and sample diversity from the replay draw improve with larger batch, so neither factor predicts a middle-batch advantage. The most likely explanation is sampling noise from a single-seed sweep. The practical conclusion is that batch size does not drive success or failure here; the strongest predictor of failure is always learning rate.
+Batch size has no monotonic relationship with performance. All three sizes (32, 64, 128) appear in the top-performing tier. Batch 64 is slightly over-represented among the perfect-score configs (mean = 500, std = 0), but there is no clean mechanistic explanation for this: both gradient variance and sample diversity from the replay draw improve with larger batch, so neither factor predicts a middle-batch advantage. The most likely explanation is sampling noise from a single-seed sweep. The practical conclusion is that batch size does not drive success or failure here. The strongest predictor of failure is always learning rate.
 
 ### 3.4. Decay Strategy: Minor Advantage for Exponential at Higher LRs
 
@@ -78,14 +74,14 @@ The table below summarises the six perfect-score configs and the single clear fa
 | `88694cf2` | $5 \times 10^{-3}$ | 32 | linear | 50,000 | <span style="color: green;">500.0</span> | <span style="color: green;">0.0</span> |
 | `690440aa` | $5 \times 10^{-3}$ | 32 | **exp** | N/A | <span style="color: red;">437.1</span> | <span style="color: red;">160.1</span> |
 
-The juxtaposition of `88694cf2` and `690440aa` is instructive: the same learning rate and batch size, with only the decay strategy differing. Linear decay succeeds; exponential fails. At $\text{lr} = 5 \times 10^{-3}$, the gradient updates are already large. Exponential decay removes exploration more aggressively in the early steps, committing the agent to a noisy, high-LR policy before the Q-network has stabilised. The result is self-reinforcing instability.
+The juxtaposition of `88694cf2` and `690440aa` is instructive: the same learning rate and batch size, with only the decay strategy differing. Linear decay succeeds. Exponential fails. At $\text{lr} = 5 \times 10^{-3}$, the gradient updates are already large. Exponential decay removes exploration more aggressively in the early steps, committing the agent to a noisy, high-LR policy before the Q-network has stabilised. The result is self-reinforcing instability.
 
 ### 3.6. Transferable Lessons
 
-- **Start with $\text{lr} \in [5 \times 10^{-4}, 2 \times 10^{-3}]$ for MLP-based DQN.** Both extremes of the swept range fail or are fragile. The failure mode of too-low LR is slow convergence; the failure mode of too-high LR is catastrophic forgetting and Q-value divergence.
+- **Start with $\text{lr} \in [5 \times 10^{-4}, 2 \times 10^{-3}]$ for MLP-based DQN.** Both extremes of the swept range fail or are fragile. The failure mode of too-low LR is slow convergence. The failure mode of too-high LR is catastrophic forgetting and Q-value divergence.
 - **$\varepsilon$ decay strategy matters more at extreme learning rates.** In the moderate-LR regime ($10^{-3}$ to $3 \times 10^{-3}$), both strategies succeed. Exponential is a safer default when LR is moderate because it accelerates early exploitation. At high LR, prefer linear decay to avoid overcommitting before the Q-network is reliable.
 - **Batch size is a secondary concern at this scale.** Do not spend sweep budget on fine-grained batch search until learning rate is bracketed.
-- **Std of zero is a meaningful signal.** Configs achieving mean = 500, std = 0 over 1,000 evaluation episodes have converged to a deterministic near-optimal policy; high std (> 50) signals persistent instability even if the mean looks adequate.
+- **Std of zero is a meaningful signal.** Configs achieving mean = 500, std = 0 over 1,000 evaluation episodes have converged to a deterministic near-optimal policy. High std (> 50) signals persistent instability even if the mean looks adequate.
 
 ---
 
@@ -98,11 +94,11 @@ Training plots show three panels: a 50-episode rolling mean of episode return, t
 [Figure 1](#fig-66e09612) shows the training curves for this config, the cleanest successful run in the sweep.
 
 <figure id="fig-66e09612" style="text-align: center;">
-  <img src="/assets/images/cartpole_dqn_training_66e09612.png" alt="Training curves for config 66e09612." style="width: 90%;">
+  <img src="/assets/images/cartpole_dqn_training_66e09612.png" alt="Training curves for config 66e09612." style="width: 100%;">
   <figcaption>Figure 1: Training curves for config <code>66e09612</code> (lr = 5 × 10⁻⁴, batch 64, exponential decay). Episode returns (left), episode lengths (centre), and TD loss (right).</figcaption>
 </figure>
 
-**Episodes 1–100 (buffer fill).** Return sits near the random baseline ($\approx 20–30$ steps). The replay buffer requires 1,000 steps before training begins; given that early episodes are short, roughly 25–50 episodes pass in pure data collection. TD loss is near zero because no gradient updates have occurred.
+**Episodes 1–100 (buffer fill).** Return sits near the random baseline ($\approx 20–30$ steps). The replay buffer requires 1,000 steps before training begins. Given that early episodes are short, roughly 25–50 episodes pass in pure data collection. TD loss is near zero because no gradient updates have occurred.
 
 **Episodes 100–300 (rapid learning).** Return climbs steeply from $\approx 50$ to $\approx 350$ steps. The Q-network begins to correctly rank actions, distinguishing 'push toward the pole lean' from 'push away'. Simultaneously, $\varepsilon$ is decaying and the buffer accumulates diverse transitions across a range of pole angles. TD loss rises to $\approx 10–20$, reflecting growing Q-value magnitudes rather than deteriorating fit.
 
@@ -115,17 +111,17 @@ Most other successful configs follow the same three phases, differing only in th
 [Figure 2](#fig-690440aa) shows the training curves for this config, the only one that never achieves reliable performance.
 
 <figure id="fig-690440aa" style="text-align: center;">
-  <img src="/assets/images/cartpole_dqn_training_690440aa.png" alt="Training curves for config 690440aa." style="width: 90%;">
+  <img src="/assets/images/cartpole_dqn_training_690440aa.png" alt="Training curves for config 690440aa." style="width: 100%;">
   <figcaption>Figure 2: Training curves for config <code>690440aa</code> (lr = 5 × 10⁻³, batch 32, exponential decay). Episode returns (left), episode lengths (centre), and TD loss (right).</figcaption>
 </figure>
 
 **Episodes 1–100 (fast initial rise).** Return climbs to $\approx 200$ steps faster than most configs, as the high learning rate moves Q-values substantially per update and exponential decay removes exploration quickly.
 
-**Episodes 100 onward (repeated collapse).** In contrast to successful configs, where TD loss rises gradually and return stabilises, here TD loss diverges to $> 400$ and return cycles repeatedly between $\approx 300–350$ and near-random levels. The underlying mechanism is compounding Q-value overestimation. High LR causes the online network to develop inflated Q-values through large, noisy gradient updates: each mini-batch update overshoots the true Bellman target, and with a constantly shifting data distribution the corrections never converge. When the target network syncs, it copies these already-inflated values and holds them fixed as regression targets for the next 100 steps; the online network is then trained to match inflated targets, pushing its Q-values higher still, ready to seed the next sync. The early exhaustion of exploration from exponential decay exacerbates this, as the near-deterministic trajectories that result reduce buffer diversity and deprive the network of the varied Bellman targets that would otherwise dampen overestimation. The contrast with `88694cf2` (same LR, same batch, linear decay; [Figure 3](#fig-88694cf2)) confirms the diagnosis: linear decay keeps $\varepsilon$ higher for longer, breaking the feedback loop between premature exploitation and diverging Q-values.
+**Episodes 100 onward (repeated collapse).** In contrast to successful configs, where TD loss rises gradually and return stabilises, here TD loss diverges to $> 400$ and return cycles repeatedly between $\approx 300–350$ and near-random levels. The underlying mechanism is compounding Q-value overestimation. High LR causes the online network to develop inflated Q-values through large, noisy gradient updates: each mini-batch update overshoots the true Bellman target, and with a constantly shifting data distribution the corrections never converge. When the target network syncs, it copies these already-inflated values and holds them fixed as regression targets for the next 100 steps. The online network is then trained to match inflated targets, pushing its Q-values higher still, ready to seed the next sync. The early exhaustion of exploration from exponential decay exacerbates this, as the near-deterministic trajectories that result reduce buffer diversity and deprive the network of the varied Bellman targets that would otherwise dampen overestimation. The contrast with `88694cf2` (same LR, same batch, linear decay, [Figure 3](#fig-88694cf2)) confirms the diagnosis: linear decay keeps $\varepsilon$ higher for longer, breaking the feedback loop between premature exploitation and diverging Q-values.
 
 <figure id="fig-88694cf2" style="text-align: center;">
-  <img src="/assets/images/cartpole_dqn_training_88694cf2.png" alt="Training curves for config 88694cf2." style="width: 90%;">
-  <figcaption>Figure 3: Training curves for config <code>88694cf2</code> (lr = 5 × 10⁻³, batch 32, linear decay). Episode returns (left), episode lengths (centre), and TD loss (right). Identical to <code>690440aa</code> in every hyperparameter except decay strategy; the stable plateau and bounded TD loss confirm that keeping exploration higher for longer prevents the overestimation cycle.</figcaption>
+  <img src="/assets/images/cartpole_dqn_training_88694cf2.png" alt="Training curves for config 88694cf2." style="width: 100%;">
+  <figcaption>Figure 3: Training curves for config <code>88694cf2</code> (lr = 5 × 10⁻³, batch 32, linear decay). Episode returns (left), episode lengths (centre), and TD loss (right). Identical to <code>690440aa</code> in every hyperparameter except decay strategy. The stable plateau and bounded TD loss confirm that keeping exploration higher for longer prevents the overestimation cycle.</figcaption>
 </figure>
 
 The key distinction between this failure mode and the bounded oscillation in successful runs is therefore not the presence of performance dips, since all DQN runs exhibit some variance, but whether the TD loss diverges. A TD loss that plateaus signals healthy learning, whereas one that compounds without bound signals overestimation taking hold.
@@ -172,7 +168,7 @@ Python's global interpreter lock (GIL) prevents multiple threads from executing 
 
 Python's `multiprocessing` module supports two process start methods: `fork` and `spawn`.
 
-`fork` creates a child process by duplicating the parent's entire memory space using the UNIX `fork()` system call. The child inherits all open file descriptors, locks, and library state. Because the copy is performed at the OS level via copy-on-write, `fork` is fast. However, it is inherently unsafe when the parent holds internal state that is not designed to be duplicated, such as OS-level locks, GPU contexts, or Objective-C runtime objects; duplicating such state produces two processes that each believe they hold exclusive ownership, leading to undefined behaviour.
+`fork` creates a child process by duplicating the parent's entire memory space using the UNIX `fork()` system call. The child inherits all open file descriptors, locks, and library state. Because the copy is performed at the OS level via copy-on-write, `fork` is fast. However, it is inherently unsafe when the parent holds internal state that is not designed to be duplicated, such as OS-level locks, GPU contexts, or Objective-C runtime objects. Duplicating such state produces two processes that each believe they hold exclusive ownership, leading to undefined behaviour.
 
 `spawn` creates a child process by launching a fresh Python interpreter from scratch. The child starts with a clean slate, re-imports only the modules it needs, and receives its task via inter-process communication (IPC). This is slower to start than `fork` but safe in all contexts.
 
@@ -261,7 +257,7 @@ The enclosing 5-tuple container holds five 8-byte pointers to the above objects,
 
 Per-transition cost:
 
-$$\underbrace{2 \times 112}_{\text{obs, next_obs}} + \underbrace{28}_{\text{action}} + \underbrace{24}_{\text{reward}} + \underbrace{28}_{\text{done}} + \underbrace{80}_{\text{tuple}} = 384 \text{ bytes.}$$
+$$\underbrace{2 \times 112}_{\text{obs, next-obs}} + \underbrace{28}_{\text{action}} + \underbrace{24}_{\text{reward}} + \underbrace{28}_{\text{done}} + \underbrace{80}_{\text{tuple}} = 384 \text{ bytes.}$$
 
 At capacity, the buffer holds 50,000 transitions:
 

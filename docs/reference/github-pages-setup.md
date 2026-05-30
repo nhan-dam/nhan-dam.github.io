@@ -1,24 +1,30 @@
 # GitHub Pages Setup
 
-## 1. Overview
+> Created on: 18 April 2026
+>
+> Updated on: 29 May 2026
 
-This note documents how to set up a personal website on GitHub Pages using MkDocs Material — a free, zero-maintenance way to publish technical notes alongside source code in the same repository.
+# 1. Overview
+
+This note documents how to set up a personal website on GitHub Pages using MkDocs Material, a free, zero-maintenance way to publish technical notes alongside source code in the same repository.
 
 The resulting site is served at `https://your-username.github.io/your-repo-name` with no domain name to buy or server to maintain. Every `git push` to `main` automatically rebuilds and redeploys the site via GitHub Actions.
 
 ---
 
-## 2. Prerequisites
+# 2. Prerequisites
 
 - A GitHub account.
-- Git installed and configured locally (see Section 3).
-- Python and `pip` available locally (only needed if you want to preview the site before pushing).
+- Git installed and configured locally (see [Section 3](#3-git-configuration)).
+- `uv` installed locally (only needed if you want to preview the site before pushing).
 
 ---
 
-## 3. Git Configuration
+# 3. Git Configuration
 
-Before creating any commits, configure git to use your GitHub private no-reply email address. This is required if the 'Block command line pushes that expose my email' privacy setting is enabled in GitHub (Settings → Emails) — pushes made with a real email address will be rejected.
+> **One-time setup:** The steps in this section configure git globally on your machine and register an SSH key with GitHub. They are a one-time task per machine. If git is already configured and an SSH key is already added to GitHub, skip to [Section 4](#4-repository-structure).
+
+Before creating any commits, configure git to use your GitHub private no-reply email address. This is required if the 'Block command line pushes that expose my email' privacy setting is enabled in GitHub (Settings → Emails). Pushes made with a real email address will be rejected.
 
 Find your no-reply address at GitHub → Settings → Emails. It takes the form `123456789+your-username@users.noreply.github.com`.
 
@@ -51,7 +57,7 @@ git remote set-url origin git@github.com:your-username/your-repo.git
 
 ---
 
-## 4. Repository Structure
+# 4. Repository Structure
 
 The minimal structure required for MkDocs is:
 
@@ -65,13 +71,15 @@ your-repo/
 │   └── javascripts/
 │       └── mathjax.js        ← LaTeX rendering config
 ├── mkdocs.yml                ← site configuration
-├── requirements.txt          ← Python dependencies
-└── .gitignore
+├── pyproject.toml            ← project metadata and dependencies (managed by uv)
+├── uv.lock                   ← dependency lockfile (commit this)
+├── .python-version           ← Python version pin (created by uv init)
+└── .gitignore                ← created by uv init; extend with site/ and .DS_Store
 ```
 
 Notes and subdirectories live inside `docs/`. The `mkdocs.yml` file controls the site theme, navigation, and plugins. Everything else is generated automatically and should not be committed.
 
-Add the following to `.gitignore` to exclude the local build output:
+`uv init` creates a `.gitignore` that already excludes `.venv/`. Extend it with the following entries to also exclude the MkDocs build output and macOS metadata:
 
 ```
 site/
@@ -82,15 +90,27 @@ __pycache__/
 
 ---
 
-## 5. Configuration Files
+# 5. Configuration Files
 
-### 5.1. `requirements.txt`
+## 5.1. Project Initialisation
 
+Start by initialising a `uv` project inside the repo directory. This creates `pyproject.toml`, `.python-version`, and initialises the git repository:
+
+```bash
+cd your-repo
+uv init
+rm main.py    # sample entry point created by uv; not needed here
 ```
-mkdocs-material>=9.5
+
+Then add MkDocs Material as a dependency:
+
+```bash
+uv add mkdocs-material
 ```
 
-### 5.2. `mkdocs.yml`
+This updates `pyproject.toml` and creates `uv.lock`. Both files should be committed to the repository.
+
+## 5.2. `mkdocs.yml`
 
 ```yaml
 site_name: Your Site Name
@@ -145,7 +165,7 @@ nav:
 
 The `nav` block controls the sidebar navigation. Each entry maps a label to a Markdown file path relative to `docs/`.
 
-### 5.3. `docs/javascripts/mathjax.js`
+## 5.3. `docs/javascripts/mathjax.js`
 
 Required for LaTeX rendering in notes. Without this file, the `extra_javascript` entry in `mkdocs.yml` will have no effect.
 
@@ -164,9 +184,9 @@ window.MathJax = {
 };
 ```
 
-### 5.4. `.github/workflows/deploy.yml`
+## 5.4. `.github/workflows/deploy.yml`
 
-This workflow triggers on every push to `main`, installs MkDocs Material, and deploys the built site to the `gh-pages` branch.
+This workflow triggers on every push to `main` and deploys the built site to the `gh-pages` branch. `uv run` installs dependencies automatically before running the deploy command.
 
 ```yaml
 name: Deploy MkDocs to GitHub Pages
@@ -188,35 +208,28 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v5.6.0
-        with:
-          python-version: '3.x'
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
 
       - name: Deploy to GitHub Pages
-        run: mkdocs gh-deploy --force
+        run: uv run mkdocs gh-deploy --force
 ```
 
-> **Action versions:** `actions/checkout@v4.2.2` and `actions/setup-python@v5.6.0` are the minimum versions required for Node.js 24 compatibility on GitHub Actions runners. GitHub is deprecating Node.js 20 for actions from June 2026 and removing it entirely in September 2026. Using these pinned versions avoids deprecation warnings in the build log.
+> **Action version:** `actions/checkout@v4.2.2` is the minimum version required for Node.js 24 compatibility on GitHub Actions runners. GitHub is deprecating Node.js 20 for actions from June 2026 and removing it entirely in September 2026. Using this pinned version avoids deprecation warnings in the build log.
 
 > **Residual warning:** A warning about `actions/upload-artifact@v4` may still appear. This action is called internally by `mkdocs gh-deploy` and is not directly controllable from this workflow file. It is safe to ignore until a future release of `mkdocs-material` updates their tooling.
 
 ---
 
-## 6. GitHub Repository Settings
+# 6. GitHub Repository Settings
 
-### 6.1. Create the Repository
+## 6.1. Create the Repository
 
 Create a new repository on GitHub. The site will be served at `https://your-username.github.io/your-repo-name`, so choose the repo name accordingly.
 
-### 6.2. Push the Initial Commit
+## 6.2. Push the Initial Commit
 
 ```bash
-cd your-repo
-git init
 git add .
 git commit -m "Initial commit"
 git remote add origin git@github.com:your-username/your-repo-name.git
@@ -232,7 +245,7 @@ git push origin main
 
 > **`--rebase` vs plain `git pull`:** Without `--rebase`, `git pull` creates an extra merge commit joining the two histories. With `--rebase`, your local commits are replayed on top of the remote commits, producing a clean linear history. For a personal repo this is mostly aesthetic, but it is a good habit.
 
-### 6.3. Configure GitHub Pages
+## 6.3. Configure GitHub Pages
 
 After the first push, the Actions workflow will run and create a `gh-pages` branch. Once it completes:
 
@@ -248,7 +261,7 @@ The site will be live within about 30 seconds at `https://your-username.github.i
 
 ---
 
-## 7. Ongoing Workflow
+# 7. Ongoing Workflow
 
 Every subsequent `git push` to `main` triggers a rebuild automatically. No manual steps are needed after the initial setup.
 
@@ -262,14 +275,24 @@ git push origin main
 To preview the site locally before pushing:
 
 ```bash
-pip install -r requirements.txt
-mkdocs serve
+uv run mkdocs serve
 # Open http://localhost:8000
 ```
 
+`uv run` automatically syncs the virtual environment against `pyproject.toml` before starting the server, so no manual activation is required.
+
+To use a different port (e.g. when previewing multiple repos simultaneously):
+
+```bash
+uv run mkdocs serve --dev-addr localhost:8001
+# Open http://localhost:8001
+```
+
+Pass any available port number to `--dev-addr`. The default is `localhost:8000`.
+
 ---
 
-## 8. URL Structure
+# 8. URL Structure
 
 | Repo name | Site URL |
 |---|---|
@@ -280,13 +303,13 @@ A repo named exactly `your-username.github.io` produces a root personal site. An
 
 ---
 
-## 9. Troubleshooting
+# 9. Troubleshooting
 
-### 9.1. Site Shows Raw `README.md` Instead of the MkDocs Site
+## 9.1. Site Shows Raw `README.md` Instead of the MkDocs Site
 
-The `gh-pages` branch has not been created yet, or GitHub Pages is not pointed at it. Check that the Actions workflow has run successfully (repository → **Actions** tab), then verify the Pages source setting as described in Section 6.3.
+The `gh-pages` branch has not been created yet, or GitHub Pages is not pointed at it. Check that the Actions workflow has run successfully (repository → **Actions** tab), then verify the Pages source setting as described in [Section 6.3](#63-configure-github-pages).
 
-### 9.2. Old Version of the Site Appears After Deployment
+## 9.2. Old Version of the Site Appears After Deployment
 
 This is a browser caching issue. Hard-refresh to bypass the cache:
 
@@ -295,7 +318,7 @@ This is a browser caching issue. Hard-refresh to bypass the cache:
 
 Alternatively, open the site in a private/incognito window, which has no cache. To permanently clear the cache for the site in Chrome: DevTools (`Cmd + Option + I`) → **Application** → **Storage** → **Clear site data**.
 
-### 9.3. Push Rejected with Email Privacy Error
+## 9.3. Push Rejected with Email Privacy Error
 
 GitHub rejects pushes that expose a real email address when the privacy setting is enabled. Fix by amending the commit author to use the no-reply address:
 

@@ -68,8 +68,10 @@ your-repo/
 │       └── deploy.yml        ← GitHub Actions workflow
 ├── docs/                     ← all Markdown content goes here
 │   ├── index.md              ← site homepage
-│   └── javascripts/
-│       └── mathjax.js        ← LaTeX rendering config
+│   ├── javascripts/
+│   │   └── mathjax.js        ← LaTeX rendering config
+│   └── stylesheets/
+│       └── extra.css         ← custom site-wide styles (e.g. table centering)
 ├── mkdocs.yml                ← site configuration
 ├── pyproject.toml            ← project metadata and dependencies (managed by uv)
 ├── uv.lock                   ← dependency lockfile (commit this)
@@ -157,6 +159,9 @@ extra_javascript:
   - javascripts/mathjax.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 
+extra_css:
+  - stylesheets/extra.css
+
 nav:
   - Home: index.md
   - Section One:
@@ -184,7 +189,28 @@ window.MathJax = {
 };
 ```
 
-## 5.4. `.github/workflows/deploy.yml`
+## 5.4. `docs/stylesheets/extra.css`
+
+Contains custom site-wide styles loaded via the `extra_css` entry in `mkdocs.yml`. The file currently centres tables on the page and justifies paragraph text.
+
+```css
+.md-content p {
+  text-align: justify;
+}
+
+.md-typeset__scrollwrap {
+  display: flex;
+  justify-content: center;
+}
+
+.md-typeset__table {
+  width: auto;
+}
+```
+
+MkDocs Material wraps every table in a `.md-typeset__scrollwrap` div for horizontal scrolling on narrow screens. Setting `display: flex` and `justify-content: center` on that wrapper centres the table horizontally. Setting `width: auto` on `.md-typeset__table` prevents the table from stretching to fill the full page width.
+
+## 5.5. `.github/workflows/deploy.yml`
 
 This workflow triggers on every push to `main` and deploys the built site to the `gh-pages` branch. `uv run` installs dependencies automatically before running the deploy command.
 

@@ -14,8 +14,8 @@ The goal is to document concepts clearly enough that a future version of me (or 
 
 ## 2. Source Code
 
-All code associated with these notes lives in the same repository:
-[github.com/nhan-dam/nhan-dam.github.io](https://github.com/nhan-dam/nhan-dam.github.io)
+All code associated with these notes lives in the same owner's repositories:
+[github.com/nhan-dam](https://github.com/nhan-dam)
 
 ---
 

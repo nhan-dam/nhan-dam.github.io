@@ -7,8 +7,7 @@ Technical notes on Machine Learning.
 ## Local preview
 
 ```bash
-pip install -r requirements.txt
-mkdocs serve
+uv run mkdocs serve
 ```
 
 Then open http://localhost:8000.
@@ -20,7 +19,6 @@ docs/           # all note content (Markdown)
   rlhf/         # RLHF curriculum notes
   projects/     # project write-ups
   reference/    # setup guides and cheat sheets
-src/            # source code for projects
 mkdocs.yml      # site configuration
 ```
 

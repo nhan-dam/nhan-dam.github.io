@@ -266,7 +266,7 @@ If GitHub auto-created files (e.g. a `LICENSE` or `README.md`) when the repo was
 
 ```bash
 git pull origin main --rebase
-git push origin main
+git push -u origin main
 ```
 
 > **`--rebase` vs plain `git pull`:** Without `--rebase`, `git pull` creates an extra merge commit joining the two histories. With `--rebase`, your local commits are replayed on top of the remote commits, producing a clean linear history. For a personal repo this is mostly aesthetic, but it is a good habit.

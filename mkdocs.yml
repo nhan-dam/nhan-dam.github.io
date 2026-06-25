@@ -36,8 +36,12 @@ markdown_extensions:
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.highlight:
-      anchor_linenums: true
-  - pymdownx.superfences
+      anchor_linenums: false
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.details
@@ -60,11 +64,10 @@ nav:
   - Learning:
     - RLHF Curriculum:
       - Overview: rlhf/curriculum/index.md
-      - Phase 1 - Reinforcement Learning Foundations:
-        - Theory: rlhf/curriculum/phase01.md
-        - Project 1 - Tabular Q-Learning on Gymnasium Blackjack: rlhf/curriculum/report_qlearning_blackjack.md
-        - Project 2 - Tabular Q-Learning on Gymnasium CartPole: rlhf/curriculum/report_qlearning_cartpole.md
-        - Project 3 - Deep Q-Network on Gymnasium CartPole: rlhf/curriculum/report_dqn_cartpole.md
+      - Phase 1 - Reinforcement Learning Foundations: rlhf/curriculum/phase01.md
+      # - Phase 2 - Classical RLHF Pipeline: rlhf/curriculum/phase02.md
+      # - Phase 3 - Modern Alignment Methods: rlhf/curriculum/phase03.md
+      - Appendix: rlhf/curriculum/appendix.md
     # - Week 2 – Policy Gradients & PPO: rlhf/week2-ppo.md
     - DLAI RLHF Course:
       - Overview: rlhf/dlai/index.md
@@ -73,9 +76,29 @@ nav:
       - Lecture 3 - Tune an LLM with RLHF: rlhf/dlai/DLAI_Lecture3.md
       - Lecture 4 - Evaluate an RLHF-Tuned Model: rlhf/dlai/DLAI_Lecture4.md
       - Lecture 5 - Google Cloud Setup: rlhf/dlai/DLAI_Lecture5.md
-  # - Projects:
-  #   - Overview: projects/index.md
-  #   - CartPole with PPO: projects/cartpole-ppo.md
+    # - ML System Design:
+    #   - Cheat Sheet: ml-system-design/00-cheat-sheet.md
+    #   - Ads System Overview: ml-system-design/09-ads-system-overview.md
+    #   - Methodology: ml-system-design/01-methodology.md
+    #   - Case 1 - Video Recommendation: ml-system-design/02-case-video-recommendation.md
+    #   - Case 2 - Spam and Abuse Detection: ml-system-design/03-case-spam-abuse-detection.md
+    #   - Case 3 - Visual Search and Ranking: ml-system-design/04-case-visual-search-ranking.md
+    #   - Case 4 - Ad CTR Prediction: ml-system-design/05-case-ad-ctr-prediction.md
+    #   - Case 5 - CVR with Delayed Feedback: ml-system-design/06-case-cvr-delayed-feedback.md
+    #   - Case 6 - Bid Optimisation: ml-system-design/07-case-bid-optimisation.md
+    #   - Case 7 - Ad Relevance and Quality: ml-system-design/08-case-ad-relevance-quality.md
+    #   - Case 8 - Ad Targeting and Audience Expansion: ml-system-design/10-case-ad-targeting-audience-expansion.md
+    #   - Case 9 - Budget Pacing: ml-system-design/11-case-budget-pacing.md
+    #   - Case 10 - Friend Recommendation: ml-system-design/12-case-friend-recommendation.md
+    #   - Case 11 - Text Search Ranking: ml-system-design/13-case-search-ranking.md
+    #   - Case 12 - LLM Product with RAG: ml-system-design/14-case-llm-product.md
+    #   - A/B Testing Deep Dive: ml-system-design/15-ab-testing-deep-dive.md
+  - Projects:
+    - Overview: projects/index.md
+    - Project 1 - Tabular Q-Learning on Gymnasium Blackjack: projects/report_qlearning_blackjack.md
+    - Project 2 - Tabular Q-Learning on Gymnasium CartPole: projects/report_qlearning_cartpole.md
+    - Project 3 - Deep Q-Network on Gymnasium CartPole: projects/report_dqn_cartpole.md
+    - Project 4 - Proximal Policy Optimisation on Gymnasium LunarLander: projects/report_ppo_lunarlander.md
   - Reference:
     - Mac ML Workstation Setup: reference/ml_workstation_setup_uv.md
     - GitHub Pages Setup: reference/github-pages-setup.md

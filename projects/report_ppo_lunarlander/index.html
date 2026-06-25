@@ -1,0 +1,2637 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Nhan Dam's Technical Notes on Machine Learning.">
+      
+      
+        <meta name="author" content="Nhan Dam">
+      
+      
+        <link rel="canonical" href="https://nhan-dam.github.io/projects/report_ppo_lunarlander/">
+      
+      
+        <link rel="prev" href="../report_dqn_cartpole/">
+      
+      
+        <link rel="next" href="../../reference/ml_workstation_setup_uv/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Project 4 - Proximal Policy Optimisation on Gymnasium LunarLander - ND's Machine Learning Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ppo-on-lunarlandercontinuous-v3-design-and-sweep-results" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="ND&#39;s Machine Learning Notes" class="md-header__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ND's Machine Learning Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Project 4 - Proximal Policy Optimisation on Gymnasium LunarLander
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nhan-dam/nhan-dam.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nhan-dam/nhan-dam.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../rlhf/curriculum/" class="md-tabs__link">
+          
+  
+  
+  Learning
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  Projects
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/ml_workstation_setup_uv/" class="md-tabs__link">
+          
+  
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="ND&#39;s Machine Learning Notes" class="md-nav__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ND's Machine Learning Notes
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nhan-dam/nhan-dam.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nhan-dam/nhan-dam.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Learning
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Learning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLHF Curriculum
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RLHF Curriculum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/curriculum/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/curriculum/phase01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 1 - Reinforcement Learning Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/curriculum/appendix.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DLAI RLHF Course
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    DLAI RLHF Course
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/dlai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/dlai/DLAI_Lecture1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 1 - Conceptual Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/dlai/DLAI_Lecture2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 2 - Datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/dlai/DLAI_Lecture3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 3 - Tune an LLM with RLHF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/dlai/DLAI_Lecture4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 4 - Evaluate an RLHF-Tuned Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/dlai/DLAI_Lecture5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 5 - Google Cloud Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Projects
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Projects
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report_qlearning_blackjack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 1 - Tabular Q-Learning on Gymnasium Blackjack
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report_qlearning_cartpole/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 2 - Tabular Q-Learning on Gymnasium CartPole
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report_dqn_cartpole/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 3 - Deep Q-Network on Gymnasium CartPole
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 4 - Proximal Policy Optimisation on Gymnasium LunarLander
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 4 - Proximal Policy Optimisation on Gymnasium LunarLander
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-why-two-scripts-for-one-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Why Two Scripts for One Algorithm
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-ppo-algorithmic-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. PPO Algorithmic Decisions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. PPO Algorithmic Decisions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-shared-trunk-actor-critic-with-diagonal-gaussian-head" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Shared-Trunk Actor-Critic With Diagonal Gaussian Head
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-on-policy-rollout-buffer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. On-Policy Rollout Buffer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-generalised-advantage-estimation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Generalised Advantage Estimation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-terminated-vs-truncated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4. Terminated vs Truncated
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-clipped-surrogate-loss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5. Clipped Surrogate Loss
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-k-epoch-mini-batch-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6. K-Epoch Mini-Batch Update
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-gradient-norm-clipping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7. Gradient Norm Clipping
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-engineering-scaffolding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Engineering Scaffolding
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Engineering Scaffolding">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-trainingconfig-dataclass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. TrainingConfig Dataclass
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-agent-decoupled-from-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Agent Decoupled From Config
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-best-checkpoint-selection-with-mid-training-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Best-Checkpoint Selection With Mid-Training Evaluation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-deterministic-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4. Deterministic Evaluation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-seeding-and-reproducibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5. Seeding and Reproducibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-parallel-sweep-with-multiprocessing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6. Parallel Sweep With Multiprocessing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-the-observability-axis-tensorboard-vs-weights-and-biases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. The Observability Axis: TensorBoard vs Weights and Biases
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. The Observability Axis: TensorBoard vs Weights and Biases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-what-is-shared" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. What Is Shared
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-tensorboard-variant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. TensorBoard Variant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-weights-and-biases-variant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. Weights and Biases Variant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-side-by-side-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4. Side-by-Side Comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-environment-and-reward-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Environment and Reward Decisions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Environment and Reward Decisions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-no-entropy-bonus-by-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1. No Entropy Bonus by Default
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-a-densely-shaped-reward" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2. A Densely Shaped Reward
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-experimental-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Experimental Setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-sweep-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Sweep Results
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Sweep Results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-overall-outcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1. Overall Outcome
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-the-entropy-bonus-is-the-dominant-reliability-driver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2. The Entropy Bonus Is the Dominant Reliability Driver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-learning-rate-speed-against-stability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3. Learning Rate: Speed Against Stability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-clip-epsilon-a-secondary-effect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4. Clip Epsilon: A Secondary Effect
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-training-curves-and-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Training Curves and Diagnostics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Training Curves and Diagnostics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-clip-fraction-as-a-health-signal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1. Clip Fraction as a Health Signal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-entropy-schedule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2. Entropy Schedule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-a-clean-solve-and-a-representative-failure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3. A Clean Solve and a Representative Failure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-late-training-degradation-and-the-value-of-best-checkpoint-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4. Late-Training Degradation and the Value of Best-Checkpoint Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-empirical-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Empirical Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-what-i-would-extend-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. What I Would Extend Next
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/ml_workstation_setup_uv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mac ML Workstation Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/github-pages-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitHub Pages Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/github_cheatsheet_chapter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitHub Task-Oriented Cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/claude-code-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude Code Cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-why-two-scripts-for-one-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Why Two Scripts for One Algorithm
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-ppo-algorithmic-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. PPO Algorithmic Decisions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. PPO Algorithmic Decisions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-shared-trunk-actor-critic-with-diagonal-gaussian-head" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Shared-Trunk Actor-Critic With Diagonal Gaussian Head
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-on-policy-rollout-buffer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. On-Policy Rollout Buffer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-generalised-advantage-estimation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Generalised Advantage Estimation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-terminated-vs-truncated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4. Terminated vs Truncated
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-clipped-surrogate-loss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5. Clipped Surrogate Loss
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-k-epoch-mini-batch-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6. K-Epoch Mini-Batch Update
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-gradient-norm-clipping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7. Gradient Norm Clipping
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-engineering-scaffolding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Engineering Scaffolding
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Engineering Scaffolding">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-trainingconfig-dataclass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. TrainingConfig Dataclass
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-agent-decoupled-from-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Agent Decoupled From Config
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-best-checkpoint-selection-with-mid-training-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Best-Checkpoint Selection With Mid-Training Evaluation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-deterministic-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4. Deterministic Evaluation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-seeding-and-reproducibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5. Seeding and Reproducibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-parallel-sweep-with-multiprocessing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6. Parallel Sweep With Multiprocessing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-the-observability-axis-tensorboard-vs-weights-and-biases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. The Observability Axis: TensorBoard vs Weights and Biases
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. The Observability Axis: TensorBoard vs Weights and Biases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-what-is-shared" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. What Is Shared
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-tensorboard-variant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. TensorBoard Variant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-weights-and-biases-variant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. Weights and Biases Variant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-side-by-side-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4. Side-by-Side Comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-environment-and-reward-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Environment and Reward Decisions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Environment and Reward Decisions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-no-entropy-bonus-by-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1. No Entropy Bonus by Default
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-a-densely-shaped-reward" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2. A Densely Shaped Reward
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-experimental-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Experimental Setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-sweep-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Sweep Results
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Sweep Results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-overall-outcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1. Overall Outcome
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-the-entropy-bonus-is-the-dominant-reliability-driver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2. The Entropy Bonus Is the Dominant Reliability Driver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-learning-rate-speed-against-stability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3. Learning Rate: Speed Against Stability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-clip-epsilon-a-secondary-effect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4. Clip Epsilon: A Secondary Effect
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-training-curves-and-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Training Curves and Diagnostics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Training Curves and Diagnostics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-clip-fraction-as-a-health-signal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1. Clip Fraction as a Health Signal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-entropy-schedule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2. Entropy Schedule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-a-clean-solve-and-a-representative-failure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3. A Clean Solve and a Representative Failure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-late-training-degradation-and-the-value-of-best-checkpoint-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4. Late-Training Degradation and the Value of Best-Checkpoint Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-empirical-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Empirical Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-what-i-would-extend-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. What I Would Extend Next
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/nhan-dam/nhan-dam.github.io/edit/main/docs/projects/report_ppo_lunarlander.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="ppo-on-lunarlandercontinuous-v3-design-and-sweep-results">PPO on LunarLanderContinuous-v3: Design and Sweep Results<a class="headerlink" href="#ppo-on-lunarlandercontinuous-v3-design-and-sweep-results" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Created on: 12 June 2026</p>
+<p>Updated on: 24 June 2026</p>
+</blockquote>
+<p>This note documents a from-scratch PyTorch implementation of Proximal Policy Optimisation (PPO) that I built for the <code>LunarLanderContinuous-v3</code> environment from <a href="https://gymnasium.farama.org/">Gymnasium</a>, together with an empirical analysis of a 12-configuration hyperparameter sweep I ran on it.</p>
+<p>The note is in two parts. <strong>Part I</strong> (Sections <a href="#1-why-two-scripts-for-one-algorithm">1</a>–<a href="#5-environment-and-reward-decisions">5</a>) covers the implementation and the design decisions behind it, including the trade-offs that were considered and the reasons for the chosen path. <strong>Part II</strong> (Sections <a href="#6-experimental-setup">6</a>–<a href="#9-empirical-summary">9</a>) reports what the sweep actually produced: which configurations solved the task, what drove the difference, and what the training curves reveal about PPO's failure modes on this environment. <a href="#10-what-i-would-extend-next">Section 10</a> closes with planned extensions.</p>
+<p>The implementation is split across two scripts, <code>ppo_lunarlander_tensorboard.py</code> and <code>ppo_lunarlander_wandb.py</code>, which share their algorithmic core verbatim and differ only in the observability layer. The full source code can be found on <a href="https://github.com/nhan-dam/rl-foundations/tree/main/src">GitHub</a>.</p>
+<hr />
+<p><strong>Part I: Implementation and Design</strong></p>
+<hr />
+<h2 id="1-why-two-scripts-for-one-algorithm">1. Why Two Scripts for One Algorithm<a class="headerlink" href="#1-why-two-scripts-for-one-algorithm" title="Permanent link">&para;</a></h2>
+<p>The two scripts implement the same PPO algorithm, with the same <code>TrainingConfig</code> dataclass, the same <code>ActorCritic</code> network, the same <code>RolloutBuffer</code>, the same loss function, the same training loop, and the same parallel sweep harness. The only point of divergence is the logger. <code>ppo_lunarlander_tensorboard.py</code> uses <code>torch.utils.tensorboard.SummaryWriter</code>. <code>ppo_lunarlander_wandb.py</code> uses <code>wandb.init</code> and <code>wandb.log</code>.</p>
+<p>The motivation for splitting along this axis rather than collapsing both loggers behind a common abstraction is pedagogical. A side-by-side diff of the two files isolates exactly the surface area that an observability library touches: writer construction, scalar emission per update, metric-axis declaration, sweep grouping, and shutdown. Hiding this behind an interface would obscure the very contrast the note is meant to demonstrate.</p>
+<p>A combined design note, rather than two separate ones, is the right choice for the same reason. The algorithmic and engineering content does not vary across the two files. Presenting it once and then framing the observability layer as the controlled variable produces a clearer artefact than two near-duplicate write-ups.</p>
+<hr />
+<h2 id="2-ppo-algorithmic-decisions">2. PPO Algorithmic Decisions<a class="headerlink" href="#2-ppo-algorithmic-decisions" title="Permanent link">&para;</a></h2>
+<h3 id="21-shared-trunk-actor-critic-with-diagonal-gaussian-head">2.1. Shared-Trunk Actor-Critic With Diagonal Gaussian Head<a class="headerlink" href="#21-shared-trunk-actor-critic-with-diagonal-gaussian-head" title="Permanent link">&para;</a></h3>
+<p>The <code>ActorCritic</code> network is a two-hidden-layer multilayer perceptron (MLP) with Tanh activations. A shared trunk feeds two heads. The actor head outputs the per-dimension mean <span class="arithmatex">\(\mu\)</span> of a diagonal Gaussian policy. The critic head outputs a scalar state value <span class="arithmatex">\(V(s)\)</span>. The log standard deviation <span class="arithmatex">\(\log\sigma\)</span> is a state-independent learnable parameter, registered as <code>nn.Parameter</code> rather than produced by the network.</p>
+<p>Three design decisions are worth noting.</p>
+<p>First, the trunk is shared. The alternative is two independent networks. A shared trunk halves the parameter count and forces the actor and critic to develop a common feature representation, which is the convention in continuous-control PPO benchmarks. The trade-off is gradient interference, i.e. the policy and value losses can pull the trunk in different directions. The standard remedy is the value-loss coefficient <span class="arithmatex">\(c_1 = 0.5\)</span>, which keeps the value gradient from dominating, and is what this implementation uses.</p>
+<p>Second, the Gaussian is diagonal. A full covariance matrix introduces <span class="arithmatex">\(O(d^2)\)</span> parameters and offers no measurable benefit on benchmark continuous-control tasks because the action dimensions are weakly coupled at the policy level. A diagonal Gaussian also makes the action log-probability separable across dimensions, computed as <span class="arithmatex">\(\sum_i \log p(a_i \mid s)\)</span>, which is what <code>Normal(mean, std).log_prob(action).sum(dim=-1)</code> evaluates.</p>
+<p>Third, <span class="arithmatex">\(\log\sigma\)</span> is state-independent. Making it a function of the state (i.e. another network head) is supported in principle but empirically tends to destabilise training: the policy can collapse to a near-deterministic distribution in some states and a high-variance one in others, and the resulting advantage estimator becomes very high-variance. A state-independent learnable scalar per action dimension is the standard PPO choice and works well here.</p>
+<p>Activations are Tanh rather than ReLU. PPO reference implementations almost universally use Tanh because it bounds the pre-softmax (or pre-Gaussian-mean) logits, which is empirically more stable for policy gradient methods that are sensitive to scale.</p>
+<h3 id="22-on-policy-rollout-buffer">2.2. On-Policy Rollout Buffer<a class="headerlink" href="#22-on-policy-rollout-buffer" title="Permanent link">&para;</a></h3>
+<p>The <code>RolloutBuffer</code> is fixed-length (2048 steps), filled once per outer iteration, drained by <code>compute_gae</code> and <code>update</code>, and reset. The contrast with the off-policy replay buffer used in the deep Q-network (DQN) implementation is the central reason the buffer is structured this way.</p>
+<p>In DQN, transitions are reusable across many gradient updates because Q-learning is off-policy: the Bellman target <span class="arithmatex">\(r + \gamma \max_{a'} Q(s', a')\)</span> does not depend on the policy that generated <span class="arithmatex">\((s, a, r, s')\)</span>. In PPO, the surrogate loss depends on the importance-sampling ratio</p>
+<div class="arithmatex">\[r_t(\theta) = \frac{\pi_\theta(a_t \mid s_t)}{\pi_{\theta_\text{old}}(a_t \mid s_t)},\]</div>
+<p>which is only meaningful when <span class="arithmatex">\(\pi_{\theta_\text{old}}\)</span> is the policy that actually produced the action. After K epochs of updates, the ratio between the current and old policy is still bounded by the clip, but the samples themselves are no longer i.i.d. draws under a coherent old policy. They are discarded.</p>
+<p>The rollout length of 2048 is chosen because it divides cleanly into mini-batches of 64 (giving 32 mini-batches per epoch and 320 gradient steps per rollout at K=10) and matches the default in reference implementations such as Stable Baselines3. The mini-batch split is delegated to a PyTorch <code>DataLoader</code> (<code>shuffle=True</code>, <code>drop_last=False</code>), so an indivisible rollout is handled gracefully: the final batch is simply smaller rather than dropped. With the default 2048/64 the division is exact and every batch is full, but keeping the remainder is the better default for on-policy data, since it avoids discarding freshly collected samples.</p>
+<h3 id="23-generalised-advantage-estimation">2.3. Generalised Advantage Estimation<a class="headerlink" href="#23-generalised-advantage-estimation" title="Permanent link">&para;</a></h3>
+<p>Advantages are computed via Generalised Advantage Estimation (GAE) (Schulman et al., 2015), defined as the exponentially weighted sum of <span class="arithmatex">\(n\)</span>-step temporal-difference residuals,</p>
+<div class="arithmatex">\[\hat{A}_t^{\text{GAE}(\gamma,\lambda)} = \sum_{l=0}^{\infty} (\gamma\lambda)^l \delta_{t+l}, \qquad \delta_t = r_t + \gamma V(s_{t+1}) - V(s_t).\]</div>
+<p>For implementation, GAE is unrolled backwards from the rollout's final step using the recurrence</p>
+<div class="arithmatex">\[\hat{A}_t = \delta_t + \gamma\lambda (1 - \text{done}_{t+1}) \hat{A}_{t+1},\]</div>
+<p>which avoids the explicit infinite sum. The bootstrap value <span class="arithmatex">\(V(s_T)\)</span> for the state after the final stored transition is computed via <code>get_value</code>, and is used only if the rollout did not end on a terminal. The returns used as the value-function regression target are <span class="arithmatex">\(\hat{R}_t = \hat{A}_t + V(s_t)\)</span>, which is equivalent to the <span class="arithmatex">\(\lambda\)</span>-return and is the standard PPO choice.</p>
+<p>The <span class="arithmatex">\(\lambda = 0.95\)</span> default interpolates between high-bias low-variance (<span class="arithmatex">\(\lambda = 0\)</span>, pure one-step temporal difference) and low-bias high-variance (<span class="arithmatex">\(\lambda = 1\)</span>, pure Monte Carlo). It is one of the few PPO hyperparameters that essentially never needs tuning, so it is not exposed as a sweep dimension.</p>
+<h3 id="24-terminated-vs-truncated">2.4. Terminated vs Truncated<a class="headerlink" href="#24-terminated-vs-truncated" title="Permanent link">&para;</a></h3>
+<p>The Gymnasium step function returns five values, two of which signal episode end: <code>terminated</code> and <code>truncated</code>. <code>terminated</code> is True only when the environment has reached a genuine terminal state, e.g. the lander has crashed or landed. <code>truncated</code> is True when the episode ended for an external reason, typically a step-count time limit.</p>
+<p>The two flags require different treatment in GAE. A terminal state has no successor, so the bootstrap <span class="arithmatex">\(V(s_{t+1})\)</span> should be zeroed. A time-limit truncation leaves the underlying state valid, and the value of that state is still a meaningful estimate of expected future return. Zeroing the bootstrap on a truncation biases the return estimate downward at every time-limit boundary.</p>
+<p>The implementation folds the truncation bootstrap into the stored reward: when a step ends with <code>truncated</code> and not <code>terminated</code>, the critic's value of the post-truncation state is added to that step's reward as <span class="arithmatex">\(r_t \leftarrow r_t + \gamma V(s_{t+1})\)</span>, and the step is then stored as a hard episode boundary (<code>done = True</code>). GAE thereafter treats every stored boundary uniformly, i.e. the bootstrap term is zeroed at all of them, yet the truncated step still carries its continuation value through the reward. This is the mechanism Stable Baselines3 uses (<code>handle_timeout_termination</code>), and it also handles the corner case where a truncation lands exactly on the rollout's final step: the bootstrap is already in the reward, so the end-of-rollout bootstrap can simply be zeroed whenever the last transition closed an episode.</p>
+<p>A simpler approach, storing <code>terminated</code> directly in the done flag, is subtly wrong: it leaves a mid-rollout truncation unmarked, so GAE bootstraps the truncated step from the next stored value, which belongs to the freshly reset episode rather than the post-truncation state. Folding the continuation value into the reward avoids this.</p>
+<h3 id="25-clipped-surrogate-loss">2.5. Clipped Surrogate Loss<a class="headerlink" href="#25-clipped-surrogate-loss" title="Permanent link">&para;</a></h3>
+<p>The PPO objective combines three terms,</p>
+<div class="arithmatex">\[\mathcal{L}(\theta) = \mathcal{L}^{\text{CLIP}}(\theta) - c_1 \mathcal{L}^{\text{VF}}(\theta) + c_2 H[\pi_\theta],\]</div>
+<p>where</p>
+<div class="arithmatex">\[\mathcal{L}^{\text{CLIP}}(\theta) = \mathbb{E}_t\left[\min\left(r_t(\theta) \hat{A}_t,\ \text{clip}(r_t(\theta), 1 - \varepsilon, 1 + \varepsilon) \hat{A}_t\right)\right],\]</div>
+<p>and <span class="arithmatex">\(\mathcal{L}^{\text{VF}} = \mathbb{E}_t[(V_\theta(s_t) - \hat{R}_t)^2]\)</span> is the value mean squared error. The implementation flips the sign on <span class="arithmatex">\(\mathcal{L}^{\text{CLIP}}\)</span> and <span class="arithmatex">\(H\)</span> for gradient descent, since PyTorch minimises.</p>
+<p>The clip range <span class="arithmatex">\(\varepsilon = 0.2\)</span> is the standard default. Two further design points are worth flagging.</p>
+<p>First, advantages are standardised to zero mean and unit variance (commonly called advantage normalisation in PPO) at the rollout level, once, before any of the K epochs begin, not per mini-batch. Per-mini-batch normalisation is sometimes seen in the wild and works empirically, but it changes the optimisation target each mini-batch (the normalisation statistics shift between mini-batches), which is theoretically less clean. Normalising once over the full rollout keeps the target stationary across the K epochs.</p>
+<p>Second, the value function is not clipped. Some PPO implementations clip the value update analogously to the policy update,</p>
+<div class="arithmatex">\[\mathcal{L}^{\text{VF},\text{clip}} = \max\left((V_\theta(s_t) - \hat{R}_t)^2,\ (\text{clip}(V_\theta(s_t), V_{\theta_\text{old}}(s_t) \pm \varepsilon) - \hat{R}_t)^2\right),\]</div>
+<p>to prevent large value updates from destabilising the policy via shared-trunk gradients. On LunarLander this is unnecessary because the reward magnitudes are moderate and the value loss is already coefficient-weighted. Including it without need adds complexity and a hyperparameter without measurable benefit.</p>
+<h3 id="26-k-epoch-mini-batch-update">2.6. K-Epoch Mini-Batch Update<a class="headerlink" href="#26-k-epoch-mini-batch-update" title="Permanent link">&para;</a></h3>
+<p>Each outer iteration runs K=10 PPO epochs over the rollout. Within each epoch, a PyTorch <code>DataLoader</code> (<code>shuffle=True</code>) reshuffles the rollout and yields non-overlapping mini-batches of size 64. This guarantees that every sample is visited exactly K times across the K epochs, rather than K times in expectation under with-replacement sampling. The deterministic visitation matters because PPO's clip can lock out updates entirely on samples that have already drifted far in earlier epochs of the same rollout. A noisy visitation pattern compounds that effect.</p>
+<h3 id="27-gradient-norm-clipping">2.7. Gradient Norm Clipping<a class="headerlink" href="#27-gradient-norm-clipping" title="Permanent link">&para;</a></h3>
+<p>The combined gradient is clipped to L2 norm 0.5 via <code>nn.utils.clip_grad_norm_</code>. This is the standard PPO safety net. It complements the surrogate clip, which bounds the per-sample objective contribution, by additionally bounding the aggregate parameter update. In practice it rarely fires when the rest of the hyperparameters are sensibly chosen, but the cost of including it is negligible and it cleanly catches outlier mini-batches.</p>
+<hr />
+<h2 id="3-engineering-scaffolding">3. Engineering Scaffolding<a class="headerlink" href="#3-engineering-scaffolding" title="Permanent link">&para;</a></h2>
+<h3 id="31-trainingconfig-dataclass">3.1. TrainingConfig Dataclass<a class="headerlink" href="#31-trainingconfig-dataclass" title="Permanent link">&para;</a></h3>
+<p>All hyperparameters live on a single typed dataclass with field-level defaults and a hashed <code>label</code> property derived from the swept fields. The label gives every config a stable identifier that is used as the matplotlib output filename and the TensorBoard subdirectory; the wandb variant additionally derives a human-readable <code>run_name</code> from the same swept fields. This makes sweep artefacts trivially traceable back to the originating config, even after several launches.</p>
+<h3 id="32-agent-decoupled-from-config">3.2. Agent Decoupled From Config<a class="headerlink" href="#32-agent-decoupled-from-config" title="Permanent link">&para;</a></h3>
+<p><code>PPOAgent.__init__</code> takes individual parameters rather than a <code>TrainingConfig</code> instance. Each dependency is therefore explicit in the signature, the agent is reusable in contexts that do not construct a <code>TrainingConfig</code> (e.g. inference, ad hoc experiments), and the agent does not pin to a single config schema. The cost is a slightly verbose constructor call inside <code>train</code>, where the dataclass is unpacked field by field. This is a deliberate trade.</p>
+<p>The same principle is applied to the environment. Rather than receiving the <code>gym.Env</code> object, the agent takes the four primitives it actually needs, i.e. <code>obs_dim</code>, <code>action_dim</code>, <code>action_low</code>, and <code>action_high</code>, extracted by the caller. The agent therefore has no dependency on the <code>gym.Env</code> interface at all, which makes it trivially constructible in tests and inference paths without standing up an environment. The wrapped env is still produced and returned by <code>train</code> (its <code>RecordEpisodeStatistics</code> queues drive the plots, and the caller closes it), but it is no longer threaded through the agent.</p>
+<h3 id="33-best-checkpoint-selection-with-mid-training-evaluation">3.3. Best-Checkpoint Selection With Mid-Training Evaluation<a class="headerlink" href="#33-best-checkpoint-selection-with-mid-training-evaluation" title="Permanent link">&para;</a></h3>
+<p>Mid-training evaluation probes fire every <code>eval_interval_steps</code> environment steps. Each probe runs 20 deterministic evaluation episodes and reports mean, max, and standard deviation of return. The agent's <code>actor_critic.state_dict()</code> is deep-copied whenever the probe's mean exceeds the running best, with the standard deviation acting as a tiebreaker on near-equal means. After the training loop completes, the best weights are restored.</p>
+<p>Means are compared with a small tolerance, <span class="arithmatex">\(\frac{0.5}{n_{\text{eval}}}\)</span>: two probes whose means fall within it are treated as tied and the lower standard deviation wins. With only 20 episodes per probe, the sampling error on the mean far exceeds a gap this small, so preferring the more consistent policy at effectively equal means is the more robust selection rule than letting noise pick the winner. <a href="#84-late-training-degradation-and-the-value-of-best-checkpoint-selection">Section 8.4</a> quantifies how much return this mechanism recovers in practice.</p>
+<h3 id="34-deterministic-evaluation">3.4. Deterministic Evaluation<a class="headerlink" href="#34-deterministic-evaluation" title="Permanent link">&para;</a></h3>
+<p><code>test_agent</code> uses <code>dist.mean</code> rather than <code>dist.sample</code>. This removes sampling variance from the score and reports the quality of the learnt mean policy. The justification is analogous to the use of <span class="arithmatex">\(\varepsilon = 0.05\)</span> rather than <span class="arithmatex">\(\varepsilon = 0\)</span> at evaluation time in DQN (Mnih et al., 2015): a deterministic readout of a stochastic-policy network is a more honest measure of what the agent has learnt than a single noisy sample.</p>
+<h3 id="35-seeding-and-reproducibility">3.5. Seeding and Reproducibility<a class="headerlink" href="#35-seeding-and-reproducibility" title="Permanent link">&para;</a></h3>
+<p><code>train</code> seeds PyTorch, NumPy's global generator, and the environment's initial reset from <code>config.seed</code> before the agent is constructed, so weight initialisation, mini-batch shuffling, action sampling, and the initial state sequence are all reproducible for a given config. Evaluation episodes are deliberately left unseeded: the mid-training probes estimate performance over the environment's initial-condition distribution, and pinning them to a fixed sequence would understate exactly the variance the probe exists to measure.</p>
+<h3 id="36-parallel-sweep-with-multiprocessing">3.6. Parallel Sweep With Multiprocessing<a class="headerlink" href="#36-parallel-sweep-with-multiprocessing" title="Permanent link">&para;</a></h3>
+<p>The sweep is a Cartesian product over learning rate, clip <span class="arithmatex">\(\varepsilon\)</span>, and entropy coefficient, evaluated in a <code>multiprocessing.Pool</code> with the <code>spawn</code> start method. Three points are worth flagging.</p>
+<p>First, <code>spawn</code> is mandatory on macOS. Fork is unsafe with PyTorch and with the Objective-C runtime that underlies macOS GUI processes. The <code>spawn</code> start method is set explicitly before any pool is created.</p>
+<p>Second, the worker function <code>run_one_config</code> is at module scope. The <code>spawn</code> start method launches a fresh interpreter that inherits none of the parent's memory, so the worker is shipped to it via <code>pickle</code>. Pickling a function serialises only a reference to it (its module and qualified name), which the child re-imports by name, so the function must be importable as a top-level module attribute. Nested functions and lambdas have no such importable name and therefore cannot be pickled, which is why module-level functions are the standard way to satisfy this constraint.</p>
+<p>Third, workers are pinned to CPU. PPO on a small MLP is CPU-bound: the rollout collection loop is a Python-level for loop that the GPU cannot accelerate, and the per-mini-batch forward pass on a 64-wide hidden layer is negligible. Pinning to CPU avoids the GPU contention that would otherwise occur on a multi-config sweep. The same reasoning extends to automatic device selection outside the sweep: <code>_select_device</code> prefers CUDA when present but never auto-selects MPS, because on Apple silicon the per-op launch overhead and the per-step CPU-to-GPU transfer in the rollout loop make MPS slower than CPU at this model scale. MPS remains available by passing it explicitly to <code>train</code>.</p>
+<hr />
+<h2 id="4-the-observability-axis-tensorboard-vs-weights-and-biases">4. The Observability Axis: TensorBoard vs Weights and Biases<a class="headerlink" href="#4-the-observability-axis-tensorboard-vs-weights-and-biases" title="Permanent link">&para;</a></h2>
+<h3 id="41-what-is-shared">4.1. What Is Shared<a class="headerlink" href="#41-what-is-shared" title="Permanent link">&para;</a></h3>
+<p>Both scripts expose the same metric set. Per-update scalars (logged inside <code>PPOAgent.update</code>) are <code>train/policy_loss</code>, <code>train/value_loss</code>, <code>train/entropy</code>, and <code>train/clip_fraction</code>. Per-iteration scalars (logged in <code>train</code>) are <code>train/episode_return</code> (one entry per completed episode) and the eval probes' <code>eval/mean_return</code>, <code>eval/max_return</code>, <code>eval/std_return</code>. Two further scalars, <code>eval/train_clip_fraction</code> and <code>eval/train_entropy</code>, are logged in the same block but are not products of the evaluation episodes: they are the recent (last-100) average of the <em>training</em> clip fraction and entropy from <code>update</code>, snapshotted at the eval cadence so they share the env-step axis with the eval returns for side-by-side comparison. The <code>train</code> prefix in their leaf names signals this origin, while the <code>eval/</code> namespace keeps them grouped with the eval curves. Both scripts open the logger inside <code>train</code>, hand the run handle to the agent via a typed attribute (<code>PPOAgent.writer</code> or <code>PPOAgent.wandb_run</code>), and close the handle in a <code>finally</code> block so the logs flush even if training raises.</p>
+<p>The matplotlib plots and the sweep results CSV are also unchanged across the two scripts, providing a local-only audit trail independent of either live logger.</p>
+<p>One sizing detail underpins the episode-return stream in both scripts. <code>RecordEpisodeStatistics</code> keeps completed-episode returns in a bounded deque, and the logging drain reads only the unseen tail of that deque each iteration. If the deque ever evicts an entry before it has been drained, the tail indexing breaks and logging silently stops. The buffer is therefore sized to <code>total_steps</code>: an episode consumes at least one environment step, so the episode count can never exceed it and eviction can never occur.</p>
+<h3 id="42-tensorboard-variant">4.2. TensorBoard Variant<a class="headerlink" href="#42-tensorboard-variant" title="Permanent link">&para;</a></h3>
+<p>Each <code>train</code> call constructs a <code>SummaryWriter</code> at <code>./results/lunarlander_ppo_tensorboard/tb/&lt;config_label&gt;/</code>. The label-based subdirectory means that running <code>tensorboard --logdir ./results/lunarlander_ppo_tensorboard/tb</code> aggregates every config in the sweep into a single comparison view, with no further configuration. There is no account, no network dependency, and no per-launch coordination required.</p>
+<h3 id="43-weights-and-biases-variant">4.3. Weights and Biases Variant<a class="headerlink" href="#43-weights-and-biases-variant" title="Permanent link">&para;</a></h3>
+<p>Each <code>train</code> call opens a fresh <code>wandb.run</code>, passes the hyperparameter set via <code>config=</code>, and is always closed via <code>run.finish()</code> in a <code>finally</code> block, so a pool worker that trains several configs starts each from a clean run. <code>define_metric</code> declares two x-axes: <code>train/update_step</code> for the per-update scalars, and <code>env/step</code> for <code>train/episode_return</code> and all <code>eval/*</code> scalars (the standard x-axis for reinforcement learning (RL) learning curves). Both counters are logged as ordinary values, and no <code>wandb.log</code> call passes an explicit <code>step=</code>. This last point is load-bearing: wandb's global step must increase monotonically, and the per-update, per-episode, and eval streams interleave. Passing an explicit <code>step=</code> on one stream while others advance the global counter implicitly makes wandb silently drop every subsequent log whose explicit step falls behind, which hollows out the training curves without raising any error.</p>
+<p>Three further pieces of glue are worth noting.</p>
+<p>First, <code>wandb.Settings(start_method="thread")</code> is set explicitly. Wandb runs an internal IO thread, and the default <code>fork</code> start method for that thread clashes with the outer <code>multiprocessing</code> workers running under <code>spawn</code>. The documented fix is to force the wandb-internal thread to use <code>thread</code> rather than <code>fork</code>. This is one of the few wandb-specific gotchas that is not discoverable from the API alone.</p>
+<p>Second, every sweep config is assigned a common <code>wandb_group = "sweep-&lt;timestamp&gt;"</code>, set in <code>__main__</code> and threaded through the <code>TrainingConfig</code>. This is what makes the wandb UI's Group filter pull a single launch's runs together, which is the primary value proposition of wandb over TensorBoard for this kind of work.</p>
+<p>Third, <code>run.summary</code> is populated with <code>best/mean_return</code>, <code>best/max_return</code>, <code>best/std_return</code>, <code>best/step</code>, and <code>first_threshold_step</code> before <code>run.finish</code>. Summary scalars appear in the sortable run table at the project level, where they double as the natural columns for cross-config comparison. Without this, the final sweep table would only show the wandb-default columns (run name, runtime, last-logged value of each metric), which are not what one wants to sort by.</p>
+<h3 id="44-side-by-side-comparison">4.4. Side-by-Side Comparison<a class="headerlink" href="#44-side-by-side-comparison" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>TensorBoard</th>
+<th>Weights and Biases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Setup cost</td>
+<td>None beyond the dependency.</td>
+<td><code>wandb login</code> once, account required.</td>
+</tr>
+<tr>
+<td>Per-run output</td>
+<td>Local TFEvent file.</td>
+<td>Cloud-hosted run, plus local cache.</td>
+</tr>
+<tr>
+<td>Cross-run comparison</td>
+<td>Aggregated by <code>--logdir parent/</code>, view-level config.</td>
+<td>First-class UI primitive, persistent.</td>
+</tr>
+<tr>
+<td>Hyperparameter dashboard</td>
+<td>HParams plugin, clunky.</td>
+<td>Native, via <code>wandb.config</code>.</td>
+</tr>
+<tr>
+<td>System metric autocapture</td>
+<td>None.</td>
+<td>CPU, GPU, MPS, RAM.</td>
+</tr>
+<tr>
+<td>Sweep grouping</td>
+<td>Subdirectory convention.</td>
+<td><code>wandb_group</code> field, queryable.</td>
+</tr>
+<tr>
+<td>Sharing</td>
+<td>Local folder, requires the recipient to run TensorBoard.</td>
+<td>URL.</td>
+</tr>
+<tr>
+<td>Air-gapped operation</td>
+<td>Native.</td>
+<td><code>mode="offline"</code>, <code>wandb sync</code> later.</td>
+</tr>
+<tr>
+<td>Vendor risk</td>
+<td>None.</td>
+<td>External dependency, account, quota.</td>
+</tr>
+</tbody>
+</table>
+<p>The choice between the two is not a quality judgement. It is a deployment decision. TensorBoard fits when local artefacts are preferred, when the work is not shareable, or when the run environment lacks network. Wandb fits when sweep comparison and cross-machine persistence are the primary concerns. The split into two files allows both deployment modes to coexist in the same repository without an abstraction layer obscuring either. The results in Part II were collected with the TensorBoard variant.</p>
+<hr />
+<h2 id="5-environment-and-reward-decisions">5. Environment and Reward Decisions<a class="headerlink" href="#5-environment-and-reward-decisions" title="Permanent link">&para;</a></h2>
+<h3 id="51-no-entropy-bonus-by-default">5.1. No Entropy Bonus by Default<a class="headerlink" href="#51-no-entropy-bonus-by-default" title="Permanent link">&para;</a></h3>
+<p><code>entropy_coef = 0.0</code> is the default. The reasoning is that the diagonal Gaussian policy with learnable <span class="arithmatex">\(\log\sigma\)</span> already has a natural exploration mechanism, so LunarLander was expected to solve without an explicit entropy bonus. The bonus is included as a sweep dimension (0.0 vs 0.01) to test this empirically rather than carry it as an article of faith. Section <a href="#72-the-entropy-bonus-is-the-dominant-reliability-driver">7.2</a> reports the outcome, which refines the expectation: the bonus is not strictly necessary for a peak score, but it materially de-risks the search.</p>
+<h3 id="52-a-densely-shaped-reward">5.2. A Densely Shaped Reward<a class="headerlink" href="#52-a-densely-shaped-reward" title="Permanent link">&para;</a></h3>
+<p>LunarLander's reward is densely <em>shaped</em>: every step returns a sum of intermediate terms rather than a single end-of-episode payoff. The agent is rewarded for moving towards the landing pad and slowing down, for staying upright, and for each leg that makes ground contact; it is penalised a small amount for every main- or side-engine firing (a fuel cost); and the episode closes with a large terminal bonus for a safe landing or penalty for a crash (of order <span class="arithmatex">\(\pm 100\)</span>). The exact coefficients are in the Gymnasium documentation. This shaping is why the task is learnable in roughly a million steps and why no entropy bonus is strictly needed: the policy receives a corrective gradient at every timestep about whether its last action helped.</p>
+<p>This is worth contrasting with the other two environments used elsewhere in this repository, because the reward structure largely dictates which algorithm is appropriate. CartPole's reward is dense but <em>unshaped</em>: a constant <span class="arithmatex">\(+1\)</span> for every timestep the pole stays balanced, with no term for how centred or vertical the system is. The signal arrives every step but only distinguishes 'alive' from 'done', so the return is simply the number of steps survived. Blackjack sits at the opposite extreme with a <em>sparse</em> reward: zero on every intermediate step and a single terminal payout of <span class="arithmatex">\(+1\)</span> for a win, <span class="arithmatex">\(-1\)</span> for a loss, <span class="arithmatex">\(0\)</span> for a draw (optionally <span class="arithmatex">\(+1.5\)</span> for a natural). This is the hardest credit-assignment case of the three, since a whole sequence of hit/stick decisions is judged only by its final outcome. The progression from Blackjack's sparse terminal reward through CartPole's flat per-step signal to LunarLander's rich shaping mirrors the progression from tabular methods, through simple value-based or policy-gradient methods, to the full actor-critic PPO implemented here.</p>
+<hr />
+<p><strong>Part II: Empirical Results</strong></p>
+<hr />
+<h2 id="6-experimental-setup">6. Experimental Setup<a class="headerlink" href="#6-experimental-setup" title="Permanent link">&para;</a></h2>
+<p>The sweep evaluates the PPO agent on <code>LunarLanderContinuous-v3</code> across a <span class="arithmatex">\(3 \times 2 \times 2 = 12\)</span> config grid: three learning rates (<span class="arithmatex">\(10^{-4}\)</span>, <span class="arithmatex">\(3 \times 10^{-4}\)</span>, <span class="arithmatex">\(10^{-3}\)</span>), two clip ranges (<span class="arithmatex">\(\varepsilon = 0.1, 0.2\)</span>), and two entropy coefficients (<span class="arithmatex">\(c_2 = 0.0, 0.01\)</span>). Each run trains for 1,000,000 environment steps. The solve criterion is the canonical LunarLander bar: the best checkpoint's mean return over a 100-episode deterministic evaluation is at least 200. The 100-episode evaluation is the reliable signal here, because the mid-training probes average only 20 episodes each and are too noisy to decide solve status on their own.</p>
+<p>The mid-training probes still serve two purposes. They drive best-checkpoint selection (<a href="#33-best-checkpoint-selection-with-mid-training-evaluation">Section 3.3</a>), and they feed a coarse time-to-threshold diagnostic, <code>first_threshold_step</code>, i.e. the first probe step whose 20-episode mean exceeds 200. This diagnostic is reported alongside the results but is not the solve criterion, and a config can solve on the 100-episode evaluation without any single probe having crossed 200.</p>
+<p>All other hyperparameters are held fixed at the defaults in <a href="#2-ppo-algorithmic-decisions">Section 2</a>: discount <span class="arithmatex">\(\gamma = 0.99\)</span>, GAE <span class="arithmatex">\(\lambda = 0.95\)</span>, rollout length 2048, K=10 epochs, mini-batch size 64, hidden width 64, value coefficient <span class="arithmatex">\(c_1 = 0.5\)</span>, and gradient-norm clip 0.5. Probes fire every 50,000 environment steps (20 probes per run). After training, the best checkpoint is restored and scored over 100 deterministic episodes, and it is this 100-episode mean and standard deviation that <a href="#tab-sweep">Table 1</a> reports. The 12 configs run concurrently in a CPU-pinned <code>multiprocessing.Pool</code>.</p>
+<hr />
+<h2 id="7-sweep-results">7. Sweep Results<a class="headerlink" href="#7-sweep-results" title="Permanent link">&para;</a></h2>
+<h3 id="71-overall-outcome">7.1. Overall Outcome<a class="headerlink" href="#71-overall-outcome" title="Permanent link">&para;</a></h3>
+<p>Nine of the twelve configs satisfy the solve criterion. <a href="#tab-sweep">Table 1</a> lists all twelve, sorted by the best checkpoint's 100-episode mean return. The three failures are not catastrophic: each lands the craft on a good fraction of episodes, reaching a best single-episode return near 290–300 (the <code>100-ep max</code> column), barely below the solved configs. What sinks them is consistency, not capability: their best checkpoint averages below 200 over the 100-episode evaluation (174.2, 164.8, and 154.9) and carries a standard deviation above 110, more than four times that of the strongest solved configs. The headline question is therefore not whether PPO can land the craft, but what separates a reliable config from a volatile one.</p>
+<p><a id="tab-sweep"></a></p>
+<table>
+<thead>
+<tr>
+<th>Config</th>
+<th>Learning rate</th>
+<th><span class="arithmatex">\(\varepsilon_{\text{clip}}\)</span></th>
+<th><span class="arithmatex">\(c_2\)</span></th>
+<th>Solved</th>
+<th>First-threshold step</th>
+<th>100-ep mean</th>
+<th>100-ep max</th>
+<th>100-ep std</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cbeefb0b</code></td>
+<td><span class="arithmatex">\(3 \times 10^{-4}\)</span></td>
+<td>0.2</td>
+<td>0.0</td>
+<td><span style="color: green;">✓</span></td>
+<td>204,800</td>
+<td><span style="color: green;">280.2</span></td>
+<td>312.6</td>
+<td><span style="color: green;">18.7</span></td>
+</tr>
+<tr>
+<td><code>b97050c1</code></td>
+<td><span class="arithmatex">\(3 \times 10^{-4}\)</span></td>
+<td>0.1</td>
+<td>0.01</td>
+<td><span style="color: green;">✓</span></td>
+<td>409,600</td>
+<td>278.3</td>
+<td>319.3</td>
+<td>22.5</td>
+</tr>
+<tr>
+<td><code>cccccebc</code></td>
+<td><span class="arithmatex">\(1 \times 10^{-4}\)</span></td>
+<td>0.2</td>
+<td>0.01</td>
+<td><span style="color: green;">✓</span></td>
+<td>512,000</td>
+<td>268.5</td>
+<td>316.1</td>
+<td>43.9</td>
+</tr>
+<tr>
+<td><code>56f68680</code></td>
+<td><span class="arithmatex">\(1 \times 10^{-4}\)</span></td>
+<td>0.2</td>
+<td>0.0</td>
+<td><span style="color: green;">✓</span></td>
+<td>563,200</td>
+<td>259.3</td>
+<td>311.9</td>
+<td>55.5</td>
+</tr>
+<tr>
+<td><code>fb20fcb3</code></td>
+<td><span class="arithmatex">\(3 \times 10^{-4}\)</span></td>
+<td>0.2</td>
+<td>0.01</td>
+<td><span style="color: green;">✓</span></td>
+<td>153,600</td>
+<td>257.7</td>
+<td>313.0</td>
+<td>64.3</td>
+</tr>
+<tr>
+<td><code>6e1b8a66</code></td>
+<td><span class="arithmatex">\(1 \times 10^{-3}\)</span></td>
+<td>0.2</td>
+<td>0.01</td>
+<td><span style="color: green;">✓</span></td>
+<td><span style="color: green;">102,400</span></td>
+<td>253.3</td>
+<td>310.5</td>
+<td>63.1</td>
+</tr>
+<tr>
+<td><code>c509e60a</code></td>
+<td><span class="arithmatex">\(1 \times 10^{-3}\)</span></td>
+<td>0.1</td>
+<td>0.01</td>
+<td><span style="color: green;">✓</span></td>
+<td>358,400</td>
+<td>252.6</td>
+<td>307.8</td>
+<td>29.9</td>
+</tr>
+<tr>
+<td><code>f263520d</code></td>
+<td><span class="arithmatex">\(1 \times 10^{-4}\)</span></td>
+<td>0.1</td>
+<td>0.01</td>
+<td><span style="color: green;">✓</span></td>
+<td>512,000</td>
+<td>244.0</td>
+<td>321.2</td>
+<td>77.1</td>
+</tr>
+<tr>
+<td><code>7049df9e</code></td>
+<td><span class="arithmatex">\(3 \times 10^{-4}\)</span></td>
+<td>0.1</td>
+<td>0.0</td>
+<td><span style="color: green;">✓</span></td>
+<td>256,000</td>
+<td>202.7</td>
+<td>304.4</td>
+<td>89.6</td>
+</tr>
+<tr>
+<td><code>fe42cbac</code></td>
+<td><span class="arithmatex">\(1 \times 10^{-3}\)</span></td>
+<td>0.1</td>
+<td>0.0</td>
+<td><span style="color: red;">✗</span></td>
+<td>—</td>
+<td><span style="color: red;">174.2</span></td>
+<td>300.5</td>
+<td><span style="color: red;">121.4</span></td>
+</tr>
+<tr>
+<td><code>9771fd6a</code></td>
+<td><span class="arithmatex">\(1 \times 10^{-3}\)</span></td>
+<td>0.2</td>
+<td>0.0</td>
+<td><span style="color: red;">✗</span></td>
+<td>—</td>
+<td><span style="color: red;">164.8</span></td>
+<td>296.6</td>
+<td><span style="color: red;">133.7</span></td>
+</tr>
+<tr>
+<td><code>19d04c7a</code></td>
+<td><span class="arithmatex">\(1 \times 10^{-4}\)</span></td>
+<td>0.1</td>
+<td>0.0</td>
+<td><span style="color: red;">✗</span></td>
+<td>—</td>
+<td><span style="color: red;">154.9</span></td>
+<td>291.9</td>
+<td><span style="color: red;">112.7</span></td>
+</tr>
+</tbody>
+</table>
+<p><em>Table 1: All 12 sweep configs, sorted by the best checkpoint's mean return over the 100-episode evaluation. A config is solved when this mean is at least 200. The 100-ep max is the best single-episode return over the same evaluation; even the three failures reach a max near 290–300, close to the solved configs, which is what makes them volatile rather than incapable. The first-threshold step is the first mid-training (20-episode) probe step to exceed 200, a noisy time-to-threshold diagnostic rather than the solve criterion. Green marks the best config and the fastest to threshold; red marks the three failures.</em></p>
+<h3 id="72-the-entropy-bonus-is-the-dominant-reliability-driver">7.2. The Entropy Bonus Is the Dominant Reliability Driver<a class="headerlink" href="#72-the-entropy-bonus-is-the-dominant-reliability-driver" title="Permanent link">&para;</a></h3>
+<p>The cleanest split in the data is along the entropy coefficient. All six configs with <span class="arithmatex">\(c_2 = 0.01\)</span> solve the task; only three of the six with <span class="arithmatex">\(c_2 = 0.0\)</span> do, and every one of the three failures has <span class="arithmatex">\(c_2 = 0.0\)</span>. The bonus also compresses variance: the worst standard deviation among the <span class="arithmatex">\(c_2 = 0.01\)</span> configs is 77.1, whereas all three failures (all <span class="arithmatex">\(c_2 = 0.0\)</span>) exceed 110.</p>
+<p>The mechanism is visible in the entropy curves (<a href="#82-entropy-schedule">Section 8.2</a>). With <span class="arithmatex">\(c_2 = 0.01\)</span>, the bonus pushes the learnable <span class="arithmatex">\(\log\sigma\)</span> upward, so policy entropy is held high or even rises over training (e.g. <code>6e1b8a66</code> ends at 5.06 against a 2.84 start). The Gaussian stays wide, the agent keeps exploring, and it avoids the premature collapse to a narrow, locally optimal descent profile that strands the <span class="arithmatex">\(c_2 = 0.0\)</span> failures.</p>
+<p>This refines the design-note expectation in <a href="#51-no-entropy-bonus-by-default">Section 5.1</a>. The learnable <span class="arithmatex">\(\log\sigma\)</span> alone is <em>sufficient</em> in the best case, since the single highest-scoring config, <code>cbeefb0b</code> (280.2), uses <span class="arithmatex">\(c_2 = 0.0\)</span>. It is not <em>robust</em>: at the same coefficient, three of the remaining five configs fail outright and a fourth (<code>7049df9e</code>) only scrapes across at 202.7, leaving just one other clean solve (<code>56f68680</code>). A small entropy bonus is the cheaper path to a config that solves regardless of the other two knobs. The pragmatic recommendation is therefore the opposite of the implemented default: prefer <span class="arithmatex">\(c_2 = 0.01\)</span> for the search, and drop to <span class="arithmatex">\(c_2 = 0.0\)</span> only when squeezing out the last few points of return on an already-stable config.</p>
+<h3 id="73-learning-rate-speed-against-stability">7.3. Learning Rate: Speed Against Stability<a class="headerlink" href="#73-learning-rate-speed-against-stability" title="Permanent link">&para;</a></h3>
+<p>Learning rate sets the trade-off between how fast a config reaches a solving policy and how likely it is to get there at all. The quickest to threshold is <code>6e1b8a66</code> at <span class="arithmatex">\(\text{lr} = 10^{-3}\)</span>, whose mid-training probe first clears 200 at just 102,400 steps, half the figure for the best-scoring config (<code>cbeefb0b</code>, 204,800) and a fifth of the slowest <span class="arithmatex">\(\text{lr} = 10^{-4}\)</span> configs (512,000–563,200 steps). However, <span class="arithmatex">\(\text{lr} = 10^{-3}\)</span> is also the most fragile setting: two of its four configs fail (<code>fe42cbac</code>, <code>9771fd6a</code>), both with <span class="arithmatex">\(c_2 = 0.0\)</span>. The high learning rate that accelerates a well-regularised run also amplifies the policy oscillations that sink an under-regularised one.</p>
+<p>The middle rate <span class="arithmatex">\(3 \times 10^{-4}\)</span> is the safest all-rounder: all four of its configs solve, and it produces the best score overall. The lowest rate <span class="arithmatex">\(10^{-4}\)</span> also solves whenever it is paired with the entropy bonus, but pays for stability with the slowest convergence in the grid. The practical reading is that <span class="arithmatex">\(3 \times 10^{-4}\)</span> is the right default, <span class="arithmatex">\(10^{-3}\)</span> is worth the risk only with entropy regularisation in place, and <span class="arithmatex">\(10^{-4}\)</span> is a conservative fallback that wastes budget.</p>
+<h3 id="74-clip-epsilon-a-secondary-effect">7.4. Clip Epsilon: A Secondary Effect<a class="headerlink" href="#74-clip-epsilon-a-secondary-effect" title="Permanent link">&para;</a></h3>
+<p>Clip range is the weakest of the three swept factors. The tighter <span class="arithmatex">\(\varepsilon = 0.1\)</span> solves four of six configs and the looser <span class="arithmatex">\(\varepsilon = 0.2\)</span> solves five of six, with the lone <span class="arithmatex">\(\varepsilon = 0.2\)</span> failure (<code>9771fd6a</code>) attributable to its <span class="arithmatex">\(\text{lr} = 10^{-3}\)</span>, <span class="arithmatex">\(c_2 = 0.0\)</span> pairing rather than to the clip itself. The best config uses <span class="arithmatex">\(\varepsilon = 0.2\)</span>, but matched pairs do not show a consistent advantage in either direction once learning rate and entropy are controlled for. Clip range is best left at the <span class="arithmatex">\(0.2\)</span> default and not spent on sweep budget until the other two factors are bracketed.</p>
+<hr />
+<h2 id="8-training-curves-and-diagnostics">8. Training Curves and Diagnostics<a class="headerlink" href="#8-training-curves-and-diagnostics" title="Permanent link">&para;</a></h2>
+<p>Each config's matplotlib output is a <span class="arithmatex">\(2 \times 3\)</span> panel grid: episode returns, episode lengths, and clip fraction on the top row; policy loss, value loss, and policy entropy on the bottom row. The two diagnostics that most cleanly separate success from failure are the clip fraction and the entropy schedule.</p>
+<h3 id="81-clip-fraction-as-a-health-signal">8.1. Clip Fraction as a Health Signal<a class="headerlink" href="#81-clip-fraction-as-a-health-signal" title="Permanent link">&para;</a></h3>
+<p>The clip fraction, i.e. the proportion of mini-batch samples whose importance ratio is clamped by <span class="arithmatex">\(\varepsilon\)</span>, behaves very differently in stable and unstable runs. Solved configs show a moderate early clip fraction (roughly 0.05–0.18 averaged over the first tenth of updates), a brief transient peak as the policy first moves (up to <span class="arithmatex">\(\approx 0.6\)</span>), and then a decay to a stable low value (0.03–0.22 for eight of the nine, with the high-learning-rate solve <code>c509e60a</code> the outlier at 0.33). The two high-learning-rate failures instead let the clip fraction stay elevated: <code>fe42cbac</code> averages 0.316 early, peaks at 0.922, and is still at 0.750 at the end of training, meaning three of every four samples are pinned to the clip boundary on the final updates, and <code>9771fd6a</code> ends near 0.47. The policy is thrashing against the trust region rather than settling inside it.</p>
+<p>The curriculum offers a heuristic that a clip fraction spiking above 0.4 early in training indicates the learning rate is too high. The sweep refines this in two ways. First, the early value alone is not decisive: <code>fe42cbac</code> averages 0.316 early yet fails, while its matched twin <code>c509e60a</code> averages an almost identical 0.314 and solves, the difference being the entropy bonus rather than anything visible in the early clip fraction. The more reliable reading is the <em>sustained</em> clip fraction late in training, but it flags only the overshoot failure mode: the two high-learning-rate failures stay above 0.45, far above the solved band, whereas the low-learning-rate failure <code>19d04c7a</code> ends at just 0.23, indistinguishable from a healthy run. <code>19d04c7a</code> fails for the opposite reason, i.e. too-slow learning compounded by an early entropy collapse, so its small updates never push many samples past the clip boundary. Second, the highest learning rate (<span class="arithmatex">\(10^{-3}\)</span>) does produce the highest early clip fractions in the grid (roughly 0.18–0.32), consistent with the heuristic's direction, but whether that early pressure resolves or compounds is decided by the entropy bonus, not the learning rate alone.</p>
+<p>Plotting all twelve per-update clip-fraction traces on one axis is unreadable, so <a href="#fig-clip-bar">Figure 1</a> summarises each run by its sustained clip fraction instead. The two high-learning-rate failures clear the <span class="arithmatex">\(\approx 0.45\)</span> flag, while <code>19d04c7a</code> sits down among the solved configs, the split just described.</p>
+<figure id="fig-clip-bar" style="text-align: center;">
+  <img src="/assets/images/lunarlander_clip_fraction_sustained_bar.png" alt="Sustained clip fraction by config." style="width: 90%;">
+  <figcaption>Figure 1: Sustained clip fraction (final logged value) for each config, coloured by outcome and sorted. The two high-learning-rate failures (<code>fe42cbac</code>, <code>9771fd6a</code>) sit above the ~0.45 overshoot flag, whereas the low-learning-rate failure <code>19d04c7a</code> (0.23) sits among the solved configs. This is the same point as the raw curves but legible: a high sustained clip fraction flags the overshoot failure mode, not slow-learning failures.</figcaption>
+</figure>
+
+<h3 id="82-entropy-schedule">8.2. Entropy Schedule<a class="headerlink" href="#82-entropy-schedule" title="Permanent link">&para;</a></h3>
+<p>Policy entropy starts at 2.84 for every config (the entropy of the freshly initialised Gaussian). What happens next depends on whether the entropy coefficient puts a floor under it, and the contrast between <span class="arithmatex">\(c_2 = 0.0\)</span> and <span class="arithmatex">\(c_2 = 0.01\)</span> is the clearest curve-level explanation of the reliability gap in <a href="#72-the-entropy-bonus-is-the-dominant-reliability-driver">Section 7.2</a>.</p>
+<p>At <span class="arithmatex">\(c_2 = 0.0\)</span>, the entropy schedule is governed by the policy gradient alone, and it can go two ways. In a clean run the policy sharpens around a good landing trajectory and entropy decays smoothly to a low value (<code>cbeefb0b</code> settles near 0.64), which produces the sharpest mean policy and the best score in the sweep. In a failing run the policy instead overcommits early and entropy collapses (<code>9771fd6a</code> dives to 0.45), leaving a narrow policy that performs poorly. Because <span class="arithmatex">\(\log\sigma\)</span> is a learnable parameter driven by the surrogate-loss gradient and not only by the entropy term, the gradient then reinflates <span class="arithmatex">\(\sigma\)</span> once the collapsed mean underperforms and better-than-expected actions land off that mean (the gradient of the Gaussian log-probability with respect to <span class="arithmatex">\(\log\sigma\)</span> is proportional to <span class="arithmatex">\((a - \mu)^2/\sigma^2 - 1\)</span>, which is positive when actions fall more than one standard deviation from the mean). <code>9771fd6a</code> accordingly climbs back to 1.44, but this rebound is an oscillating, unconverged policy rather than recovered exploration. The salient point is that at <span class="arithmatex">\(c_2 = 0.0\)</span> nothing prevents the early collapse, so whether a config lands in the clean-decay regime or the collapse-and-thrash regime is left to chance.</p>
+<p>At <span class="arithmatex">\(c_2 = 0.01\)</span>, the bonus adds a constant upward push on <span class="arithmatex">\(\log\sigma\)</span>, holding entropy high throughout training (<code>b97050c1</code> ends at 3.07, <code>c509e60a</code> at 4.41, <code>6e1b8a66</code> at 5.06). This is precisely the advantage: the floor removes the premature-collapse failure mode by construction, so the policy keeps exploring until its value estimates are reliable, and all six <span class="arithmatex">\(c_2 = 0.01\)</span> configs solve. The wider policy is almost free at evaluation, because the deterministic eval scores the mean action (<a href="#34-deterministic-evaluation">Section 3.4</a>) and ignores <span class="arithmatex">\(\sigma\)</span>, so a high training-time variance barely affects the reported return. The one thing the bonus gives up is the very top of the range, since the single sharpest policy comes from a clean <span class="arithmatex">\(c_2 = 0.0\)</span> decay, which is why <span class="arithmatex">\(c_2 = 0.01\)</span> is the robust default rather than the score-maximising one.</p>
+<p>This entropy effect leaves a second fingerprint on the clip fraction. Because the bonus keeps the policy from collapsing and lurching between narrow distributions, it also relieves pressure on the surrogate clip, so the importance ratio is clamped less often. <a href="#fig-clip-pairs">Figure 2</a> makes this visible across the three matched failure-success pairs, each fixing the learning rate and clip range and varying only <span class="arithmatex">\(c_2\)</span>. Read pairwise, the <span class="arithmatex">\(c_2 = 0.01\)</span> twin sustains a lower clip fraction than its <span class="arithmatex">\(c_2 = 0.0\)</span> partner in every pair, and the gap is widest at the high learning rate (<span class="arithmatex">\(10^{-3}\)</span>), where overshoot is the dominant risk. The plot must be read pairwise rather than as absolute bands: the solved <code>c509e60a</code> sits above the failed <code>19d04c7a</code>, so a low clip fraction does not by itself imply success, consistent with <a href="#81-clip-fraction-as-a-health-signal">Section 8.1</a>.</p>
+<figure id="fig-clip-pairs" style="text-align: center;">
+  <img src="/assets/images/lunarlander_train_clip_fraction_tb.png" alt="Clip fraction for three matched failure-success pairs." style="width: 100%;">
+  <figcaption class="arithmatex">Figure 2: TensorBoard <code>train/clip_fraction</code> (smoothing 0.95) for the three matched failure-success pairs, each fixing learning rate and clip range and varying only \(c_2\): <code>9771fd6a</code>/<code>6e1b8a66</code> (lr \(10^{-3}\), \(\varepsilon\) 0.2), <code>fe42cbac</code>/<code>c509e60a</code> (lr \(10^{-3}\), \(\varepsilon\) 0.1), and <code>19d04c7a</code>/<code>f263520d</code> (lr \(10^{-4}\), \(\varepsilon\) 0.1). Within each pair the \(c_2\) = 0.01 twin sustains a lower clip fraction, most clearly for the high-learning-rate pair. The bands track learning rate, not outcome, so the figure must be read pairwise.</figcaption>
+</figure>
+
+<h3 id="83-a-clean-solve-and-a-representative-failure">8.3. A Clean Solve and a Representative Failure<a class="headerlink" href="#83-a-clean-solve-and-a-representative-failure" title="Permanent link">&para;</a></h3>
+<p><a href="#fig-best">Figure 3</a> shows the training curves for the best config, <code>cbeefb0b</code>. Returns rise steadily and the clip fraction and entropy both relax to stable values, the signature of a run that has settled inside its trust region.</p>
+<figure id="fig-best" style="text-align: center;">
+  <img src="/assets/images/lunarlander_ppo_training_cbeefb0b.png" alt="Training curves for config cbeefb0b." style="width: 100%;">
+  <figcaption class="arithmatex">Figure 3: Training curves for the best config <code>cbeefb0b</code> (lr \(= 3 \times 10^{-4}\), \(\varepsilon\) = 0.2, \(c_2\) = 0.0). Top row: episode returns, episode lengths, clip fraction. Bottom row: policy loss, value loss, policy entropy.</figcaption>
+</figure>
+
+<p><a href="#fig-fail">Figure 4</a> shows a representative failure, <code>9771fd6a</code>. All three failures are the <span class="arithmatex">\(c_2 = 0.0\)</span> members of matched pairs whose <span class="arithmatex">\(c_2 = 0.01\)</span> twins solved (<code>9771fd6a</code>/<code>6e1b8a66</code>, <code>fe42cbac</code>/<code>c509e60a</code>, <code>19d04c7a</code>/<code>f263520d</code>, each pair sharing its learning rate and clip range), which is the controlled evidence behind <a href="#72-the-entropy-bonus-is-the-dominant-reliability-driver">Section 7.2</a>. Strikingly, <code>9771fd6a</code>'s twin <code>6e1b8a66</code> is the fastest solve in the sweep, so a single entropy bonus flips this pair from the most unstable failure to the quickest success. <code>9771fd6a</code> is the most representative of the three: it carries the highest 100-episode standard deviation in the entire sweep (133.7), its clip fraction stays elevated (ending near 0.47) rather than relaxing to the solved band, and its entropy follows the early-collapse-then-rebound trajectory dissected in <a href="#82-entropy-schedule">Section 8.2</a>, diving to 0.45 before climbing back to 1.44.</p>
+<figure id="fig-fail" style="text-align: center;">
+  <img src="/assets/images/lunarlander_ppo_training_9771fd6a.png" alt="Training curves for config 9771fd6a." style="width: 100%;">
+  <figcaption class="arithmatex">Figure 4: Training curves for a representative failure <code>9771fd6a</code> (lr \(= 10^{-3}\), \(\varepsilon\) = 0.2, \(c_2\) = 0.0), the most unstable run in the sweep (100-episode std 133.7); its matched \(c_2\) = 0.01 twin <code>6e1b8a66</code> is the fastest solve. The elevated clip fraction (ending near 0.47) and the entropy collapse-and-rebound (0.45 → 1.44) mark a policy that oscillates rather than converging.</figcaption>
+</figure>
+
+<p>The TensorBoard aggregate <code>eval/mean_return</code> view (<a href="#fig-tb-returns">Figure 5</a>) makes the entropy-bonus split legible at a glance: grouping all twelve runs separates the solved band from the three failures.</p>
+<figure id="fig-tb-returns" style="text-align: center;">
+  <img src="/assets/images/lunarlander_eval_mean_return_tb.png" alt="TensorBoard eval mean return across all 12 configs." style="width: 100%;">
+  <figcaption>Figure 5: TensorBoard <code>eval/mean_return</code> (mid-training 20-episode probes) across all 12 configs. The three failing runs separate as a low band that stays under the 200 mark.</figcaption>
+</figure>
+
+<h3 id="84-late-training-degradation-and-the-value-of-best-checkpoint-selection">8.4. Late-Training Degradation and the Value of Best-Checkpoint Selection<a class="headerlink" href="#84-late-training-degradation-and-the-value-of-best-checkpoint-selection" title="Permanent link">&para;</a></h3>
+<p>PPO's mid-training evaluation curve on this task is markedly non-monotonic: a run frequently peaks partway through training and then drifts down. For <code>cbeefb0b</code>, the best checkpoint is taken at step 665,600 and scores 280.2 over the 100-episode evaluation, whereas the final mid-training probe at one million steps falls back to roughly 197. Several solved configs show the same pattern (<code>b97050c1</code>'s best checkpoint scores 278.3, but its final probe is near 146), and the failures swing even harder.</p>
+<p>This validates the best-checkpoint mechanism described in <a href="#33-best-checkpoint-selection-with-mid-training-evaluation">Section 3.3</a> as a measurable contributor, not mere hygiene. A last-iterate policy, i.e. one reported from whatever weights happen to exist at step one million, would forfeit on the order of 80–130 return on the stronger configs and would misrank the sweep. Restoring the best checkpoint recovers that margin and is what makes the <a href="#tab-sweep">Table 1</a> ordering reflect each config's true capability rather than the noise of its final probe.</p>
+<hr />
+<h2 id="9-empirical-summary">9. Empirical Summary<a class="headerlink" href="#9-empirical-summary" title="Permanent link">&para;</a></h2>
+<p>The sweep shows that PPO solves <code>LunarLanderContinuous-v3</code> comfortably, with nine of twelve configs clearing the 200-return bar on the 100-episode evaluation of their best checkpoint, but that <em>reliability</em> is governed primarily by the entropy bonus and secondarily by the learning rate. A small entropy coefficient (<span class="arithmatex">\(c_2 = 0.01\)</span>) solved every config it touched and accounted for the difference between the solved and failed groups, by holding the policy's exploration up and preventing the premature distribution collapse that strands the un-regularised runs. Learning rate trades convergence speed against stability: <span class="arithmatex">\(3 \times 10^{-4}\)</span> is the safe default, <span class="arithmatex">\(10^{-3}\)</span> is the fastest but only safe with the entropy bonus, and <span class="arithmatex">\(10^{-4}\)</span> is a slow but dependable fallback. Clip range is a third-order effect and is best left at 0.2.</p>
+<p>The most useful training-curve diagnostic is the <em>sustained</em> clip fraction, with one caveat. A value that stays above roughly 0.45 into late training reliably flags the overshoot failure mode, where too-high a learning rate leaves the policy thrashing against the trust region, and it does so more cleanly than the early-spike heuristic alone. The converse does not hold: a low sustained clip fraction does not guarantee success, since the low-learning-rate failure decays into the solved band yet still fails, for the unrelated reason of learning too slowly with no entropy floor to keep it exploring. Finally, because PPO's evaluation curve peaks mid-training and drifts, best-checkpoint selection is not optional polish but a mechanism that recovers 80–130 return on the stronger configs and is necessary for the sweep ranking to be meaningful.</p>
+<hr />
+<h2 id="10-what-i-would-extend-next">10. What I Would Extend Next<a class="headerlink" href="#10-what-i-would-extend-next" title="Permanent link">&para;</a></h2>
+<p>The implementation is intentionally scoped to the single-environment, single-seed regime that the project's curriculum prescribes. Several extensions would be natural next steps and are worth flagging.</p>
+<p>First, vectorised environments via <code>gym.vector.AsyncVectorEnv</code> would amortise the rollout collection cost across multiple parallel environment instances per worker, decoupling sample throughput from the single-environment step rate. This is the standard scaling lever for PPO on continuous control and would compress the wall-clock time of the sweep substantially.</p>
+<p>Second, multi-seed runs per config would give variance estimates on the reported mean return. The current single-seed sweep cannot fully distinguish a genuinely-better config from a luckier seed, which is the main caveat on the factor analysis in <a href="#7-sweep-results">Section 7</a>. A small bump to three or five seeds per config, adding the existing <code>seed</code> field to the sweep grid, would close that gap and put error bars on the entropy-bonus effect.</p>
+<p>Third, the parallel sweep harness is a fixed Cartesian product. Replacing it with a wandb-managed sweep (Bayesian or Hyperband) would let the search adapt to early signals from completed runs, which is a more sample-efficient way to explore high-dimensional hyperparameter spaces.</p>
+<p>Fourth, a recurrent policy (gated recurrent unit (GRU) or long short-term memory (LSTM)) would generalise the implementation to partially observable environments. The rollout buffer would then need to carry the recurrent hidden state alongside each transition, and the mini-batch sampling would have to respect episode boundaries rather than shuffling across them.</p>
+<p>Each of these is a controlled extension of the existing scaffolding. The current file structure (typed config, decoupled agent, factored rollout buffer, observability split along its own axis) was chosen with such extensions in mind.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

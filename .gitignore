@@ -17,3 +17,6 @@ site/
 
 # macOS
 .DS_Store
+
+# Obsidian
+.obsidian/

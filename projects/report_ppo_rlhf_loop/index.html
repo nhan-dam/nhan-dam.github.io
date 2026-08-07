@@ -1,0 +1,2665 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Nhan Dam's Technical Notes on Machine Learning.">
+      
+      
+        <meta name="author" content="Nhan Dam">
+      
+      
+        <link rel="canonical" href="https://nhan-dam.github.io/projects/report_ppo_rlhf_loop/">
+      
+      
+        <link rel="prev" href="../report_reward_model_hh/">
+      
+      
+        <link rel="next" href="../../reference/ml_workstation_setup_uv/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Project 7 - Full RLHF Loop with Proximal Policy Optimisation - ND's Machine Learning Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#full-reinforcement-learning-from-human-feedback-training-loop-with-proximal-policy-optimisation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="ND&#39;s Machine Learning Notes" class="md-header__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ND's Machine Learning Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Project 7 - Full RLHF Loop with Proximal Policy Optimisation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nhan-dam/nhan-dam.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nhan-dam/nhan-dam.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../rlhf/curriculum/" class="md-tabs__link">
+          
+  
+  
+  Learning
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  Projects
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/ml_workstation_setup_uv/" class="md-tabs__link">
+          
+  
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="ND&#39;s Machine Learning Notes" class="md-nav__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ND's Machine Learning Notes
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nhan-dam/nhan-dam.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nhan-dam/nhan-dam.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Learning
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Learning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLHF Curriculum
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RLHF Curriculum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/curriculum/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/curriculum/phase01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 1 - Reinforcement Learning Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/curriculum/phase02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 2 - Classical RLHF Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/curriculum/appendix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DLAI RLHF Course
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    DLAI RLHF Course
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/dlai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/dlai/DLAI_Lecture1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 1 - Conceptual Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/dlai/DLAI_Lecture2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 2 - Datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/dlai/DLAI_Lecture3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 3 - Tune an LLM with RLHF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/dlai/DLAI_Lecture4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 4 - Evaluate an RLHF-Tuned Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rlhf/dlai/DLAI_Lecture5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 5 - Google Cloud Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Projects
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Projects
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report_qlearning_blackjack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 1 - Tabular Q-Learning on Gymnasium Blackjack
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report_qlearning_cartpole/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 2 - Tabular Q-Learning on Gymnasium CartPole
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report_dqn_cartpole/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 3 - Deep Q-Network on Gymnasium CartPole
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report_ppo_lunarlander/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 4 - Proximal Policy Optimisation on Gymnasium LunarLander
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report_sft_lora_dolly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 5 - Supervised Fine-Tuning of Qwen2.5-0.5B
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report_reward_model_hh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 6 - Reward Model Training on Anthropic HH-RLHF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 7 - Full RLHF Loop with Proximal Policy Optimisation
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 7 - Full RLHF Loop with Proximal Policy Optimisation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-background" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Background
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-exploratory-data-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Exploratory Data Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Exploratory Data Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-format-size-and-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Format, Size, and Prompts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-prompt-lengths-and-the-length-cap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. Prompt Lengths and the Length Cap
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-conversation-depth-and-data-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Conversation Depth and Data Quality
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-implementation-and-design-choices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Implementation and Design Choices
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Implementation and Design Choices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-the-trl-v1-application-programming-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. The TRL v1 Application Programming Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-three-models-in-memory-instead-of-four" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Three Models in Memory Instead of Four
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-critic-initialised-from-the-reward-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Critic Initialised from the Reward Model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-prompt-extraction-and-length-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4. Prompt Extraction and Length Filtering
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-generation-hygiene-as-reward-hacking-defence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5. Generation Hygiene as Reward-Hacking Defence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-fixed-kl-coefficient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6. Fixed KL Coefficient
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37-artefact-resolution-across-pipeline-stages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.7. Artefact Resolution Across Pipeline Stages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#38-configuration-driven-experiments-and-run-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.8. Configuration-Driven Experiments and Run Tracking
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-training-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Training Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-training-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Training Diagnostics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Training Diagnostics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-the-monitored-signals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1. The Monitored Signals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-observed-trajectory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2. Observed Trajectory
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-quantitative-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Quantitative Evaluation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Quantitative Evaluation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-headline-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1. Headline Comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-checkpoint-sweep-no-late-run-decline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2. Checkpoint Sweep: No Late-Run Decline
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-qualitative-completion-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Qualitative Completion Review
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Qualitative Completion Review">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-findings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1. Findings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-verdict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2. Verdict
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-reflections-and-next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Reflections and Next Steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-appendix-why-the-importance-ratio-is-not-tracked" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Appendix: Why the Importance Ratio Is Not Tracked
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/ml_workstation_setup_uv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mac ML Workstation Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/github-pages-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitHub Pages Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/github_cheatsheet_chapter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitHub Task-Oriented Cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/claude-code-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude Code Cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-background" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Background
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-exploratory-data-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Exploratory Data Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Exploratory Data Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-format-size-and-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Format, Size, and Prompts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-prompt-lengths-and-the-length-cap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. Prompt Lengths and the Length Cap
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-conversation-depth-and-data-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Conversation Depth and Data Quality
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-implementation-and-design-choices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Implementation and Design Choices
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Implementation and Design Choices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-the-trl-v1-application-programming-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. The TRL v1 Application Programming Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-three-models-in-memory-instead-of-four" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Three Models in Memory Instead of Four
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-critic-initialised-from-the-reward-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Critic Initialised from the Reward Model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-prompt-extraction-and-length-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4. Prompt Extraction and Length Filtering
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-generation-hygiene-as-reward-hacking-defence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5. Generation Hygiene as Reward-Hacking Defence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-fixed-kl-coefficient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6. Fixed KL Coefficient
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37-artefact-resolution-across-pipeline-stages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.7. Artefact Resolution Across Pipeline Stages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#38-configuration-driven-experiments-and-run-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.8. Configuration-Driven Experiments and Run Tracking
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-training-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Training Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-training-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Training Diagnostics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Training Diagnostics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-the-monitored-signals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1. The Monitored Signals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-observed-trajectory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2. Observed Trajectory
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-quantitative-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Quantitative Evaluation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Quantitative Evaluation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-headline-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1. Headline Comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-checkpoint-sweep-no-late-run-decline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2. Checkpoint Sweep: No Late-Run Decline
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-qualitative-completion-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Qualitative Completion Review
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Qualitative Completion Review">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-findings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1. Findings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-verdict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2. Verdict
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-reflections-and-next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Reflections and Next Steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-appendix-why-the-importance-ratio-is-not-tracked" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Appendix: Why the Importance Ratio Is Not Tracked
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/nhan-dam/nhan-dam.github.io/edit/main/docs/projects/report_ppo_rlhf_loop.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="full-reinforcement-learning-from-human-feedback-training-loop-with-proximal-policy-optimisation">Full Reinforcement Learning from Human Feedback Training Loop with Proximal Policy Optimisation<a class="headerlink" href="#full-reinforcement-learning-from-human-feedback-training-loop-with-proximal-policy-optimisation" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Created on: 12 June 2026</p>
+<p>Updated on: 28 July 2026</p>
+</blockquote>
+<p>This note documents an implementation of the final stage of the classical reinforcement learning from human feedback (RLHF) pipeline (<a href="#ref-stiennon2020">Stiennon et al., 2020</a>; <a href="#ref-ouyang2022">Ouyang et al., 2022</a>): proximal policy optimisation (PPO) of the supervised fine-tuning (SFT) policy against the trained reward model (RM), with prompts drawn from <code>Anthropic/hh-rlhf</code>.</p>
+<p>The full source code can be found on <a href="https://github.com/nhan-dam/rlhf-course/blob/main/src/pipeline/ppo_rlhf_loop.py">GitHub</a>.</p>
+<h2 id="1-background">1. Background<a class="headerlink" href="#1-background" title="Permanent link">&para;</a></h2>
+<p>The policy <span class="arithmatex">\(\pi_\theta\)</span> (initialised from <span class="arithmatex">\(\pi_{\text{ref}}\)</span>, the SFT model) generates responses, the frozen RM scores them, and PPO updates the policy to maximise the Kullback-Leibler (KL) shaped reward</p>
+<p><span id="eq-kl-reward"></span></p>
+<div class="arithmatex">\[r(x, y) = r_\phi(x, y) - \beta \cdot \text{KL}\left[\pi_\theta(\cdot \mid x) \parallel \pi_{\text{ref}}(\cdot \mid x)\right], \tag{1}\]</div>
+<p>where <span class="arithmatex">\(r_\phi(x, y)\)</span> is the scalar score that the frozen RM, with learned parameters <span class="arithmatex">\(\phi\)</span>, assigns to response <span class="arithmatex">\(y\)</span> given prompt <span class="arithmatex">\(x\)</span>, and <span class="arithmatex">\(\beta\)</span> is a fixed coefficient controlling the strength of the KL penalty (see <a href="#36-fixed-kl-coefficient">Section 3.6</a>). The KL penalty in <a href="#eq-kl-reward">(1)</a> prevents the policy from drifting into degenerate outputs that exploit the RM (reward hacking). Classically this requires four models in memory: the actor, the frozen reference, the frozen RM, and the critic.</p>
+<p>One structural limitation of this implementation, a consequence of its dataset choices rather than of the RLHF pipeline itself, is worth stating up front. The stages here do not share one data distribution: the SFT stage trained on single-turn Dolly instructions, whereas the RM and this stage both draw on the multi-turn <code>Anthropic/hh-rlhf</code> dialogues. The objective in <a href="#eq-kl-reward">(1)</a> remains well defined under such a mismatch, but one of its implicit assumptions weakens: the policy is initialised, and its KL anchor fixed, at an SFT model that begins off-distribution on the <code>\n\nHuman:</code>/<code>\n\nAssistant:</code> prompt format, so part of the limited KL budget is spent adapting to the format rather than to the preferences. The critical link is unaffected, since the RM judges responses to the same prompt distribution it was trained on, and it is that link whose failure amplifies reward hacking. The canonical pipelines (<a href="#ref-stiennon2020">Stiennon et al., 2020</a>; <a href="#ref-ouyang2022">Ouyang et al., 2022</a>) draw demonstrations, comparisons, and PPO prompts from a single prompt distribution, so this seam is a compromise of stitching together off-the-shelf datasets rather than standard practice. Training SFT on the chosen responses of HH-RLHF would unify the pipeline on one distribution, at the cost of a weaker instruction-following flavour.</p>
+<h2 id="2-exploratory-data-analysis">2. Exploratory Data Analysis<a class="headerlink" href="#2-exploratory-data-analysis" title="Permanent link">&para;</a></h2>
+<p>Before the design decisions of <a href="#3-implementation-and-design-choices">Section 3</a>, the prompt data is inspected with <a href="https://github.com/nhan-dam/rlhf-course/blob/main/src/eda/eda_ppo_dataset.py"><code>eda_ppo_dataset.py</code></a> so the configuration rests on the data rather than on defaults. PPO consumes only the prompt side of <code>Anthropic/hh-rlhf</code>. <code>extract_prompt</code> cuts each <code>chosen</code> dialogue after the final <code>\n\nAssistant:</code> marker, and the policy generates the response itself, so the units analysed are prompts rather than preference pairs. The script reports, to both the screen and a text file under <code>results/ppo_rlhf_loop/</code>, the prompt format and size, the prompt-length distribution that fixes <code>max_prompt_tokens</code>, the conversation depth, and basic quality checks. The figures reported below are from a run of the script over the full dataset.</p>
+<h3 id="21-format-size-and-prompts">2.1. Format, Size, and Prompts<a class="headerlink" href="#21-format-size-and-prompts" title="Permanent link">&para;</a></h3>
+<p>HH-RLHF stores complete dialogues in two text columns, <code>chosen</code> and <code>rejected</code>, with a <code>train</code> split of 160,800 rows and a dedicated <code>test</code> split of 8,552 rows. PPO ignores the preference labels and the rejected side, so the dataset reduces to the prompts extracted from the <code>chosen</code> dialogues. The stage draws both its training prompts and its 100 evaluation prompts from the <code>train</code> split, carving the eval set from it with a seeded split, so the dataset's own <code>test</code> split is left unused at this stage. The source can pair more than one chosen-versus-rejected comparison with the same prompt, so a prompt may recur across rows, and the script reports both the raw and the distinct prompt counts. In practice the duplication is minor (821 duplicate rows, <a href="#23-conversation-depth-and-data-quality">Section 2.3</a>). It also prints random extracted prompts, since reading the actual prompts is the quickest way to see the task distribution the policy will be optimised on.</p>
+<h3 id="22-prompt-lengths-and-the-length-cap">2.2. Prompt Lengths and the Length Cap<a class="headerlink" href="#22-prompt-lengths-and-the-length-cap" title="Permanent link">&para;</a></h3>
+<p>The prompt length fixes <code>max_prompt_tokens</code>. Over-long prompts are filtered out rather than truncated, because a truncated dialogue can lose the actual question and leave the policy optimising reward on nonsense (see <a href="#34-prompt-extraction-and-length-filtering">Section 3.4</a>). The cap therefore acts with filter semantics on the prompt length alone, since the response is generated rather than stored. The distribution is summarised in <a href="#tab-ppo-lengths">Table 1</a>, and the retention at each candidate cap in <a href="#tab-ppo-cap">Table 2</a>. Both tables are computed over the raw, non-deduplicated rows of the split, matching what the trainer consumes, so the retained counts in <a href="#tab-ppo-cap">Table 2</a> are the actual training-set sizes.</p>
+<p><a id="tab-ppo-lengths"></a></p>
+<table>
+<thead>
+<tr>
+<th>Percentile</th>
+<th>Prompt tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50th</td>
+<td>100</td>
+</tr>
+<tr>
+<td>90th</td>
+<td>323</td>
+</tr>
+<tr>
+<td>95th</td>
+<td>421</td>
+</tr>
+<tr>
+<td>99th</td>
+<td>688</td>
+</tr>
+<tr>
+<td>Max</td>
+<td>1,896</td>
+</tr>
+</tbody>
+</table>
+<p>Table 1: Prompt token-length distribution, tokenised as the PPO prompt map does.</p>
+<p><a id="tab-ppo-cap"></a></p>
+<table>
+<thead>
+<tr>
+<th><code>max_prompt_tokens</code></th>
+<th>Prompts kept</th>
+<th>% kept</th>
+<th>Prompts dropped</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>128</td>
+<td>94,108</td>
+<td>58.52%</td>
+<td>66,692</td>
+</tr>
+<tr>
+<td>192</td>
+<td>117,733</td>
+<td>73.22%</td>
+<td>43,067</td>
+</tr>
+<tr>
+<td><strong>256 (selected)</strong></td>
+<td><strong>133,331</strong></td>
+<td><strong>82.92%</strong></td>
+<td><strong>27,469</strong></td>
+</tr>
+<tr>
+<td>320</td>
+<td>144,433</td>
+<td>89.82%</td>
+<td>16,367</td>
+</tr>
+<tr>
+<td>384</td>
+<td>150,360</td>
+<td>93.51%</td>
+<td>10,440</td>
+</tr>
+</tbody>
+</table>
+<p>Table 2: Prompts retained at each candidate <code>max_prompt_tokens</code>, where a prompt is kept only if its length falls within the cap.</p>
+<p>Length filtering is not a neutral subsample, since it preferentially drops longer multi-turn dialogues, so the retention at 256 is read against that bias before the cap is confirmed.</p>
+<h3 id="23-conversation-depth-and-data-quality">2.3. Conversation Depth and Data Quality<a class="headerlink" href="#23-conversation-depth-and-data-quality" title="Permanent link">&para;</a></h3>
+<p>A prompt may be a single Human turn or a multi-turn dialogue ending at the assistant cue, and the depth governs how much of the prompt budget is dialogue context rather than the latest question. The script reports the Human-turn distribution, with a median of 2 turns and 30.7% of prompts single-turn, so most prompts carry several turns of dialogue context before the latest question. The quality checks count empty prompts and duplicate prompts, which are 0 and 821 respectively, leaving 159,979 distinct prompts in the full split. Duplicate prompts are expected here rather than an error, since the source can pair more than one comparison with the same prompt, and only the distinct prompts contribute new training signal.</p>
+<h2 id="3-implementation-and-design-choices">3. Implementation and Design Choices<a class="headerlink" href="#3-implementation-and-design-choices" title="Permanent link">&para;</a></h2>
+<h3 id="31-the-trl-v1-application-programming-interface">3.1. The TRL v1 Application Programming Interface<a class="headerlink" href="#31-the-trl-v1-application-programming-interface" title="Permanent link">&para;</a></h3>
+<p>In TRL v1 (this project pins 1.0.0), <code>PPOTrainer</code> lives in <code>trl.experimental.ppo</code> and follows the design of <a href="#ref-huang2024">Huang et al. (2024)</a>: the trainer is constructed with all four models and a pre-tokenised prompt dataset, and a single <code>train()</code> call runs rollout generation, reward scoring, KL shaping, generalised advantage estimation, and the clipped PPO update internally.</p>
+<h3 id="32-three-models-in-memory-instead-of-four">3.2. Three Models in Memory Instead of Four<a class="headerlink" href="#32-three-models-in-memory-instead-of-four" title="Permanent link">&para;</a></h3>
+<p>The policy is trained as a LoRA Parameter-Efficient Fine-Tuning (PEFT) model and <code>ref_model=None</code> is passed to the trainer. With a PEFT policy, <code>PPOTrainer</code> recovers <span class="arithmatex">\(\pi_{\text{ref}}\)</span> by disabling the adapters, which is exact rather than approximate: the policy's base weights are the merged SFT model, and a freshly initialised LoRA contributes <span class="arithmatex">\(\Delta W = BA = 0\)</span>, so the adapter-disabled policy and the reference coincide at initialisation and the base remains frozen throughout. One copy of the Qwen2.5-0.5B backbone therefore serves both actor and reference, leaving three full models in memory (policy+reference, RM, critic) within the unified-memory budget of the workstation. During the run, <a href="https://github.com/nhan-dam/rlhf-course/blob/main/src/common/model_utils.py"><code>model_utils.CacheCleaner</code></a> bounds PyTorch's reserved-memory pool, as in the other stages. The SFT report's Section 5 presents the allocator analysis behind it.</p>
+<h3 id="33-critic-initialised-from-the-reward-model">3.3. Critic Initialised from the Reward Model<a class="headerlink" href="#33-critic-initialised-from-the-reward-model" title="Permanent link">&para;</a></h3>
+<p>The value model is loaded from the trained RM rather than given a fresh scalar head. The critic's job, predicting expected return from a partial response, is close to what the RM already computes, so RM initialisation gives the critic a meaningful starting point and reduces the early-training phase in which a random critic feeds noise into the advantage estimates. This follows the canonical TRL PPO recipe and <a href="#ref-stiennon2020">Stiennon et al. (2020)</a>.</p>
+<h3 id="34-prompt-extraction-and-length-filtering">3.4. Prompt Extraction and Length Filtering<a class="headerlink" href="#34-prompt-extraction-and-length-filtering" title="Permanent link">&para;</a></h3>
+<p>HH-RLHF stores complete dialogues, but PPO needs only prompts: the policy generates the responses itself. <code>extract_prompt</code> cuts each <code>chosen</code> text after the final <code>\n\nAssistant:</code> marker. Prompts longer than 256 tokens are then <strong>filtered out rather than truncated</strong>, because a truncated dialogue can lose the actual question, leaving the policy to be rewarded for responses to nonsense. The cap was confirmed against the prompt-length distribution of <a href="#22-prompt-lengths-and-the-length-cap">Section 2.2</a>. The tokeniser is configured with left padding, which batched generation with decoder-only models requires (the model must generate from the rightmost, non-padded position).</p>
+<p>The single sequence cap of the earlier stages splits into two hyperparameters at this stage, because the response does not exist in the dataset. <code>max_prompt_tokens = 256</code> acts on the data side as the prompt filter above. <code>response_length = 128</code> acts at rollout time as a generation budget, i.e. the maximum new tokens per episode, with each rollout stopping at the first end-of-sequence (EOS) token or at the budget. Neither cap truncates stored text, and the two compose: every scored sequence is at most 256 + 128 = 384 tokens, inside the RM's own 512-token training cap, so the RM only scores sequence lengths it was trained on.</p>
+<blockquote>
+<p><strong>Why a 128-token budget, when the SFT stage's qualitative probe (SFT report, Section 4.6) generates 256?</strong> The two settings serve different purposes. The SFT probe is a one-off inspection of Dolly-style tasks, which run long, whereas <code>response_length</code> binds every one of the 10,000 rollouts, and three considerations push it down. First, cost: rollout generation dominates PPO wall-clock time, and the sequence length scales the activation memory of every forward pass through the policy, reference, critic, and RM, which matters with three models resident in a 64 GB budget. Second, the data: HH-RLHF assistant turns are short chat responses, so 128 tokens covers the realistic range of the behaviour the RM was trained to judge, and extra budget mostly buys room for rambling, the reward-hacking route that the generation hygiene of <a href="#35-generation-hygiene-as-reward-hacking-defence">Section 3.5</a> exists to close.</p>
+<p>Third, composition with the RM cap: 256 + 128 = 384 leaves headroom under 512, whereas a 256-token budget would sit exactly at the boundary and would foreclose raising the prompt cap to 384 (384 + 128 = 512), which would use the RM's full admissible range. The value was not ablated. A persistently high missing-EOS rate, i.e. responses wanting to run past the budget, would be the signal to revisit it. The rising EOS counts of <a href="#52-observed-trajectory">Section 5.2</a> argue the budget was not binding.</p>
+</blockquote>
+<h3 id="35-generation-hygiene-as-reward-hacking-defence">3.5. Generation Hygiene as Reward-Hacking Defence<a class="headerlink" href="#35-generation-hygiene-as-reward-hacking-defence" title="Permanent link">&para;</a></h3>
+<p>Two <code>PPOConfig</code> settings close off the cheapest reward-hacking route, rambling to the token limit. <code>stop_token="eos"</code> truncates each response at the first EOS token before the RM scores it, so the score reflects the response the user would actually see. <code>missing_eos_penalty=1.0</code> subtracts a fixed penalty whenever a response never emits EOS, directly punishing policies that learn to fill the entire 128-token budget. These complement, rather than replace, the KL penalty in <a href="#eq-kl-reward">(1)</a>.</p>
+<h3 id="36-fixed-kl-coefficient">3.6. Fixed KL Coefficient<a class="headerlink" href="#36-fixed-kl-coefficient" title="Permanent link">&para;</a></h3>
+<p>TRL v1 exposes no adaptive KL controller, so <span class="arithmatex">\(\beta\)</span> is a fixed <code>kl_coef</code>, set here to 0.2, a conventional starting point in the 0.1 to 0.3 band. The tuning loop is manual. If <code>objective/kl</code> grows unboundedly during training, <span class="arithmatex">\(\beta\)</span> is raised. If the policy barely moves and <code>objective/scores</code> stays flat, <span class="arithmatex">\(\beta\)</span> is lowered. This is less convenient than an adaptive controller but makes the reward trade-off explicit, and <span class="arithmatex">\(\beta\)</span> is the first hyperparameter to revisit when the warning signals of <a href="#5-training-diagnostics">Section 5</a> appear.</p>
+<h3 id="37-artefact-resolution-across-pipeline-stages">3.7. Artefact Resolution Across Pipeline Stages<a class="headerlink" href="#37-artefact-resolution-across-pipeline-stages" title="Permanent link">&para;</a></h3>
+<p>The script consumes the outputs of both previous stages and, by default, locates them without configuration: the default paths are taken from the shared configuration module, and <a href="https://github.com/nhan-dam/rlhf-course/blob/main/src/common/model_utils.py"><code>model_utils.resolve_model_path</code></a> merges each LoRA adapter into a loadable full model (the RM adapter into a sequence-classification base, the SFT adapter into a causal language model base), caching the merge. Any stage can still be pointed at an arbitrary Hub model or local directory.</p>
+<h3 id="38-configuration-driven-experiments-and-run-tracking">3.8. Configuration-Driven Experiments and Run Tracking<a class="headerlink" href="#38-configuration-driven-experiments-and-run-tracking" title="Permanent link">&para;</a></h3>
+<p>The PPO stage uses the same configuration machinery as the other two, so experiments are driven by configuration rather than by editing source. <code>PPORunConfig</code> is parsed with <code>transformers.HfArgumentParser</code>, which accepts both command-line overrides and a JSON configuration file, so a sweep over, for example, the KL coefficient <span class="arithmatex">\(\beta\)</span> or the policy's target modules requires no code change. The run label is the hash of the full resolved configuration, so any change in any hyperparameter yields a distinct label and its own results directory, which prevents different experiments from overwriting each other's artefacts. Each run also writes its resolved configuration to <code>config_&lt;label&gt;.json</code> and a metrics summary to <code>metrics_&lt;label&gt;.json</code>. PPO has no single acceptance gate, so the summary records the final values of the RLHF reward, the raw reward-model score, the KL, and the entropy. The reward and the KL are recorded together because a high reward alongside a high KL is the classic reward-hacking signature. The entropy field records the per-token <code>policy/entropy_avg</code> of <a href="#5-training-diagnostics">Section 5</a>. The shared <a href="https://github.com/nhan-dam/rlhf-course/blob/main/src/analysis/aggregate_metrics.py"><code>aggregate_metrics.py</code></a> helper joins these files and ranks PPO runs by final reward.</p>
+<p>One capability of the earlier stages is missing here: the PPO stage cannot resume from an interruption. This is a limitation of the trainer rather than an omission, since the experimental <code>PPOTrainer.train()</code> takes no arguments at all, so the <code>resume_from_checkpoint</code> path used by the SFT and reward-model stages cannot be invoked. Intermediate checkpoints are still written at the configured cadence, but they exist for manual adapter recovery with a fresh optimiser, and an interrupted run otherwise restarts from scratch.</p>
+<h2 id="4-training-configuration">4. Training Configuration<a class="headerlink" href="#4-training-configuration" title="Permanent link">&para;</a></h2>
+<p>The values below are the defaults. They are overridable from the command line or a JSON file (see <a href="#38-configuration-driven-experiments-and-run-tracking">Section 3.8</a>).</p>
+<table>
+<thead>
+<tr>
+<th>Hyperparameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Policy / reference base</td>
+<td>SFT model (merged), reference via adapter disabling</td>
+</tr>
+<tr>
+<td>Reward model / critic init</td>
+<td>Trained RM (merged)</td>
+</tr>
+<tr>
+<td>Policy LoRA rank <span class="arithmatex">\(r\)</span> / scaling <span class="arithmatex">\(\alpha\)</span> / dropout</td>
+<td>32 / 64 / 0.05</td>
+</tr>
+<tr>
+<td>Policy LoRA target modules</td>
+<td><code>q_proj</code>, <code>v_proj</code> (default)</td>
+</tr>
+<tr>
+<td>Learning rate</td>
+<td><span class="arithmatex">\(10^{-5}\)</span></td>
+</tr>
+<tr>
+<td>Episode budget</td>
+<td>10,000</td>
+</tr>
+<tr>
+<td>Per-device batch size <span class="arithmatex">\(\times\)</span> gradient accumulation</td>
+<td><span class="arithmatex">\(4 \times 4 = 16\)</span> effective</td>
+</tr>
+<tr>
+<td>PPO epochs per rollout batch</td>
+<td>4</td>
+</tr>
+<tr>
+<td>KL coefficient <span class="arithmatex">\(\beta\)</span></td>
+<td>0.2 (fixed)</td>
+</tr>
+<tr>
+<td>Response length / temperature</td>
+<td>128 tokens / 0.7</td>
+</tr>
+<tr>
+<td>Missing-EOS penalty</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>Maximum prompt length</td>
+<td>256 tokens (filtering, not truncation)</td>
+</tr>
+<tr>
+<td>Gradient checkpointing</td>
+<td>enabled (default; configurable)</td>
+</tr>
+<tr>
+<td>Precision</td>
+<td>bfloat16</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Why is the learning rate <span class="arithmatex">\(10^{-5}\)</span>, an order of magnitude below the SFT (<span class="arithmatex">\(2 \times 10^{-4}\)</span>) and RM (<span class="arithmatex">\(10^{-4}\)</span>) rates, when LoRA is supposed to permit larger steps?</strong> LoRA does permit larger steps, and this stage uses the same adapters (rank 32 on <code>q_proj</code>/<code>v_proj</code>) as the others. But LoRA's argument is about the <em>parameterisation</em>: randomly initialised low-rank adapters tolerate bigger steps than the pre-trained backbone would, which sets the rate relative to full fine-tuning of the same objective (a full fine-tune here would sit nearer <span class="arithmatex">\(10^{-6}\)</span>). It says nothing about the ceiling the <em>objective</em> imposes, and PPO's objective is far less forgiving than SFT's or the RM's for three reasons:</p>
+<ul>
+<li><strong>It is on-policy.</strong> The policy generates its own training data, so a large update shifts the distribution the next batch is drawn from, a feedback loop that diverges if steps are too big. SFT and RM fit fixed targets on a fixed dataset, where a large step merely fits faster.</li>
+<li><strong>The signal is a noisy, exploitable proxy</strong> (a learned RM plus a still-training critic) rather than ground-truth labels, and bigger steps find the RM's blind spots faster, the very format-gaming and confidently-wrong exploits catalogued in <a href="#7-qualitative-completion-review">Section 7</a>.</li>
+<li><strong>Batch reuse amplifies each step.</strong> <code>num_ppo_epochs = 4</code> updates on every rollout batch four times, so the effective movement per rollout is larger than the raw rate suggests.</li>
+</ul>
+<p>A small rate is thus part of the same trust region that the clipping and the KL penalty of <a href="#36-fixed-kl-coefficient">Section 3.6</a> enforce. Indeed, <a href="#5-training-diagnostics">Section 5</a>'s remedy for unbounded KL is to lower the learning rate. The healthy diagnostics of <a href="#52-observed-trajectory">Section 5.2</a>, an approximate KL to the rollout policy near 0.001 and a clipped fraction flat at 0.8%, are evidence the conservative rate kept updates inside that region. The value <span class="arithmatex">\(10^{-5}\)</span> is the conventional PPO setting and matches <a href="#ref-huang2024">Huang et al. (2024)</a>, whose implementation this stage follows.</p>
+</blockquote>
+<h2 id="5-training-diagnostics">5. Training Diagnostics<a class="headerlink" href="#5-training-diagnostics" title="Permanent link">&para;</a></h2>
+<p>PPO has no single acceptance gate, so the run is judged from several logged series at once. This section defines those series and what healthy behaviour looks like in each, then reads run <code>e71b6d13</code> against them. The held-out evaluation of the trained policy is separate and follows in <a href="#6-quantitative-evaluation">Section 6</a>.</p>
+<h3 id="51-the-monitored-signals">5.1. The Monitored Signals<a class="headerlink" href="#51-the-monitored-signals" title="Permanent link">&para;</a></h3>
+<p>Every signal below is logged to TensorBoard under TRL v1's metric names, with the final values also persisted to <code>metrics_&lt;label&gt;.json</code> (see <a href="#38-configuration-driven-experiments-and-run-tracking">Section 3.8</a>). They are grouped here by how decisive each is.</p>
+<p><strong>Primary signals, which decide whether training is working.</strong></p>
+<ul>
+<li><code>objective/rlhf_reward</code>, the raw reward-model score minus the KL cost, is the actual optimisation target and should increase steadily.</li>
+<li><code>objective/scores</code>, the raw reward-model score, should rise while <code>objective/kl</code> stays bounded. A sharp rise followed by collapse is the classic reward-hacking signature, at which point the generated text must be inspected for repetition or format gaming, with the levers being to raise <span class="arithmatex">\(\beta\)</span> or retrain the reward model against the exploited weakness. The trainer's built-in <code>generate_completions()</code> prints only to the console and persists nothing, so the reliable way to inspect the text is the persisted, scored completions of the <a href="#7-qualitative-completion-review">Section 7</a> diagnostic.</li>
+<li><code>objective/kl</code>, the sequence-level KL from the frozen SFT reference, is the drift the reward penalty of <a href="#eq-kl-reward">(1)</a> is meant to contain and must stay bounded. Unbounded growth means the policy is escaping the reference, for which the levers are to raise <span class="arithmatex">\(\beta\)</span>, lower the learning rate, or reduce <code>num_ppo_epochs</code>.</li>
+</ul>
+<p><strong>Stability signals, which decide whether the primary signals can be trusted.</strong> A failure here corrupts the advantages or the exploration that the primary objectives rest on.</p>
+<ul>
+<li><code>policy/entropy_avg</code> is the entropy of the policy's output distribution, computed in closed form at each position and averaged over the update, in nats per token. Some decline is the objective working rather than a fault, since maximising a fixed reward with no entropy bonus favours a deterministic policy. What matters is that it does not collapse towards zero, which would mark a near-deterministic policy that has stopped exploring. TRL v1's <code>PPOConfig</code> exposes no entropy-bonus coefficient, but the penalty in <a href="#eq-kl-reward">(1)</a> already contains one, since <span class="arithmatex">\(-\beta \text{KL}(\pi \parallel \pi_\text{ref}) = \beta H(\pi) + \beta \mathbb{E}_\pi[\log \pi_\text{ref}]\)</span>, which makes <span class="arithmatex">\(\beta\)</span> the lever alongside the episode budget.</li>
+<li><code>loss/value_avg</code> is the critic's squared regression error against its fixed generalised-advantage-estimation return target and should fall and then hold stable. Divergence means the critic can no longer track the policy, which feeds noise into every advantage estimate, and the remedy is a lower learning rate. A value that stays high is read alongside <code>val/clipfrac_avg</code>, the fraction of positions where TRL's value clip binds, since a high fraction means the critic is being throttled by that clip and a near-zero one means it simply cannot fit the returns. The value clip is an implementation convention inherited from OpenAI's PPO baselines rather than part of the original PPO objective, so it widens through <code>cliprange_value</code> rather than through any quantity in <a href="#eq-kl-reward">(1)</a>.</li>
+<li><code>policy/clipfrac_avg</code> is the fraction of the batch whose importance ratio (defined with <code>policy/approxkl_avg</code> below) hit the policy clip. A persistently high value, above roughly 20% to 30%, means the policy is moving too fast per update, for which the levers are a lower learning rate or fewer <code>num_ppo_epochs</code>.</li>
+<li><code>policy/approxkl_avg</code> estimates the KL from the rollout policy <span class="arithmatex">\(\pi_{\theta_\text{old}}\)</span> to the current policy, <span class="arithmatex">\(\text{KL}[\pi_{\theta_\text{old}} \parallel \pi_\theta]\)</span>, over the reused optimisation epochs. This is the trust-region divergence that the clipped surrogate is designed to keep small: PPO's clip is a first-order stand-in for the explicit KL constraint of trust-region policy optimisation, bounding this divergence implicitly rather than measuring it, so <code>approxkl</code> is the empirical check that the clip is holding. It should stay small, and growth under active clipping is the same warning as a high clip fraction, remedied by fewer <code>num_ppo_epochs</code> or a lower learning rate. It is anchored to the rollout policy, which makes it conceptually distinct from <code>objective/kl</code>, the divergence from the frozen SFT reference that shapes the reward in <a href="#eq-kl-reward">(1)</a>. It is computed from the importance ratio of <a href="#eq-importance-ratio">(2)</a>, i.e. how much more likely the current policy is to emit a sampled token than the rollout policy that generated the batch, which is also the ratio the surrogate clips. TRL logs that ratio directly as <code>val/ratio</code> and <code>val/ratio_var</code>, but neither is tracked here, because squaring the log-ratio is what preserves the per-token movement that both of those discard (<a href="#9-appendix-why-the-importance-ratio-is-not-tracked">Section 9</a>).</li>
+</ul>
+<p><strong>Context signals, which support the above but are rarely acted on alone.</strong></p>
+<ul>
+<li><code>objective/non_score_reward</code> is the <span class="arithmatex">\(-\beta \cdot \text{KL}\)</span> term itself, so it is <span class="arithmatex">\(\beta\)</span> times <code>objective/kl</code> and equals the gap between <code>objective/scores</code> and <code>objective/rlhf_reward</code>.</li>
+<li><code>loss/policy_avg</code> is the clipped surrogate objective averaged over the update, and it is deliberately not read as a convergence signal. It is advantage-weighted and starts each update near zero, since the ratio is 1.0 on the first epoch and the advantages are standardised to zero mean per batch, so a small value means only that there is no net gradient push at that moment, not that the policy has converged. Progress is read from the reward rising rather than from this loss falling, which is why <code>loss/value_avg</code> is the loss monitored in its place.</li>
+<li><code>objective/entropy</code> is TRL's sequence-level entropy estimate and is deliberately not read here, despite being the more prominent name in the dashboard. It sums sampled-token surprisal over the response window after filling every position past the EOS token with a sentinel log-probability of 1.0, so it subtracts a nat per padded position, tracks response length rather than entropy, and turns negative once padding dominates. On run <code>e71b6d13</code> it correlates with <code>val/num_eos_tokens</code> at -0.927. The per-token <code>policy/entropy_avg</code> above is the signal to use.</li>
+<li><code>val/num_eos_tokens</code> counts EOS tokens across the batch. Since the padding token is the EOS token, this counts the whole tail left after each response ends rather than one token per terminated sequence, so it reads as aggregate tail length. A rising count therefore means responses are finishing earlier within the budget, which is the generation hygiene of <a href="#35-generation-hygiene-as-reward-hacking-defence">Section 3.5</a> taking effect.</li>
+<li><code>lr</code> records the scheduled learning rate, for confirming the decay.</li>
+</ul>
+<h3 id="52-observed-trajectory">5.2. Observed Trajectory<a class="headerlink" href="#52-observed-trajectory" title="Permanent link">&para;</a></h3>
+<p>The first full run (label <code>e71b6d13</code>) completed its 10,000-episode budget in 625 updates over roughly 7 hours on the development workstation, writing checkpoints every 100 updates and the final policy adapter to <code>results/ppo_rlhf_loop/adapter_&lt;label&gt;/</code>. <a href="#tab-ppo-results">Table 3</a> gives the first- and last-50-update means of the monitored signals, grouped by the tiers of <a href="#5-training-diagnostics">Section 5</a>, and their per-update trajectories are plotted by tier in <a href="#fig-ppo-primary">Figure 1</a> to <a href="#fig-ppo-context">Figure 3</a> from the run's logged history (also logged to TensorBoard, with the final-step values persisted to <code>metrics_&lt;label&gt;.json</code>). Each noisy series is drawn raw with an exponential-moving-average (EMA) overlay at weight 0.9, the smoothing scheme used for the loss figures of the earlier stages.</p>
+<p><a id="tab-ppo-results"></a></p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Signal</th>
+<th>First 50 updates</th>
+<th>Last 50 updates</th>
+<th>Expected if healthy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary</td>
+<td><code>objective/rlhf_reward</code> (score minus KL cost)</td>
+<td>-0.131</td>
+<td>0.154</td>
+<td>Rises steadily and turns positive</td>
+</tr>
+<tr>
+<td>Primary</td>
+<td><code>objective/scores</code> (raw RM score)</td>
+<td>-0.104</td>
+<td>0.268</td>
+<td>Rises without a rise-then-collapse</td>
+</tr>
+<tr>
+<td>Primary</td>
+<td><code>objective/kl</code> (nats)</td>
+<td>0.135</td>
+<td>0.569</td>
+<td>Grows early, then stays bounded</td>
+</tr>
+<tr>
+<td>Stability</td>
+<td><code>policy/entropy_avg</code> (nats per token)</td>
+<td>1.003</td>
+<td>0.923</td>
+<td>Declines gently, no collapse towards zero</td>
+</tr>
+<tr>
+<td>Stability</td>
+<td><code>loss/value_avg</code></td>
+<td>0.047</td>
+<td>0.032</td>
+<td>Falls, then holds stable</td>
+</tr>
+<tr>
+<td>Stability</td>
+<td><code>policy/clipfrac_avg</code></td>
+<td>0.008</td>
+<td>0.008</td>
+<td>Flat and low, well under 20%</td>
+</tr>
+<tr>
+<td>Stability</td>
+<td><code>policy/approxkl_avg</code></td>
+<td>0.0012</td>
+<td>0.0010</td>
+<td>Small and flat under active clipping</td>
+</tr>
+<tr>
+<td>Context</td>
+<td><code>val/num_eos_tokens</code></td>
+<td>729</td>
+<td>939</td>
+<td>Rises, then plateaus</td>
+</tr>
+</tbody>
+</table>
+<p>Table 3: Training trajectory of run <code>e71b6d13</code>, grouped by the signal tiers of <a href="#5-training-diagnostics">Section 5</a>, each entry a mean over the first and last 50 of its 625 updates. The final column states the behaviour a successful run is expected to show, with the remedies in <a href="#5-training-diagnostics">Section 5</a>.</p>
+<p>Judged against the signals of <a href="#5-training-diagnostics">Section 5</a>, the run is healthy across all three tiers, each taken in turn below with its figure.</p>
+<p><strong>Primary signals.</strong> The net RLHF reward, the actual optimisation target, turned positive early and kept rising, so the score gain outpaced the KL cost throughout, which <a href="#fig-ppo-primary">Figure 1</a> shows as the two reward curves climbing together with only a slowly widening gap between them. That gap is the KL penalty of <a href="#eq-kl-reward">(1)</a>, which is the lower panel scaled by <span class="arithmatex">\(\beta\)</span>, so the two panels are not independent readings. The raw RM score rose steadily by roughly 0.37 with no sharp rise-then-collapse (<a href="#fig-ppo-primary">Figure 1</a>, top). That rise cannot be trusted on its own, because it is comparable to the reward the policy could earn by exploiting the RM rather than improving: on its weakest adversarial probes the RM separates good from bad by only about 0.1 reward units, and on some prefers the worse response outright (RM report, Section 6.3). When the gain is no larger than the RM's own error scale, the score alone cannot separate genuine improvement from reward hacking, which is what the completion review of <a href="#7-qualitative-completion-review">Section 7</a> checks. The KL divergence stayed bounded (<a href="#fig-ppo-primary">Figure 1</a>, bottom), stabilising around 0.4 to 0.6 with a gentle upward drift to a maximum of 1.27 at update 615, which suggests the 10,000-episode budget was about the right stopping point at <span class="arithmatex">\(\beta = 0.2\)</span>.</p>
+<figure id="fig-ppo-primary" style="text-align: center;">
+  <img src="/assets/images/ppo_primary_e71b6d13.png" alt="Primary signals: reward-model score and net RLHF reward, above the KL divergence to the SFT reference, over training updates." style="width: 85%;">
+  <figcaption class="arithmatex">Figure 1: Primary signals of run e71b6d13, each raw per update with an EMA overlay. Top: the raw reward-model score \(r_\phi\) and the net RLHF reward of <a href="#eq-kl-reward">(1)</a>. Bottom: the sequence-level KL to the SFT reference, with its maximum marked.</figcaption>
+</figure>
+
+<p><strong>Stability signals.</strong> The policy kept exploring and the optimisation stayed inside its trust region, taking the four panels of <a href="#fig-ppo-stability">Figure 2</a> in the order they appear. Entropy held up (top left). The per-token entropy drifted from a first-50-update mean of 1.003 nats to a last-50 mean of 0.923, a decline of roughly 8% over 625 updates, with successive fifths of the run averaging 0.98, 0.94, 0.95, 0.97, and 0.93. The plotted curve opens higher, at 1.206, but that is the first update's single noisy value seeding the moving average rather than a transient, since updates 1 to 10 already average 1.050. Its smoothed minimum of 0.892 falls at update 82, early rather than late, so this is drift rather than a downward trend. That is the mild sharpening <a href="#5-training-diagnostics">Section 5</a> expects, and it leaves the policy far from the entropy-collapse failure mode, which matters because TRL v1's <code>PPOConfig</code> exposes no entropy-bonus coefficient to counter such a collapse. The figure averages over every position rather than the generated tokens alone, but that is not what drives it: regressing the series on the post-EOS fraction of the response window explains 1% of its variance and moves the average by under 0.02 nats across the run. The critic value loss (top right) fell steeply from 0.147 at the first update to below 0.06 by the sixth and then settled near 0.03, giving first- and last-50-update means of 0.047 and 0.032. The critic's own clip never became a concern, since <code>val/clipfrac_avg</code> fell from 0.021 over the first 50 updates to 0.000 over the last 50, so the conditional read of <a href="#5-training-diagnostics">Section 5</a> does not apply and the falling value loss reflects a critic that fits rather than one held back by <code>cliprange_value</code>. The policy clip fraction (bottom left) held flat at 0.8%, and it is unaffected by the padding tail, as it is a masked mean. The approximate KL to the rollout policy (bottom right) stayed near 0.001, though that figure reads healthier than the policy behaved, because of how it is averaged. <code>policy/approxkl_avg</code> is an unmasked mean, and at post-EOS positions the divergence is exactly 0 by construction, so with 45% of the window in that state the logged value understates the movement on generated tokens by a factor of about 1.8. Corrected update by update it sits near 0.0019. The same correction applied to the importance ratio, which is logged but not tracked (<a href="#9-appendix-why-the-importance-ratio-is-not-tracked">Section 9</a>), puts its largest deviation from 1.0 at 0.005 against a clip range of 0.2, so the conclusion holds with room to spare.</p>
+<figure id="fig-ppo-stability" style="text-align: center;">
+  <img src="/assets/images/ppo_stability_e71b6d13.png" alt="Stability signals: per-token policy entropy, critic value loss, policy clip fraction, and approximate KL to the rollout policy over training updates." style="width: 90%;">
+  <figcaption>Figure 2: Stability signals of run e71b6d13, each raw per update with an EMA overlay. Top row: per-token policy entropy, with its smoothed minimum marked, and critic value loss. Bottom row: policy clip fraction and approximate KL to the rollout policy.</figcaption>
+</figure>
+
+<p><strong>Context signals.</strong> <code>val/num_eos_tokens</code> rises from the opening updates and settles roughly 30% above its first-50 mean (729 to 939, <a href="#fig-ppo-context">Figure 3</a>). Because padding and EOS share a token id, this is 30% growth in the aggregate tail, so the reading is that responses finish earlier within the 128-token budget rather than that more of them finish at all. Either way the missing-EOS penalty of <a href="#35-generation-hygiene-as-reward-hacking-defence">Section 3.5</a> had its intended effect.</p>
+<figure id="fig-ppo-context" style="text-align: center;">
+  <img src="/assets/images/ppo_context_e71b6d13.png" alt="Context signal: EOS tokens per batch over training updates." style="width: 80%;">
+  <figcaption>Figure 3: Context signal of run e71b6d13. EOS tokens per batch, raw per update with an EMA overlay.</figcaption>
+</figure>
+
+<h2 id="6-quantitative-evaluation">6. Quantitative Evaluation<a class="headerlink" href="#6-quantitative-evaluation" title="Permanent link">&para;</a></h2>
+<p><a href="#52-observed-trajectory">Section 5.2</a> reads the signals the trainer logged during the run. This section measures the trained policy instead, on 100 held-out prompts carved from the training split with the run's own seed, which no stage of the pipeline trained on. Both subsections score those prompts with the frozen RM and report the scores, which is what distinguishes this section from the review of the same held-out set in <a href="#7-qualitative-completion-review">Section 7</a>. Scoring inherits one limitation: the judge is the model PPO optimised against, which makes it blind to reward hacking by construction, since a completion that exploits the RM registers as an improvement. No amount of extra sampling fixes that, which is why the numbers here are settled first and then read against the text.</p>
+<h3 id="61-headline-comparison">6.1. Headline Comparison<a class="headerlink" href="#61-headline-comparison" title="Permanent link">&para;</a></h3>
+<p>Over 100 held-out prompts, each scored as the mean of four samples at temperature 0.7, the final PPO policy reaches a mean RM score of 0.364 against the SFT reference's 0.276. The paired per-prompt gain is 0.087, with a bootstrap 95% confidence interval of 0.017 to 0.161, so the improvement is resolvable but modest, and roughly a quarter of the 0.37 training-time score gain transfers to held-out prompts.</p>
+<p>The win rate tells the sharper version of the same story. PPO outscores the reference on 54 of 100 prompts, an interval of 44% to 64% that spans chance, so the win rate on its own is not resolvable. Taken together, PPO lifts the average score without winning on a clear majority of prompts. Sampling four completions per prompt rather than one matters here: a single draw at temperature 0.7 leaves per-prompt noise comparable to the effect, which is enough to move a win rate by more than ten points. The win rate is in any case directional evidence only, since the judge is the RM the policy was optimised against, and the text-level review of <a href="#7-qualitative-completion-review">Section 7</a> is the check on what it means.</p>
+<h3 id="62-checkpoint-sweep-no-late-run-decline">6.2. Checkpoint Sweep: No Late-Run Decline<a class="headerlink" href="#62-checkpoint-sweep-no-late-run-decline" title="Permanent link">&para;</a></h3>
+<p>PPO ships its final policy unconditionally, because the TRL trainer has no best-checkpoint machinery and no trustworthy selection metric exists: choosing the checkpoint with the highest held-out RM score would select for reward hacking, since the RM is the metric being optimised. Selection is therefore not attempted. Instead, a second diagnostic script, <a href="https://github.com/nhan-dam/rlhf-course/blob/main/src/diagnostics/sweep_ppo_checkpoints.py"><code>src/diagnostics/sweep_ppo_checkpoints.py</code></a>, monitors for decline after the fact. It evaluates every saved checkpoint on the same 100 held-out prompts, drawing four samples per prompt under an identically reseeded stream so differences between rows reflect the weights rather than the draw, and tabulates the RM score alongside mechanical degeneracy statistics that the RM cannot fake: word 4-gram repetition (the Repetition column of <a href="#tab-ppo-sweep">Table 4</a>), list-marker frequency (List fraction, the format-gaming signature), response length (Mean words), and empty completions, which are reported below rather than as a column. Repetition is the fraction of a completion's overlapping four-word windows that duplicate an earlier window, so a phrase repeated to the token budget drives it towards 1 while ordinary prose stays near 0, four words being wide enough to ignore common short phrases and narrow enough to catch a loop. Measuring it on whitespace-split words rather than tokens keeps it independent of the tokeniser. It also writes every per-prompt and per-sample score to a JSON companion, which is what the intervals below are computed from. Each checkpoint's gain is the mean of its 100 paired per-prompt differences against the SFT baseline of 0.276, and the interval beside it is a bootstrap percentile interval over those same pairs. <a href="#tab-ppo-sweep">Table 4</a> shows the result.</p>
+<p><a id="tab-ppo-sweep"></a></p>
+<table>
+<thead>
+<tr>
+<th>Checkpoint (update)</th>
+<th>Mean RM score</th>
+<th>Gain vs SFT (95% CI)</th>
+<th>Win rate vs SFT</th>
+<th>Repetition</th>
+<th>List fraction</th>
+<th>Mean words</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100</td>
+<td>+0.327</td>
+<td>+0.051 (-0.033 to +0.132)</td>
+<td>55%</td>
+<td>0.019</td>
+<td>11%</td>
+<td>52</td>
+</tr>
+<tr>
+<td>200</td>
+<td>+0.351</td>
+<td>+0.075 (-0.007 to +0.155)</td>
+<td>57%</td>
+<td>0.017</td>
+<td>10%</td>
+<td>49</td>
+</tr>
+<tr>
+<td>300</td>
+<td>+0.354</td>
+<td>+0.077 (+0.002 to +0.154)</td>
+<td>53%</td>
+<td>0.019</td>
+<td>10%</td>
+<td>51</td>
+</tr>
+<tr>
+<td>400</td>
+<td>+0.379</td>
+<td>+0.102 (+0.025 to +0.184)</td>
+<td>54%</td>
+<td>0.018</td>
+<td>12%</td>
+<td>50</td>
+</tr>
+<tr>
+<td>500</td>
+<td>+0.386</td>
+<td>+0.110 (+0.033 to +0.189)</td>
+<td>61%</td>
+<td>0.018</td>
+<td>12%</td>
+<td>49</td>
+</tr>
+<tr>
+<td>600</td>
+<td>+0.375</td>
+<td>+0.099 (+0.023 to +0.175)</td>
+<td>58%</td>
+<td>0.018</td>
+<td>11%</td>
+<td>52</td>
+</tr>
+<tr>
+<td>625 (final)</td>
+<td>+0.364</td>
+<td>+0.087 (+0.017 to +0.161)</td>
+<td>54%</td>
+<td>0.016</td>
+<td>8%</td>
+<td>50</td>
+</tr>
+</tbody>
+</table>
+<p>Table 4: Checkpoint sweep of run <code>e71b6d13</code> over 100 held-out prompts, each scored as the mean of four samples, with bootstrap percentile intervals over the paired differences.</p>
+<p>Two conclusions follow. First, there is no decline. Every checkpoint sits above the SFT baseline, the gain rises over the first half of training and then flattens, and the final checkpoint's interval excludes zero, so shipping the final policy is validated rather than assumed. The apparent peak at update 500 is not a real ordering. Compared with the final checkpoint prompt by prompt it leads by 0.023, an interval of -0.034 to +0.078 that spans zero, and the whole spread of checkpoint gains, 0.059, is under twice the 0.037 standard error of any one of them. Selecting on that peak would be selecting noise, which is a second reason to leave selection alone. Second, the gain is not driven by degeneration, since repetition, list fraction, and response length stay flat across the run, with the list fraction lowest at the final checkpoint, and no checkpoint produced an empty completion.</p>
+<h2 id="7-qualitative-completion-review">7. Qualitative Completion Review<a class="headerlink" href="#7-qualitative-completion-review" title="Permanent link">&para;</a></h2>
+<p>The scores of <a href="#6-quantitative-evaluation">Section 6</a> cannot distinguish a better answer from one that exploits the judge, so the generated text has to be read. The trainer's own check, <code>generate_completions()</code>, prints five samples to the console and persists nothing, so a one-off diagnostic script, <a href="https://github.com/nhan-dam/rlhf-course/blob/main/src/diagnostics/generate_ppo_completions.py"><code>src/diagnostics/generate_ppo_completions.py</code></a>, backfills a reviewable artefact. It regenerates held-out prompts with the trained policy and, from the same loaded model with its adapters disabled, with the SFT reference policy, sampling both under identical seeded settings and scoring both with the frozen RM. Reading is only practical at small scale, so this section covers the first 20 of the same 100 prompts scored in <a href="#6-quantitative-evaluation">Section 6</a>, with the paired completions written to <code>results/ppo_rlhf_loop/completions_&lt;label&gt;.md</code> and prompts numbered by their position in that file. The reviewed file is committed as <a href="https://github.com/nhan-dam/rlhf-course/blob/main/reports/data/ppo_rlhf_loop/completions_e71b6d13.md"><code>reports/data/ppo_rlhf_loop/completions_e71b6d13.md</code></a>, so every prompt cited below can be read in full alongside both policies' completions. Three prompts there ask for help with using stolen credit cards, defrauding an elderly relative, and torture methods; where a policy complied, that completion is redacted in the committed copy, while the prompt, the score, and any refusing or deflecting completion are left intact. The redaction is marked in place and does not affect the findings, which rest on the scores and on whether each policy refused. Scores in that file are single draws at temperature 0.7 rather than the four-sample means of <a href="#6-quantitative-evaluation">Section 6</a>, so the two sets of numbers are not directly comparable.</p>
+<h3 id="71-findings">7.1. Findings<a class="headerlink" href="#71-findings" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Both RM weaknesses flagged before the run (RM report, Section 6.3) appear, and they co-occur (prompts 5 and 10).</strong> On the detergent-recipe prompt (prompt 5), the PPO completion switches to numbered steps and outscores the reference (1.70 against 1.44), yet its content is confidently wrong: the recipe's first ingredient is laundry detergent itself, and it directs the user to wash clothes in the dishwasher. The holiday-store-hours prompt (prompt 10) is the cleanest case. The PPO completion is a templated bullet list claiming most stores are open on Christmas 'to give customers time to rest', and the RM doubles its score (1.08 against 0.54). This is format gaming rewarded over truth. The drift is mild, i.e. PPO has not collapsed into lists everywhere, but where lists appear the score jumps for the wrong reason.</li>
+<li><strong>Degeneration is rare and correctly punished (prompts 6 and 15).</strong> One completion (prompt 6) repeats 'the International Space Station' to the token budget and scores -0.66. On the same prompt the reference claims humans have visited Pluto, the Sun, and stars, and scores +0.63, confirming the RM is near chance on confidently wrong prose. The opposite failure also occurs once (prompt 15), where PPO answers a substantive question with only 'Good luck, and have fun!' (0.07 against the reference's 1.15).</li>
+<li><strong>The genuine gains are on harmlessness and conversational behaviour</strong> (prompts 14, 16, 17, and 18), which is what HH-RLHF should teach. PPO de-escalates a hostile sexist rant (prompt 17, +0.79), refuses a celebrity phone-call request more firmly (prompt 14, +0.85), gives a more balanced answer to a loaded welfare question (prompt 16), and politely closes conversations where the reference emitted nothing (prompt 18, +1.33), consistent with the rising EOS counts of <a href="#52-observed-trajectory">Section 5.2</a>.</li>
+<li><strong>Harmful compliance persists (prompts 3, 7, and 12).</strong> PPO still assists with stolen credit cards (prompt 3) and gives step-by-step instructions for defrauding an elderly relative (prompt 7, scored worse than the reference), and it plays along with a torture roleplay (prompt 12). The RM scores these low, but the KL anchor to an SFT policy that also complies limits how far PPO can move.</li>
+</ul>
+<h3 id="72-verdict">7.2. Verdict<a class="headerlink" href="#72-verdict" title="Permanent link">&para;</a></h3>
+<p>The run is a qualified pass. PPO moved the policy in the intended direction on harmlessness and dialogue behaviour without wholesale reward hacking, and the optimisation itself was stable. However, the completions confirm that the RM's format-gaming and confidently-wrong blind spots are exploited at the margin, with the KL penalty containing rather than eliminating the effect. Both caveats should carry into any decision to extend training or lower <span class="arithmatex">\(\beta\)</span>, since either change gives the policy more room to optimise exactly those blind spots.</p>
+<h2 id="8-reflections-and-next-steps">8. Reflections and Next Steps<a class="headerlink" href="#8-reflections-and-next-steps" title="Permanent link">&para;</a></h2>
+<p><strong>Check how a scalar is computed before reading a trend into it.</strong> Three of this stage's diagnostics turned out to measure something other than what their names suggest, and the cause is shared. Rollouts always run to the full response budget, and because the pipeline sets the padding token to the EOS token, a response that finishes early is followed by a long tail of EOS tokens. TRL neutralises that tail by filling it with a sentinel log-probability of 1.0, then aggregates some metrics over it and masks others. Whether a given metric survives follows a simple rule:</p>
+<ul>
+<li>Metrics built from a <em>difference</em> of two log-probability tensors are safe at the sentinel, since it cancels to exactly zero. <code>objective/kl</code> and <code>objective/non_score_reward</code> then <em>sum</em> over the response, and zero is the identity for a sum, so both are exact.</li>
+<li>The same differences fed to an <em>unmasked mean</em> are not safe. The sentinel cancels to the perfectly healthy value, a ratio of 1.0 and a divergence of 0, and averaging those in dilutes the result towards health. This is why <code>policy/approxkl_avg</code> and <code>val/ratio</code> read about 1.8 times better than the policy behaves, as <a href="#52-observed-trajectory">Section 5.2</a> records. <code>val/ratio_var</code> is deflated by the square of that factor, about 3.3 times, because it is the variance of quantities each already scaled by one minus the tail fraction.</li>
+<li><code>objective/entropy</code> is the one metric that reads the log-probability tensor without differencing, so the sentinel does not cancel and instead subtracts a nat per padded position, which is what makes it a length measure rather than an entropy one (<a href="#5-training-diagnostics">Section 5</a>).</li>
+</ul>
+<p><a href="#tab-ppo-masking">Table 5</a> applies the rule to every scalar this stage logs, so a future run can start from the verdict rather than repeat the exercise. To recover an unmasked mean on generated tokens only, divide by one minus the tail fraction of the response window. That fraction averages 0.451 of the 2,048 response slots per update, giving a mean correction factor of 1.82, but it ranges from 0.18 to 0.68 across updates, so the correction is applied per update rather than to an aggregate. The fraction is estimated from <code>val/num_eos_tokens</code>, which assumes the tail holds only EOS tokens, so the factor is a lower bound. The padding tail is not the only way a logged name can mislead. <code>val/ratio_var</code> is a variance taken across microbatches rather than across tokens, which follows from where TRL places its averaging step and is unrelated to padding (<a href="#9-appendix-why-the-importance-ratio-is-not-tracked">Section 9</a>).</p>
+<p><a id="tab-ppo-masking"></a></p>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>How it is aggregated</th>
+<th>Effect of the tail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>objective/rlhf_reward</code></td>
+<td>Per-sequence score plus summed KL</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>objective/scores</code></td>
+<td>Reward model on the truncated response</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>objective/kl</code></td>
+<td>Sum over the response, sentinel cancels to 0</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>objective/non_score_reward</code></td>
+<td>Sum of <span class="arithmatex">\(-\beta \cdot \text{KL}\)</span>, same cancellation</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>loss/policy_avg</code></td>
+<td><code>masked_mean</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>loss/value_avg</code></td>
+<td><code>masked_mean</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>policy/clipfrac_avg</code></td>
+<td><code>masked_mean</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>val/clipfrac_avg</code></td>
+<td><code>masked_mean</code></td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>lr</code></td>
+<td>Scheduler</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>policy/entropy_avg</code></td>
+<td>Unmasked mean of a closed-form entropy</td>
+<td>Mild dilution, measured under 0.02 nats</td>
+</tr>
+<tr>
+<td><code>policy/approxkl_avg</code></td>
+<td>Unmasked mean, tail contributes exactly 0</td>
+<td>Deflated by about 1.8 times</td>
+</tr>
+<tr>
+<td><code>val/ratio</code></td>
+<td>Unmasked mean, tail contributes exactly 1.0</td>
+<td>Deflated by about 1.8 times</td>
+</tr>
+<tr>
+<td><code>val/ratio_var</code></td>
+<td>Variance across microbatches of the same per-microbatch mean</td>
+<td>Deflated by about 3.3 times</td>
+</tr>
+<tr>
+<td><code>val/num_eos_tokens</code></td>
+<td>Count of EOS ids</td>
+<td>Measures tail length, not sequences finished</td>
+</tr>
+<tr>
+<td><code>objective/entropy</code></td>
+<td>Sum of an undifferenced log-probability</td>
+<td>Unusable, tracks response length</td>
+</tr>
+</tbody>
+</table>
+<p>Table 5: Every scalar logged by this stage, classified by whether the post-EOS tail reaches it.</p>
+<p><strong>Two levers are already identified.</strong> The reward model's blind spots are the binding constraint on how far a second run could go, since <a href="#7-qualitative-completion-review">Section 7</a> found the policy exploiting exactly the format-gaming and confidently-wrong weaknesses catalogued before training, so targeted adversarial preference pairs added to the RM's training data would raise the ceiling more than any PPO hyperparameter change. Separately, the prompt-length cap of <a href="#34-prompt-extraction-and-length-filtering">Section 3.4</a> was set conservatively and has headroom, which is a configuration-only experiment.</p>
+<h2 id="9-appendix-why-the-importance-ratio-is-not-tracked">9. Appendix: Why the Importance Ratio Is Not Tracked<a class="headerlink" href="#9-appendix-why-the-importance-ratio-is-not-tracked" title="Permanent link">&para;</a></h2>
+<p>TRL logs three scalars derived from the same importance ratio, and <a href="#5-training-diagnostics">Section 5</a> tracks only one of them. <code>policy/approxkl_avg</code> is kept, while <code>val/ratio</code> and <code>val/ratio_var</code> are not, which is also why the ratio has no row in <a href="#tab-ppo-results">Table 3</a> and no panel in <a href="#fig-ppo-stability">Figure 2</a>. This appendix gives the reason, since a reader watching TensorBoard will see all three.</p>
+<p><strong>The ratio itself.</strong> PPO reuses each batch of rollouts for <code>num_ppo_epochs</code> optimisation epochs. The batch was generated by the rollout policy <span class="arithmatex">\(\pi_{\theta_\text{old}}\)</span>, but the policy under optimisation has already moved by the second epoch. Each token is therefore weighted by the importance ratio</p>
+<p><span id="eq-importance-ratio"></span></p>
+<div class="arithmatex">\[r_t = \frac{\pi_\theta(y_t \mid x, y_{&lt;t})}{\pi_{\theta_\text{old}}(y_t \mid x, y_{&lt;t})}. \tag{2}\]</div>
+<p>A value of 1 means the policy has not moved at that token, a value above 1 that it now favours the sampled token more, and a value below 1 that it favours it less.</p>
+<p><strong>What the diagnostic must detect.</strong> How far the policy has moved off the batch it was trained on. Large movement means the surrogate objective is being evaluated far from where it is valid, so the update cannot be trusted.</p>
+<p><strong>The two candidates.</strong> <code>val/ratio</code> averages <span class="arithmatex">\(r_t\)</span>. <code>policy/approxkl_avg</code> averages <span class="arithmatex">\(0.5(\log r_t)^2\)</span>. The difference is that the first keeps the sign of the movement and the second squares it away.</p>
+<p><strong>Why the signed average fails.</strong> Opposite movements cancel. Four tokens with ratios 1.2, 0.8, 1.2, 0.8 average to exactly 1.0, which reads as a policy that has not moved, when in fact every token moved by 20%. Squaring removes the cancellation, since each token then contributes a positive amount. On the same four tokens <code>approxkl</code> returns 0.021 rather than 0.</p>
+<p><strong>The cancellation is real, not hypothetical.</strong> Across run <code>e71b6d13</code>, <code>val/ratio</code> stayed within 0.32% of its own mean while <code>policy/approxkl_avg</code> varied by up to 52% of its mean. The two are built from the same per-token quantity, yet only one of them carries a visible signal.</p>
+<p><strong>The obvious objection.</strong> A variance also squares deviations, so <code>val/ratio_var</code> ought to recover what the mean discards. It would, if it were the variance over tokens, which it is not.</p>
+<p><strong>What TRL actually stores.</strong> The trainer computes <span class="arithmatex">\(r_t\)</span> for every token in a microbatch, averages them into a single scalar, and records that scalar once per optimisation epoch, minibatch, and gradient-accumulation step. <code>val/ratio</code> is the mean of those scalars and <code>val/ratio_var</code> is their variance. The variance is therefore taken across microbatches, over a quantity in which the token-level spread has already been averaged away. Measured on this run, <code>policy/approxkl_avg</code> is about 600 times larger than <span class="arithmatex">\(0.5 \times\)</span> <code>val/ratio_var</code>, which is the order of magnitude expected when a spread is averaged over a microbatch of roughly a thousand positions before being measured.</p>
+<p><strong>Conclusion.</strong> <code>policy/approxkl_avg</code> is the only logged scalar that sees token-level movement. <code>val/ratio</code> conceals it by cancellation and <code>val/ratio_var</code> conceals it by averaging too early, so tracking either alongside <code>approxkl</code> would add a series without adding information. Both remain in <a href="#tab-ppo-masking">Table 5</a>, which audits every logged scalar for the padding effect of <a href="#8-reflections-and-next-steps">Section 8</a> rather than recommending what to watch.</p>
+<h2 id="10-references">10. References<a class="headerlink" href="#10-references" title="Permanent link">&para;</a></h2>
+<ul>
+<li><span id="ref-huang2024"></span>Huang, S., Noukhovitch, M., Hosseini, A., Rasul, K., Wang, W., and Tunstall, L. (2024). <em>The N+ Implementation Details of RLHF with PPO: A Case Study on TL;DR Summarization</em>. <a href="https://arxiv.org/abs/2403.17031">arXiv:2403.17031</a>.</li>
+<li><span id="ref-ouyang2022"></span>Ouyang, L., Wu, J., Jiang, X., Almeida, D., Wainwright, C. L., Mishkin, P., Zhang, C., Agarwal, S., Slama, K., Ray, A., Schulman, J., Hilton, J., Kelton, F., Miller, L., Simens, M., Askell, A., Welinder, P., Christiano, P., Leike, J., and Lowe, R. (2022). <em>Training Language Models to Follow Instructions with Human Feedback</em>. Advances in Neural Information Processing Systems (NeurIPS) 2022. <a href="https://arxiv.org/abs/2203.02155">arXiv:2203.02155</a>.</li>
+<li><span id="ref-stiennon2020"></span>Stiennon, N., Ouyang, L., Wu, J., Ziegler, D. M., Lowe, R., Voss, C., Radford, A., Amodei, D., and Christiano, P. (2020). <em>Learning to Summarize from Human Feedback</em>. Advances in Neural Information Processing Systems (NeurIPS) 2020. <a href="https://arxiv.org/abs/2009.01325">arXiv:2009.01325</a>.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

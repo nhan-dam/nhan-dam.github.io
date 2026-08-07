@@ -1,0 +1,2305 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Nhan Dam's Technical Notes on Machine Learning.">
+      
+      
+        <meta name="author" content="Nhan Dam">
+      
+      
+        <link rel="canonical" href="https://nhan-dam.github.io/rlhf/curriculum/phase02/">
+      
+      
+        <link rel="prev" href="../phase01/">
+      
+      
+        <link rel="next" href="../appendix/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Phase 2 - Classical RLHF Pipeline - ND's Machine Learning Notes</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#phase-2-the-classical-rlhf-pipeline" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="ND&#39;s Machine Learning Notes" class="md-header__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ND's Machine Learning Notes
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Phase 2 - Classical RLHF Pipeline
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nhan-dam/nhan-dam.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nhan-dam/nhan-dam.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  Learning
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../projects/" class="md-tabs__link">
+          
+  
+  
+  Projects
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../reference/ml_workstation_setup_uv/" class="md-tabs__link">
+          
+  
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="ND&#39;s Machine Learning Notes" class="md-nav__button md-logo" aria-label="ND's Machine Learning Notes" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ND's Machine Learning Notes
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nhan-dam/nhan-dam.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nhan-dam/nhan-dam.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Learning
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Learning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLHF Curriculum
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RLHF Curriculum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 1 - Reinforcement Learning Foundations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 2 - Classical RLHF Pipeline
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 2 - Classical RLHF Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#3-module-3-supervised-fine-tuning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Module 3: Supervised Fine-Tuning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Module 3: Supervised Fine-Tuning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-theory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Theory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-hands-on-project-supervised-fine-tuning-with-low-rank-adaptation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Hands-on Project: Supervised Fine-Tuning with Low-Rank Adaptation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-module-4-reward-model-training" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Module 4: Reward Model Training
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Module 4: Reward Model Training">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-theory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Theory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rm-quality-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Intuitions for Reward Model Quality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-hands-on-project-reward-model-training" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. Hands-on Project: Reward Model Training
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ppo-rlhf-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Module 5: The Full Reinforcement Learning from Human Feedback Training Loop
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Module 5: The Full Reinforcement Learning from Human Feedback Training Loop">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-theory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1. Theory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-debugging-the-reinforcement-learning-from-human-feedback-training-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2. Debugging the Reinforcement Learning from Human Feedback Training Loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-suggested-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3. Suggested Reading
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.3. Suggested Reading">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#531-stiennon-et-al-2020-learning-to-summarize-from-human-feedback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.1. Stiennon et al. (2020): Learning to Summarize from Human Feedback
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#532-ouyang-et-al-2022-training-language-models-to-follow-instructions-with-human-feedback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.2. Ouyang et al. (2022): Training Language Models to Follow Instructions with Human Feedback
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-hands-on-project-full-reinforcement-learning-from-human-feedback-training-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4. Hands-on Project: Full Reinforcement Learning from Human Feedback Training Loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appendix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DLAI RLHF Course
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    DLAI RLHF Course
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/DLAI_Lecture1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 1 - Conceptual Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/DLAI_Lecture2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 2 - Datasets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/DLAI_Lecture3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 3 - Tune an LLM with RLHF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/DLAI_Lecture4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 4 - Evaluate an RLHF-Tuned Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dlai/DLAI_Lecture5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lecture 5 - Google Cloud Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Projects
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Projects
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/report_qlearning_blackjack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 1 - Tabular Q-Learning on Gymnasium Blackjack
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/report_qlearning_cartpole/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 2 - Tabular Q-Learning on Gymnasium CartPole
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/report_dqn_cartpole/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 3 - Deep Q-Network on Gymnasium CartPole
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/report_ppo_lunarlander/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 4 - Proximal Policy Optimisation on Gymnasium LunarLander
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/report_sft_lora_dolly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 5 - Supervised Fine-Tuning of Qwen2.5-0.5B
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/report_reward_model_hh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 6 - Reward Model Training on Anthropic HH-RLHF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/report_ppo_rlhf_loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 7 - Full RLHF Loop with Proximal Policy Optimisation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/ml_workstation_setup_uv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mac ML Workstation Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/github-pages-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitHub Pages Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/github_cheatsheet_chapter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitHub Task-Oriented Cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/claude-code-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude Code Cheatsheet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#3-module-3-supervised-fine-tuning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Module 3: Supervised Fine-Tuning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Module 3: Supervised Fine-Tuning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-theory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Theory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-hands-on-project-supervised-fine-tuning-with-low-rank-adaptation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Hands-on Project: Supervised Fine-Tuning with Low-Rank Adaptation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-module-4-reward-model-training" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Module 4: Reward Model Training
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Module 4: Reward Model Training">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-theory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Theory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rm-quality-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Intuitions for Reward Model Quality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-hands-on-project-reward-model-training" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. Hands-on Project: Reward Model Training
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ppo-rlhf-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Module 5: The Full Reinforcement Learning from Human Feedback Training Loop
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Module 5: The Full Reinforcement Learning from Human Feedback Training Loop">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-theory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1. Theory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-debugging-the-reinforcement-learning-from-human-feedback-training-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2. Debugging the Reinforcement Learning from Human Feedback Training Loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-suggested-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3. Suggested Reading
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.3. Suggested Reading">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#531-stiennon-et-al-2020-learning-to-summarize-from-human-feedback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.1. Stiennon et al. (2020): Learning to Summarize from Human Feedback
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#532-ouyang-et-al-2022-training-language-models-to-follow-instructions-with-human-feedback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.2. Ouyang et al. (2022): Training Language Models to Follow Instructions with Human Feedback
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-hands-on-project-full-reinforcement-learning-from-human-feedback-training-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4. Hands-on Project: Full Reinforcement Learning from Human Feedback Training Loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/nhan-dam/nhan-dam.github.io/edit/main/docs/rlhf/curriculum/phase02.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="phase-2-the-classical-rlhf-pipeline">Phase 2 — The Classical RLHF Pipeline<a class="headerlink" href="#phase-2-the-classical-rlhf-pipeline" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Created on: 22 April 2026</p>
+<p>Updated on: 16 July 2026</p>
+</blockquote>
+<p>Reinforcement learning from human feedback (RLHF), as originally described in 'Learning to Summarize from Human Feedback' (Stiennon et al., 2020) and subsequently in InstructGPT (Ouyang et al., 2022), consists of three sequential stages, each covered by one module of this phase. Supervised fine-tuning (SFT) turns a base language model into an instruction follower (Module 3). Reward model (RM) training distils human preferences into a scalar scoring function (Module 4). Proximal policy optimisation (PPO) then optimises the SFT model against the reward model (Module 5), reusing the PPO machinery developed in Module 2 (<a href="../phase01/#alg-ppo">Algorithm 4</a>). Each stage consumes the artefact produced by the previous one, so the modules must be completed in order.</p>
+<h2 id="3-module-3-supervised-fine-tuning">3. Module 3: Supervised Fine-Tuning<a class="headerlink" href="#3-module-3-supervised-fine-tuning" title="Permanent link">&para;</a></h2>
+<h3 id="31-theory">3.1. Theory<a class="headerlink" href="#31-theory" title="Permanent link">&para;</a></h3>
+<p>A pre-trained language model is a next-token predictor trained on web-scale text. It has no notion of instruction-following: prompted with a question, it is as likely to continue with another question as to answer it, because both continuations are plausible web text. The SFT step addresses this by fine-tuning the base model on a curated dataset of (prompt, response) pairs, where the responses are high-quality demonstrations written by human annotators or distilled from a larger model.</p>
+<p>SFT is standard supervised learning with cross-entropy loss. Given a prompt <span class="arithmatex">\(x\)</span> and a target response <span class="arithmatex">\(y = (y_1, \ldots, y_T)\)</span>, the SFT loss is</p>
+<p><span id="eq-sft-loss"></span></p>
+<div class="arithmatex">\[\mathcal{L}_{\text{SFT}}(\theta) = -\sum_{t=1}^{T} \log p_\theta(y_t \mid x, y_{\lt t}), \tag{21}\]</div>
+<p>where <span class="arithmatex">\(y_{\lt t} = (y_1, \ldots, y_{t-1})\)</span> denotes the response tokens preceding position <span class="arithmatex">\(t\)</span>, and <span class="arithmatex">\(p_\theta\)</span> is the model's next-token distribution. Note that the sum in <a href="#eq-sft-loss">(21)</a> runs over response tokens only. The prompt tokens condition the prediction but contribute no loss terms of their own, because the model is never asked to generate a prompt. Computing loss on the prompt as well would dilute the gradient signal with ordinary language-modelling terms unrelated to the behaviour being taught. In implementations the prompt and response are concatenated into a single sequence <span class="arithmatex">\([x, y]\)</span> and fed through the model in one forward pass, which produces a next-token prediction at every position. Restricting the loss to response positions therefore requires masking out the prompt positions from the cross-entropy. This masking is what is known as the 'completion-only loss'.</p>
+<p>The SFT model is denoted <span class="arithmatex">\(\pi_{\text{ref}}\)</span> and called the <strong>reference policy</strong>, because the later PPO stage treats it as a fixed anchor: a Kullback–Leibler (KL) divergence penalty (introduced in <a href="#51-theory">Section 5.1</a>) punishes the policy for drifting away from it.</p>
+<p><strong>LoRA for efficient fine-tuning.</strong> Full fine-tuning of a multi-billion-parameter model is impractical on a single workstation: every weight matrix needs gradients, optimiser state, and storage for a full model copy per experiment. Low-Rank Adaptation (LoRA) (Hu et al., 2021) exploits the empirical observation that the <em>change</em> a fine-tune makes to a weight matrix has low intrinsic rank, even when the matrix itself does not. LoRA therefore freezes each pre-trained weight matrix <span class="arithmatex">\(W \in \mathbb{R}^{d \times k}\)</span> and learns an additive update factorised as <span class="arithmatex">\(\Delta W = BA\)</span>, with <span class="arithmatex">\(B \in \mathbb{R}^{d \times r}\)</span>, <span class="arithmatex">\(A \in \mathbb{R}^{r \times k}\)</span>, and <span class="arithmatex">\(r \ll \min(d, k)\)</span>, typically injected into the attention projection layers. The adapted forward pass is</p>
+<div class="arithmatex">\[h = Wx + \frac{\alpha}{r} BAx,\]</div>
+<p>where <span class="arithmatex">\(\alpha\)</span> is a constant scaling factor (conventionally <span class="arithmatex">\(\alpha = 2r\)</span>) that decouples the update's effective magnitude from the choice of rank. <span class="arithmatex">\(B\)</span> is initialised to zero, so <span class="arithmatex">\(\Delta W = 0\)</span> at the start of training and the adapted model behaves exactly like the base model, with no disruptive random perturbation. The number of trainable parameters scales as <span class="arithmatex">\(O(r(d + k))\)</span> rather than <span class="arithmatex">\(O(dk)\)</span>, and a rank of <span class="arithmatex">\(r = 16\)</span> to <span class="arithmatex">\(64\)</span> is typically sufficient for instruction following. Quantised LoRA (QLoRA) further quantises the frozen base weights to 4-bit precision, reducing memory by a factor of approximately 4 with minimal quality degradation.</p>
+<p>In practice <span class="arithmatex">\(r\)</span> is rarely the first hyperparameter to tune. Performance is fairly flat across the usual <span class="arithmatex">\(r = 8\)</span> to <span class="arithmatex">\(64\)</span> band, because once <span class="arithmatex">\(r\)</span> exceeds the update's intrinsic rank the extra capacity mostly adds parameters and overfitting risk. Most pipelines therefore fix a default of 16 or 32. The learning rate, the choice of which modules to adapt (e.g. attention-only versus all linear layers), and the effective scale <span class="arithmatex">\(\alpha / r\)</span> are higher-leverage knobs and are swept first. When <span class="arithmatex">\(r\)</span> is tuned at all, it is usually a coarse sweep jointly with <span class="arithmatex">\(\alpha\)</span>. The Adaptive LoRA (AdaLoRA) variant allocates rank adaptively per layer, automating the choice.</p>
+<h3 id="32-hands-on-project-supervised-fine-tuning-with-low-rank-adaptation">3.2. Hands-on Project: Supervised Fine-Tuning with Low-Rank Adaptation<a class="headerlink" href="#32-hands-on-project-supervised-fine-tuning-with-low-rank-adaptation" title="Permanent link">&para;</a></h3>
+<p><strong>Objective.</strong> Fine-tune Qwen2.5-0.5B (or a comparable small model) on a dialogue dataset to produce <span class="arithmatex">\(\pi_{\text{ref}}\)</span>. A small base model is used so that the four-model PPO stage of <a href="#54-hands-on-project-full-reinforcement-learning-from-human-feedback-training-loop">Section 5.4</a> fits in unified memory on a single workstation.</p>
+<p><strong>Setup.</strong></p>
+<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>/Volumes/ML_Workspace/projects/rlhf-course
+<span class="nb">cd</span><span class="w"> </span>/Volumes/ML_Workspace/projects/rlhf-course
+uv<span class="w"> </span>init<span class="w"> </span>--python<span class="w"> </span><span class="m">3</span>.12
+uv<span class="w"> </span>add<span class="w"> </span>torch<span class="w"> </span>transformers<span class="w"> </span>datasets<span class="w"> </span>tokenizers<span class="w"> </span>accelerate<span class="w"> </span>peft<span class="w"> </span>trl
+uv<span class="w"> </span>add<span class="w"> </span>huggingface_hub<span class="w"> </span>tensorboard<span class="w"> </span>rich
+</code></pre></div>
+<p><strong>Dataset.</strong> Use <code>databricks/databricks-dolly-15k</code>, a permissively licensed instruction dataset with 15,000 examples. Each example holds an <code>instruction</code>, an optional <code>context</code> passage, and a <code>response</code>. Mapping the examples to explicit <code>prompt</code>/<code>completion</code> columns lets <code>trl.SFTTrainer</code> apply the completion-only loss of <a href="#eq-sft-loss">(21)</a>: the column boundary tells the trainer where the prompt ends.</p>
+<p><strong>Implementation outline.</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModelForCausalLM</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">peft</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoraConfig</span><span class="p">,</span> <span class="n">get_peft_model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">trl</span><span class="w"> </span><span class="kn">import</span> <span class="n">SFTConfig</span><span class="p">,</span> <span class="n">SFTTrainer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
+
+<span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;Qwen/Qwen2.5-0.5B&quot;</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
+
+<span class="n">lora_config</span> <span class="o">=</span> <span class="n">LoraConfig</span><span class="p">(</span>
+    <span class="n">r</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">lora_alpha</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+    <span class="n">target_modules</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;q_proj&quot;</span><span class="p">,</span> <span class="s2">&quot;v_proj&quot;</span><span class="p">],</span>
+    <span class="n">lora_dropout</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">task_type</span><span class="o">=</span><span class="s2">&quot;CAUSAL_LM&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">get_peft_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">lora_config</span><span class="p">)</span>
+
+<span class="c1"># Map Dolly to prompt/completion columns so the trainer can mask the prompt</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_prompt_completion</span><span class="p">(</span><span class="n">example</span><span class="p">):</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;### Context:</span><span class="se">\n</span><span class="si">{</span><span class="n">example</span><span class="p">[</span><span class="s1">&#39;context&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">example</span><span class="p">[</span><span class="s2">&quot;context&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="p">(</span>
+            <span class="s2">&quot;Below is an instruction that describes a task. &quot;</span>
+            <span class="s2">&quot;Write a response that appropriately completes the request.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;### Instruction:</span><span class="se">\n</span><span class="si">{</span><span class="n">example</span><span class="p">[</span><span class="s1">&#39;instruction&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">### Response:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">),</span>
+        <span class="s2">&quot;completion&quot;</span><span class="p">:</span> <span class="n">example</span><span class="p">[</span><span class="s2">&quot;response&quot;</span><span class="p">],</span>
+    <span class="p">}</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;databricks/databricks-dolly-15k&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">to_prompt_completion</span><span class="p">,</span> <span class="n">remove_columns</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="n">test_size</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># held-out split for overfitting detection</span>
+
+<span class="c1"># warmup_ratio is deprecated in transformers &gt;= 5.2; derive absolute warmup steps</span>
+<span class="n">num_epochs</span>      <span class="o">=</span> <span class="mi">3</span>
+<span class="n">effective_batch</span> <span class="o">=</span> <span class="mi">8</span> <span class="o">*</span> <span class="mi">2</span>   <span class="c1"># per-device batch size x gradient accumulation</span>
+<span class="n">total_steps</span>     <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">effective_batch</span><span class="p">)</span> <span class="o">*</span> <span class="n">num_epochs</span>
+
+<span class="n">training_args</span> <span class="o">=</span> <span class="n">SFTConfig</span><span class="p">(</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/sft-output&quot;</span><span class="p">,</span>
+    <span class="n">num_train_epochs</span><span class="o">=</span><span class="n">num_epochs</span><span class="p">,</span>
+    <span class="n">per_device_train_batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">per_device_eval_batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">gradient_accumulation_steps</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>   <span class="c1"># effective batch size = 8 x 2 = 16</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">2e-4</span><span class="p">,</span>
+    <span class="n">warmup_steps</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="mf">0.03</span> <span class="o">*</span> <span class="n">total_steps</span><span class="p">),</span>
+    <span class="n">gradient_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>     <span class="c1"># trades recompute for activation memory</span>
+    <span class="n">gradient_checkpointing_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;use_reentrant&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+    <span class="n">logging_steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">eval_strategy</span><span class="o">=</span><span class="s2">&quot;steps&quot;</span><span class="p">,</span>
+    <span class="n">eval_steps</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+    <span class="n">save_steps</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+    <span class="c1"># Keep the lowest eval-loss checkpoint rather than the final one</span>
+    <span class="c1"># (save_steps must be a multiple of eval_steps for this to work)</span>
+    <span class="n">load_best_model_at_end</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">metric_for_best_model</span><span class="o">=</span><span class="s2">&quot;eval_loss&quot;</span><span class="p">,</span>
+    <span class="n">greater_is_better</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">bf16</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>           <span class="c1"># supported on M4 Pro</span>
+    <span class="n">max_length</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+    <span class="n">completion_only_loss</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>   <span class="c1"># loss on response tokens only</span>
+    <span class="n">report_to</span><span class="o">=</span><span class="s2">&quot;tensorboard&quot;</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">SFTTrainer</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+    <span class="n">train_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">],</span>
+    <span class="n">eval_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">],</span>
+    <span class="n">args</span><span class="o">=</span><span class="n">training_args</span><span class="p">,</span>
+    <span class="n">processing_class</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+<span class="c1"># save_model writes the LoRA adapter and the tokenizer together, so the reward</span>
+<span class="c1"># modelling stage can load both from this one path</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span>
+    <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/sft-model&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+<p><strong>Implementation tip.</strong> There are two equivalent routes to a LoRA-wrapped model. The snippet above wraps manually with <code>get_peft_model(model, lora_config)</code> and hands the resulting parameter-efficient fine-tuning (PEFT) model to the trainer, which makes the 'freeze the base, inject trainable adapters' step explicit and lets you call <code>model.print_trainable_parameters()</code> as a sanity check before training. Alternatively, pass the plain model together with <code>peft_config=lora_config</code> to the trainer, which then calls <code>get_peft_model</code> internally and handles related preparation for you (e.g. enabling input gradients under gradient checkpointing). The manual route is used here, where LoRA is the lesson. The later projects treat LoRA as plumbing and use the trainer-managed route instead (see the snippet in <a href="#43-hands-on-project-reward-model-training">Section 4.3</a>), which is also the only sensible route for the PPO stage, where the trainer manages the PEFT structure itself to recover the frozen reference policy. Do not mix the two routes: passing an already-wrapped PEFT model together with a <code>peft_config</code> is an error, and TRL's trainers raise a <code>ValueError</code> at construction. Give the trainer either a PEFT model and no <code>peft_config</code> (as here), or a plain model plus the config (as in <a href="#43-hands-on-project-reward-model-training">Section 4.3</a>).</p>
+<p><strong>What to observe.</strong> Monitor training and validation loss, and inspect qualitative outputs on held-out prompts. A well-tuned SFT model should consistently produce coherent, on-format responses before proceeding to reward modelling. Falling training loss with flat or rising validation loss indicates overfitting. In that case, reduce the number of epochs or increase dropout.</p>
+<hr />
+<h2 id="4-module-4-reward-model-training">4. Module 4: Reward Model Training<a class="headerlink" href="#4-module-4-reward-model-training" title="Permanent link">&para;</a></h2>
+<h3 id="41-theory">4.1. Theory<a class="headerlink" href="#41-theory" title="Permanent link">&para;</a></h3>
+<p>The reward model <span class="arithmatex">\(r_\phi(x, y)\)</span> is a neural network that maps a (prompt, response) pair to a scalar, the estimated human preference score. It is trained on a dataset of pairwise comparisons: for each prompt <span class="arithmatex">\(x\)</span>, a human annotator has indicated that response <span class="arithmatex">\(y_w\)</span> ('chosen') is preferred over <span class="arithmatex">\(y_l\)</span> ('rejected'). Pairwise comparison is used rather than absolute scoring because humans are far more consistent at ranking two responses than at assigning calibrated numeric scores.</p>
+<p><strong>The Bradley–Terry model.</strong> The training objective derives from the <strong>Bradley–Terry model</strong> of pairwise preferences, which assumes each response has a latent quality score and that the probability of preferring one response over another depends only on the <em>difference</em> of their scores. Identifying the latent score with the reward model's output gives</p>
+<p><span id="eq-bt-pref"></span></p>
+<div class="arithmatex">\[p(y_w \succ y_l \mid x) = \sigma\left(r_\phi(x, y_w) - r_\phi(x, y_l)\right), \tag{22}\]</div>
+<p>where <span class="arithmatex">\(y_w \succ y_l\)</span> denotes that <span class="arithmatex">\(y_w\)</span> is preferred over <span class="arithmatex">\(y_l\)</span> (<span class="arithmatex">\(\succ\)</span> is the preference-ordering symbol, a ranking analogue of <span class="arithmatex">\(&gt;\)</span>), and <span class="arithmatex">\(\sigma(z) = 1/(1 + e^{-z})\)</span> is the sigmoid function: a large positive score gap makes the preference near-certain, a zero gap makes it a coin flip. Maximising the log-likelihood of the observed preferences under <a href="#eq-bt-pref">(22)</a> gives the loss</p>
+<p><span id="eq-rm-loss"></span></p>
+<div class="arithmatex">\[\mathcal{L}_{\text{RM}}(\phi) = -\mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}} \left[ \log \sigma\left(r_\phi(x, y_w) - r_\phi(x, y_l)\right) \right]. \tag{23}\]</div>
+<p>One consequence of modelling only differences: <a href="#eq-bt-pref">(22)</a> is unchanged if a constant is added to every reward, so the absolute reward scale is unanchored and can drift during training. This is harmless for ranking but inconvenient for the PPO stage, which consumes raw scores. A small auxiliary penalty that pins the mean reward near zero (the <code>center_rewards_coefficient</code> in the project below) removes this degeneracy.</p>
+<p><strong>Architecture.</strong> The reward model is typically initialised from <span class="arithmatex">\(\pi_{\text{ref}}\)</span> (the SFT model), with the language modelling head replaced by a linear layer projecting to a single scalar. The scalar is read at the position of the <em>last</em> token of the sequence: under causal attention, only the final position attends to the entire prompt and response, so it is the only position whose hidden state summarises the whole pair. Initialising from SFT rather than from the base model is important: the reward model must 'understand' the kinds of responses being scored, and starting from a model already in the instruction-following distribution accelerates convergence.</p>
+<p><strong>Reward model limitations.</strong> The RM is a proxy for human preference, not the preference itself. It is trained on a finite, potentially biased dataset and will generalise imperfectly. Specifically, it will assign high scores to responses that superficially resemble preferred responses (e.g. long, confident-sounding text) even when the content is poor. This is the root cause of reward hacking in the PPO stage.</p>
+<h3 id="rm-quality-checks">4.2. Intuitions for Reward Model Quality<a class="headerlink" href="#rm-quality-checks" title="Permanent link">&para;</a></h3>
+<p>The following checks should be performed before using the RM in the PPO stage.</p>
+<ul>
+<li><strong>Pairwise accuracy on a held-out set.</strong> A well-trained RM should achieve at least 65–70% accuracy on held-out preference pairs. Below 60% suggests the data is too noisy or the model is undertrained.</li>
+<li><strong>Reward distribution.</strong> Plot the distribution of <span class="arithmatex">\(r_\phi(x, y_w)\)</span> and <span class="arithmatex">\(r_\phi(x, y_l)\)</span>. The distributions should be separated, with the chosen distribution shifted higher. If they overlap substantially, the RM has low discriminative power.</li>
+<li><strong>Out-of-distribution behaviour.</strong> Manually probe the RM with adversarial inputs: very long repetitive responses, confident but factually wrong responses, and responses in unexpected formats. The RM's scores on these inputs preview what the PPO stage will optimise towards.</li>
+</ul>
+<h3 id="43-hands-on-project-reward-model-training">4.3. Hands-on Project: Reward Model Training<a class="headerlink" href="#43-hands-on-project-reward-model-training" title="Permanent link">&para;</a></h3>
+<p><strong>Objective.</strong> Train a reward model on the <code>Anthropic/hh-rlhf</code> dataset, a corpus of human preference pairs in exactly the <code>chosen</code>/<code>rejected</code> format that <a href="#eq-rm-loss">(23)</a> requires.</p>
+<p><strong>Depends on <a href="#32-hands-on-project-supervised-fine-tuning-with-low-rank-adaptation">Section 3.2</a>.</strong> This project consumes the LoRA adapter trained there. It first merges that adapter into the base model to produce a standalone <code>sft-model-merged</code> checkpoint, then initialises the reward model from the merged weights, swapping the language-model head for a scalar reward head. The merged checkpoint is also reused by <a href="#54-hands-on-project-full-reinforcement-learning-from-human-feedback-training-loop">Section 5.4</a>, so this project must be run before the PPO stage.</p>
+<p><strong>Implementation outline.</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">peft</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoPeftModelForCausalLM</span><span class="p">,</span> <span class="n">LoraConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModelForSequenceClassification</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">trl</span><span class="w"> </span><span class="kn">import</span> <span class="n">RewardTrainer</span><span class="p">,</span> <span class="n">RewardConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
+
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/sft-model&quot;</span>
+<span class="p">)</span>
+<span class="k">if</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">pad_token</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">tokenizer</span><span class="o">.</span><span class="n">pad_token</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">eos_token</span>
+
+<span class="c1"># The SFT step saved a LoRA adapter; merge it into the base model first. The</span>
+<span class="c1"># tokenizer is saved alongside so the PPO stage can load both from one path.</span>
+<span class="n">sft_model</span> <span class="o">=</span> <span class="n">AutoPeftModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/sft-model&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span>
+<span class="p">)</span><span class="o">.</span><span class="n">merge_and_unload</span><span class="p">()</span>
+<span class="n">sft_model</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span>
+    <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/sft-model-merged&quot;</span>
+<span class="p">)</span>
+<span class="n">tokenizer</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span>
+    <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/sft-model-merged&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Initialise from the merged SFT model, swapping the language model (LM) head</span>
+<span class="c1"># for a scalar head</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/sft-model-merged&quot;</span><span class="p">,</span>
+    <span class="n">num_labels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># Decoder-only sequence classification pools the logit of the last non-padding</span>
+<span class="c1"># token, so the model config must know the pad token id</span>
+<span class="n">model</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">pad_token_id</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">pad_token_id</span>
+
+<span class="c1"># LoRA on the backbone; the scalar head is newly initialised, so it is trained</span>
+<span class="c1"># in full via modules_to_save rather than adapted</span>
+<span class="n">lora_config</span> <span class="o">=</span> <span class="n">LoraConfig</span><span class="p">(</span>
+    <span class="n">r</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+    <span class="n">lora_alpha</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">target_modules</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;q_proj&quot;</span><span class="p">,</span> <span class="s2">&quot;v_proj&quot;</span><span class="p">],</span>
+    <span class="n">lora_dropout</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">task_type</span><span class="o">=</span><span class="s2">&quot;SEQ_CLS&quot;</span><span class="p">,</span>
+    <span class="n">modules_to_save</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;score&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="n">train_dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Anthropic/hh-rlhf&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
+<span class="n">test_dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Anthropic/hh-rlhf&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>  <span class="c1"># the authors&#39; held-out split</span>
+
+<span class="c1"># max_length below FILTERS out over-long pairs rather than truncating them,</span>
+<span class="c1"># and RewardTrainer silently applies the same filter to any eval set it is</span>
+<span class="c1"># given. Filtering the test split once, up front, exactly as training</span>
+<span class="c1"># tokenisation sees the pairs (EOS appended) guarantees the in-training</span>
+<span class="c1"># subsample keeps all 1,000 pairs and gives the post-training acceptance</span>
+<span class="c1"># gate the same length-admissible distribution the model is trained on.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">within_cap</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">cap</span><span class="o">=</span><span class="mi">512</span><span class="p">):</span>        <span class="c1"># cap matches max_length below</span>
+    <span class="n">eos</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">eos_token</span>
+    <span class="n">chosen</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">([</span><span class="n">t</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">eos</span><span class="p">)</span> <span class="k">else</span> <span class="n">t</span> <span class="o">+</span> <span class="n">eos</span>
+                        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;chosen&quot;</span><span class="p">]])[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span>
+    <span class="n">rejected</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">([</span><span class="n">t</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">eos</span><span class="p">)</span> <span class="k">else</span> <span class="n">t</span> <span class="o">+</span> <span class="n">eos</span>
+                          <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;rejected&quot;</span><span class="p">]])[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">cap</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">cap</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">chosen</span><span class="p">,</span> <span class="n">rejected</span><span class="p">)]</span>
+
+<span class="n">gate_dataset</span> <span class="o">=</span> <span class="n">test_dataset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">within_cap</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">eval_dataset</span> <span class="o">=</span> <span class="n">gate_dataset</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1_000</span><span class="p">))</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">RewardConfig</span><span class="p">(</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/rm-output&quot;</span><span class="p">,</span>
+    <span class="n">num_train_epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">per_device_train_batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">per_device_eval_batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>      <span class="c1"># small to cap the eval-time memory peak</span>
+    <span class="n">gradient_accumulation_steps</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>     <span class="c1"># effective batch size = 4 x 4 = 16</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span>                <span class="c1"># adapters are freshly initialised and need</span>
+                                       <span class="c1"># larger steps than full fine-tuning (1e-5)</span>
+    <span class="n">bf16</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">logging_steps</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">eval_strategy</span><span class="o">=</span><span class="s2">&quot;steps&quot;</span><span class="p">,</span>
+    <span class="n">eval_steps</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+    <span class="n">save_steps</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+    <span class="c1"># Keep the lowest eval-loss checkpoint: the Bradley-Terry loss is strictly</span>
+    <span class="c1"># monotone in the reward margin, so it is a sound selection metric</span>
+    <span class="n">load_best_model_at_end</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">metric_for_best_model</span><span class="o">=</span><span class="s2">&quot;eval_loss&quot;</span><span class="p">,</span>
+    <span class="n">greater_is_better</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">max_length</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>                    <span class="c1"># pairs with a longer side are filtered out</span>
+    <span class="n">center_rewards_coefficient</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>   <span class="c1"># pins rewards near zero (see Section 4.1)</span>
+    <span class="n">report_to</span><span class="o">=</span><span class="s2">&quot;tensorboard&quot;</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">RewardTrainer</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+    <span class="n">args</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+    <span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span>
+    <span class="n">eval_dataset</span><span class="o">=</span><span class="n">eval_dataset</span><span class="p">,</span>
+    <span class="n">processing_class</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
+    <span class="n">peft_config</span><span class="o">=</span><span class="n">lora_config</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+<span class="c1"># Saves the LoRA adapter, the fully trained scalar head, and the tokenizer</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span>
+    <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/rm-model&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+<p><strong>Implementation tips.</strong> The module names passed to <code>LoraConfig</code> are simply the attribute names in the model's <code>nn.Module</code> tree, defined by the model's implementation in <code>transformers</code> (e.g. <code>Qwen2Attention</code> declares <code>self.q_proj = nn.Linear(...)</code> and <code>Qwen2ForSequenceClassification</code> declares <code>self.score = nn.Linear(...)</code>). To discover them, print the model with <code>print(model)</code> or list fully qualified names with <code>[n for n, _ in model.named_modules()]</code>, which yields entries such as <code>model.layers.0.self_attn.q_proj</code>. PEFT matches each <code>target_modules</code> entry against the <em>suffix</em> of those qualified names, so <code>"q_proj"</code> catches that projection in every layer, and the modules actually matched can be confirmed afterwards via <code>peft_model.targeted_module_names</code>. Two caveats: the names are architecture-specific (GPT-2 uses a fused <code>c_attn</code> rather than separate query/key/value projections, and BERT-style models name the classification head <code>classifier</code> rather than <code>score</code>), and a name that matches nothing raises an error rather than silently training nothing. The shortcut <code>target_modules="all-linear"</code> adapts every linear layer except the output head, useful when inspecting the module tree is inconvenient.</p>
+<p><strong>What to observe.</strong> Monitor the evaluation loss: <code>RewardTrainer</code> reports only <code>eval_loss</code> during evaluation, and since the Bradley–Terry loss of <a href="#eq-rm-loss">(23)</a> is strictly monotone in the reward margin, falling evaluation loss tracks rising pairwise accuracy. After training, compute held-out pairwise accuracy directly, i.e. the fraction of pairs where the score difference inside the sigmoid of <a href="#eq-rm-loss">(23)</a> has the correct sign, on the whole filtered test split (<code>gate_dataset</code> above) rather than on the 1,000-pair subsample. At 1,000 pairs the binomial standard error of the accuracy (about 0.015) exceeds the typical margin over an acceptance floor, while the full filtered split (7,952 of 8,552 pairs at cap 512) brings it down to about 0.005. Judge the floor to within one standard error (accept when accuracy is at least the floor minus one standard error, with a floor of 0.65 tied to human agreement on HH-RLHF), and run the diagnostic checks described in <a href="#rm-quality-checks">Section 4.2</a> before proceeding to the PPO stage. Ties count as failures under the strict inequality, which is a further reason the gate must score filtered rather than truncated pairs: a pair whose two sides diverge beyond the cap truncates to identical texts and can only tie.</p>
+<hr />
+<h2 id="ppo-rlhf-loop">5. Module 5: The Full Reinforcement Learning from Human Feedback Training Loop<a class="headerlink" href="#ppo-rlhf-loop" title="Permanent link">&para;</a></h2>
+<h3 id="51-theory">5.1. Theory<a class="headerlink" href="#51-theory" title="Permanent link">&para;</a></h3>
+<p>The PPO stage ties together all previous components. The policy (initialised from <span class="arithmatex">\(\pi_{\text{ref}}\)</span>, the SFT model) generates responses, the reward model scores them, and PPO updates the policy to maximise the scores.</p>
+<p><strong>Text generation as a reinforcement learning problem.</strong> To apply the agent–environment formalism of <a href="../phase01/#rl-problem">Module 1</a>, generation is cast as a Markov decision process (MDP). The state <span class="arithmatex">\(s_t = (x, a_1, \ldots, a_{t-1})\)</span> is the prompt plus the tokens generated so far. The action <span class="arithmatex">\(a_t\)</span> is the next token, chosen from the vocabulary. The transition is deterministic: the chosen token is appended to the state. An episode is one complete generation, ending when the policy emits an end-of-sequence (EOS) token or hits the length limit. The environment reward is sparse: zero at every intermediate step, with the reward model's score <span class="arithmatex">\(r_\phi(x, y)\)</span> delivered once at the terminal step, since the RM can only judge a complete response.</p>
+<p><strong>The KL penalty.</strong> The objective is not pure reward maximisation. An unconstrained policy would quickly learn to produce degenerate outputs that achieve high reward model scores through exploitation rather than genuine quality improvement, which is the reward hacking failure anticipated in <a href="#41-theory">Section 4.1</a>. It is mitigated by adding a <strong>Kullback–Leibler (KL) divergence penalty</strong> to the reward signal:</p>
+<p><span id="eq-kl-reward"></span></p>
+<div class="arithmatex">\[r(x, y) = r_\phi(x, y) - \beta \cdot \text{KL}\left[\pi_\theta(\cdot \mid x) \parallel \pi_{\text{ref}}(\cdot \mid x)\right]. \tag{24}\]</div>
+<p>The penalty term punishes the policy for moving probability mass away from the reference. The intuition: the RM is only trustworthy on the distribution of responses it was trained on, which is (approximately) the SFT distribution. The further <span class="arithmatex">\(\pi_\theta\)</span> drifts from <span class="arithmatex">\(\pi_{\text{ref}}\)</span>, the less the RM's scores can be trusted, so <a href="#eq-kl-reward">(24)</a> makes distance from the reference a cost that high RM scores must outweigh.</p>
+<p><strong>Per-token KL estimation.</strong> The KL term in <a href="#eq-kl-reward">(24)</a> is an expectation over all possible responses, which is intractable to compute exactly. It is instead estimated from the single response actually sampled. For each generated token, define</p>
+<p><span id="eq-token-kl"></span></p>
+<div class="arithmatex">\[\text{KL}_t = \log \pi_\theta(a_t \mid s_t) - \log \pi_{\text{ref}}(a_t \mid s_t), \tag{25}\]</div>
+<p>the log-probability ratio of the sampled action under the two policies. Because the response is sampled from <span class="arithmatex">\(\pi_\theta\)</span>, the sum of <a href="#eq-token-kl">(25)</a> over the response tokens is an unbiased single-sample estimate of the sequence-level KL divergence. Rather than subtracting this sum from the terminal reward in one lump, each <span class="arithmatex">\(-\beta \cdot \text{KL}_t\)</span> is attributed to its own timestep as a per-token shaped reward. The total penalty is identical either way, but the per-token form gives the credit-assignment machinery (advantage estimation) a dense signal locating <em>where</em> in the response the policy drifted, instead of a single end-of-episode correction.</p>
+<p><strong>The four-model setup.</strong> Classical PPO RLHF requires four models in memory simultaneously:</p>
+<ul>
+<li>The <strong>actor</strong> <span class="arithmatex">\(\pi_\theta\)</span>, the policy being trained.</li>
+<li>The <strong>reference</strong> <span class="arithmatex">\(\pi_{\text{ref}}\)</span>, a frozen copy of the SFT model used for KL computation.</li>
+<li>The <strong>reward model</strong> <span class="arithmatex">\(r_\phi\)</span>, frozen.</li>
+<li>The <strong>critic</strong> <span class="arithmatex">\(V_\psi\)</span>, used for advantage estimation, typically initialised from <span class="arithmatex">\(r_\phi\)</span>, whose response-quality estimates are a better starting point for value prediction than a fresh head.</li>
+</ul>
+<p>On the M4 Pro with 64 GB of unified memory, the four models fit comfortably for a 0.5B-parameter base, which is why this phase uses one. Larger backbones are tight: a 3B base requires LoRA and 4-bit quantisation to run four models concurrently, and 7B+ models additionally need the reference and reward models kept in 4-bit.</p>
+<p><a href="#alg-rlhf-ppo">Algorithm 5</a> summarises the full loop. The inner optimisation step is exactly the clipped PPO update of Phase 1 (<a href="../phase01/#alg-ppo">Algorithm 4</a>). What changes is where the reward comes from.</p>
+<figure id="alg-rlhf-ppo" style="text-align: center;">
+<div style="border: 1px solid #ccc; display: inline-block; text-align: left; padding: 1em; font-family: monospace;">
+<p><strong>Input:</strong><br>
+<span class="arithmatex">\(\mathcal{D}\)</span>: prompt dataset<br>
+<span class="arithmatex">\(\pi_\theta\)</span>: policy, initialised from <span class="arithmatex">\(\pi_{\text{ref}}\)</span> (the SFT model)<br>
+<span class="arithmatex">\(\pi_{\text{ref}}\)</span>: frozen reference policy<br>
+<span class="arithmatex">\(r_\phi\)</span>: frozen reward model<br>
+<span class="arithmatex">\(V_\psi\)</span>: value network, initialised from <span class="arithmatex">\(r_\phi\)</span><br>
+<span class="arithmatex">\(\beta\)</span>: KL penalty coefficient<br>
+<span class="arithmatex">\(N\)</span>: prompts per rollout batch</p>
+<p><strong>Output:</strong><br>
+<span class="arithmatex">\(\theta\)</span>: trained policy parameters</p>
+<p><strong>repeat until</strong> converged:<br>
+<span class="arithmatex">\(\quad\)</span> <em>// 1. Rollout: generate with the frozen current policy</em><br>
+<span class="arithmatex">\(\quad\)</span> <span class="arithmatex">\(\theta_\text{old} \leftarrow \theta\)</span><br>
+<span class="arithmatex">\(\quad\)</span> Sample <span class="arithmatex">\(N\)</span> prompts <span class="arithmatex">\(x \sim \mathcal{D}\)</span><br>
+<span class="arithmatex">\(\quad\)</span> <strong>for each</strong> prompt <span class="arithmatex">\(x\)</span>:<br>
+<span class="arithmatex">\(\quad\quad\)</span> Generate response <span class="arithmatex">\(y = (a_1, \ldots, a_T) \sim \pi_{\theta_\text{old}}(\cdot \mid x)\)</span><br>
+<span class="arithmatex">\(\quad\quad\)</span> Record <span class="arithmatex">\(\log \pi_{\theta_\text{old}}(a_t \mid s_t)\)</span>, <span class="arithmatex">\(\log \pi_{\text{ref}}(a_t \mid s_t)\)</span>, and <span class="arithmatex">\(V_\psi(s_t)\)</span> for <span class="arithmatex">\(t = 1, \ldots, T\)</span><br>
+<span class="arithmatex">\(\quad\quad\)</span> <em>// 2. Score: KL-shaped per-token rewards, RM score at the terminal step</em><br>
+<span class="arithmatex">\(\quad\quad\)</span> <strong>for</strong> <span class="arithmatex">\(t = 1, \ldots, T\)</span>:<br>
+<span class="arithmatex">\(\quad\quad\quad\)</span> <span class="arithmatex">\(R_t \leftarrow -\beta \cdot \text{KL}_t\)</span> <em>// <a href="#eq-token-kl">(25)</a> under <span class="arithmatex">\(\pi_{\theta_\text{old}}\)</span>, from the recorded log-probabilities</em><br>
+<span class="arithmatex">\(\quad\quad\)</span> <span class="arithmatex">\(R_T \leftarrow R_T + r_\phi(x, y)\)</span> <em>// reward model scores the complete response</em><br>
+<span class="arithmatex">\(\quad\)</span> <em>// 3. Update: GAE advantages, then the clipped PPO update</em><br>
+<span class="arithmatex">\(\quad\)</span> Compute <span class="arithmatex">\(\hat{A}_t\)</span> from the recorded <span class="arithmatex">\(\{(s_t, a_t, R_t)\}\)</span> of all <span class="arithmatex">\(N\)</span> responses and <span class="arithmatex">\(V_\psi\)</span> (<a href="../phase01/#gae">Section 2.1.3</a>)<br>
+<span class="arithmatex">\(\quad\)</span> Update <span class="arithmatex">\(\theta, \psi\)</span> for <span class="arithmatex">\(K\)</span> epochs with the clipped surrogate objective (<a href="../phase01/#alg-ppo">Algorithm 4</a>, step 3); the rewards <span class="arithmatex">\(R_t\)</span> stay fixed throughout</p>
+<p><strong>return</strong> <span class="arithmatex">\(\theta\)</span></p>
+</div>
+<figcaption>Algorithm 5: PPO-based RLHF training loop with KL-shaped reward.</figcaption>
+</figure>
+<p><strong>The <span class="arithmatex">\(\beta\)</span> hyperparameter.</strong> The KL coefficient <span class="arithmatex">\(\beta\)</span> in <a href="#eq-kl-reward">(24)</a> controls the trade-off between reward maximisation and staying close to <span class="arithmatex">\(\pi_{\text{ref}}\)</span>. A high <span class="arithmatex">\(\beta\)</span> produces a conservative policy that closely tracks <span class="arithmatex">\(\pi_{\text{ref}}\)</span>. A low <span class="arithmatex">\(\beta\)</span> allows aggressive optimisation of the reward model, increasing the risk of hacking. Values of <span class="arithmatex">\(\beta = 0.1\)</span> to <span class="arithmatex">\(0.3\)</span> are typical. In practice, <span class="arithmatex">\(\beta\)</span> is the first hyperparameter to tune if the policy drifts too far from the reference or if reward hacking is observed.</p>
+<h3 id="52-debugging-the-reinforcement-learning-from-human-feedback-training-loop">5.2. Debugging the Reinforcement Learning from Human Feedback Training Loop<a class="headerlink" href="#52-debugging-the-reinforcement-learning-from-human-feedback-training-loop" title="Permanent link">&para;</a></h3>
+<p>Training instability in the PPO RLHF loop is common. The following signals and remedies cover the most frequent failure modes.</p>
+<p><strong>KL divergence grows unboundedly.</strong> The policy is drifting from the reference. Increase <span class="arithmatex">\(\beta\)</span> in <a href="#eq-kl-reward">(24)</a>, reduce the learning rate, or reduce the number of PPO mini-batch epochs.</p>
+<p><strong>Reward increases sharply then plateaus or collapses.</strong> This is classic reward hacking. Inspect the actual generated text: it will exhibit repetition, format gaming (e.g. very long lists), or other superficially reward-signal-shaped artefacts. The remedy is to either increase <span class="arithmatex">\(\beta\)</span>, retrain the reward model with adversarial examples, or switch to direct preference optimisation (DPO) (see Phase 3).</p>
+<p><strong>Critic value loss diverges.</strong> The value network cannot track the rapidly changing policy. Use a smaller learning rate for the critic than for the actor, or detach the critic's gradient from the actor's forward pass.</p>
+<p><strong>Entropy collapses.</strong> The actor is converging to a near-deterministic policy. Increase the entropy bonus coefficient <span class="arithmatex">\(c_2\)</span> in the PPO loss.</p>
+<p><strong>Memory exhaustion.</strong> Reduce batch size, reduce the sequence length, or apply more aggressive quantisation to the frozen reference and reward models.</p>
+<h3 id="53-suggested-reading">5.3. Suggested Reading<a class="headerlink" href="#53-suggested-reading" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Stiennon et al. (2020), <em>Learning to Summarize from Human Feedback.</em> The first large-scale RLHF paper. Read before the project to see how the three-step pipeline was originally applied.</li>
+<li>Ouyang et al. (2022), <em>Training Language Models to Follow Instructions with Human Feedback.</em> The canonical reference for the full SFT → RM → PPO pipeline. Read before the project alongside Stiennon et al. (2020).</li>
+</ul>
+<h4 id="531-stiennon-et-al-2020-learning-to-summarize-from-human-feedback">5.3.1. Stiennon et al. (2020): <em>Learning to Summarize from Human Feedback</em><a class="headerlink" href="#531-stiennon-et-al-2020-learning-to-summarize-from-human-feedback" title="Permanent link">&para;</a></h4>
+<p><strong>Overview</strong></p>
+<p>Stiennon et al. (2020) trained summarisation policies directly from human preference comparisons, establishing the SFT → RM → PPO recipe that this phase implements. Working on the TL;DR dataset of Reddit posts with GPT-style models of 1.3B and 6.7B parameters, the paper demonstrated that optimising a learned preference model with RL produces summaries that humans prefer to those of much larger supervised models.</p>
+<p><strong>Problem</strong></p>
+<p>Summarisation models were trained with maximum-likelihood on reference summaries and evaluated with automatic metrics such as ROUGE, but both are proxies: a model can match references and score well on ROUGE while producing summaries humans judge as mediocre. Scaling data and parameters improves the proxy without necessarily improving the quality that actually matters, because the training objective never sees a human judgement.</p>
+<p><strong>Key Contributions</strong></p>
+<p>The paper contributed the complete preference-learning pipeline in its modern form. A large dataset of human comparisons between summary pairs was collected under unusually tight quality control, with researcher–labeller agreement monitored throughout, and the authors attribute much of the result to this data quality. The reward model was trained on these comparisons with the Bradley–Terry loss of <a href="#eq-rm-loss">(23)</a>, and the policy was optimised with PPO against the RM under a per-token KL penalty towards the SFT policy, exactly the shaped reward of <a href="#eq-kl-reward">(24)</a>. The paper also documented RM <strong>over-optimisation</strong>: pushing the policy to maximise a frozen RM (by lowering the KL penalty or using best-of-<span class="arithmatex">\(N\)</span> sampling with large <span class="arithmatex">\(N\)</span>) first improves and then <em>degrades</em> true human preference, even as the RM score keeps rising. This curve is the canonical empirical demonstration of reward hacking (<a href="#41-theory">Section 4.1</a>) and the justification for the KL anchor.</p>
+<p><strong>Results</strong></p>
+<p>The 6.7B human-feedback model's summaries were preferred by humans to the human-written reference summaries on TL;DR, and the 1.3B human-feedback model outperformed a supervised baseline ten times its size. The models also transferred to CNN/DailyMail news summarisation without any news-specific fine-tuning, producing summaries nearly matching the quality of the references there.</p>
+<p><strong>Significance</strong></p>
+<p>This is the template that InstructGPT and subsequent assistant training followed: every component of Module 5's loop (<a href="#alg-rlhf-ppo">Algorithm 5</a>) appears here in its mature form. Its two lasting lessons are that labelling quality dominates labelling quantity, and that a learned reward model must never be optimised without a constraint, the lesson encoded in <span class="arithmatex">\(\beta\)</span>.</p>
+<h4 id="532-ouyang-et-al-2022-training-language-models-to-follow-instructions-with-human-feedback">5.3.2. Ouyang et al. (2022): <em>Training Language Models to Follow Instructions with Human Feedback</em><a class="headerlink" href="#532-ouyang-et-al-2022-training-language-models-to-follow-instructions-with-human-feedback" title="Permanent link">&para;</a></h4>
+<p><strong>Overview</strong></p>
+<p>Ouyang et al. (2022) applied the Stiennon et al. (2020) recipe to general instruction following, producing the InstructGPT models from GPT-3 backbones of 1.3B, 6B, and 175B parameters. It is the canonical reference for the full SFT → RM → PPO pipeline and the direct precursor of ChatGPT.</p>
+<p><strong>Problem</strong></p>
+<p>Making language models bigger does not make them better at following a user's intent. Large models trained on next-token prediction produce outputs that are untruthful, toxic, or simply unhelpful, because the pre-training objective (predict web text) is misaligned with the deployment objective (follow the user's instruction helpfully and safely).</p>
+<p><strong>Key Contributions</strong></p>
+<p>The paper executed the three-stage pipeline at production scale and contributed several refinements. SFT used labeller-written demonstrations under the loss of <a href="#eq-sft-loss">(21)</a>. The reward model was trained on labeller <em>rankings</em> of between 4 and 9 sampled responses per prompt, with each ranking decomposed into pairwise comparisons for the loss of <a href="#eq-rm-loss">(23)</a>, an efficient design since one ranking of <span class="arithmatex">\(K\)</span> responses yields <span class="arithmatex">\(\binom{K}{2}\)</span> comparisons. The PPO stage used the per-token KL penalty of <a href="#eq-token-kl">(25)</a>. The paper also identified the <strong>alignment tax</strong>, performance regressions on public NLP benchmarks caused by RLHF, and mitigated it with the PPO-ptx variant, which mixes pre-training gradients into the PPO update.</p>
+<p><strong>Results</strong></p>
+<p>Outputs from the 1.3B InstructGPT model were preferred by labellers to outputs from the 175B GPT-3, a model over one hundred times larger. InstructGPT showed improved truthfulness on TruthfulQA and reduced toxic output when instructed to be respectful, though little improvement on bias benchmarks, and PPO-ptx largely eliminated the alignment tax. The models generalised to instruction styles rare in the fine-tuning data, such as non-English prompts and code questions, while still making simple mistakes on others.</p>
+<p><strong>Significance</strong></p>
+<p>InstructGPT demonstrated that the preference-learning pipeline scales from a single task (summarisation) to open-ended instruction following, and its publication preceded ChatGPT, which was trained with the same method. The hyperparameter shapes used in this module's projects (RM from the SFT checkpoint, small PPO learning rates, KL anchoring) descend directly from this paper, as does the practice of evaluating alignment by labeller preference rates rather than benchmark scores alone.</p>
+<h3 id="54-hands-on-project-full-reinforcement-learning-from-human-feedback-training-loop">5.4. Hands-on Project: Full Reinforcement Learning from Human Feedback Training Loop<a class="headerlink" href="#54-hands-on-project-full-reinforcement-learning-from-human-feedback-training-loop" title="Permanent link">&para;</a></h3>
+<p><strong>Objective.</strong> Run the full PPO loop using <code>trl.experimental.ppo.PPOTrainer</code>. In TRL v1, <code>PPOTrainer</code> lives in <code>trl.experimental.ppo</code> and handles generation, reward scoring, and the PPO update internally: the trainer is constructed with the models and run with a single <code>train()</code> call. When the policy is trained with LoRA (as here), only three of the four models of <a href="#51-theory">Section 5.1</a> are loaded: passing <code>ref_model=None</code> makes the trainer recover the frozen reference <span class="arithmatex">\(\pi_{\text{ref}}\)</span> exactly by disabling the policy's adapters, since the base weights underneath them are the SFT model.</p>
+<p><strong>Depends on <a href="#32-hands-on-project-supervised-fine-tuning-with-low-rank-adaptation">Section 3.2</a> and <a href="#43-hands-on-project-reward-model-training">Section 4.3</a>.</strong> The PPO models are all initialised from those two projects. The policy loads the merged SFT model <code>sft-model-merged</code> (produced by the merge step in <a href="#43-hands-on-project-reward-model-training">Section 4.3</a>) and receives fresh LoRA adapters; the frozen reference is the same model with those adapters disabled. The reward model and the value model (critic) load the reward model trained in <a href="#43-hands-on-project-reward-model-training">Section 4.3</a> — itself a LoRA adapter, so it is merged into its backbone first, mirroring the SFT merge step. Both earlier projects must therefore be completed first.</p>
+<p><strong>Implementation outline.</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">peft</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoPeftModelForSequenceClassification</span><span class="p">,</span> <span class="n">LoraConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AutoModelForCausalLM</span><span class="p">,</span>
+    <span class="n">AutoModelForSequenceClassification</span><span class="p">,</span>
+    <span class="n">AutoTokenizer</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">trl.experimental.ppo</span><span class="w"> </span><span class="kn">import</span> <span class="n">PPOConfig</span><span class="p">,</span> <span class="n">PPOTrainer</span>
+
+<span class="n">sft_path</span> <span class="o">=</span> <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/sft-model-merged&quot;</span>
+<span class="n">rm_path</span>  <span class="o">=</span> <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/rm-model&quot;</span>
+
+<span class="c1"># The RM step saved a LoRA adapter; merge it into its backbone first</span>
+<span class="n">rm_merged_path</span> <span class="o">=</span> <span class="n">rm_path</span> <span class="o">+</span> <span class="s2">&quot;-merged&quot;</span>
+<span class="n">AutoPeftModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="n">rm_path</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span>
+<span class="p">)</span><span class="o">.</span><span class="n">merge_and_unload</span><span class="p">()</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="n">rm_merged_path</span><span class="p">)</span>
+
+<span class="c1"># Left padding for batched generation</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">sft_path</span><span class="p">,</span> <span class="n">padding_side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">pad_token</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">tokenizer</span><span class="o">.</span><span class="n">pad_token</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">eos_token</span>
+
+<span class="c1"># Three of the four models of Section 5.1: with a LoRA policy, the frozen</span>
+<span class="c1"># reference is not loaded — disabling the adapters recovers pi_ref exactly</span>
+<span class="n">policy</span>       <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">sft_path</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
+<span class="n">reward_model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="n">rm_merged_path</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span>
+<span class="p">)</span>
+<span class="n">value_model</span>  <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="n">rm_merged_path</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span>  <span class="c1"># critic initialised from the RM</span>
+<span class="p">)</span>
+<span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">reward_model</span><span class="p">,</span> <span class="n">value_model</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">pad_token_id</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">pad_token_id</span>
+
+<span class="c1"># Fresh LoRA adapters on the policy</span>
+<span class="n">lora_config</span> <span class="o">=</span> <span class="n">LoraConfig</span><span class="p">(</span>
+    <span class="n">r</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">lora_alpha</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+    <span class="n">target_modules</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;q_proj&quot;</span><span class="p">,</span> <span class="s2">&quot;v_proj&quot;</span><span class="p">],</span>
+    <span class="n">lora_dropout</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">task_type</span><span class="o">=</span><span class="s2">&quot;CAUSAL_LM&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># PPOTrainer expects pre-tokenised prompts in an &#39;input_ids&#39; column</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_prompt</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">marker</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Assistant:&quot;</span>
+    <span class="k">return</span> <span class="n">text</span><span class="p">[:</span> <span class="n">text</span><span class="o">.</span><span class="n">rindex</span><span class="p">(</span><span class="n">marker</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">marker</span><span class="p">)]</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Anthropic/hh-rlhf&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">ex</span><span class="p">:</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">extract_prompt</span><span class="p">(</span><span class="n">ex</span><span class="p">[</span><span class="s2">&quot;chosen&quot;</span><span class="p">])),</span>
+    <span class="n">remove_columns</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">column_names</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># Filter out (not truncate) over-long prompts: a truncated dialogue can lose</span>
+<span class="c1"># the actual question, leaving the policy to optimise reward on nonsense</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">ex</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">ex</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">256</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="n">test_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># held-out eval prompts</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">PPOConfig</span><span class="p">(</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/ppo-output&quot;</span><span class="p">,</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span>
+    <span class="n">per_device_train_batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">gradient_accumulation_steps</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="c1"># Rollout batch = train batch x grad accum x mini-batches = 4 x 4 x 1 = 16</span>
+    <span class="c1"># episodes generated per update; each pass steps once per mini-batch</span>
+    <span class="n">num_mini_batches</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="c1"># Memory-only knob: sequences per forward pass while generating and</span>
+    <span class="c1"># scoring rollouts; no effect on the training result</span>
+    <span class="n">local_rollout_forward_batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">total_episodes</span><span class="o">=</span><span class="mi">10_000</span><span class="p">,</span>  <span class="c1"># generation budget: 10_000 / 16 per rollout = 625 updates</span>
+    <span class="n">num_ppo_epochs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>       <span class="c1"># passes over each rollout batch (episodes reused 4x)</span>
+    <span class="n">response_length</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>    <span class="c1"># generation budget (max new tokens)</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">stop_token</span><span class="o">=</span><span class="s2">&quot;eos&quot;</span><span class="p">,</span>       <span class="c1"># truncate responses at EOS before scoring</span>
+    <span class="n">missing_eos_penalty</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>   <span class="c1"># subtracted from the RM score if no EOS emitted</span>
+    <span class="n">kl_coef</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>            <span class="c1"># beta (fixed; the adaptive KL controller was removed)</span>
+    <span class="n">gradient_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">gradient_checkpointing_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;use_reentrant&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+    <span class="n">bf16</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="c1"># The PPO loop prints its metrics every update regardless of logging_steps;</span>
+    <span class="c1"># the value still gates other consumers, e.g. callbacks</span>
+    <span class="n">logging_steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="c1"># train() takes no arguments, so PPO runs cannot resume; checkpoints exist</span>
+    <span class="c1"># only for manual adapter recovery after a crash</span>
+    <span class="n">save_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">report_to</span><span class="o">=</span><span class="s2">&quot;tensorboard&quot;</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">ppo_trainer</span> <span class="o">=</span> <span class="n">PPOTrainer</span><span class="p">(</span>
+    <span class="n">args</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+    <span class="n">processing_class</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">policy</span><span class="p">,</span>
+    <span class="n">ref_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>   <span class="c1"># pi_ref = the policy with its adapters disabled</span>
+    <span class="n">reward_model</span><span class="o">=</span><span class="n">reward_model</span><span class="p">,</span>
+    <span class="n">value_model</span><span class="o">=</span><span class="n">value_model</span><span class="p">,</span>
+    <span class="n">train_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">],</span>
+    <span class="n">eval_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">],</span>
+    <span class="n">peft_config</span><span class="o">=</span><span class="n">lora_config</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ppo_trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+<span class="c1"># Saves the policy&#39;s LoRA adapter</span>
+<span class="n">ppo_trainer</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/ppo-model&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Implementation tips: the critic is trained in full.</strong> In the snippet above, LoRA applies to the policy alone. <code>PPOTrainer</code> applies <code>peft_config</code> only to <code>model</code>, then wraps the policy and the critic in one module and builds the optimiser over both, so every parameter of <code>value_model</code>, backbone and scalar head alike, is updated. Of the four models of <a href="#51-theory">Section 5.1</a>, the reward model and the reference are frozen, the policy trains only its adapters, and the critic is the sole fully trained network. It therefore carries the largest optimiser state (full Adam moments for the whole backbone), which is worth remembering when budgeting memory.</p>
+<p>TRL implements the critic this way because TRL v1's trainer reproduces the canonical OpenAI recipe: a separate value function, initialised from the reward model and trained in full, as in the papers of <a href="#53-suggested-reading">Section 5.3</a>. Note that those works predate LoRA and fully fine-tuned every component, so the full critic was the default of its era rather than a verdict against a low-rank critic. TRL grafts PEFT on only where it buys something structural, namely the policy, where the adapter also yields the free reference model via adapter disabling. A pragmatic argument for keeping the default is that value accuracy directly controls advantage noise and hence PPO stability, so maximal critic plasticity is the conservative choice. The critic is also discarded after training, so no artefact-size argument favours an adapter.</p>
+<p>A LoRA critic is nonetheless possible. The trainer exposes no <code>value_peft_config</code>, but it accepts a critic that is already PEFT-wrapped, because both of its access paths (<code>getattr(value_model, value_model.base_model_prefix)</code> for the backbone and <code>value_model.score</code> for the head) resolve correctly through PEFT's attribute forwarding. Wrap the critic before constructing the trainer and change nothing else:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">peft</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_peft_model</span>
+
+<span class="n">value_lora_config</span> <span class="o">=</span> <span class="n">LoraConfig</span><span class="p">(</span>
+    <span class="n">r</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+    <span class="n">lora_alpha</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">target_modules</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;q_proj&quot;</span><span class="p">,</span> <span class="s2">&quot;v_proj&quot;</span><span class="p">],</span>
+    <span class="n">lora_dropout</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">task_type</span><span class="o">=</span><span class="s2">&quot;SEQ_CLS&quot;</span><span class="p">,</span>
+    <span class="c1"># Value targets are non-stationary (the policy keeps moving), so the</span>
+    <span class="c1"># scalar head must remain trainable</span>
+    <span class="n">modules_to_save</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;score&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="n">value_model</span> <span class="o">=</span> <span class="n">get_peft_model</span><span class="p">(</span><span class="n">value_model</span><span class="p">,</span> <span class="n">value_lora_config</span><span class="p">)</span>
+</code></pre></div>
+<p>Three caveats. This route relies on PEFT attribute forwarding, an implementation detail rather than a documented contract, so re-verify it after any TRL or PEFT upgrade. The saving is in gradients and optimiser state only, since the critic's weights and activations stay resident either way. Finally, <code>save_model</code> stores only the policy adapter, so the critic adapter is discarded unless <code>value_model</code> is saved manually, which is usually fine because the critic is scaffolding.</p>
+<p><strong>What to observe.</strong> Track <code>objective/kl</code>, <code>objective/scores</code>, <code>objective/rlhf_reward</code>, <code>policy/entropy_avg</code>, and <code>loss/value_avg</code> in TensorBoard. For entropy, prefer <code>policy/entropy_avg</code>, the closed-form per-token entropy, over the more prominently named <code>objective/entropy</code>. The latter sums sampled-token surprisal across the response window after filling every position past the end-of-sequence token with a sentinel log-probability of 1.0, so it subtracts a nat per padded position and measures response length as much as entropy, falling steeply and even turning negative as responses learn to terminate earlier. Since TRL v1 exposes no adaptive KL controller, <span class="arithmatex">\(\beta\)</span> is fixed via <code>kl_coef</code> and must be tuned manually: if <code>objective/kl</code> grows unboundedly, increase <code>kl_coef</code> per the remedies in <a href="#52-debugging-the-reinforcement-learning-from-human-feedback-training-loop">Section 5.2</a>. If <code>objective/scores</code> increases while <code>objective/kl</code> remains bounded, training is proceeding correctly.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

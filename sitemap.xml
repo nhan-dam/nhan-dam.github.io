@@ -17,11 +17,23 @@
          <lastmod>2026-08-07</lastmod>
     </url>
     <url>
+         <loc>https://nhan-dam.github.io/projects/report_ppo_rlhf_loop/</loc>
+         <lastmod>2026-08-07</lastmod>
+    </url>
+    <url>
          <loc>https://nhan-dam.github.io/projects/report_qlearning_blackjack/</loc>
          <lastmod>2026-08-07</lastmod>
     </url>
     <url>
          <loc>https://nhan-dam.github.io/projects/report_qlearning_cartpole/</loc>
+         <lastmod>2026-08-07</lastmod>
+    </url>
+    <url>
+         <loc>https://nhan-dam.github.io/projects/report_reward_model_hh/</loc>
+         <lastmod>2026-08-07</lastmod>
+    </url>
+    <url>
+         <loc>https://nhan-dam.github.io/projects/report_sft_lora_dolly/</loc>
          <lastmod>2026-08-07</lastmod>
     </url>
     <url>
@@ -45,7 +57,15 @@
          <lastmod>2026-08-07</lastmod>
     </url>
     <url>
+         <loc>https://nhan-dam.github.io/rlhf/curriculum/appendix/</loc>
+         <lastmod>2026-08-07</lastmod>
+    </url>
+    <url>
          <loc>https://nhan-dam.github.io/rlhf/curriculum/phase01/</loc>
+         <lastmod>2026-08-07</lastmod>
+    </url>
+    <url>
+         <loc>https://nhan-dam.github.io/rlhf/curriculum/phase02/</loc>
          <lastmod>2026-08-07</lastmod>
     </url>
     <url>

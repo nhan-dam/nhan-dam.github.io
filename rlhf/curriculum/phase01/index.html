@@ -18,7 +18,7 @@
         <link rel="prev" href="../">
       
       
-        <link rel="next" href="../../dlai/">
+        <link rel="next" href="../phase02/">
       
       
         
@@ -936,7 +936,35 @@
   
   
     <li class="md-nav__item">
-      <a href="../appendix.md" class="md-nav__link">
+      <a href="../phase02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 2 - Classical RLHF Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appendix/" class="md-nav__link">
         
   
   
@@ -1386,6 +1414,90 @@
     
   
     Project 4 - Proximal Policy Optimisation on Gymnasium LunarLander
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/report_sft_lora_dolly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 5 - Supervised Fine-Tuning of Qwen2.5-0.5B
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/report_reward_model_hh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 6 - Reward Model Training on Anthropic HH-RLHF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/report_ppo_rlhf_loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project 7 - Full RLHF Loop with Proximal Policy Optimisation
   
 
     
@@ -1965,7 +2077,7 @@
 <br />
 <figcaption>Figure 1: Agent-environment interaction in RL. Source: https://gymnasium.farama.org/_images/AE_loop.png.</figcaption>
 </figure>
-<p>As shown in <a href="#fig-ae-loop">Figure 1</a>, at each time step the agent observes the current state of the environment and receives a scalar reward. It then selects an action, which causes the environment to transition to a new state. This cycle of observation, action, and reward is the fundamental unit of interaction in every RL algorithm covered in this course, from Q-learning in <a href="#rl-problem">Section 1</a> to proximal policy optimisation (PPO)-based reinforcement learning from human feedback (RLHF) in <a href="phase02.md#ppo-rlhf-loop">Section 5</a>. In the language model setting, the 'environment' is the human (or reward model) that evaluates the generated response, and the 'action' at each step is the next token emitted by the policy.</p>
+<p>As shown in <a href="#fig-ae-loop">Figure 1</a>, at each time step the agent observes the current state of the environment and receives a scalar reward. It then selects an action, which causes the environment to transition to a new state. This cycle of observation, action, and reward is the fundamental unit of interaction in every RL algorithm covered in this course, from Q-learning in <a href="#rl-problem">Section 1</a> to proximal policy optimisation (PPO)-based reinforcement learning from human feedback (RLHF) in <a href="../phase02/#ppo-rlhf-loop">Section 5</a>. In the language model setting, the 'environment' is the human (or reward model) that evaluates the generated response, and the 'action' at each step is the next token emitted by the policy.</p>
 <p>The standard formalism of RL is the <strong>Markov Decision Process (MDP)</strong>, a tuple <span class="arithmatex">\((S, A, P, R, \gamma)\)</span>.</p>
 <ul>
 <li><span class="arithmatex">\(S\)</span> is the state space, the complete description of the world at a given time step.</li>
@@ -2098,7 +2210,7 @@ P(s_{t+1} \mid s_t, a_t, s_{t-1}, a_{t-1}, \ldots) = P(s_{t+1} \mid s_t, a_t).
 <ul>
 <li><strong>Sparse rewards.</strong> The agent must stumble upon the correct behaviour by chance before any learning signal exists at all. Montezuma's Revenge (<a href="#137-results">Section 1.3.7</a>) is the canonical example. The RLHF counterpart is structural rather than incidental: the reward model can only score a complete response, so a single terminal scalar must be apportioned across every token of the generation, which is exactly the credit-assignment burden that the critic and GAE (<a href="#gae">Section 2.1.3</a>) are introduced to carry.</li>
 <li><strong>Misspecified rewards.</strong> The agent optimises the proxy that was written down, not the intent behind it, and any gap between the two is eventually found and exploited. In RLHF the reward function is a learned proxy by construction, so the gap is guaranteed to exist. Exploiting it is called reward hacking, and containing it is the purpose of the KL penalty in Phase 2.</li>
-<li><strong>Highly stochastic environments.</strong> When the same action from the same state yields wildly different returns, the learning signal is buried in return variance and sample requirements grow accordingly. In RLHF the stochasticity lives in the sampled generations and in noisy, sometimes contradictory human preference labels, one reason preference-data quality matters more than quantity (<a href="phase02.md#53-suggested-reading">Section 5.3</a> in Phase 2).</li>
+<li><strong>Highly stochastic environments.</strong> When the same action from the same state yields wildly different returns, the learning signal is buried in return variance and sample requirements grow accordingly. In RLHF the stochasticity lives in the sampled generations and in noisy, sometimes contradictory human preference labels, one reason preference-data quality matters more than quantity (<a href="../phase02/#53-suggested-reading">Section 5.3</a> in Phase 2).</li>
 </ul>
 <h3 id="13-suggested-reading">1.3. Suggested Reading<a class="headerlink" href="#13-suggested-reading" title="Permanent link">&para;</a></h3>
 <p>Mnih et al. (2015), <em>Human-Level Control through Deep Reinforcement Learning.</em> Read before the project. The paper introduces the exact architecture and training procedure you are about to implement.</p>
@@ -2413,7 +2525,7 @@ r_t(\theta) = \frac{\pi_\theta(a_t \mid s_t)}{\pi_{\theta_\text{old}}(a_t \mid s
 \]</div>
 <p>via stochastic gradient <em>ascent</em> on <span class="arithmatex">\(\nabla_\theta \mathcal{L}(\theta)\)</span> (equivalently, descent on <span class="arithmatex">\(-\mathcal{L}(\theta)\)</span>).</p>
 <p><strong>Why PPO matters for RLHF:</strong></p>
-<p>PPO is the workhorse optimiser of the classical RLHF pipeline (see <a href="phase02.md#ppo-rlhf-loop">Section 5</a>), for two reasons.</p>
+<p>PPO is the workhorse optimiser of the classical RLHF pipeline (see <a href="../phase02/#ppo-rlhf-loop">Section 5</a>), for two reasons.</p>
 <ul>
 <li>The clip provides cheap, stable on-policy updates from minibatch data, which matters when each rollout (a full generation from a large language model) is expensive.</li>
 <li>In RLHF, PPO's trust-region behaviour is reinforced by an explicit Kullback–Leibler (KL) divergence penalty against the supervised fine-tuned reference policy, added to the per-token reward. This second KL term is conceptually distinct from the clip (it constrains drift from the <em>reference</em> policy rather than from the <em>rollout</em> policy), but both share the same goal: preventing the policy from straying into regions where the reward model is unreliable, which is the proximate cause of reward hacking.</li>
@@ -2434,7 +2546,7 @@ r_t(\theta) = \frac{\pi_\theta(a_t \mid s_t)}{\pi_{\theta_\text{old}}(a_t \mid s
 <div class="arithmatex">\[
 \hat{A}_t^{\text{GAE}} = (1-\lambda)\sum_{n=1}^{\infty} \lambda^{n-1} \hat{A}_t^{(n)}.
 \]</div>
-<p>To see this collapses to <a href="#eq-gae">(18)</a>, swap the order of summation: <span class="arithmatex">\(\delta_{t+l}\)</span> contributes to every <span class="arithmatex">\(\hat{A}_t^{(n)}\)</span> with <span class="arithmatex">\(n &gt; l\)</span>, so its total weight is <span class="arithmatex">\((1-\lambda)\sum_{n=l+1}^{\infty}\lambda^{n-1}\cdot\gamma^l = \lambda^l \gamma^l = (\gamma\lambda)^l\)</span>, recovering <span class="arithmatex">\(\sum_{l=0}^{\infty}(\gamma\lambda)^l \delta_{t+l}\)</span>. At <span class="arithmatex">\(\lambda = 1\)</span> the <span class="arithmatex">\((1-\lambda)\)</span> formula yields <span class="arithmatex">\(0 \cdot \infty\)</span> (the sum diverges), so the extreme case must be read from <a href="#eq-gae">(18)</a> directly, as done below. The same identity, expressed as a TD(<span class="arithmatex">\(\lambda\)</span>) return rather than an advantage, is derived in full in <a href="appendix.md#15-n-step-td-error">Appendix 1.5</a>.</p>
+<p>To see this collapses to <a href="#eq-gae">(18)</a>, swap the order of summation: <span class="arithmatex">\(\delta_{t+l}\)</span> contributes to every <span class="arithmatex">\(\hat{A}_t^{(n)}\)</span> with <span class="arithmatex">\(n &gt; l\)</span>, so its total weight is <span class="arithmatex">\((1-\lambda)\sum_{n=l+1}^{\infty}\lambda^{n-1}\cdot\gamma^l = \lambda^l \gamma^l = (\gamma\lambda)^l\)</span>, recovering <span class="arithmatex">\(\sum_{l=0}^{\infty}(\gamma\lambda)^l \delta_{t+l}\)</span>. At <span class="arithmatex">\(\lambda = 1\)</span> the <span class="arithmatex">\((1-\lambda)\)</span> formula yields <span class="arithmatex">\(0 \cdot \infty\)</span> (the sum diverges), so the extreme case must be read from <a href="#eq-gae">(18)</a> directly, as done below. The same identity, expressed as a TD(<span class="arithmatex">\(\lambda\)</span>) return rather than an advantage, is derived in full in <a href="../appendix/#15-n-step-td-error">Appendix 1.5</a>.</p>
 <p><strong><span class="arithmatex">\(\lambda\)</span> at the extremes.</strong></p>
 <ul>
 <li>
@@ -2482,7 +2594,7 @@ Q^{\pi_\theta}(s_t, a_t) = \mathbb{E}[G_t \mid s_t, a_t], \qquad V^{\pi_\theta}(
 \]</div>
 <p>Each step prepends one TD residual and rescales the accumulated tail by <span class="arithmatex">\(\gamma\lambda\)</span>, computing every <span class="arithmatex">\(\hat{A}_t\)</span> in one <span class="arithmatex">\(O(T)\)</span> pass rather than the <span class="arithmatex">\(O(T^2)\)</span> cost of summing each timestep independently. The boundary value <span class="arithmatex">\(\hat{A}_{T+1} = 0\)</span> encodes the episode edge: there is no advantage to accumulate beyond the final step, with <span class="arithmatex">\(V(s_{T+1}) = 0\)</span> for a true terminal state or the bootstrap value <span class="arithmatex">\(V(s_{T+1})\)</span> if the episode was merely truncated at the horizon.</p>
 <p><strong>Advantage standardisation.</strong> In practice, <span class="arithmatex">\(\hat{A}_t\)</span> is standardised to zero mean and unit variance across the rollout batch before being used in the policy gradient update. The two operations have different justifications. Subtracting the batch mean is theoretically neutral: any state-independent constant may be subtracted from the advantage without changing the expected gradient, by the baseline argument in <a href="#eq-pg-advantage">Section 2.1.1</a>. Dividing by the batch standard deviation has no formal justification but prevents large reward magnitudes from producing disproportionately large gradient steps, acting as a per-batch adaptive scaling of the learning rate. This standardisation is not part of the formal GAE or PPO theory, but it is a near-universal implementation default.</p>
-<p><strong>A note on TD error targets.</strong> In <a href="#q-learning-dqn">Section 1.1.1</a> the TD error was defined on <span class="arithmatex">\(Q\)</span>, namely <span class="arithmatex">\(\delta_t = R_t + \gamma \max_{a'} Q(s_{t+1}, a') - Q(s_t, a_t)\)</span>, whereas the residual here is defined on <span class="arithmatex">\(V\)</span>, namely <span class="arithmatex">\(\delta_t = R_t + \gamma V(s_{t+1}) - V(s_t)\)</span>. This is not a conflict: TD is a general bootstrapping technique that applies to any value function, because each of <span class="arithmatex">\(Q\)</span> and <span class="arithmatex">\(V\)</span> obeys its own Bellman recursion in the immediate reward <span class="arithmatex">\(R_t\)</span>. The choice of target depends on the algorithm. <span class="arithmatex">\(Q\)</span>-based TD suits off-policy control (Q-learning, DQN), where <span class="arithmatex">\(\max_{a'} Q\)</span> selects the greedy action without a separate value network, while <span class="arithmatex">\(V\)</span>-based TD suits actor-critic methods (e.g. Advantage Actor-Critic (A2C), PPO), where a separate policy handles action selection and the critic need only estimate state values. The advantage <span class="arithmatex">\(A\)</span> is never bootstrapped directly; it is recovered from <span class="arithmatex">\(V\)</span>-based TD residuals through GAE, as the <span class="arithmatex">\(\lambda = 0\)</span> case <span class="arithmatex">\(\hat{A}_t = \delta_t\)</span> makes explicit. <a href="appendix.md#12-why-value-functions-satisfy-a-td-recursion">Appendix 1.2</a> derives why <span class="arithmatex">\(V\)</span> obeys the same one-step recursion as <span class="arithmatex">\(Q\)</span> and shows how a <span class="arithmatex">\(V\)</span>-based TD residual doubles as a one-sample advantage estimate.</p>
+<p><strong>A note on TD error targets.</strong> In <a href="#q-learning-dqn">Section 1.1.1</a> the TD error was defined on <span class="arithmatex">\(Q\)</span>, namely <span class="arithmatex">\(\delta_t = R_t + \gamma \max_{a'} Q(s_{t+1}, a') - Q(s_t, a_t)\)</span>, whereas the residual here is defined on <span class="arithmatex">\(V\)</span>, namely <span class="arithmatex">\(\delta_t = R_t + \gamma V(s_{t+1}) - V(s_t)\)</span>. This is not a conflict: TD is a general bootstrapping technique that applies to any value function, because each of <span class="arithmatex">\(Q\)</span> and <span class="arithmatex">\(V\)</span> obeys its own Bellman recursion in the immediate reward <span class="arithmatex">\(R_t\)</span>. The choice of target depends on the algorithm. <span class="arithmatex">\(Q\)</span>-based TD suits off-policy control (Q-learning, DQN), where <span class="arithmatex">\(\max_{a'} Q\)</span> selects the greedy action without a separate value network, while <span class="arithmatex">\(V\)</span>-based TD suits actor-critic methods (e.g. Advantage Actor-Critic (A2C), PPO), where a separate policy handles action selection and the critic need only estimate state values. The advantage <span class="arithmatex">\(A\)</span> is never bootstrapped directly; it is recovered from <span class="arithmatex">\(V\)</span>-based TD residuals through GAE, as the <span class="arithmatex">\(\lambda = 0\)</span> case <span class="arithmatex">\(\hat{A}_t = \delta_t\)</span> makes explicit. <a href="../appendix/#12-why-value-functions-satisfy-a-td-recursion">Appendix 1.2</a> derives why <span class="arithmatex">\(V\)</span> obeys the same one-step recursion as <span class="arithmatex">\(Q\)</span> and shows how a <span class="arithmatex">\(V\)</span>-based TD residual doubles as a one-sample advantage estimate.</p>
 <h4 id="ppo-algorithm">2.1.4. Putting It Together: The PPO Algorithm<a class="headerlink" href="#ppo-algorithm" title="Permanent link">&para;</a></h4>
 <p>The three subsections above are the three ingredients of one training loop. The <strong>policy gradient theorem</strong> (<a href="#eq-pg-advantage">Section 2.1.1</a>) establishes the gradient <a href="#eq-pg-advantage">(15)</a>: push up the log-probability of actions with positive advantage, push down those with negative advantage. As shown in <a href="#eq-ppo-full">(17)</a>, <strong>PPO</strong> (<a href="#ppo-clip">Section 2.1.2</a>) replaces the raw gradient with the clipped surrogate <span class="arithmatex">\(\mathcal{L}^{\text{CLIP}}\)</span> (as defined in <a href="#eq-ppo-clip">(16)</a>) so that each update stays inside a trust region, which is what permits reusing one batch of rollouts for several gradient epochs. <strong>GAE</strong> (<a href="#gae">Section 2.1.3</a>) supplies the advantage estimate <span class="arithmatex">\(\hat{A}_t\)</span> that both of the above require, trading off bias and variance through <span class="arithmatex">\(\lambda\)</span> (see <a href="#eq-gae">(18)</a>). The actor-critic structure underpins all three: a value network <span class="arithmatex">\(V_\phi\)</span> acts as the baseline that makes the advantage well-conditioned (the variance-reduction argument from Step 4 of <a href="#eq-pg-advantage">Section 2.1.1</a>) and supplies the <span class="arithmatex">\(V(s)\)</span> terms inside the TD residuals.</p>
 <figure id="alg-ppo" style="text-align: center;">
@@ -2555,7 +2667,7 @@ Q^{\pi_\theta}(s_t, a_t) = \mathbb{E}[G_t \mid s_t, a_t], \qquad V^{\pi_\theta}(
 <p><strong>Results</strong></p>
 <p>PPO was evaluated on MuJoCo continuous-control tasks and 49 Atari 2600 games. On continuous control, the CLIP objective with <span class="arithmatex">\(\varepsilon = 0.2\)</span> scored best among the tested surrogate variants, outperforming the adaptive KL-penalty version of PPO as well as TRPO, the cross-entropy method (CEM), and A2C baselines. On Atari, PPO beat A2C on the large majority of games and was competitive with Actor-Critic with Experience Replay (ACER): ACER reached higher final scores on more games, while PPO led on early learning speed despite being far simpler to implement. Between three and ten optimisation epochs per rollout batch were reported as robust defaults across tasks.</p>
 <p><strong>Significance</strong></p>
-<p>PPO replaced TRPO as the default policy optimiser for large-scale RL applications, including the classical RLHF pipeline (see <a href="phase02.md#ppo-rlhf-loop">Section 5</a>). Its prevalence is due to three properties: it requires only first-order gradients, it is compatible with shared actor-critic architectures, and its clipping heuristic requires little per-task tuning in practice.</p>
+<p>PPO replaced TRPO as the default policy optimiser for large-scale RL applications, including the classical RLHF pipeline (see <a href="../phase02/#ppo-rlhf-loop">Section 5</a>). Its prevalence is due to three properties: it requires only first-order gradients, it is compatible with shared actor-critic architectures, and its clipping heuristic requires little per-task tuning in practice.</p>
 <h4 id="232-schulman-et-al-2016-high-dimensional-continuous-control-using-generalized-advantage-estimation">2.3.2. Schulman et al. (2016): <em>High-Dimensional Continuous Control Using Generalized Advantage Estimation</em><a class="headerlink" href="#232-schulman-et-al-2016-high-dimensional-continuous-control-using-generalized-advantage-estimation" title="Permanent link">&para;</a></h4>
 <p><strong>Overview</strong></p>
 <p>Schulman et al. (2016) introduced GAE, a family of advantage estimators parameterised by <span class="arithmatex">\(\lambda \in [0, 1]\)</span> that interpolates between high-bias/low-variance and low-bias/high-variance estimates. The paper combined GAE with TRPO and demonstrated high-dimensional continuous locomotion on MuJoCo. The technical derivation of GAE is covered in <a href="#gae">Section 2.1.3</a>.</p>

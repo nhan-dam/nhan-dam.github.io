@@ -62,10 +62,16 @@ extra_css:
 nav:
   - Home: index.md
   - Learning:
+    # - Agentic AI:
+    #   - LLM Foundations for Agentic AI: agentic-ai/01_llm_foundations_for_agents.md
+    #   - Agent Fundamentals: agentic-ai/02_agent_fundamentals.md
+    #   - Agent Design Patterns and Frameworks: agentic-ai/03_agent_patterns_and_frameworks.md
+    #   - Agent Evaluation, Safety, and Production: agentic-ai/04_agent_evaluation_and_production.md
+    #   - 'Project: Scout, a Multi-Tool Research Agent': agentic-ai/05_project_research_agent.md
     - RLHF Curriculum:
       - Overview: rlhf/curriculum/index.md
       - Phase 1 - Reinforcement Learning Foundations: rlhf/curriculum/phase01.md
-      # - Phase 2 - Classical RLHF Pipeline: rlhf/curriculum/phase02.md
+      - Phase 2 - Classical RLHF Pipeline: rlhf/curriculum/phase02.md
       # - Phase 3 - Modern Alignment Methods: rlhf/curriculum/phase03.md
       - Appendix: rlhf/curriculum/appendix.md
     # - Week 2 – Policy Gradients & PPO: rlhf/week2-ppo.md
@@ -99,6 +105,9 @@ nav:
     - Project 2 - Tabular Q-Learning on Gymnasium CartPole: projects/report_qlearning_cartpole.md
     - Project 3 - Deep Q-Network on Gymnasium CartPole: projects/report_dqn_cartpole.md
     - Project 4 - Proximal Policy Optimisation on Gymnasium LunarLander: projects/report_ppo_lunarlander.md
+    - Project 5 - Supervised Fine-Tuning of Qwen2.5-0.5B: projects/report_sft_lora_dolly.md
+    - Project 6 - Reward Model Training on Anthropic HH-RLHF: projects/report_reward_model_hh.md
+    - Project 7 - Full RLHF Loop with Proximal Policy Optimisation: projects/report_ppo_rlhf_loop.md
   - Reference:
     - Mac ML Workstation Setup: reference/ml_workstation_setup_uv.md
     - GitHub Pages Setup: reference/github-pages-setup.md

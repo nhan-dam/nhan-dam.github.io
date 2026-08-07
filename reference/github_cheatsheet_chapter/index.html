@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -1225,13 +1225,113 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="2. Push a Local Repository to a New Remote Repository">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-create-the-remote-repository-without-auto-initialisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Create the Remote Repository Without Auto-Initialisation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-audit-what-the-first-commit-would-contain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. Audit What the First Commit Would Contain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-link-and-push" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Link and Push
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-add-the-licence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4. Add the Licence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-reconcile-a-rejected-first-push" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5. Reconcile a Rejected First Push
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-create-a-local-branch" class="md-nav__link">
+  <a href="#3-set-up-continuous-integration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Create a Local Branch
+        3. Set Up Continuous Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Set Up Continuous Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-add-the-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Add the Workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-add-the-status-badge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Add the Status Badge
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-create-a-local-branch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Create a Local Branch
       
     </span>
   </a>
@@ -1239,10 +1339,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-show-all-local-and-remote-branches" class="md-nav__link">
+  <a href="#5-show-all-local-and-remote-branches" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Show All Local and Remote Branches
+        5. Show All Local and Remote Branches
       
     </span>
   </a>
@@ -1250,10 +1350,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-delete-a-local-or-remote-branch" class="md-nav__link">
+  <a href="#6-delete-a-local-or-remote-branch" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Delete a Local or Remote Branch
+        6. Delete a Local or Remote Branch
       
     </span>
   </a>
@@ -1261,10 +1361,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-sync-the-branch-list-between-local-and-remote" class="md-nav__link">
+  <a href="#7-sync-the-branch-list-between-local-and-remote" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Sync the Branch List Between Local and Remote
+        7. Sync the Branch List Between Local and Remote
       
     </span>
   </a>
@@ -1272,10 +1372,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-squash-commits" class="md-nav__link">
+  <a href="#8-squash-commits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Squash Commits
+        8. Squash Commits
       
     </span>
   </a>
@@ -1283,10 +1383,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-permanently-discard-current-changes-and-revert-to-a-prior-commit" class="md-nav__link">
+  <a href="#9-permanently-discard-current-changes-and-revert-to-a-prior-commit" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. Permanently Discard Current Changes and Revert to a Prior Commit
+        9. Permanently Discard Current Changes and Revert to a Prior Commit
       
     </span>
   </a>
@@ -1294,10 +1394,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#9-temporarily-discard-current-changes-and-revert-to-a-prior-commit" class="md-nav__link">
+  <a href="#10-temporarily-discard-current-changes-and-revert-to-a-prior-commit" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. Temporarily Discard Current Changes and Revert to a Prior Commit
+        10. Temporarily Discard Current Changes and Revert to a Prior Commit
       
     </span>
   </a>
@@ -1305,10 +1405,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#10-permanently-discard-current-changes-and-switch-branch" class="md-nav__link">
+  <a href="#11-permanently-discard-current-changes-and-switch-branch" class="md-nav__link">
     <span class="md-ellipsis">
       
-        10. Permanently Discard Current Changes and Switch Branch
+        11. Permanently Discard Current Changes and Switch Branch
       
     </span>
   </a>
@@ -1316,10 +1416,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#11-temporarily-discard-current-changes-and-switch-branch" class="md-nav__link">
+  <a href="#12-temporarily-discard-current-changes-and-switch-branch" class="md-nav__link">
     <span class="md-ellipsis">
       
-        11. Temporarily Discard Current Changes and Switch Branch
+        12. Temporarily Discard Current Changes and Switch Branch
       
     </span>
   </a>
@@ -1416,13 +1516,113 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="2. Push a Local Repository to a New Remote Repository">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-create-the-remote-repository-without-auto-initialisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Create the Remote Repository Without Auto-Initialisation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-audit-what-the-first-commit-would-contain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. Audit What the First Commit Would Contain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-link-and-push" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Link and Push
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-add-the-licence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4. Add the Licence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-reconcile-a-rejected-first-push" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5. Reconcile a Rejected First Push
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-create-a-local-branch" class="md-nav__link">
+  <a href="#3-set-up-continuous-integration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Create a Local Branch
+        3. Set Up Continuous Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Set Up Continuous Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-add-the-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Add the Workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-add-the-status-badge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Add the Status Badge
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-create-a-local-branch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Create a Local Branch
       
     </span>
   </a>
@@ -1430,10 +1630,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-show-all-local-and-remote-branches" class="md-nav__link">
+  <a href="#5-show-all-local-and-remote-branches" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Show All Local and Remote Branches
+        5. Show All Local and Remote Branches
       
     </span>
   </a>
@@ -1441,10 +1641,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-delete-a-local-or-remote-branch" class="md-nav__link">
+  <a href="#6-delete-a-local-or-remote-branch" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Delete a Local or Remote Branch
+        6. Delete a Local or Remote Branch
       
     </span>
   </a>
@@ -1452,10 +1652,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-sync-the-branch-list-between-local-and-remote" class="md-nav__link">
+  <a href="#7-sync-the-branch-list-between-local-and-remote" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Sync the Branch List Between Local and Remote
+        7. Sync the Branch List Between Local and Remote
       
     </span>
   </a>
@@ -1463,10 +1663,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-squash-commits" class="md-nav__link">
+  <a href="#8-squash-commits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Squash Commits
+        8. Squash Commits
       
     </span>
   </a>
@@ -1474,10 +1674,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-permanently-discard-current-changes-and-revert-to-a-prior-commit" class="md-nav__link">
+  <a href="#9-permanently-discard-current-changes-and-revert-to-a-prior-commit" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. Permanently Discard Current Changes and Revert to a Prior Commit
+        9. Permanently Discard Current Changes and Revert to a Prior Commit
       
     </span>
   </a>
@@ -1485,10 +1685,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#9-temporarily-discard-current-changes-and-revert-to-a-prior-commit" class="md-nav__link">
+  <a href="#10-temporarily-discard-current-changes-and-revert-to-a-prior-commit" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. Temporarily Discard Current Changes and Revert to a Prior Commit
+        10. Temporarily Discard Current Changes and Revert to a Prior Commit
       
     </span>
   </a>
@@ -1496,10 +1696,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#10-permanently-discard-current-changes-and-switch-branch" class="md-nav__link">
+  <a href="#11-permanently-discard-current-changes-and-switch-branch" class="md-nav__link">
     <span class="md-ellipsis">
       
-        10. Permanently Discard Current Changes and Switch Branch
+        11. Permanently Discard Current Changes and Switch Branch
       
     </span>
   </a>
@@ -1507,10 +1707,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#11-temporarily-discard-current-changes-and-switch-branch" class="md-nav__link">
+  <a href="#12-temporarily-discard-current-changes-and-switch-branch" class="md-nav__link">
     <span class="md-ellipsis">
       
-        11. Temporarily Discard Current Changes and Switch Branch
+        12. Temporarily Discard Current Changes and Switch Branch
       
     </span>
   </a>
@@ -1545,10 +1745,10 @@
 <h1 id="github-task-oriented-cheatsheet">GitHub Task-Oriented Cheatsheet<a class="headerlink" href="#github-task-oriented-cheatsheet" title="Permanent link">&para;</a></h1>
 <blockquote>
 <p>Created on: 20 April 2026</p>
-<p>Updated on: 8 May 2026</p>
+<p>Updated on: 6 August 2026</p>
 </blockquote>
 <h2 id="1-create-a-new-local-repository">1. Create a New Local Repository<a class="headerlink" href="#1-create-a-new-local-repository" title="Permanent link">&para;</a></h2>
-<p><strong>Note for <code>uv</code> projects:</strong> <code>uv init</code> automatically runs <code>git init</code> and creates a <code>.gitignore</code> pre-populated with <code>.venv/</code> and <code>.python-version</code>. If you are scaffolding a project with <code>uv</code>, skip <code>git init</code> — the repository already exists.</p>
+<p><strong>Note for <code>uv</code> projects:</strong> <code>uv init</code> automatically runs <code>git init</code> and creates a <code>.gitignore</code> pre-populated with <code>.venv/</code> and <code>.python-version</code>. If you are scaffolding a project with <code>uv</code>, skip <code>git init</code>, since the repository already exists.</p>
 <p>For a plain directory not managed by <code>uv</code>:</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>init
 git<span class="w"> </span>add<span class="w"> </span>.
@@ -1556,34 +1756,103 @@ git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </sp
 </code></pre></div>
 <hr />
 <h2 id="2-push-a-local-repository-to-a-new-remote-repository">2. Push a Local Repository to a New Remote Repository<a class="headerlink" href="#2-push-a-local-repository-to-a-new-remote-repository" title="Permanent link">&para;</a></h2>
-<p>Link the local repository to a newly created remote (e.g. on GitHub), then push all commits.</p>
+<p>This procedure links a local repository holding at least one commit (see <a href="#1-create-a-new-local-repository">Section 1</a>) to a newly created remote, pushes it, and configures the licence.</p>
+<h3 id="21-create-the-remote-repository-without-auto-initialisation">2.1. Create the Remote Repository Without Auto-Initialisation<a class="headerlink" href="#21-create-the-remote-repository-without-auto-initialisation" title="Permanent link">&para;</a></h3>
+<p>Create the repository on GitHub with no README, no <code>.gitignore</code>, and no licence template selected. Each of those options writes a commit to the remote that shares no ancestor with the local history, which makes the first push fail and forces the reconciliation of <a href="#25-reconcile-a-rejected-first-push">Section 2.5</a>. The licence is added after the first push instead, as described in <a href="#24-add-the-licence">Section 2.4</a>.</p>
+<h3 id="22-audit-what-the-first-commit-would-contain">2.2. Audit What the First Commit Would Contain<a class="headerlink" href="#22-audit-what-the-first-commit-would-contain" title="Permanent link">&para;</a></h3>
+<p>Git retains every version of every blob permanently, so one oversized file inflates all future clones even after it is deleted, and GitHub rejects any file above 100 MB. Machine-learning repositories are especially exposed, since model weights, checkpoints, merged models, and exported artefacts accumulate in the working tree. Verify the ignore rules before the first commit rather than after:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>ls-files<span class="w"> </span>-oc<span class="w"> </span>--exclude-standard<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l<span class="w">   </span><span class="c1"># number of files that would be committed</span>
+du<span class="w"> </span>-sh<span class="w"> </span>--exclude<span class="o">=</span>.git<span class="w"> </span>.<span class="w">                       </span><span class="c1"># working-tree size, ignore rules not applied</span>
+</code></pre></div>
+<p>If the two disagree by orders of magnitude, the ignore rules are incomplete. Typical entries for a training repository are the results directory, any <code>*-model</code> and <code>*-model-merged</code> directories, <code>*.gguf</code>, and <code>.DS_Store</code>.</p>
+<p>Large artefacts belong elsewhere. Weights go to a model registry, e.g. the Hugging Face Hub. Datasets and checkpoints go to object storage tracked by DVC or git-annex, which keeps a small pointer file in Git. Only small, human-readable artefacts that documents cite, e.g. metric summaries and evaluation tables, are worth committing directly.</p>
+<h3 id="23-link-and-push">2.3. Link and Push<a class="headerlink" href="#23-link-and-push" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>git@github.com:&lt;user&gt;/&lt;repo&gt;.git
 git<span class="w"> </span>branch<span class="w"> </span>-M<span class="w"> </span>main
 git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>main
 </code></pre></div>
-<p>If the remote was already added with an HTTPS URL (which prompts for credentials even when an SSH key is configured), switch it to SSH:</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>remote<span class="w"> </span>set-url<span class="w"> </span>origin<span class="w"> </span>git@github.com:&lt;user&gt;/&lt;repo&gt;.git
-</code></pre></div>
 <ul>
 <li><code>git branch -M main</code> renames the current branch to <code>main</code>, forcing the rename even if a branch called <code>main</code> already exists (<code>-M</code> is shorthand for <code>--move --force</code>). This is necessary because <code>git init</code> may create a default branch named <code>master</code> depending on the Git version or local configuration.</li>
 <li><code>-u</code> sets the upstream tracking reference so that subsequent <code>git push</code> and <code>git pull</code> calls require no additional arguments.</li>
+<li><code>git remote -v</code> confirms the remote resolved as intended before pushing.</li>
 </ul>
-<p>If the push is rejected with a 'fetch first' error, the remote contains commits not present locally (e.g. a <code>LICENSE</code> or <code>README.md</code> auto-created by GitHub). Pull with rebase to merge those commits onto the local history, then push:</p>
+<p>If the remote was already added with an HTTPS URL (which prompts for credentials even when an SSH key is configured), switch it to SSH:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>remote<span class="w"> </span>set-url<span class="w"> </span>origin<span class="w"> </span>git@github.com:&lt;user&gt;/&lt;repo&gt;.git
+</code></pre></div>
+<h3 id="24-add-the-licence">2.4. Add the Licence<a class="headerlink" href="#24-add-the-licence" title="Permanent link">&para;</a></h3>
+<p>Add the licence through the GitHub interface after the first push, so that the template text, the copyright year, and the owner name are filled in automatically. Select 'Add file', then 'Create new file', name the file <code>LICENSE</code>, and use the 'Choose a licence template' button that appears. Commit to <code>main</code>, then bring the commit down:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>pull
+</code></pre></div>
+<p>That commit is a child of the pushed history, so the pull is a fast-forward and leaves no merge commit. Recording the licence in the packaging metadata as well keeps the built artefact consistent with the repository, e.g. <code>license = "MIT"</code> in <code>pyproject.toml</code> for a Python project.</p>
+<blockquote>
+<p><strong>Check every licence, not only the repository's own.</strong> The chosen licence covers the code and prose written for the repository. It does not cover anything the repository consumes or redistributes. Datasets, base models, and vendored code keep their own terms, some of which impose obligations such as attribution or share-alike. Before publishing, enumerate every external asset the repository ships, quotes, or documents, confirm that redistribution is permitted, and record each licence in the README alongside the repository's own. Verbatim excerpts, e.g. sample rows printed into a committed exploratory-data-analysis report, remain under their upstream terms regardless of the repository licence.</p>
+</blockquote>
+<h3 id="25-reconcile-a-rejected-first-push">2.5. Reconcile a Rejected First Push<a class="headerlink" href="#25-reconcile-a-rejected-first-push" title="Permanent link">&para;</a></h3>
+<p>If the push is rejected with a 'fetch first' error, the remote contains commits not present locally, e.g. a <code>LICENSE</code> or <code>README.md</code> auto-created by GitHub. Pull with rebase to replay the local commits on top of the remote ones, then push:</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>main<span class="w"> </span>--rebase
 git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>main
 </code></pre></div>
-<p>Using <code>--rebase</code> replays local commits on top of the remote commits, producing a clean linear history. Without it, <code>git pull</code> would insert an extra merge commit joining the two histories.</p>
+<p>Using <code>--rebase</code> produces a clean linear history. Without it, <code>git pull</code> inserts an extra merge commit joining the two histories.</p>
+<p>When the two histories have no commit in common, which is the usual case for a repository initialised on both sides, Git refuses outright with 'refusing to merge unrelated histories'. Add the override:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>main<span class="w"> </span>--rebase<span class="w"> </span>--allow-unrelated-histories
+</code></pre></div>
 <hr />
-<h2 id="3-create-a-local-branch">3. Create a Local Branch<a class="headerlink" href="#3-create-a-local-branch" title="Permanent link">&para;</a></h2>
+<h2 id="3-set-up-continuous-integration">3. Set Up Continuous Integration<a class="headerlink" href="#3-set-up-continuous-integration" title="Permanent link">&para;</a></h2>
+<p>Continuous integration (CI) runs the test suite automatically on every push. GitHub Actions executes any workflow file found under <code>.github/workflows/</code>, so committing the file is the only setup required.</p>
+<h3 id="31-add-the-workflow">3.1. Add the Workflow<a class="headerlink" href="#31-add-the-workflow" title="Permanent link">&para;</a></h3>
+<p>The following workflow tests a <code>uv</code>-managed Python project. Save it as <code>.github/workflows/ci.yml</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CI</span>
+
+<span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">workflow_dispatch</span><span class="p">:</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">test</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">timeout-minutes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">astral-sh/setup-uv@v5</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">enable-cache</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">          </span><span class="nt">cache-dependency-glob</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uv.lock</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uv python install</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uv sync --locked</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uv run pytest -q</span>
+</code></pre></div>
+<ul>
+<li><code>workflow_dispatch</code> adds a 'Run workflow' button to the Actions tab, which starts the workflow on demand.</li>
+<li><code>uv python install</code> reads <code>.python-version</code>, so the runner and the workstation agree on the interpreter.</li>
+<li><code>uv sync --locked</code> fails when <code>uv.lock</code> is out of step with <code>pyproject.toml</code>, so a stale lockfile becomes a failed build rather than a silent re-resolution.</li>
+<li><code>enable-cache</code> with <code>cache-dependency-glob: uv.lock</code> reuses the dependency cache until the lockfile changes.</li>
+</ul>
+<blockquote>
+<p><strong>Expect a delay on the first run.</strong> The first push-triggered run on a new repository can take tens of minutes to be scheduled, and the Actions tab reports no runs in the meantime. Subsequent runs queue immediately. Use the 'Run workflow' button to verify the workflow without waiting.</p>
+</blockquote>
+<h3 id="32-add-the-status-badge">3.2. Add the Status Badge<a class="headerlink" href="#32-add-the-status-badge" title="Permanent link">&para;</a></h3>
+<p>Place the badge directly beneath the README title, separated from it by a blank line.</p>
+<div class="highlight"><pre><span></span><code>[<span class="nt">![CI</span>](<span class="na">https://github.com/&lt;user&gt;/&lt;repo&gt;/actions/workflows/ci.yml/badge.svg</span>)](https://github.com/&lt;user&gt;/&lt;repo&gt;/actions/workflows/ci.yml)
+</code></pre></div>
+<ul>
+<li>The badge reports the most recent run of that workflow on the default branch. Wrapping it in a link opens the Actions tab.</li>
+<li>Append <code>?branch=main</code> to pin the badge to one branch, or <code>?event=push</code> to ignore manually dispatched runs.</li>
+<li>On a private repository the badge image does not render for viewers without access, so it is worth adding when the repository is made public.</li>
+</ul>
+<hr />
+<h2 id="4-create-a-local-branch">4. Create a Local Branch<a class="headerlink" href="#4-create-a-local-branch" title="Permanent link">&para;</a></h2>
 <p>Create a new branch and switch to it immediately.</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
-<p>The <code>-c</code> flag (shorthand for <code>--create</code>) creates the branch and switches to it in one step; it is equivalent to the older <code>git checkout -b &lt;branch-name&gt;</code>.</p>
+<p>The <code>-c</code> flag (shorthand for <code>--create</code>) creates the branch and switches to it in one step. It is equivalent to the older <code>git checkout -b &lt;branch-name&gt;</code>.</p>
 <p>To create the branch without switching to it:</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>branch<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
 <hr />
-<h2 id="4-show-all-local-and-remote-branches">4. Show All Local and Remote Branches<a class="headerlink" href="#4-show-all-local-and-remote-branches" title="Permanent link">&para;</a></h2>
+<h2 id="5-show-all-local-and-remote-branches">5. Show All Local and Remote Branches<a class="headerlink" href="#5-show-all-local-and-remote-branches" title="Permanent link">&para;</a></h2>
 <p>List local branches only:</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>branch
 </code></pre></div>
@@ -1594,8 +1863,8 @@ git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>branch<span class="w"> </span>-a
 </code></pre></div>
 <hr />
-<h2 id="5-delete-a-local-or-remote-branch">5. Delete a Local or Remote Branch<a class="headerlink" href="#5-delete-a-local-or-remote-branch" title="Permanent link">&para;</a></h2>
-<p>Delete a local branch (safe — refuses if the branch has unmerged changes):</p>
+<h2 id="6-delete-a-local-or-remote-branch">6. Delete a Local or Remote Branch<a class="headerlink" href="#6-delete-a-local-or-remote-branch" title="Permanent link">&para;</a></h2>
+<p>Delete a local branch, i.e. the safe form, which refuses if the branch has unmerged changes:</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>branch<span class="w"> </span>-d<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
 <p>Force-delete a local branch regardless of merge status:</p>
@@ -1605,7 +1874,7 @@ git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--delete<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
 <hr />
-<h2 id="6-sync-the-branch-list-between-local-and-remote">6. Sync the Branch List Between Local and Remote<a class="headerlink" href="#6-sync-the-branch-list-between-local-and-remote" title="Permanent link">&para;</a></h2>
+<h2 id="7-sync-the-branch-list-between-local-and-remote">7. Sync the Branch List Between Local and Remote<a class="headerlink" href="#7-sync-the-branch-list-between-local-and-remote" title="Permanent link">&para;</a></h2>
 <p>Remote branches that have been deleted on the server are not automatically removed from the local reference list. To prune stale remote-tracking references:</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>fetch<span class="w"> </span>--prune
 </code></pre></div>
@@ -1613,11 +1882,11 @@ git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>fetch.prune<span class="w"> </span><span class="nb">true</span>
 </code></pre></div>
 <hr />
-<h2 id="7-squash-commits">7. Squash Commits<a class="headerlink" href="#7-squash-commits" title="Permanent link">&para;</a></h2>
+<h2 id="8-squash-commits">8. Squash Commits<a class="headerlink" href="#8-squash-commits" title="Permanent link">&para;</a></h2>
 <p>'Squashing' collapses multiple commits into a single commit. Before squashing, inspect the recent commit log to determine how many commits to include:</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>-&lt;n&gt;
 </code></pre></div>
-<p>By default, <code>git log --oneline</code> prints all commits (paginated via <code>less</code>; press <code>q</code> to quit). Passing <code>-&lt;n&gt;</code> limits the output to the <code>&lt;n&gt;</code> most recent commits. For most squash decisions, <code>-10</code> or <code>-20</code> is sufficient, e.g.:</p>
+<p>By default, <code>git log --oneline</code> prints all commits (paginated via <code>less</code>, so press <code>q</code> to quit). Passing <code>-&lt;n&gt;</code> limits the output to the <code>&lt;n&gt;</code> most recent commits. For most squash decisions, <code>-10</code> or <code>-20</code> is sufficient, e.g.:</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>-10
 </code></pre></div>
 <p>The output shows one line per commit with the short hash and subject message, e.g.:</p>
@@ -1628,14 +1897,14 @@ git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span
 <p>Once you have identified the target range, run an interactive rebase where <code>&lt;n&gt;</code> is the number of commits to include:</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>rebase<span class="w"> </span>-i<span class="w"> </span>HEAD~&lt;n&gt;
 </code></pre></div>
-<p>In the editor that opens, leave the first entry as <code>pick</code> and change the remaining entries to <code>squash</code> (or <code>s</code>). Save and close; Git will then prompt for a combined commit message.</p>
+<p>In the editor that opens, leave the first entry as <code>pick</code> and change the remaining entries to <code>squash</code> (or <code>s</code>). Save and close. Git then prompts for a combined commit message.</p>
 <p><strong>Note:</strong> squashing rewrites history, so if any of the squashed commits were already on the remote, a normal <code>git push</code> will be rejected because the local <code>HEAD</code> is now behind the remote. Force-push to overwrite the remote history:</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>push<span class="w"> </span>--force-with-lease
 </code></pre></div>
-<p>Prefer <code>--force-with-lease</code> over <code>--force</code>; it refuses the push if the remote has received commits since the last fetch, guarding against accidentally overwriting others' work. Coordinate with collaborators before force-pushing to any shared branch.</p>
+<p>Prefer <code>--force-with-lease</code> over <code>--force</code>. It refuses the push if the remote has received commits since the last fetch, guarding against accidentally overwriting others' work. Coordinate with collaborators before force-pushing to any shared branch.</p>
 <hr />
-<h2 id="8-permanently-discard-current-changes-and-revert-to-a-prior-commit">8. Permanently Discard Current Changes and Revert to a Prior Commit<a class="headerlink" href="#8-permanently-discard-current-changes-and-revert-to-a-prior-commit" title="Permanent link">&para;</a></h2>
-<p>First, identify the target commit hash using the one-line log (also useful for counting commits to squash; see Section 7):</p>
+<h2 id="9-permanently-discard-current-changes-and-revert-to-a-prior-commit">9. Permanently Discard Current Changes and Revert to a Prior Commit<a class="headerlink" href="#9-permanently-discard-current-changes-and-revert-to-a-prior-commit" title="Permanent link">&para;</a></h2>
+<p>First, identify the target commit hash using the one-line log, which is also useful for counting commits to squash (see <a href="#8-squash-commits">Section 8</a>):</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>-&lt;n&gt;
 </code></pre></div>
 <p>Copy the short hash of the desired target commit, then perform a hard reset. This moves <code>HEAD</code> to the specified commit and discards all subsequent commits and uncommitted changes. The operation is irreversible.</p>
@@ -1644,9 +1913,9 @@ git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span
 <p>If the branch has already been pushed to a remote, force-push to overwrite the remote history:</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>push<span class="w"> </span>--force-with-lease
 </code></pre></div>
-<p>Prefer <code>--force-with-lease</code> over <code>--force</code>; it refuses the push if the remote has received commits since the last fetch, guarding against accidentally overwriting others' work.</p>
+<p>Prefer <code>--force-with-lease</code> over <code>--force</code>. It refuses the push if the remote has received commits since the last fetch, guarding against accidentally overwriting others' work.</p>
 <hr />
-<h2 id="9-temporarily-discard-current-changes-and-revert-to-a-prior-commit">9. Temporarily Discard Current Changes and Revert to a Prior Commit<a class="headerlink" href="#9-temporarily-discard-current-changes-and-revert-to-a-prior-commit" title="Permanent link">&para;</a></h2>
+<h2 id="10-temporarily-discard-current-changes-and-revert-to-a-prior-commit">10. Temporarily Discard Current Changes and Revert to a Prior Commit<a class="headerlink" href="#10-temporarily-discard-current-changes-and-revert-to-a-prior-commit" title="Permanent link">&para;</a></h2>
 <p>'Stashing' saves uncommitted changes to a temporary stack and restores a clean working directory, without permanently discarding anything.</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;&lt;description&gt;&quot;</span>
 git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>&lt;commit-hash&gt;
@@ -1656,7 +1925,7 @@ git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> <
 </code></pre></div>
 <p><code>git stash pop</code> applies the most recent stash entry and removes it from the stack. To apply without removing it, use <code>git stash apply</code> instead.</p>
 <hr />
-<h2 id="10-permanently-discard-current-changes-and-switch-branch">10. Permanently Discard Current Changes and Switch Branch<a class="headerlink" href="#10-permanently-discard-current-changes-and-switch-branch" title="Permanent link">&para;</a></h2>
+<h2 id="11-permanently-discard-current-changes-and-switch-branch">11. Permanently Discard Current Changes and Switch Branch<a class="headerlink" href="#11-permanently-discard-current-changes-and-switch-branch" title="Permanent link">&para;</a></h2>
 <p>Discard all uncommitted changes in the working directory and index, then switch to another branch. This is irreversible.</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>HEAD
 git<span class="w"> </span>switch<span class="w"> </span>&lt;branch-name&gt;
@@ -1665,7 +1934,7 @@ git<span class="w"> </span>switch<span class="w"> </span>&lt;branch-name&gt;
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>switch<span class="w"> </span>--discard-changes<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
 <hr />
-<h2 id="11-temporarily-discard-current-changes-and-switch-branch">11. Temporarily Discard Current Changes and Switch Branch<a class="headerlink" href="#11-temporarily-discard-current-changes-and-switch-branch" title="Permanent link">&para;</a></h2>
+<h2 id="12-temporarily-discard-current-changes-and-switch-branch">12. Temporarily Discard Current Changes and Switch Branch<a class="headerlink" href="#12-temporarily-discard-current-changes-and-switch-branch" title="Permanent link">&para;</a></h2>
 <p>Stash uncommitted changes before switching, preserving them for later retrieval.</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;&lt;description&gt;&quot;</span>
 git<span class="w"> </span>switch<span class="w"> </span>&lt;branch-name&gt;
@@ -1732,7 +2001,7 @@ git<span class="w"> </span>stash<span class="w"> </span>pop
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="../../javascripts/mathjax.js"></script>
       

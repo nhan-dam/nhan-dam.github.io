@@ -1755,7 +1755,7 @@ G_t^{(n)} = \sum_{k=0}^{n-1} \gamma^k R_{t+k} + \gamma^n \hat{V}(S_{t+n}),
 <div class="arithmatex">\[
 \delta_t^{(n)} = G_t^{(n)} - \hat{V}(S_t).
 \]</div>
-<p>Setting <span class="arithmatex">\(n = 1\)</span> recovers the standard TD error from <a href="#11-general-definition">Appendix 1.1</a>. As <span class="arithmatex">\(n \to \infty\)</span>, the bootstrap term vanishes (for <span class="arithmatex">\(\gamma &lt; 1\)</span>) and <span class="arithmatex">\(G_t^{(n)}\)</span> converges to the full Monte Carlo return <span class="arithmatex">\(G_t\)</span>.</p>
+<p>Setting <span class="arithmatex">\(n = 1\)</span> recovers the standard TD error from <a href="#11-general-definition">Appendix 1.1</a>. As <span class="arithmatex">\(n \to \infty\)</span>, the bootstrap term vanishes (for <span class="arithmatex">\(\gamma \lt 1\)</span>) and <span class="arithmatex">\(G_t^{(n)}\)</span> converges to the full Monte Carlo return <span class="arithmatex">\(G_t\)</span>.</p>
 <p>The parameter <span class="arithmatex">\(n\)</span> therefore acts as a dial between the two extremes described in <a href="#22-trade-off-with-monte-carlo">Appendix 2.2</a>: larger <span class="arithmatex">\(n\)</span> reduces bias (more real reward signal, less dependence on the imperfect <span class="arithmatex">\(\hat{V}\)</span>) at the cost of higher variance (more stochastic steps in the target). '<span class="arithmatex">\(\text{TD}(\lambda)\)</span>' extends this idea by replacing the single choice of <span class="arithmatex">\(n\)</span> with an exponentially weighted average over all <span class="arithmatex">\(n\)</span>-step returns,</p>
 <div class="arithmatex">\[
 G_t^\lambda = (1 - \lambda) \sum_{n=1}^{T-t-1} \lambda^{n-1} G_t^{(n)} + \lambda^{T-t-1} G_t,
@@ -1778,7 +1778,7 @@ G_t^\lambda - V(S_t) = \sum_{l=0}^{\infty} (\gamma\lambda)^l \delta_{t+l},
 <div class="arithmatex">\[
 G_t^\lambda - V(S_t) = (1-\lambda)\sum_{n=1}^{\infty}\lambda^{n-1}\bigl[G_t^{(n)} - V(S_t)\bigr].
 \]</div>
-<p>Substituting the identity from Step 1 and swapping the order of summation (the term <span class="arithmatex">\(\gamma^l \delta_{t+l}\)</span> appears in the inner sum for every <span class="arithmatex">\(n &gt; l\)</span>):</p>
+<p>Substituting the identity from Step 1 and swapping the order of summation (the term <span class="arithmatex">\(\gamma^l \delta_{t+l}\)</span> appears in the inner sum for every <span class="arithmatex">\(n \gt l\)</span>):</p>
 <div class="arithmatex">\[
 \begin{align*}
 G_t^\lambda - V(S_t) &amp;= (1-\lambda)\sum_{n=1}^{\infty}\lambda^{n-1}\sum_{l=0}^{n-1}\gamma^l\delta_{t+l} \\

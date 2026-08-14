@@ -2266,7 +2266,8 @@
 <h3 id="34-decay-strategy-minor-advantage-for-exponential-at-higher-lrs">3.4. Decay Strategy: Minor Advantage for Exponential at Higher LRs<a class="headerlink" href="#34-decay-strategy-minor-advantage-for-exponential-at-higher-lrs" title="Permanent link">&para;</a></h3>
 <p>Across matched (LR, batch) pairs, exponential decay tends to reach <code>solved_step</code> slightly earlier than linear. The most likely reason is that exponential decay is front-loaded: the agent's exploration rate falls faster in the early steps, accelerating the transition to exploitation when the Q-network starts producing useful estimates. Linear decay is uniform, keeping <span class="arithmatex">\(\varepsilon\)</span> higher for longer. The difference rarely changes whether a config passes the criterion, but it noticeably affects <em>when</em> it first passes.</p>
 <h3 id="35-best-and-worst-configurations">3.5. Best and Worst Configurations<a class="headerlink" href="#35-best-and-worst-configurations" title="Permanent link">&para;</a></h3>
-<p>The table below summarises the six perfect-score configs and the single clear failure.</p>
+<p><a href="#tab-dqn-configs">Table 1</a> summarises the six perfect-score configs and the single clear failure.</p>
+<p><a id="tab-dqn-configs"></a></p>
 <table>
 <thead>
 <tr>
@@ -2345,6 +2346,7 @@
 </tr>
 </tbody>
 </table>
+<p>Table 1: The six perfect-score configurations and the single clear failure, each scored over 1,000 evaluation episodes using its best checkpoint. Green marks the perfect scores; red marks the failure.</p>
 <p>The juxtaposition of <code>88694cf2</code> and <code>690440aa</code> is instructive: the same learning rate and batch size, with only the decay strategy differing. Linear decay succeeds. Exponential fails. At <span class="arithmatex">\(\text{lr} = 5 \times 10^{-3}\)</span>, the gradient updates are already large. Exponential decay removes exploration more aggressively in the early steps, committing the agent to a noisy, high-LR policy before the Q-network has stabilised. The result is self-reinforcing instability.</p>
 <h3 id="36-transferable-lessons">3.6. Transferable Lessons<a class="headerlink" href="#36-transferable-lessons" title="Permanent link">&para;</a></h3>
 <ul>
@@ -2465,7 +2467,8 @@ y = r + \gamma Q_{\text{target}}\left(s', \arg\max_{a'} Q_{\text{online}}(s', a'
 <h4 id="b83-python-heap-and-imported-libraries">B.8.3. Python Heap and Imported Libraries<a class="headerlink" href="#b83-python-heap-and-imported-libraries" title="Permanent link">&para;</a></h4>
 <p>Under <code>spawn</code>, each subprocess re-imports PyTorch, NumPy, Gymnasium, and the other dependencies into its own heap. The private, writable portion of this (interpreter state, module objects, Python-level caches) amounts to approximately 60 MB per process. This figure excludes the read-only code pages of shared libraries, which are accounted for in <a href="#b85-shared-library-pages">Section B.8.5</a>.</p>
 <h4 id="b84-per-worker-total-private-memory">B.8.4. Per-Worker Total (Private Memory)<a class="headerlink" href="#b84-per-worker-total-private-memory" title="Permanent link">&para;</a></h4>
-<p>Summing the components above:</p>
+<p>Summing the components above, <a href="#tab-dqn-worker-memory">Table 2</a> gives the per-worker total:</p>
+<p><a id="tab-dqn-worker-memory"></a></p>
 <table>
 <thead>
 <tr>
@@ -2500,6 +2503,7 @@ y = r + \gamma Q_{\text{target}}\left(s', \arg\max_{a'} Q_{\text{online}}(s', a'
 </tr>
 </tbody>
 </table>
+<p>Table 2: Per-worker private memory under <code>spawn</code>, by component.</p>
 <h4 id="b85-shared-library-pages">B.8.5. Shared Library Pages<a class="headerlink" href="#b85-shared-library-pages" title="Permanent link">&para;</a></h4>
 <p>The PyTorch and NumPy dynamic libraries are memory-mapped files. The macOS kernel loads their read-only code pages once into physical memory and maps them into each process's virtual address space via copy-on-write. The physical cost of these pages is therefore paid once regardless of worker count, at approximately 350 MB.</p>
 <h4 id="b86-total-for-10-workers">B.8.6. Total for 10 Workers<a class="headerlink" href="#b86-total-for-10-workers" title="Permanent link">&para;</a></h4>

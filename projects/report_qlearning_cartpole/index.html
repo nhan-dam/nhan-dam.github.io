@@ -1670,7 +1670,8 @@
 <p>CartPole observations are continuous four-vectors:</p>
 <div class="arithmatex">\[\mathbf{s} = [\underbrace{x}_{\text{cart pos}}, \underbrace{\dot{x}}_{\text{cart vel}}, \underbrace{\theta}_{\text{pole angle}}, \underbrace{\dot{\theta}}_{\text{pole ang. vel}}] \in \mathbb{R}^4.\]</div>
 <p>A tabular Q-table requires a finite, discrete key for each state. The solution is to partition each dimension into <span class="arithmatex">\(B\)</span> equal-width bins and map each raw observation to a bin-index tuple via <code>np.digitize</code>. With <span class="arithmatex">\(B = 8\)</span> bins per dimension this yields <span class="arithmatex">\(8^4 = 4{,}096\)</span> discrete states, a manageable table size.</p>
-<p>Bin ranges are set to cover the region the agent actually visits rather than the environment's theoretical extremes, and values outside the range are clipped to the nearest bin:</p>
+<p>Bin ranges are set to cover the region the agent actually visits rather than the environment's theoretical extremes, and values outside the range are clipped to the nearest bin (<a href="#tab-cp-bins">Table 1</a>):</p>
+<p><a id="tab-cp-bins"></a></p>
 <table>
 <thead>
 <tr>
@@ -1702,6 +1703,7 @@
 </tr>
 </tbody>
 </table>
+<p>Table 1: Discretisation of each observation dimension, with the bin count applied to each.</p>
 <h3 id="22-key-design-choices">2.2. Key Design Choices<a class="headerlink" href="#22-key-design-choices" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Q-table representation.</strong> A <code>defaultdict</code> keyed by the discretised state tuple, initialised to zero vectors. This is memory-efficient as only visited states are allocated.</li>
@@ -1757,7 +1759,8 @@ Return Q
 <hr />
 <h2 id="3-results">3. Results<a class="headerlink" href="#3-results" title="Permanent link">&para;</a></h2>
 <h3 id="31-sweep-summary">3.1. Sweep Summary<a class="headerlink" href="#31-sweep-summary" title="Permanent link">&para;</a></h3>
-<p>The table below reports final evaluation performance (1,000 greedy episodes) for all eight configurations, sorted by mean return:</p>
+<p><a href="#tab-cp-results">Table 2</a> reports final evaluation performance for all eight configurations:</p>
+<p><a id="tab-cp-results"></a></p>
 <table>
 <thead>
 <tr>
@@ -1836,6 +1839,7 @@ Return Q
 </tr>
 </tbody>
 </table>
+<p>Table 2: Final evaluation over 1,000 greedy episodes for all eight configurations, sorted by mean return. Bold marks the best configuration.</p>
 <p>Observations:</p>
 <ul>
 <li><strong>Linear decay dominates.</strong> All four linear-decay configurations reach or nearly reach a mean return of 500, whereas their exponential counterparts show higher variance in three of four cases.</li>

@@ -1755,7 +1755,8 @@
 <li><strong>Exponential decay:</strong> <span class="arithmatex">\(\varepsilon_{t+1} = \max(\varepsilon_\text{min}, \varepsilon_t \cdot \rho)\)</span>, where <span class="arithmatex">\(\rho = (\varepsilon_\text{min} / \varepsilon_0)^{2/N}\)</span>.</li>
 </ul>
 <p>Both strategies are calibrated so that <span class="arithmatex">\(\varepsilon\)</span> reaches <code>final_epsilon</code> at the halfway point of training (<span class="arithmatex">\(N/2\)</span> episodes), leaving the second half for near-greedy exploitation and fine-tuning.</p>
-<p>Key parameter values:</p>
+<p>Key parameter values are listed in <a href="#tab-bj-exploration">Table 1</a>.</p>
+<p><a id="tab-bj-exploration"></a></p>
 <table>
 <thead>
 <tr>
@@ -1782,6 +1783,7 @@
 </tr>
 </tbody>
 </table>
+<p>Table 1: Exploration schedule parameter values.</p>
 <h3 id="34-best-checkpoint-selection">3.4. Best-Checkpoint Selection<a class="headerlink" href="#34-best-checkpoint-selection" title="Permanent link">&para;</a></h3>
 <p>Rather than returning the final agent, training periodically evaluates the greedy policy (with <span class="arithmatex">\(\varepsilon = 0\)</span>) every 500 episodes during the second half of training, using 5,000 evaluation episodes per checkpoint. The checkpoint with the highest win rate is restored at the end of training. This guards against late-training regression caused by residual noise in the Q-table.</p>
 <h3 id="35-hyperparameter-sweep">3.5. Hyperparameter Sweep<a class="headerlink" href="#35-hyperparameter-sweep" title="Permanent link">&para;</a></h3>
@@ -1794,7 +1796,8 @@
 <hr />
 <h2 id="4-results">4. Results<a class="headerlink" href="#4-results" title="Permanent link">&para;</a></h2>
 <h3 id="41-sweep-summary">4.1. Sweep Summary<a class="headerlink" href="#41-sweep-summary" title="Permanent link">&para;</a></h3>
-<p>The table below shows the final evaluation results (over 10,000 test episodes) for all eight configurations, sorted by win rate.</p>
+<p><a href="#tab-bj-results">Table 2</a> shows the final evaluation results for all eight configurations.</p>
+<p><a id="tab-bj-results"></a></p>
 <table>
 <thead>
 <tr>
@@ -1864,6 +1867,7 @@
 </tr>
 </tbody>
 </table>
+<p>Table 2: Final evaluation over 10,000 test episodes for all eight configurations, sorted by win rate. Bold marks the best configuration.</p>
 <p>Key observations:</p>
 <ul>
 <li>The best configuration is <code>lr=0.05</code> with linear decay, achieving a <strong>win rate of 43.5%</strong> and average reward of <strong>−0.040</strong>, which compares favourably with the theoretical optimal of approximately −0.029 for this variant of the game.</li>

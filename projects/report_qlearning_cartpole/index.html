@@ -1668,7 +1668,7 @@
 <h2 id="2-implementation">2. Implementation<a class="headerlink" href="#2-implementation" title="Permanent link">&para;</a></h2>
 <h3 id="21-the-discretisation-challenge">2.1. The Discretisation Challenge<a class="headerlink" href="#21-the-discretisation-challenge" title="Permanent link">&para;</a></h3>
 <p>CartPole observations are continuous four-vectors:</p>
-<div class="arithmatex">\[\mathbf{s} = [\underbrace{x}_{\text{cart pos}},\ \underbrace{\dot{x}}_{\text{cart vel}},\ \underbrace{\theta}_{\text{pole angle}},\ \underbrace{\dot{\theta}}_{\text{pole ang. vel}}] \in \mathbb{R}^4.\]</div>
+<div class="arithmatex">\[\mathbf{s} = [\underbrace{x}_{\text{cart pos}}, \underbrace{\dot{x}}_{\text{cart vel}}, \underbrace{\theta}_{\text{pole angle}}, \underbrace{\dot{\theta}}_{\text{pole ang. vel}}] \in \mathbb{R}^4.\]</div>
 <p>A tabular Q-table requires a finite, discrete key for each state. The solution is to partition each dimension into <span class="arithmatex">\(B\)</span> equal-width bins and map each raw observation to a bin-index tuple via <code>np.digitize</code>. With <span class="arithmatex">\(B = 8\)</span> bins per dimension this yields <span class="arithmatex">\(8^4 = 4{,}096\)</span> discrete states, a manageable table size.</p>
 <p>Bin ranges are set to cover the region the agent actually visits rather than the environment's theoretical extremes, and values outside the range are clipped to the nearest bin:</p>
 <table>
@@ -1682,22 +1682,22 @@
 <tbody>
 <tr>
 <td>Cart position</td>
-<td><span class="arithmatex">\([-2.4,\ 2.4]\)</span> m</td>
+<td><span class="arithmatex">\([-2.4, 2.4]\)</span> m</td>
 <td>8</td>
 </tr>
 <tr>
 <td>Cart velocity</td>
-<td><span class="arithmatex">\([-3.0,\ 3.0]\)</span> m/s</td>
+<td><span class="arithmatex">\([-3.0, 3.0]\)</span> m/s</td>
 <td>8</td>
 </tr>
 <tr>
 <td>Pole angle</td>
-<td><span class="arithmatex">\([-0.25,\ 0.25]\)</span> rad</td>
+<td><span class="arithmatex">\([-0.25, 0.25]\)</span> rad</td>
 <td>8</td>
 </tr>
 <tr>
 <td>Pole angular velocity</td>
-<td><span class="arithmatex">\([-3.5,\ 3.5]\)</span> rad/s</td>
+<td><span class="arithmatex">\([-3.5, 3.5]\)</span> rad/s</td>
 <td>8</td>
 </tr>
 </tbody>
@@ -1750,7 +1750,7 @@ Return Q
 <h3 id="23-hyperparameter-sweep">2.3. Hyperparameter Sweep<a class="headerlink" href="#23-hyperparameter-sweep" title="Permanent link">&para;</a></h3>
 <p>A grid search was run over:</p>
 <ul>
-<li><strong>Learning rates:</strong> <span class="arithmatex">\(\alpha \in \{0.05, 0.1, 0.3, 0.5\}\)</span>.</li>
+<li><strong>Learning rates:</strong> <span class="arithmatex">\(\alpha \in \lbrace 0.05, 0.1, 0.3, 0.5 \rbrace\)</span>.</li>
 <li><strong>Decay strategies:</strong> linear and exponential, both reaching <span class="arithmatex">\(\varepsilon_f = 0.01\)</span> by episode 25,000 (half of the 50,000-episode budget).</li>
 </ul>
 <p>All other hyperparameters were fixed: <span class="arithmatex">\(\gamma = 0.99\)</span>, <span class="arithmatex">\(\varepsilon_0 = 1.0\)</span>, and 50,000 training episodes.</p>

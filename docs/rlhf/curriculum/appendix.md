@@ -105,7 +105,7 @@ $$
 \delta_t^{(n)} = G_t^{(n)} - \hat{V}(S_t).
 $$
 
-Setting $n = 1$ recovers the standard TD error from [Appendix 1.1](#11-general-definition). As $n \to \infty$, the bootstrap term vanishes (for $\gamma < 1$) and $G_t^{(n)}$ converges to the full Monte Carlo return $G_t$.
+Setting $n = 1$ recovers the standard TD error from [Appendix 1.1](#11-general-definition). As $n \to \infty$, the bootstrap term vanishes (for $\gamma \lt 1$) and $G_t^{(n)}$ converges to the full Monte Carlo return $G_t$.
 
 The parameter $n$ therefore acts as a dial between the two extremes described in [Appendix 2.2](#22-trade-off-with-monte-carlo): larger $n$ reduces bias (more real reward signal, less dependence on the imperfect $\hat{V}$) at the cost of higher variance (more stochastic steps in the target). '$\text{TD}(\lambda)$' extends this idea by replacing the single choice of $n$ with an exponentially weighted average over all $n$-step returns,
 
@@ -141,7 +141,7 @@ $$
 G_t^\lambda - V(S_t) = (1-\lambda)\sum_{n=1}^{\infty}\lambda^{n-1}\bigl[G_t^{(n)} - V(S_t)\bigr].
 $$
 
-Substituting the identity from Step 1 and swapping the order of summation (the term $\gamma^l \delta_{t+l}$ appears in the inner sum for every $n > l$):
+Substituting the identity from Step 1 and swapping the order of summation (the term $\gamma^l \delta_{t+l}$ appears in the inner sum for every $n \gt l$):
 
 $$
 \begin{align*}

@@ -64,7 +64,11 @@ For implementation, GAE is unrolled backwards from the rollout's final step usin
 
 $$\hat{A}_t = \delta_t + \gamma\lambda (1 - \text{done}_{t+1}) \hat{A}_{t+1},$$
 
-which avoids the explicit infinite sum. The bootstrap value $V(s_T)$ for the state after the final stored transition is computed via `get_value`, and is used only if the rollout did not end on a terminal. The returns used as the value-function regression target are $\hat{R}_t = \hat{A}_t + V(s_t)$, which is equivalent to the $\lambda$-return and is the standard PPO choice.
+which avoids the explicit infinite sum. The bootstrap value $V(s_T)$ for the state after the final stored transition is computed via `get_value`, and is used only if the rollout did not end on a terminal. The returns used as the value-function regression target are
+
+$$\hat{R}_t = \hat{A}_t + V(s_t),$$
+
+which is equivalent to the $\lambda$-return and is the standard PPO choice.
 
 The $\lambda = 0.95$ default interpolates between high-bias low-variance ($\lambda = 0$, pure one-step temporal difference) and low-bias high-variance ($\lambda = 1$, pure Monte Carlo). It is one of the few PPO hyperparameters that essentially never needs tuning, so it is not exposed as a sweep dimension.
 
@@ -86,9 +90,13 @@ $$\mathcal{L}(\theta) = \mathcal{L}^{\text{CLIP}}(\theta) - c_1 \mathcal{L}^{\te
 
 where
 
-$$\mathcal{L}^{\text{CLIP}}(\theta) = \mathbb{E}_t\left[\min\left(r_t(\theta) \hat{A}_t,\ \text{clip}(r_t(\theta), 1 - \varepsilon, 1 + \varepsilon) \hat{A}_t\right)\right],$$
+$$\mathcal{L}^{\text{CLIP}}(\theta) = \mathbb{E}_t\left[\min\left(r_t(\theta) \hat{A}_t, \text{clip}(r_t(\theta), 1 - \varepsilon, 1 + \varepsilon) \hat{A}_t\right)\right],$$
 
-and $\mathcal{L}^{\text{VF}} = \mathbb{E}_t[(V_\theta(s_t) - \hat{R}_t)^2]$ is the value mean squared error. The implementation flips the sign on $\mathcal{L}^{\text{CLIP}}$ and $H$ for gradient descent, since PyTorch minimises.
+and
+
+$$\mathcal{L}^{\text{VF}} = \mathbb{E}_t\left[(V_\theta(s_t) - \hat{R}_t)^2\right]$$
+
+is the value mean squared error. The implementation flips the sign on $\mathcal{L}^{\text{CLIP}}$ and $H$ for gradient descent, since PyTorch minimises.
 
 The clip range $\varepsilon = 0.2$ is the standard default. Two further design points are worth flagging.
 
@@ -96,7 +104,7 @@ First, advantages are standardised to zero mean and unit variance (commonly call
 
 Second, the value function is not clipped. Some PPO implementations clip the value update analogously to the policy update,
 
-$$\mathcal{L}^{\text{VF},\text{clip}} = \max\left((V_\theta(s_t) - \hat{R}_t)^2,\ (\text{clip}(V_\theta(s_t), V_{\theta_\text{old}}(s_t) \pm \varepsilon) - \hat{R}_t)^2\right),$$
+$$\mathcal{L}^{\text{VF},\text{clip}} = \max\left((V_\theta(s_t) - \hat{R}_t)^2, (\text{clip}(V_\theta(s_t), V_{\theta_\text{old}}(s_t) \pm \varepsilon) - \hat{R}_t)^2\right),$$
 
 to prevent large value updates from destabilising the policy via shared-trunk gradients. On LunarLander this is unnecessary because the reward magnitudes are moderate and the value loss is already coefficient-weighted. Including it without need adds complexity and a hyperparameter without measurable benefit.
 
@@ -176,6 +184,8 @@ Third, `run.summary` is populated with `best/mean_return`, `best/max_return`, `b
 
 ### 4.4. Side-by-Side Comparison
 
+<a id="tab-observability"></a>
+
 | Aspect | TensorBoard | Weights and Biases |
 |---|---|---|
 | Setup cost | None beyond the dependency. | `wandb login` once, account required. |
@@ -187,6 +197,8 @@ Third, `run.summary` is populated with `best/mean_return`, `best/max_return`, `b
 | Sharing | Local folder, requires the recipient to run TensorBoard. | URL. |
 | Air-gapped operation | Native. | `mode="offline"`, `wandb sync` later. |
 | Vendor risk | None. | External dependency, account, quota. |
+
+Table 1: TensorBoard and Weights and Biases compared across the aspects that bear on this project.
 
 The choice between the two is not a quality judgement. It is a deployment decision. TensorBoard fits when local artefacts are preferred, when the work is not shareable, or when the run environment lacks network. Wandb fits when sweep comparison and cross-machine persistence are the primary concerns. The split into two files allows both deployment modes to coexist in the same repository without an abstraction layer obscuring either. The results in Part II were collected with the TensorBoard variant.
 
@@ -216,7 +228,7 @@ The sweep evaluates the PPO agent on `LunarLanderContinuous-v3` across a $3 \tim
 
 The mid-training probes still serve two purposes. They drive best-checkpoint selection ([Section 3.3](#33-best-checkpoint-selection-with-mid-training-evaluation)), and they feed a coarse time-to-threshold diagnostic, `first_threshold_step`, i.e. the first probe step whose 20-episode mean exceeds 200. This diagnostic is reported alongside the results but is not the solve criterion, and a config can solve on the 100-episode evaluation without any single probe having crossed 200.
 
-All other hyperparameters are held fixed at the defaults in [Section 2](#2-ppo-algorithmic-decisions): discount $\gamma = 0.99$, GAE $\lambda = 0.95$, rollout length 2048, K=10 epochs, mini-batch size 64, hidden width 64, value coefficient $c_1 = 0.5$, and gradient-norm clip 0.5. Probes fire every 50,000 environment steps (20 probes per run). After training, the best checkpoint is restored and scored over 100 deterministic episodes, and it is this 100-episode mean and standard deviation that [Table 1](#tab-sweep) reports. The 12 configs run concurrently in a CPU-pinned `multiprocessing.Pool`.
+All other hyperparameters are held fixed at the defaults in [Section 2](#2-ppo-algorithmic-decisions): discount $\gamma = 0.99$, GAE $\lambda = 0.95$, rollout length 2048, K=10 epochs, mini-batch size 64, hidden width 64, value coefficient $c_1 = 0.5$, and gradient-norm clip 0.5. Probes fire every 50,000 environment steps (20 probes per run). After training, the best checkpoint is restored and scored over 100 deterministic episodes, and it is this 100-episode mean and standard deviation that [Table 2](#tab-sweep) reports. The 12 configs run concurrently in a CPU-pinned `multiprocessing.Pool`.
 
 ---
 
@@ -224,7 +236,7 @@ All other hyperparameters are held fixed at the defaults in [Section 2](#2-ppo-a
 
 ### 7.1. Overall Outcome
 
-Nine of the twelve configs satisfy the solve criterion. [Table 1](#tab-sweep) lists all twelve, sorted by the best checkpoint's 100-episode mean return. The three failures are not catastrophic: each lands the craft on a good fraction of episodes, reaching a best single-episode return near 290–300 (the `100-ep max` column), barely below the solved configs. What sinks them is consistency, not capability: their best checkpoint averages below 200 over the 100-episode evaluation (174.2, 164.8, and 154.9) and carries a standard deviation above 110, more than four times that of the strongest solved configs. The headline question is therefore not whether PPO can land the craft, but what separates a reliable config from a volatile one.
+Nine of the twelve configs satisfy the solve criterion. [Table 2](#tab-sweep) lists all twelve, sorted by the best checkpoint's 100-episode mean return. The three failures are not catastrophic: each lands the craft on a good fraction of episodes, reaching a best single-episode return near 290–300 (the `100-ep max` column), barely below the solved configs. What sinks them is consistency, not capability: their best checkpoint averages below 200 over the 100-episode evaluation (174.2, 164.8, and 154.9) and carries a standard deviation above 110, more than four times that of the strongest solved configs. The headline question is therefore not whether PPO can land the craft, but what separates a reliable config from a volatile one.
 
 <a id="tab-sweep"></a>
 
@@ -243,7 +255,7 @@ Nine of the twelve configs satisfy the solve criterion. [Table 1](#tab-sweep) li
 | `9771fd6a` | $1 \times 10^{-3}$ | 0.2 | 0.0 | <span style="color: red;">✗</span> | — | <span style="color: red;">164.8</span> | 296.6 | <span style="color: red;">133.7</span> |
 | `19d04c7a` | $1 \times 10^{-4}$ | 0.1 | 0.0 | <span style="color: red;">✗</span> | — | <span style="color: red;">154.9</span> | 291.9 | <span style="color: red;">112.7</span> |
 
-*Table 1: All 12 sweep configs, sorted by the best checkpoint's mean return over the 100-episode evaluation. A config is solved when this mean is at least 200. The 100-ep max is the best single-episode return over the same evaluation; even the three failures reach a max near 290–300, close to the solved configs, which is what makes them volatile rather than incapable. The first-threshold step is the first mid-training (20-episode) probe step to exceed 200, a noisy time-to-threshold diagnostic rather than the solve criterion. Green marks the best config and the fastest to threshold; red marks the three failures.*
+Table 2: All 12 sweep configs, sorted by the best checkpoint's mean return over the 100-episode evaluation. Green marks the best config and the fastest to threshold; red marks the three failures.
 
 ### 7.2. The Entropy Bonus Is the Dominant Reliability Driver
 
@@ -275,11 +287,11 @@ The clip fraction, i.e. the proportion of mini-batch samples whose importance ra
 
 The curriculum offers a heuristic that a clip fraction spiking above 0.4 early in training indicates the learning rate is too high. The sweep refines this in two ways. First, the early value alone is not decisive: `fe42cbac` averages 0.316 early yet fails, while its matched twin `c509e60a` averages an almost identical 0.314 and solves, the difference being the entropy bonus rather than anything visible in the early clip fraction. The more reliable reading is the *sustained* clip fraction late in training, but it flags only the overshoot failure mode: the two high-learning-rate failures stay above 0.45, far above the solved band, whereas the low-learning-rate failure `19d04c7a` ends at just 0.23, indistinguishable from a healthy run. `19d04c7a` fails for the opposite reason, i.e. too-slow learning compounded by an early entropy collapse, so its small updates never push many samples past the clip boundary. Second, the highest learning rate ($10^{-3}$) does produce the highest early clip fractions in the grid (roughly 0.18–0.32), consistent with the heuristic's direction, but whether that early pressure resolves or compounds is decided by the entropy bonus, not the learning rate alone.
 
-Plotting all twelve per-update clip-fraction traces on one axis is unreadable, so [Figure 1](#fig-clip-bar) summarises each run by its sustained clip fraction instead. The two high-learning-rate failures clear the $\approx 0.45$ flag, while `19d04c7a` sits down among the solved configs, the split just described.
+Plotting all twelve per-update clip-fraction traces on one axis is unreadable, so [Figure 1](#fig-clip-bar) summarises each run by its sustained clip fraction instead. The two high-learning-rate failures clear the $\approx 0.45$ flag, while `19d04c7a` (0.23) sits down among the solved configs, the split just described.
 
 <figure id="fig-clip-bar" style="text-align: center;">
   <img src="/assets/images/lunarlander_clip_fraction_sustained_bar.png" alt="Sustained clip fraction by config." style="width: 90%;">
-  <figcaption>Figure 1: Sustained clip fraction (final logged value) for each config, coloured by outcome and sorted. The two high-learning-rate failures (<code>fe42cbac</code>, <code>9771fd6a</code>) sit above the ~0.45 overshoot flag, whereas the low-learning-rate failure <code>19d04c7a</code> (0.23) sits among the solved configs. This is the same point as the raw curves but legible: a high sustained clip fraction flags the overshoot failure mode, not slow-learning failures.</figcaption>
+  <figcaption>Figure 1: Sustained clip fraction (final logged value) for each config, coloured by outcome and sorted.</figcaption>
 </figure>
 
 ### 8.2. Entropy Schedule
@@ -294,7 +306,7 @@ This entropy effect leaves a second fingerprint on the clip fraction. Because th
 
 <figure id="fig-clip-pairs" style="text-align: center;">
   <img src="/assets/images/lunarlander_train_clip_fraction_tb.png" alt="Clip fraction for three matched failure-success pairs." style="width: 100%;">
-  <figcaption class="arithmatex">Figure 2: TensorBoard <code>train/clip_fraction</code> (smoothing 0.95) for the three matched failure-success pairs, each fixing learning rate and clip range and varying only \(c_2\): <code>9771fd6a</code>/<code>6e1b8a66</code> (lr \(10^{-3}\), \(\varepsilon\) 0.2), <code>fe42cbac</code>/<code>c509e60a</code> (lr \(10^{-3}\), \(\varepsilon\) 0.1), and <code>19d04c7a</code>/<code>f263520d</code> (lr \(10^{-4}\), \(\varepsilon\) 0.1). Within each pair the \(c_2\) = 0.01 twin sustains a lower clip fraction, most clearly for the high-learning-rate pair. The bands track learning rate, not outcome, so the figure must be read pairwise.</figcaption>
+  <figcaption>Figure 2: TensorBoard <code>train/clip_fraction</code> (smoothing 0.95) for the three matched failure-success pairs, each fixing learning rate and clip range and varying only c2: <code>9771fd6a</code>/<code>6e1b8a66</code> (lr 1e-3, \epsilon 0.2), <code>fe42cbac</code>/<code>c509e60a</code> (lr 1e-3, \epsilon 0.1), and <code>19d04c7a</code>/<code>f263520d</code> (lr 1e-4, \epsilon 0.1).</figcaption>
 </figure>
 
 ### 8.3. A Clean Solve and a Representative Failure
@@ -303,28 +315,28 @@ This entropy effect leaves a second fingerprint on the clip fraction. Because th
 
 <figure id="fig-best" style="text-align: center;">
   <img src="/assets/images/lunarlander_ppo_training_cbeefb0b.png" alt="Training curves for config cbeefb0b." style="width: 100%;">
-  <figcaption class="arithmatex">Figure 3: Training curves for the best config <code>cbeefb0b</code> (lr \(= 3 \times 10^{-4}\), \(\varepsilon\) = 0.2, \(c_2\) = 0.0). Top row: episode returns, episode lengths, clip fraction. Bottom row: policy loss, value loss, policy entropy.</figcaption>
+  <figcaption>Figure 3: Training curves for the best config <code>cbeefb0b</code> (lr = 3e-4, \epsilon = 0.2, c2 = 0.0). Top row: episode returns, episode lengths, clip fraction. Bottom row: policy loss, value loss, policy entropy.</figcaption>
 </figure>
 
 [Figure 4](#fig-fail) shows a representative failure, `9771fd6a`. All three failures are the $c_2 = 0.0$ members of matched pairs whose $c_2 = 0.01$ twins solved (`9771fd6a`/`6e1b8a66`, `fe42cbac`/`c509e60a`, `19d04c7a`/`f263520d`, each pair sharing its learning rate and clip range), which is the controlled evidence behind [Section 7.2](#72-the-entropy-bonus-is-the-dominant-reliability-driver). Strikingly, `9771fd6a`'s twin `6e1b8a66` is the fastest solve in the sweep, so a single entropy bonus flips this pair from the most unstable failure to the quickest success. `9771fd6a` is the most representative of the three: it carries the highest 100-episode standard deviation in the entire sweep (133.7), its clip fraction stays elevated (ending near 0.47) rather than relaxing to the solved band, and its entropy follows the early-collapse-then-rebound trajectory dissected in [Section 8.2](#82-entropy-schedule), diving to 0.45 before climbing back to 1.44.
 
 <figure id="fig-fail" style="text-align: center;">
   <img src="/assets/images/lunarlander_ppo_training_9771fd6a.png" alt="Training curves for config 9771fd6a." style="width: 100%;">
-  <figcaption class="arithmatex">Figure 4: Training curves for a representative failure <code>9771fd6a</code> (lr \(= 10^{-3}\), \(\varepsilon\) = 0.2, \(c_2\) = 0.0), the most unstable run in the sweep (100-episode std 133.7); its matched \(c_2\) = 0.01 twin <code>6e1b8a66</code> is the fastest solve. The elevated clip fraction (ending near 0.47) and the entropy collapse-and-rebound (0.45 → 1.44) mark a policy that oscillates rather than converging.</figcaption>
+  <figcaption>Figure 4: Training curves for a representative failure <code>9771fd6a</code> (lr = 1e-3, \epsilon = 0.2, c2 = 0.0). Top row: episode returns, episode lengths, clip fraction. Bottom row: policy loss, value loss, policy entropy.</figcaption>
 </figure>
 
-The TensorBoard aggregate `eval/mean_return` view ([Figure 5](#fig-tb-returns)) makes the entropy-bonus split legible at a glance: grouping all twelve runs separates the solved band from the three failures.
+The TensorBoard aggregate `eval/mean_return` view ([Figure 5](#fig-tb-returns)) makes the entropy-bonus split legible at a glance: grouping all twelve runs separates the solved band from the three failures, which stay under the 200 mark.
 
 <figure id="fig-tb-returns" style="text-align: center;">
   <img src="/assets/images/lunarlander_eval_mean_return_tb.png" alt="TensorBoard eval mean return across all 12 configs." style="width: 100%;">
-  <figcaption>Figure 5: TensorBoard <code>eval/mean_return</code> (mid-training 20-episode probes) across all 12 configs. The three failing runs separate as a low band that stays under the 200 mark.</figcaption>
+  <figcaption>Figure 5: TensorBoard <code>eval/mean_return</code> (mid-training 20-episode probes) across all 12 configs.</figcaption>
 </figure>
 
 ### 8.4. Late-Training Degradation and the Value of Best-Checkpoint Selection
 
 PPO's mid-training evaluation curve on this task is markedly non-monotonic: a run frequently peaks partway through training and then drifts down. For `cbeefb0b`, the best checkpoint is taken at step 665,600 and scores 280.2 over the 100-episode evaluation, whereas the final mid-training probe at one million steps falls back to roughly 197. Several solved configs show the same pattern (`b97050c1`'s best checkpoint scores 278.3, but its final probe is near 146), and the failures swing even harder.
 
-This validates the best-checkpoint mechanism described in [Section 3.3](#33-best-checkpoint-selection-with-mid-training-evaluation) as a measurable contributor, not mere hygiene. A last-iterate policy, i.e. one reported from whatever weights happen to exist at step one million, would forfeit on the order of 80–130 return on the stronger configs and would misrank the sweep. Restoring the best checkpoint recovers that margin and is what makes the [Table 1](#tab-sweep) ordering reflect each config's true capability rather than the noise of its final probe.
+This validates the best-checkpoint mechanism described in [Section 3.3](#33-best-checkpoint-selection-with-mid-training-evaluation) as a measurable contributor, not mere hygiene. A last-iterate policy, i.e. one reported from whatever weights happen to exist at step one million, would forfeit on the order of 80–130 return on the stronger configs and would misrank the sweep. Restoring the best checkpoint recovers that margin and is what makes the [Table 2](#tab-sweep) ordering reflect each config's true capability rather than the noise of its final probe.
 
 ---
 

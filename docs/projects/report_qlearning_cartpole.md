@@ -18,18 +18,22 @@ The full source code can be found on [GitHub](https://github.com/nhan-dam/rl-fou
 
 CartPole observations are continuous four-vectors:
 
-$$\mathbf{s} = [\underbrace{x}_{\text{cart pos}},\ \underbrace{\dot{x}}_{\text{cart vel}},\ \underbrace{\theta}_{\text{pole angle}},\ \underbrace{\dot{\theta}}_{\text{pole ang. vel}}] \in \mathbb{R}^4.$$
+$$\mathbf{s} = [\underbrace{x}_{\text{cart pos}}, \underbrace{\dot{x}}_{\text{cart vel}}, \underbrace{\theta}_{\text{pole angle}}, \underbrace{\dot{\theta}}_{\text{pole ang. vel}}] \in \mathbb{R}^4.$$
 
 A tabular Q-table requires a finite, discrete key for each state. The solution is to partition each dimension into $B$ equal-width bins and map each raw observation to a bin-index tuple via `np.digitize`. With $B = 8$ bins per dimension this yields $8^4 = 4{,}096$ discrete states, a manageable table size.
 
-Bin ranges are set to cover the region the agent actually visits rather than the environment's theoretical extremes, and values outside the range are clipped to the nearest bin:
+Bin ranges are set to cover the region the agent actually visits rather than the environment's theoretical extremes, and values outside the range are clipped to the nearest bin ([Table 1](#tab-cp-bins)):
+
+<a id="tab-cp-bins"></a>
 
 | Dimension | Range | Bins |
 |---|---|---|
-| Cart position | $[-2.4,\ 2.4]$ m | 8 |
-| Cart velocity | $[-3.0,\ 3.0]$ m/s | 8 |
-| Pole angle | $[-0.25,\ 0.25]$ rad | 8 |
-| Pole angular velocity | $[-3.5,\ 3.5]$ rad/s | 8 |
+| Cart position | $[-2.4, 2.4]$ m | 8 |
+| Cart velocity | $[-3.0, 3.0]$ m/s | 8 |
+| Pole angle | $[-0.25, 0.25]$ rad | 8 |
+| Pole angular velocity | $[-3.5, 3.5]$ rad/s | 8 |
+
+Table 1: Discretisation of each observation dimension, with the bin count applied to each.
 
 ### 2.2. Key Design Choices
 
@@ -82,7 +86,7 @@ Return Q
 
 A grid search was run over:
 
-- **Learning rates:** $\alpha \in \{0.05, 0.1, 0.3, 0.5\}$.
+- **Learning rates:** $\alpha \in \lbrace 0.05, 0.1, 0.3, 0.5 \rbrace$.
 - **Decay strategies:** linear and exponential, both reaching $\varepsilon_f = 0.01$ by episode 25,000 (half of the 50,000-episode budget).
 
 All other hyperparameters were fixed: $\gamma = 0.99$, $\varepsilon_0 = 1.0$, and 50,000 training episodes.
@@ -93,7 +97,9 @@ All other hyperparameters were fixed: $\gamma = 0.99$, $\varepsilon_0 = 1.0$, an
 
 ### 3.1. Sweep Summary
 
-The table below reports final evaluation performance (1,000 greedy episodes) for all eight configurations, sorted by mean return:
+[Table 2](#tab-cp-results) reports final evaluation performance for all eight configurations:
+
+<a id="tab-cp-results"></a>
 
 | Learning rate | Decay strategy | Best episode | Mean return | Max return | Std dev return |
 |---|---|---|---|---|---|
@@ -105,6 +111,8 @@ The table below reports final evaluation performance (1,000 greedy episodes) for
 | 0.05 | exponential | 30,500 | 499.222 | 500 | 13.35 |
 | 0.3 | exponential | 31,000 | 499.06 | 500 | 21.00 |
 | 0.05 | linear | 27,000 | 498.979 | 500 | 10.26 |
+
+Table 2: Final evaluation over 1,000 greedy episodes for all eight configurations, sorted by mean return. Bold marks the best configuration.
 
 Observations:
 

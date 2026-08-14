@@ -151,7 +151,7 @@ The reward model $r_\phi(x, y)$ is a neural network that maps a (prompt, respons
 
 $$p(y_w \succ y_l \mid x) = \sigma\left(r_\phi(x, y_w) - r_\phi(x, y_l)\right), \tag{22}$$
 
-where $y_w \succ y_l$ denotes that $y_w$ is preferred over $y_l$ ($\succ$ is the preference-ordering symbol, a ranking analogue of $>$), and $\sigma(z) = 1/(1 + e^{-z})$ is the sigmoid function: a large positive score gap makes the preference near-certain, a zero gap makes it a coin flip. Maximising the log-likelihood of the observed preferences under [(22)](#eq-bt-pref) gives the loss
+where $y_w \succ y_l$ denotes that $y_w$ is preferred over $y_l$ ($\succ$ is the preference-ordering symbol, a ranking analogue of $\gt$), and $\sigma(z) = 1/(1 + e^{-z})$ is the sigmoid function: a large positive score gap makes the preference near-certain, a zero gap makes it a coin flip. Maximising the log-likelihood of the observed preferences under [(22)](#eq-bt-pref) gives the loss
 
 <span id="eq-rm-loss"></span>
 

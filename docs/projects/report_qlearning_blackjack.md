@@ -48,7 +48,9 @@ Two decay strategies were compared:
 
 Both strategies are calibrated so that $\varepsilon$ reaches `final_epsilon` at the halfway point of training ($N/2$ episodes), leaving the second half for near-greedy exploitation and fine-tuning.
 
-Key parameter values:
+Key parameter values are listed in [Table 1](#tab-bj-exploration).
+
+<a id="tab-bj-exploration"></a>
 
 | Parameter | Value |
 |---|---|
@@ -56,6 +58,8 @@ Key parameter values:
 | `final_epsilon` | 0.1 |
 | `discount_factor` ($\gamma$) | 0.95 |
 | `n_episodes` | 100,000 |
+
+Table 1: Exploration schedule parameter values.
 
 ### 3.4. Best-Checkpoint Selection
 
@@ -76,7 +80,9 @@ Each configuration was identified by an 8-character MD5 hash of its hyperparamet
 
 ### 4.1. Sweep Summary
 
-The table below shows the final evaluation results (over 10,000 test episodes) for all eight configurations, sorted by win rate.
+[Table 2](#tab-bj-results) shows the final evaluation results for all eight configurations.
+
+<a id="tab-bj-results"></a>
 
 | Learning rate | Decay strategy | Best episode | Win rate | Average reward |
 |---|---|---|---|---|
@@ -88,6 +94,8 @@ The table below shows the final evaluation results (over 10,000 test episodes) f
 | 0.1 | linear | 94,500 | 0.4237 | −0.0584 |
 | 0.05 | exponential | 83,000 | 0.4190 | −0.0660 |
 | 0.001 | linear | 94,000 | 0.4173 | −0.0761 |
+
+Table 2: Final evaluation over 10,000 test episodes for all eight configurations, sorted by win rate. Bold marks the best configuration.
 
 Key observations:
 

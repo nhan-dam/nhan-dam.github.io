@@ -6,7 +6,7 @@
 
 This note documents an implementation of deep Q-network on `CartPole-v1` environment from [Gymnasium](https://gymnasium.farama.org/).
 
-The full source code can be found on [GitHub](https://github.com/nhan-dam/rl-foundations/blob/main/src/dqn_cartpole.py).
+The full source code can be found on [GitHub](https://github.com/nhan-dam/rl-foundations/tree/main/src/dqn_cartpole.py).
 
 ## 1. Implementation and Design Choices
 
@@ -50,7 +50,7 @@ There are 14 of 30 configs that satisfy the solve criterion. The 16 failures are
 
 Learning rate is the single most influential hyperparameter. Every config with $\text{lr} = 10^{-4}$ fails the 50,000-step criterion, and most take 100,000–225,000 steps to first cross the threshold, around two to four times the budget. By contrast, configs with $\text{lr} \geq 5 \times 10^{-4}$ overwhelmingly pass, with the sole clear exception being `690440aa` ($\text{lr} = 5 \times 10^{-3}$, batch 32, exponential), which never achieves reliable performance at all.
 
-The effective learning rate range for this task and architecture is approximately $[5 \times 10^{-4},\, 5 \times 10^{-3}]$: fast enough to update Q-values meaningfully from each mini-batch but not so large that gradient steps destabilise the function approximator against the non-stationary temporal-difference (TD) targets.
+The effective learning rate range for this task and architecture is approximately $[5 \times 10^{-4}, 5 \times 10^{-3}]$: fast enough to update Q-values meaningfully from each mini-batch but not so large that gradient steps destabilise the function approximator against the non-stationary temporal-difference (TD) targets.
 
 ### 3.3. Batch Size: Secondary and Inconclusive
 
@@ -62,7 +62,9 @@ Across matched (LR, batch) pairs, exponential decay tends to reach `solved_step`
 
 ### 3.5. Best and Worst Configurations
 
-The table below summarises the six perfect-score configs and the single clear failure.
+[Table 1](#tab-dqn-configs) summarises the six perfect-score configs and the single clear failure.
+
+<a id="tab-dqn-configs"></a>
 
 | Config | LR | Batch | Decay | Solved step | Mean | Std |
 |---|---|---|---|---|---|---|
@@ -73,6 +75,8 @@ The table below summarises the six perfect-score configs and the single clear fa
 | `9aaebea6` | $3 \times 10^{-3}$ | 64 | linear | 25,000 | <span style="color: green;">500.0</span> | <span style="color: green;">0.0</span> |
 | `88694cf2` | $5 \times 10^{-3}$ | 32 | linear | 50,000 | <span style="color: green;">500.0</span> | <span style="color: green;">0.0</span> |
 | `690440aa` | $5 \times 10^{-3}$ | 32 | **exp** | N/A | <span style="color: red;">437.1</span> | <span style="color: red;">160.1</span> |
+
+Table 1: The six perfect-score configurations and the single clear failure, each scored over 1,000 evaluation episodes using its best checkpoint. Green marks the perfect scores; red marks the failure.
 
 The juxtaposition of `88694cf2` and `690440aa` is instructive: the same learning rate and batch size, with only the decay strategy differing. Linear decay succeeds. Exponential fails. At $\text{lr} = 5 \times 10^{-3}$, the gradient updates are already large. Exponential decay removes exploration more aggressively in the early steps, committing the agent to a noisy, high-LR policy before the Q-network has stabilised. The result is self-reinforcing instability.
 
@@ -104,7 +108,7 @@ Training plots show three panels: a 50-episode rolling mean of episode return, t
 
 **Episodes 300–900 (plateau with bounded variance).** Return oscillates between $\approx 350$ and $\approx 500$ around a stable high mean. TD loss continues rising to $\approx 30–40$ as the discounted returns the network must represent grow, but the rate of increase is gradual and the loss does not diverge. The training procedure saves the best checkpoint, so the terminal drop at episodes $\approx 900–950$ (after the best point has passed) does not affect the evaluated policy.
 
-Most other successful configs follow the same three phases, differing only in the speed of the rise: configs with $\text{lr} \in \{10^{-3},\, 3 \times 10^{-3}\}$ reach the plateau roughly 100 episodes earlier. Configs with $\text{lr} = 10^{-4}$ exhibit a slow ramp, taking 300–400 episodes to arrive where successful configs arrive by episode 200, because the per-update gradient step is too small to overcome noise in the single-sample Bellman targets quickly enough.
+Most other successful configs follow the same three phases, differing only in the speed of the rise: configs with $\text{lr} \in \lbrace 10^{-3}, 3 \times 10^{-3} \rbrace$ reach the plateau roughly 100 episodes earlier. Configs with $\text{lr} = 10^{-4}$ exhibit a slow ramp, taking 300–400 episodes to arrive where successful configs arrive by episode 200, because the per-update gradient step is too small to overcome noise in the single-sample Bellman targets quickly enough.
 
 ### 4.2. Failure: Config `690440aa` (lr $= 5 \times 10^{-3}$, batch 32, exponential)
 
@@ -117,11 +121,11 @@ Most other successful configs follow the same three phases, differing only in th
 
 **Episodes 1–100 (fast initial rise).** Return climbs to $\approx 200$ steps faster than most configs, as the high learning rate moves Q-values substantially per update and exponential decay removes exploration quickly.
 
-**Episodes 100 onward (repeated collapse).** In contrast to successful configs, where TD loss rises gradually and return stabilises, here TD loss diverges to $> 400$ and return cycles repeatedly between $\approx 300–350$ and near-random levels. The underlying mechanism is compounding Q-value overestimation. High LR causes the online network to develop inflated Q-values through large, noisy gradient updates: each mini-batch update overshoots the true Bellman target, and with a constantly shifting data distribution the corrections never converge. When the target network syncs, it copies these already-inflated values and holds them fixed as regression targets for the next 100 steps. The online network is then trained to match inflated targets, pushing its Q-values higher still, ready to seed the next sync. The early exhaustion of exploration from exponential decay exacerbates this, as the near-deterministic trajectories that result reduce buffer diversity and deprive the network of the varied Bellman targets that would otherwise dampen overestimation. The contrast with `88694cf2` (same LR, same batch, linear decay, [Figure 3](#fig-88694cf2)) confirms the diagnosis: linear decay keeps $\varepsilon$ higher for longer, breaking the feedback loop between premature exploitation and diverging Q-values.
+**Episodes 100 onward (repeated collapse).** In contrast to successful configs, where TD loss rises gradually and return stabilises, here TD loss diverges to > 400 and return cycles repeatedly between $\approx 300–350$ and near-random levels. The underlying mechanism is compounding Q-value overestimation. High LR causes the online network to develop inflated Q-values through large, noisy gradient updates: each mini-batch update overshoots the true Bellman target, and with a constantly shifting data distribution the corrections never converge. When the target network syncs, it copies these already-inflated values and holds them fixed as regression targets for the next 100 steps. The online network is then trained to match inflated targets, pushing its Q-values higher still, ready to seed the next sync. The early exhaustion of exploration from exponential decay exacerbates this, as the near-deterministic trajectories that result reduce buffer diversity and deprive the network of the varied Bellman targets that would otherwise dampen overestimation. The contrast with `88694cf2` (same LR, same batch, linear decay, [Figure 3](#fig-88694cf2)) confirms the diagnosis: linear decay keeps $\varepsilon$ higher for longer, breaking the feedback loop between premature exploitation and diverging Q-values.
 
 <figure id="fig-88694cf2" style="text-align: center;">
   <img src="/assets/images/cartpole_dqn_training_88694cf2.png" alt="Training curves for config 88694cf2." style="width: 100%;">
-  <figcaption>Figure 3: Training curves for config <code>88694cf2</code> (lr = 5 × 10⁻³, batch 32, linear decay). Episode returns (left), episode lengths (centre), and TD loss (right). Identical to <code>690440aa</code> in every hyperparameter except decay strategy. The stable plateau and bounded TD loss confirm that keeping exploration higher for longer prevents the overestimation cycle.</figcaption>
+  <figcaption>Figure 3: Training curves for config <code>88694cf2</code> (lr = 5 × 10⁻³, batch 32, linear decay). Episode returns (left), episode lengths (centre), and TD loss (right).</figcaption>
 </figure>
 
 The key distinction between this failure mode and the bounded oscillation in successful runs is therefore not the presence of performance dips, since all DQN runs exhibit some variance, but whether the TD loss diverges. A TD loss that plateaus signals healthy learning, whereas one that compounds without bound signals overestimation taking hold.
@@ -147,7 +151,7 @@ Standard DQN computes the Bellman target as $r + \gamma \max_{a'} Q_{\text{targe
 Double DQN (van Hasselt et al., 2016) decouples the two operations across the two networks that already exist in standard DQN. The online network selects the greedy next action, then the target network evaluates it:
 
 $$
-y = r + \gamma \, Q_{\text{target}}\!\left(s',\, \arg\max_{a'} Q_{\text{online}}(s', a')\right)
+y = r + \gamma Q_{\text{target}}\left(s', \arg\max_{a'} Q_{\text{online}}(s', a')\right)
 $$
 
 Because the two networks carry different weights, an action that the online network overestimates tends to receive a more conservative value from the target network, breaking the self-reinforcing bias. The change touches only the TD target computation. Everything else, including environment-interaction action selection via the online network, the replay buffer, and the target network sync schedule, is identical to standard DQN. No additional parameters or computational cost are introduced.
@@ -269,7 +273,9 @@ Under `spawn`, each subprocess re-imports PyTorch, NumPy, Gymnasium, and the oth
 
 #### B.8.4. Per-Worker Total (Private Memory)
 
-Summing the components above:
+Summing the components above, [Table 2](#tab-dqn-worker-memory) gives the per-worker total:
+
+<a id="tab-dqn-worker-memory"></a>
 
 | Component | Size |
 |---|---|
@@ -279,6 +285,8 @@ Summing the components above:
 | Python heap and per-process state | ~60 MB |
 | Environment wrappers, loss history, misc | ~5 MB |
 | **Total private per worker** | **~84 MB** |
+
+Table 2: Per-worker private memory under `spawn`, by component.
 
 #### B.8.5. Shared Library Pages
 

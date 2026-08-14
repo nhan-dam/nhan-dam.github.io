@@ -90,7 +90,7 @@ This single-sample approximation is valid because the observed $s_{t+1}$ is draw
 Formally, convergence to $Q^*$ is guaranteed provided every $(s, a)$ pair is visited infinitely often and $\alpha_t$ satisfies the **Robbins-Monro conditions**:
 
 $$
-\sum_t \alpha_t = \infty \qquad \text{and} \qquad \sum_t \alpha_t^2 < \infty.
+\sum_t \alpha_t = \infty \qquad \text{and} \qquad \sum_t \alpha_t^2 \lt \infty.
 $$
 
 The two conditions answer complementary questions about how $\alpha_t$ should decay. The first condition requires that the steps never shrink so aggressively that the algorithm effectively stops learning before it has corrected its early estimation errors. If the total step size were finite, updates would freeze prematurely. The second condition requires that steps eventually become small enough for the noise in each single-sample update to average out rather than accumulate. If steps stayed large forever, the estimate would keep bouncing and never settle. A concrete schedule satisfying both is $\alpha_t = 1/t$: the harmonic series $\sum 1/t$ diverges (first condition met), while $\sum 1/t^2 = \pi^2/6$ is finite (second condition met).
@@ -111,7 +111,7 @@ In the tabular setting, $Q(s, a)$ is a lookup table with one entry per $(s, a)$ 
 
 **Experience replay.** Without intervention, the transitions $(s_t, a_t, r_t, s_{t+1})$ fed to the network arrive in temporal order, meaning consecutive samples are highly correlated, as the same region of state space is visited for many steps in a row. Training a neural network on correlated samples violates the i.i.d. assumption that gradient descent relies on, producing biased gradient estimates and causing the network to overfit to the current region of the environment while catastrophically forgetting others. Experience replay breaks this correlation by storing every observed transition in a fixed-size circular buffer $\mathcal{D}$ and sampling uniformly at random from it at each update step. [Algorithm 1](#alg-exp-rep) illustrates this training technique.
 
-Action selection at each step follows an **$\varepsilon$-greedy policy**, a simple strategy for balancing exploration (trying actions whose Q-values are uncertain) and exploitation (taking the action the current network considers best). At each step the agent draws $u \sim \text{Uniform}(0, 1)$: if $u < \varepsilon$ it selects a random action, otherwise it selects $\arg\max_a Q(s_t, a; \theta)$. $\varepsilon$ is annealed from 1.0 at the start of training, when the network knows nothing and pure exploration is warranted, down to a small value such as 0.05 once the network has learned a reasonable policy. Without this exploration mechanism, the agent may never visit large parts of the state space, violating the condition that every $(s, a)$ pair must be visited sufficiently often for Q-learning to converge.
+Action selection at each step follows an **$\varepsilon$-greedy policy**, a simple strategy for balancing exploration (trying actions whose Q-values are uncertain) and exploitation (taking the action the current network considers best). At each step the agent draws $u \sim \text{Uniform}(0, 1)$: if $u \lt \varepsilon$ it selects a random action, otherwise it selects $\arg\max_a Q(s_t, a; \theta)$. $\varepsilon$ is annealed from 1.0 at the start of training, when the network knows nothing and pure exploration is warranted, down to a small value such as 0.05 once the network has learned a reasonable policy. Without this exploration mechanism, the agent may never visit large parts of the state space, violating the condition that every $(s, a)$ pair must be visited sufficiently often for Q-learning to converge.
 
 <figure id="alg-exp-rep" style="text-align: center;" markdown="1">
 <div style="border: 1px solid #ccc; display: inline-block; text-align: left; padding: 1em; font-family: monospace;" markdown="1">
@@ -128,7 +128,7 @@ $\theta$: updated Q-network parameters
 Initialise replay buffer $D$ with capacity $N$<br>
 **for each** time step $t$:<br>
 $\quad$ Draw $u \sim \mathrm{Uniform}(0,1)$<br>
-$\quad$ **if** $u < \varepsilon$:<br>
+$\quad$ **if** $u \lt \varepsilon$:<br>
 $\quad\quad$ $a_t \leftarrow$ random action from $A$ *// explore*<br>
 $\quad$ **else**:<br>
 $\quad\quad$ $a_t \leftarrow \arg\max_a Q(s_t, a; \theta)$ *// exploit*<br>
@@ -284,7 +284,7 @@ The paper reports this result without the factor of $-2$. The scalar $2$ is abso
 
 The TD error $\delta_i = y_i - Q(s,a;\theta_i)$ can be very large early in training when Q-values are poorly initialised, producing large gradients that destabilise parameter updates. The paper addresses this by clipping $\delta_i$ to $[-1, 1]$, which is equivalent to using the Huber loss in place of mean squared error (MSE).
 
-The mechanism is grounded in the derivative of the absolute value loss $|\delta_i|$, which equals $\pm 1$ everywhere except at zero. This constant derivative is precisely what bounds the gradient: for any $|\delta_i| > 1$, the gradient contribution is fixed at unit magnitude regardless of how large the error is. The Huber loss exploits this by combining both regimes: it behaves as MSE for $|\delta_i| \leq 1$, where the gradient is proportional to the error and allows precise convergence near the optimum, and as the absolute value loss for $|\delta_i| > 1$, where the constant-magnitude gradient prevents any single outlier transition from dominating the update.
+The mechanism is grounded in the derivative of the absolute value loss $|\delta_i|$, which equals $\pm 1$ everywhere except at zero. This constant derivative is precisely what bounds the gradient: for any $|\delta_i| \gt 1$, the gradient contribution is fixed at unit magnitude regardless of how large the error is. The Huber loss exploits this by combining both regimes: it behaves as MSE for $|\delta_i| \leq 1$, where the gradient is proportional to the error and allows precise convergence near the optimum, and as the absolute value loss for $|\delta_i| \gt 1$, where the constant-magnitude gradient prevents any single outlier transition from dominating the update.
 
 Error clipping should not be confused with **reward clipping**, a separate mechanism the paper applies during training: all positive rewards are clipped to $+1$ and all negative rewards to $-1$, with zero rewards unchanged. Because game scores vary enormously in scale across the 49 games, it is reward clipping that bounds the scale of the error derivatives and allows the same learning rate to be used on every game without per-game tuning. The paper notes its cost explicitly: the agent cannot distinguish rewards of different magnitudes. Error clipping is then an additional stabilisation on top, protecting the update from outlier TD errors that survive even with clipped rewards.
 
@@ -411,7 +411,7 @@ $$
 \end{align*}
 $$
 
-where the second equality interchanges gradient and integral (justified by the Leibniz rule, since $p(\tau;\theta)$ is smooth in $\theta$ and $G(\tau)$ is bounded under bounded rewards and $\gamma < 1$), and the third uses $\nabla_\theta G(\tau) = 0$.
+where the second equality interchanges gradient and integral (justified by the Leibniz rule, since $p(\tau;\theta)$ is smooth in $\theta$ and $G(\tau)$ is bounded under bounded rewards and $\gamma \lt 1$), and the third uses $\nabla_\theta G(\tau) = 0$.
 
 **Step 2: Log-derivative trick.** Direct evaluation of $\nabla_\theta p(\tau;\theta)$ is intractable because [(2)](#eq-traj-prob) contains the unknown environment dynamics $P$. The identity $\nabla_\theta p(\tau;\theta) = p(\tau;\theta) \nabla_\theta \log p(\tau;\theta)$, obtained by rearranging $\nabla_\theta \log p = (\nabla_\theta p) / p$, converts the integral into an expectation:
 
@@ -464,18 +464,18 @@ Splitting the inner sum at $t' = t$,
 
 $$\nabla_\theta J(\pi_\theta) = \mathbb{E}_{\tau \sim \pi_\theta}\left[\sum_{t=0}^T \nabla_\theta \log \pi_\theta(a_t \mid s_t) \left(\sum_{t'=0}^{t-1} \gamma^{t'} R(s_{t'}, a_{t'}) + \sum_{t'=t}^T \gamma^{t'} R(s_{t'}, a_{t'})\right)\right]. \tag{6}$$
 
-The claim is that the first inner sum (the past rewards) contributes zero in expectation. Intuitively, an action $a_t$ sampled at step $t$ cannot causally influence rewards already collected at earlier steps $t' < t$. Formally, the **score function** $\nabla_\theta \log \pi_\theta(a_t \mid s_t)$ has mean zero under $\pi_\theta(\cdot \mid s_t)$ (a standard identity, proved below), so any quantity determined before $a_t$ is sampled multiplies it to zero in expectation.
+The claim is that the first inner sum (the past rewards) contributes zero in expectation. Intuitively, an action $a_t$ sampled at step $t$ cannot causally influence rewards already collected at earlier steps $t' \lt t$. Formally, the **score function** $\nabla_\theta \log \pi_\theta(a_t \mid s_t)$ has mean zero under $\pi_\theta(\cdot \mid s_t)$ (a standard identity, proved below), so any quantity determined before $a_t$ is sampled multiplies it to zero in expectation.
 
-Fix any pair $(t, t')$ with $t' < t$. The reward $R(s_{t'}, a_{t'})$ is a deterministic function of $(s_{t'}, a_{t'})$, both of which lie in the prefix $\tau_{<t} := (s_0, a_0, \ldots, s_{t-1}, a_{t-1}, s_t)$. Neither factor in the integrand depends on the post-action variables $(s_{t+1}, a_{t+1}, \ldots, s_T, a_T)$, so those variables marginalise out trivially. Writing the joint density of $(\tau_{<t}, a_t)$ as $p(\tau_{<t};\theta) \cdot \pi_\theta(a_t \mid s_t)$,
+Fix any pair $(t, t')$ with $t' \lt t$. The reward $R(s_{t'}, a_{t'})$ is a deterministic function of $(s_{t'}, a_{t'})$, both of which lie in the prefix $\tau_{\lt t} := (s_0, a_0, \ldots, s_{t-1}, a_{t-1}, s_t)$. Neither factor in the integrand depends on the post-action variables $(s_{t+1}, a_{t+1}, \ldots, s_T, a_T)$, so those variables marginalise out trivially. Writing the joint density of $(\tau_{\lt t}, a_t)$ as $p(\tau_{\lt t};\theta) \cdot \pi_\theta(a_t \mid s_t)$,
 
 <span id="eq-cross-term"></span>
 
 $$
 \begin{align*}
 &\mathbb{E}_{\tau \sim \pi_\theta}\left[\nabla_\theta \log \pi_\theta(a_t \mid s_t) \cdot \gamma^{t'} R(s_{t'}, a_{t'})\right] \\
-&\quad= \int p(\tau_{<t};\theta) \pi_\theta(a_t \mid s_t) \nabla_\theta \log \pi_\theta(a_t \mid s_t) \cdot \gamma^{t'} R(s_{t'}, a_{t'}) \mathrm{d}\tau_{<t} \mathrm{d}a_t \\
-&\quad= \int p(\tau_{<t};\theta) \gamma^{t'} R(s_{t'}, a_{t'}) \left[\int \pi_\theta(a_t \mid s_t) \nabla_\theta \log \pi_\theta(a_t \mid s_t) \mathrm{d}a_t\right] \mathrm{d}\tau_{<t} \\
-&\quad= \mathbb{E}_{\tau_{<t}}\left[\gamma^{t'} R(s_{t'}, a_{t'}) \cdot \mathbb{E}_{a_t \sim \pi_\theta(\cdot \mid s_t)}\left[\nabla_\theta \log \pi_\theta(a_t \mid s_t)\right]\right]. \tag{7}
+&\quad= \int p(\tau_{\lt t};\theta) \pi_\theta(a_t \mid s_t) \nabla_\theta \log \pi_\theta(a_t \mid s_t) \cdot \gamma^{t'} R(s_{t'}, a_{t'}) \mathrm{d}\tau_{\lt t} \mathrm{d}a_t \\
+&\quad= \int p(\tau_{\lt t};\theta) \gamma^{t'} R(s_{t'}, a_{t'}) \left[\int \pi_\theta(a_t \mid s_t) \nabla_\theta \log \pi_\theta(a_t \mid s_t) \mathrm{d}a_t\right] \mathrm{d}\tau_{\lt t} \\
+&\quad= \mathbb{E}_{\tau_{\lt t}}\left[\gamma^{t'} R(s_{t'}, a_{t'}) \cdot \mathbb{E}_{a_t \sim \pi_\theta(\cdot \mid s_t)}\left[\nabla_\theta \log \pi_\theta(a_t \mid s_t)\right]\right]. \tag{7}
 \end{align*}
 $$
 
@@ -493,7 +493,7 @@ $$
 \end{align*}
 $$
 
-where the first equality applies the log-derivative identity $\nabla_\theta \log \pi_\theta(a \mid s_t) = \nabla_\theta \pi_\theta(a \mid s_t) / \pi_\theta(a \mid s_t)$, and the third exchanges the sum and the gradient (valid for finite action spaces by linearity, and for continuous action spaces under standard regularity conditions for differentiating under the integral). Substituting this result into [(7)](#eq-cross-term) gives zero. Every $t' < t$ term in [(6)](#eq-pg-split) therefore vanishes, leaving only the $t' \geq t$ contributions, which form the **reward-to-go** from step $t$:
+where the first equality applies the log-derivative identity $\nabla_\theta \log \pi_\theta(a \mid s_t) = \nabla_\theta \pi_\theta(a \mid s_t) / \pi_\theta(a \mid s_t)$, and the third exchanges the sum and the gradient (valid for finite action spaces by linearity, and for continuous action spaces under standard regularity conditions for differentiating under the integral). Substituting this result into [(7)](#eq-cross-term) gives zero. Every $t' \lt t$ term in [(6)](#eq-pg-split) therefore vanishes, leaving only the $t' \geq t$ contributions, which form the **reward-to-go** from step $t$:
 
 <span id="eq-rtg"></span>
 
@@ -509,9 +509,9 @@ $$Q^{\pi}(s, a) = \mathbb{E}\left[\sum_{k=0}^{T} \gamma^k R(s_k, a_k) \middle| s
 
 To apply this definition inside [(9)](#eq-rtg), where the reward-to-go is indexed from an arbitrary time step $t$ within a longer trajectory, two consequences of the Markov property are needed.
 
-First, **prefix independence**. Under Markov dynamics $P(s_{t+1} \mid s_t, a_t)$ and a Markov policy $\pi_\theta(a_t \mid s_t)$, the conditional distribution of the future $(s_{t+1}, a_{t+1}, \ldots, s_T, a_T)$ given the full prefix $\tau_{<t} \cup \{a_t\}$ depends only on $(s_t, a_t)$. Therefore,
+First, **prefix independence**. Under Markov dynamics $P(s_{t+1} \mid s_t, a_t)$ and a Markov policy $\pi_\theta(a_t \mid s_t)$, the conditional distribution of the future $(s_{t+1}, a_{t+1}, \ldots, s_T, a_T)$ given the full prefix $\tau_{\lt t} \cup \{a_t\}$ depends only on $(s_t, a_t)$. Therefore,
 
-$$\mathbb{E}_{\tau \sim \pi_\theta}\left[\sum_{t'=t}^T \gamma^{t'-t} R(s_{t'}, a_{t'}) \middle| \tau_{<t}, a_t\right] = \mathbb{E}_{\tau \sim \pi_\theta}\left[\sum_{t'=t}^T \gamma^{t'-t} R(s_{t'}, a_{t'}) \middle| s_t, a_t\right].$$
+$$\mathbb{E}_{\tau \sim \pi_\theta}\left[\sum_{t'=t}^T \gamma^{t'-t} R(s_{t'}, a_{t'}) \middle| \tau_{\lt t}, a_t\right] = \mathbb{E}_{\tau \sim \pi_\theta}\left[\sum_{t'=t}^T \gamma^{t'-t} R(s_{t'}, a_{t'}) \middle| s_t, a_t\right].$$
 
 The full-prefix conditioning collapses to conditioning on $(s_t, a_t)$ alone.
 
@@ -621,7 +621,7 @@ Choosing $b(s_t) = V^{\pi_\theta}(s_t)$ replaces $Q^{\pi_\theta}(s_t, a_t) - V^{
 
 $$\boxed{\nabla_\theta J(\pi_\theta) = \mathbb{E}_{\tau \sim \pi_\theta}\left[\sum_{t=0}^T \gamma^t \nabla_\theta \log \pi_\theta(a_t \mid s_t) \cdot A^{\pi_\theta}(s_t, a_t) \right].} \tag{15}$$
 
-Equation [(15)](#eq-pg-advantage) is the **policy gradient theorem** in its advantage form. The advantage acts as a directional signal under gradient ascent: the per-step update $\theta \leftarrow \theta + \eta  \nabla_\theta \log \pi_\theta(a_t \mid s_t) \cdot A^{\pi_\theta}(s_t, a_t)$ moves $\theta$ along the direction in which $\pi_\theta(a_t \mid s_t)$ increases, scaled by the sign and magnitude of $A^{\pi_\theta}$. When $A^{\pi_\theta}(s_t, a_t) > 0$ the probability $\pi_\theta(a_t \mid s_t)$ is raised, reinforcing the action. When $A^{\pi_\theta}(s_t, a_t) < 0$ the negative scalar flips the direction and the probability is lowered, suppressing the action. Actions that beat the policy's own expected return are pushed up, and those that underperform are pushed down.
+Equation [(15)](#eq-pg-advantage) is the **policy gradient theorem** in its advantage form. The advantage acts as a directional signal under gradient ascent: the per-step update $\theta \leftarrow \theta + \eta  \nabla_\theta \log \pi_\theta(a_t \mid s_t) \cdot A^{\pi_\theta}(s_t, a_t)$ moves $\theta$ along the direction in which $\pi_\theta(a_t \mid s_t)$ increases, scaled by the sign and magnitude of $A^{\pi_\theta}$. When $A^{\pi_\theta}(s_t, a_t) \gt 0$ the probability $\pi_\theta(a_t \mid s_t)$ is raised, reinforcing the action. When $A^{\pi_\theta}(s_t, a_t) \lt 0$ the negative scalar flips the direction and the probability is lowered, suppressing the action. Actions that beat the policy's own expected return are pushed up, and those that underperform are pushed down.
 
 In practice almost all implementations drop $\gamma^t$ from the per-step coefficient in [(15)](#eq-pg-advantage), weighting every timestep equally when aggregating the gradient across a trajectory. This is a biased estimator of $\nabla_\theta J$: later timesteps are overweighted relative to what the discounted objective requires, so the policy converges to the maximiser of a slightly different objective. The bias is empirically benign because $\gamma$ is typically close to 1, so $\gamma^t$ deviates little from 1 over a finite episode. In the episodic RLHF setting, where each episode is a single self-contained response with no meaningful continuation beyond it, $\gamma = 1$ is standard, $\gamma^t = 1$ for all $t$, and the question does not arise.
 
@@ -683,10 +683,10 @@ where $\varepsilon$ is a small constant (typically 0.1 or 0.2) and $\mathbb{E}_t
 
 Consider the two cases separately.
 
-- **Positive advantage** ($\hat{A}_t > 0$, the action was better than the baseline). The objective rewards increasing $r_t$. The clip caps the unclipped term at $r_t = 1 + \varepsilon$, so once the new policy has raised the probability of $a_t$ by a factor of $1 + \varepsilon$ relative to $\pi_{\theta_\text{old}}$, no further gradient is provided. Beyond that point, the clipped term becomes constant in $\theta$ and its gradient vanishes.
-- **Negative advantage** ($\hat{A}_t < 0$, the action was worse than the baseline). The objective rewards decreasing $r_t$. The clip caps the unclipped term at $r_t = 1 - \varepsilon$, so once the probability of $a_t$ has been reduced by a factor of $1 - \varepsilon$, no further gradient is provided in the same direction.
+- **Positive advantage** ($\hat{A}_t \gt 0$, the action was better than the baseline). The objective rewards increasing $r_t$. The clip caps the unclipped term at $r_t = 1 + \varepsilon$, so once the new policy has raised the probability of $a_t$ by a factor of $1 + \varepsilon$ relative to $\pi_{\theta_\text{old}}$, no further gradient is provided. Beyond that point, the clipped term becomes constant in $\theta$ and its gradient vanishes.
+- **Negative advantage** ($\hat{A}_t \lt 0$, the action was worse than the baseline). The objective rewards decreasing $r_t$. The clip caps the unclipped term at $r_t = 1 - \varepsilon$, so once the probability of $a_t$ has been reduced by a factor of $1 - \varepsilon$, no further gradient is provided in the same direction.
 
-The outer $\min$ is what makes the heuristic sound. If the optimiser is moving in the right direction (improving the objective), the clip removes the gradient once the trust region is crossed. However, if a step has already pushed $r_t$ outside the trust region in the wrong direction (e.g. $r_t > 1 + \varepsilon$ when $\hat{A}_t < 0$, so the policy is now assigning more probability to a bad action), $\min$ selects the unclipped term, which still has a non-zero gradient pulling $r_t$ back. The clip therefore only suppresses gradients when doing so is safe, and never lets an out-of-region policy go uncorrected.
+The outer $\min$ is what makes the heuristic sound. If the optimiser is moving in the right direction (improving the objective), the clip removes the gradient once the trust region is crossed. However, if a step has already pushed $r_t$ outside the trust region in the wrong direction (e.g. $r_t \gt 1 + \varepsilon$ when $\hat{A}_t \lt 0$, so the policy is now assigning more probability to a bad action), $\min$ selects the unclipped term, which still has a non-zero gradient pulling $r_t$ back. The clip therefore only suppresses gradients when doing so is safe, and never lets an out-of-region policy go uncorrected.
 
 **Full PPO objective:**
 
@@ -741,7 +741,7 @@ $$
 \hat{A}_t^{\text{GAE}} = (1-\lambda)\sum_{n=1}^{\infty} \lambda^{n-1} \hat{A}_t^{(n)}.
 $$
 
-To see this collapses to [(18)](#eq-gae), swap the order of summation: $\delta_{t+l}$ contributes to every $\hat{A}_t^{(n)}$ with $n > l$, so its total weight is $(1-\lambda)\sum_{n=l+1}^{\infty}\lambda^{n-1}\cdot\gamma^l = \lambda^l \gamma^l = (\gamma\lambda)^l$, recovering $\sum_{l=0}^{\infty}(\gamma\lambda)^l \delta_{t+l}$. At $\lambda = 1$ the $(1-\lambda)$ formula yields $0 \cdot \infty$ (the sum diverges), so the extreme case must be read from [(18)](#eq-gae) directly, as done below. The same identity, expressed as a TD($\lambda$) return rather than an advantage, is derived in full in [Appendix 1.5](appendix.md#15-n-step-td-error).
+To see this collapses to [(18)](#eq-gae), swap the order of summation: $\delta_{t+l}$ contributes to every $\hat{A}_t^{(n)}$ with $n \gt l$, so its total weight is $(1-\lambda)\sum_{n=l+1}^{\infty}\lambda^{n-1}\cdot\gamma^l = \lambda^l \gamma^l = (\gamma\lambda)^l$, recovering $\sum_{l=0}^{\infty}(\gamma\lambda)^l \delta_{t+l}$. At $\lambda = 1$ the $(1-\lambda)$ formula yields $0 \cdot \infty$ (the sum diverges), so the extreme case must be read from [(18)](#eq-gae) directly, as done below. The same identity, expressed as a TD($\lambda$) return rather than an advantage, is derived in full in [Appendix 1.5](appendix.md#15-n-step-td-error).
 
 **$\lambda$ at the extremes.**
 

@@ -13,7 +13,7 @@ The 'temporal-difference' (TD) error is the signed difference between a bootstra
 The Bellman equation states that value satisfies a recursive relationship: the return from the current step equals the immediate reward plus the discounted return from the next step. Applying this recursion whilst substituting the current value estimate for the unknown future return gives the TD error,
 
 $$
-\delta_t = \underbrace{R_t + \gamma \, \hat{V}(\text{next})}_{\text{TD target}} - \underbrace{\hat{V}(\text{now})}_{\text{current estimate}},
+\delta_t = \underbrace{R_t + \gamma \hat{V}(\text{next})}_{\text{TD target}} - \underbrace{\hat{V}(\text{now})}_{\text{current estimate}},
 $$
 
 where $\hat{V}$ denotes the value estimate being learned and $\gamma \in [0, 1]$ is the discount factor. A non-zero $\delta_t$ indicates that the estimate is inconsistent with itself after one step of real experience. The standard update rule adjusts the estimate by $\alpha \delta_t$, where $\alpha$ is the learning rate.

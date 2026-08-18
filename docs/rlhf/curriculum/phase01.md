@@ -165,7 +165,7 @@ Initialise online network $Q(\cdot;\theta)$ and target network $Q(\cdot;\theta^-
 $\quad$ Sample mini-batch of $k$ transitions from $D$<br>
 $\quad$ **for each** transition $(s, a, r, s')$:<br>
 $\quad\quad$ $y \leftarrow r + \gamma \max_{a'} Q(s', a'; \theta^-)$ *// frozen target network*<br>
-$\quad$ $\mathcal{L} \leftarrow \mathrm{MSE}(Q(s, a; \theta),\, y)$<br>
+$\quad$ $\mathcal{L} \leftarrow \mathrm{MSE}(Q(s, a; \theta), y)$<br>
 $\quad$ Update $\theta$ via gradient descent on $\mathcal{L}$<br>
 $\quad$ Every $C$ steps: $\theta^- \leftarrow \theta$ *// periodic hard copy*
 
@@ -189,7 +189,7 @@ In Q-learning, ε (epsilon) controls the balance between exploration, taking ran
 
 Exponential decay is generally preferred over linear decay. Because exponential decay reduces ε multiplicatively each episode, 
 
-$$\varepsilon \leftarrow \max(\varepsilon_{\min},\ \varepsilon \cdot \lambda),$$
+$$\varepsilon \leftarrow \max(\varepsilon_{\min}, \varepsilon \cdot \lambda),$$
 
 where $\lambda \in (0, 1)$ is the decay rate (e.g. $\lambda = 0.9995$), it frontloads exploration into the early phase of training, where the Q-table is largely uninformed and random actions are most valuable. Linear decay, by contrast, reduces exploration at a constant rate regardless of how much the agent has already learnt, which can leave the agent over-exploring in later episodes when exploitation would be more productive.
  
@@ -254,7 +254,7 @@ obtained by sampling $s'$ rather than integrating over it.
 
 **Relationship between $L_i$ and $\tilde{L}_i$.** Let $\bar{y}_i = \mathbb{E}_{s'}[y_i \mid s,a,r]$. Expanding the inner expectation of $\tilde{L}_i$ by adding and subtracting $\bar{y}_i$ yields
 
-$$\mathbb{E}_{s'}\left[(y_i - Q)^2\right] = \mathbb{E}_{s'}\left[(y_i - \bar{y}_i)^2\right] + 2(\bar{y}_i - Q)\underbrace{\mathbb{E}_{s'}[y_i - \bar{y}_i]}_{=\,0} + (\bar{y}_i - Q)^2.$$
+$$\mathbb{E}_{s'}\left[(y_i - Q)^2\right] = \mathbb{E}_{s'}\left[(y_i - \bar{y}_i)^2\right] + 2(\bar{y}_i - Q)\underbrace{\mathbb{E}_{s'}[y_i - \bar{y}_i]}_{=0} + (\bar{y}_i - Q)^2.$$
 
 The cross-term vanishes since $\mathbb{E}_{s'}[y_i] = \bar{y}_i$ by definition. Taking the outer expectation over $(s,a,r)$,
 
@@ -272,7 +272,7 @@ which justifies optimising the tractable $\tilde{L}_i$ in practice.
 
 **Gradient derivation.** Applying the chain rule to a single sample with $\delta_i = y_i - Q(s,a;\theta_i)$,
 
-$$\nabla_{\theta_i} \delta_i^2 = 2\delta_i \cdot \nabla_{\theta_i} \delta_i = 2\delta_i \cdot \Bigl(\underbrace{\nabla_{\theta_i} y_i}_{=\,0} - \nabla_{\theta_i} Q(s,a;\theta_i)\Bigr).$$
+$$\nabla_{\theta_i} \delta_i^2 = 2\delta_i \cdot \nabla_{\theta_i} \delta_i = 2\delta_i \cdot \Bigl(\underbrace{\nabla_{\theta_i} y_i}_{=0} - \nabla_{\theta_i} Q(s,a;\theta_i)\Bigr).$$
 
 Since $y_i$ depends on $\theta_i^-$ rather than $\theta_i$, the first term vanishes. Taking the expectation over $(s,a,r,s')$,
 
@@ -380,7 +380,7 @@ The derivation starts from the definition of $J(\pi_\theta)$ given in [Section 1
 
 <span id="eq-J-integral"></span>
 
-$$J(\pi_\theta) = \mathbb{E}_{\tau \sim \pi_\theta}\left[\sum_{t=0}^T \gamma^t R(s_t, a_t)\right] = \int p(\tau;\theta) G(\tau) \mathrm{d}\tau, \tag{1}$$
+$$J(\pi_\theta) = \mathbb{E}_{\tau \sim \pi_\theta}\left[\sum_{t=0}^T \gamma^t R(s_t, a_t)\right] = \int p(\tau;\theta) G(\tau) \thinspace \mathrm{d}\tau, \tag{1}$$
 
 where $G(\tau) = \sum_{t=0}^T \gamma^t R(s_t, a_t)$ is the discounted return of trajectory $\tau = (s_0, a_0, s_1, a_1, \ldots, s_T, a_T)$. By the chain rule of probability, the trajectory density factors as
 
@@ -405,9 +405,9 @@ Differentiating [(1)](#eq-J-integral) with respect to $\theta$ and noting that $
 $$
 \begin{align*}
 \nabla_\theta J(\pi_\theta)
-&= \nabla_\theta \int p(\tau;\theta) G(\tau) \mathrm{d}\tau \\
-&= \int \nabla_\theta\left[p(\tau;\theta) G(\tau)\right] \mathrm{d}\tau \\
-&= \int \nabla_\theta p(\tau;\theta) \cdot G(\tau) \mathrm{d}\tau,
+&= \nabla_\theta \int p(\tau;\theta) G(\tau) \thinspace \mathrm{d}\tau \\
+&= \int \nabla_\theta\left[p(\tau;\theta) G(\tau)\right] \thinspace \mathrm{d}\tau \\
+&= \int \nabla_\theta p(\tau;\theta) \cdot G(\tau) \thinspace \mathrm{d}\tau,
 \end{align*}
 $$
 
@@ -420,8 +420,8 @@ where the second equality interchanges gradient and integral (justified by the L
 $$
 \begin{align*}
 \nabla_\theta J(\pi_\theta)
-&= \int \nabla_\theta p(\tau;\theta) \cdot G(\tau) \mathrm{d}\tau \\
-&= \int p(\tau;\theta) \nabla_\theta \log p(\tau;\theta) \cdot G(\tau) \mathrm{d}\tau \\
+&= \int \nabla_\theta p(\tau;\theta) \cdot G(\tau) \thinspace \mathrm{d}\tau \\
+&= \int p(\tau;\theta) \nabla_\theta \log p(\tau;\theta) \cdot G(\tau) \thinspace \mathrm{d}\tau \\
 &= \mathbb{E}_{\tau \sim \pi_\theta}\left[\nabla_\theta \log p(\tau;\theta) \cdot G(\tau)\right]. \tag{3}
 \end{align*}
 $$
@@ -473,8 +473,8 @@ Fix any pair $(t, t')$ with $t' \lt t$. The reward $R(s_{t'}, a_{t'})$ is a dete
 $$
 \begin{align*}
 &\mathbb{E}_{\tau \sim \pi_\theta}\left[\nabla_\theta \log \pi_\theta(a_t \mid s_t) \cdot \gamma^{t'} R(s_{t'}, a_{t'})\right] \\
-&\quad= \int p(\tau_{\lt t};\theta) \pi_\theta(a_t \mid s_t) \nabla_\theta \log \pi_\theta(a_t \mid s_t) \cdot \gamma^{t'} R(s_{t'}, a_{t'}) \mathrm{d}\tau_{\lt t} \mathrm{d}a_t \\
-&\quad= \int p(\tau_{\lt t};\theta) \gamma^{t'} R(s_{t'}, a_{t'}) \left[\int \pi_\theta(a_t \mid s_t) \nabla_\theta \log \pi_\theta(a_t \mid s_t) \mathrm{d}a_t\right] \mathrm{d}\tau_{\lt t} \\
+&\quad= \int p(\tau_{\lt t};\theta) \pi_\theta(a_t \mid s_t) \nabla_\theta \log \pi_\theta(a_t \mid s_t) \cdot \gamma^{t'} R(s_{t'}, a_{t'}) \thinspace \mathrm{d}\tau_{\lt t} \thinspace \mathrm{d}a_t \\
+&\quad= \int p(\tau_{\lt t};\theta) \gamma^{t'} R(s_{t'}, a_{t'}) \left[\int \pi_\theta(a_t \mid s_t) \nabla_\theta \log \pi_\theta(a_t \mid s_t) \thinspace \mathrm{d}a_t\right] \thinspace \mathrm{d}\tau_{\lt t} \\
 &\quad= \mathbb{E}_{\tau_{\lt t}}\left[\gamma^{t'} R(s_{t'}, a_{t'}) \cdot \mathbb{E}_{a_t \sim \pi_\theta(\cdot \mid s_t)}\left[\nabla_\theta \log \pi_\theta(a_t \mid s_t)\right]\right]. \tag{7}
 \end{align*}
 $$
@@ -554,8 +554,8 @@ depends only on $(s_t, a_t)$, since $Q^{\pi_\theta}(s_t, a_t)$ has its future va
 $$
 \begin{align*}
 \mathbb{E}_{\tau \sim \pi_\theta}[f_t(s_t, a_t)]
-&= \int p(\tau;\theta) f_t(s_t, a_t) \mathrm{d}\tau \\
-&= \int f_t(s_t, a_t) \underbrace{\left[\int p(\tau;\theta) \mathrm{d}\tau_{\setminus (s_t, a_t)}\right]}_{p_t(s_t, a_t)} \mathrm{d}s_t \mathrm{d}a_t \\
+&= \int p(\tau;\theta) f_t(s_t, a_t) \thinspace \mathrm{d}\tau \\
+&= \int f_t(s_t, a_t) \underbrace{\left[\int p(\tau;\theta) \thinspace \mathrm{d}\tau_{\setminus (s_t, a_t)}\right]}_{p_t(s_t, a_t)} \thinspace \mathrm{d}s_t \thinspace \mathrm{d}a_t \\
 &= \mathbb{E}_{(s_t, a_t)}[f_t(s_t, a_t)], \tag{12}
 \end{align*}
 $$
@@ -703,7 +703,7 @@ where $\mathcal{L}^{\text{VF}}$ is the squared error between the critic's value 
 $\mathcal{L}(\theta)$ is a surrogate *objective*, not a loss in the minimisation sense: all three terms are oriented so that larger values correspond to better policies. Training therefore solves
 
 $$
-\max_{\theta}\ \mathcal{L}(\theta),
+\max_{\theta} \mathcal{L}(\theta),
 $$
 
 via stochastic gradient *ascent* on $\nabla_\theta \mathcal{L}(\theta)$ (equivalently, descent on $-\mathcal{L}(\theta)$).

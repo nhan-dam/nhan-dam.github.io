@@ -1813,43 +1813,43 @@ uv<span class="w"> </span>add<span class="w"> </span>huggingface_hub<span class=
 <span class="kn">from</span><span class="w"> </span><span class="nn">trl</span><span class="w"> </span><span class="kn">import</span> <span class="n">SFTConfig</span><span class="p">,</span> <span class="n">SFTTrainer</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
 
-<span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;Qwen/Qwen2.5-0.5B&quot;</span>
+<span class="n">model_name</span> <span class="o">=</span> <span class="s2">"Qwen/Qwen2.5-0.5B"</span>
 <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
 
 <span class="n">lora_config</span> <span class="o">=</span> <span class="n">LoraConfig</span><span class="p">(</span>
     <span class="n">r</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
     <span class="n">lora_alpha</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
-    <span class="n">target_modules</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;q_proj&quot;</span><span class="p">,</span> <span class="s2">&quot;v_proj&quot;</span><span class="p">],</span>
+    <span class="n">target_modules</span><span class="o">=</span><span class="p">[</span><span class="s2">"q_proj"</span><span class="p">,</span> <span class="s2">"v_proj"</span><span class="p">],</span>
     <span class="n">lora_dropout</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
-    <span class="n">task_type</span><span class="o">=</span><span class="s2">&quot;CAUSAL_LM&quot;</span><span class="p">,</span>
+    <span class="n">task_type</span><span class="o">=</span><span class="s2">"CAUSAL_LM"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">get_peft_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">lora_config</span><span class="p">)</span>
 
 <span class="c1"># Map Dolly to prompt/completion columns so the trainer can mask the prompt</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">to_prompt_completion</span><span class="p">(</span><span class="n">example</span><span class="p">):</span>
-    <span class="n">context</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;### Context:</span><span class="se">\n</span><span class="si">{</span><span class="n">example</span><span class="p">[</span><span class="s1">&#39;context&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">example</span><span class="p">[</span><span class="s2">&quot;context&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"### Context:</span><span class="se">\n</span><span class="si">{</span><span class="n">example</span><span class="p">[</span><span class="s1">'context'</span><span class="p">]</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">"</span> <span class="k">if</span> <span class="n">example</span><span class="p">[</span><span class="s2">"context"</span><span class="p">]</span> <span class="k">else</span> <span class="s2">""</span>
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="p">(</span>
-            <span class="s2">&quot;Below is an instruction that describes a task. &quot;</span>
-            <span class="s2">&quot;Write a response that appropriately completes the request.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;### Instruction:</span><span class="se">\n</span><span class="si">{</span><span class="n">example</span><span class="p">[</span><span class="s1">&#39;instruction&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">### Response:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">"prompt"</span><span class="p">:</span> <span class="p">(</span>
+            <span class="s2">"Below is an instruction that describes a task. "</span>
+            <span class="s2">"Write a response that appropriately completes the request.</span><span class="se">\n\n</span><span class="s2">"</span>
+            <span class="sa">f</span><span class="s2">"### Instruction:</span><span class="se">\n</span><span class="si">{</span><span class="n">example</span><span class="p">[</span><span class="s1">'instruction'</span><span class="p">]</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">"</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">### Response:</span><span class="se">\n</span><span class="s2">"</span>
         <span class="p">),</span>
-        <span class="s2">&quot;completion&quot;</span><span class="p">:</span> <span class="n">example</span><span class="p">[</span><span class="s2">&quot;response&quot;</span><span class="p">],</span>
+        <span class="s2">"completion"</span><span class="p">:</span> <span class="n">example</span><span class="p">[</span><span class="s2">"response"</span><span class="p">],</span>
     <span class="p">}</span>
 
-<span class="n">dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;databricks/databricks-dolly-15k&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">"databricks/databricks-dolly-15k"</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">"train"</span><span class="p">)</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">to_prompt_completion</span><span class="p">,</span> <span class="n">remove_columns</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="n">test_size</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># held-out split for overfitting detection</span>
 
 <span class="c1"># warmup_ratio is deprecated in transformers &gt;= 5.2; derive absolute warmup steps</span>
 <span class="n">num_epochs</span>      <span class="o">=</span> <span class="mi">3</span>
 <span class="n">effective_batch</span> <span class="o">=</span> <span class="mi">8</span> <span class="o">*</span> <span class="mi">2</span>   <span class="c1"># per-device batch size x gradient accumulation</span>
-<span class="n">total_steps</span>     <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">effective_batch</span><span class="p">)</span> <span class="o">*</span> <span class="n">num_epochs</span>
+<span class="n">total_steps</span>     <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">"train"</span><span class="p">])</span> <span class="o">/</span> <span class="n">effective_batch</span><span class="p">)</span> <span class="o">*</span> <span class="n">num_epochs</span>
 
 <span class="n">training_args</span> <span class="o">=</span> <span class="n">SFTConfig</span><span class="p">(</span>
-    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/sft-output&quot;</span><span class="p">,</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">"/Volumes/ML_Workspace/projects/rlhf-course/sft-output"</span><span class="p">,</span>
     <span class="n">num_train_epochs</span><span class="o">=</span><span class="n">num_epochs</span><span class="p">,</span>
     <span class="n">per_device_train_batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
     <span class="n">per_device_eval_batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
@@ -1857,27 +1857,27 @@ uv<span class="w"> </span>add<span class="w"> </span>huggingface_hub<span class=
     <span class="n">learning_rate</span><span class="o">=</span><span class="mf">2e-4</span><span class="p">,</span>
     <span class="n">warmup_steps</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="mf">0.03</span> <span class="o">*</span> <span class="n">total_steps</span><span class="p">),</span>
     <span class="n">gradient_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>     <span class="c1"># trades recompute for activation memory</span>
-    <span class="n">gradient_checkpointing_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;use_reentrant&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+    <span class="n">gradient_checkpointing_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">"use_reentrant"</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
     <span class="n">logging_steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-    <span class="n">eval_strategy</span><span class="o">=</span><span class="s2">&quot;steps&quot;</span><span class="p">,</span>
+    <span class="n">eval_strategy</span><span class="o">=</span><span class="s2">"steps"</span><span class="p">,</span>
     <span class="n">eval_steps</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
     <span class="n">save_steps</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
     <span class="c1"># Keep the lowest eval-loss checkpoint rather than the final one</span>
     <span class="c1"># (save_steps must be a multiple of eval_steps for this to work)</span>
     <span class="n">load_best_model_at_end</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">metric_for_best_model</span><span class="o">=</span><span class="s2">&quot;eval_loss&quot;</span><span class="p">,</span>
+    <span class="n">metric_for_best_model</span><span class="o">=</span><span class="s2">"eval_loss"</span><span class="p">,</span>
     <span class="n">greater_is_better</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">bf16</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>           <span class="c1"># supported on M4 Pro</span>
     <span class="n">max_length</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
     <span class="n">completion_only_loss</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>   <span class="c1"># loss on response tokens only</span>
-    <span class="n">report_to</span><span class="o">=</span><span class="s2">&quot;tensorboard&quot;</span><span class="p">,</span>
+    <span class="n">report_to</span><span class="o">=</span><span class="s2">"tensorboard"</span><span class="p">,</span>
     <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">trainer</span> <span class="o">=</span> <span class="n">SFTTrainer</span><span class="p">(</span>
     <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-    <span class="n">train_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">],</span>
-    <span class="n">eval_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">],</span>
+    <span class="n">train_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">"train"</span><span class="p">],</span>
+    <span class="n">eval_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">"test"</span><span class="p">],</span>
     <span class="n">args</span><span class="o">=</span><span class="n">training_args</span><span class="p">,</span>
     <span class="n">processing_class</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
 <span class="p">)</span>
@@ -1885,7 +1885,7 @@ uv<span class="w"> </span>add<span class="w"> </span>huggingface_hub<span class=
 <span class="c1"># save_model writes the LoRA adapter and the tokenizer together, so the reward</span>
 <span class="c1"># modelling stage can load both from this one path</span>
 <span class="n">trainer</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span>
-    <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/sft-model&quot;</span>
+    <span class="s2">"/Volumes/ML_Workspace/projects/rlhf-course/sft-model"</span>
 <span class="p">)</span>
 </code></pre></div>
 <p><strong>Implementation tip.</strong> There are two equivalent routes to a LoRA-wrapped model. The snippet above wraps manually with <code>get_peft_model(model, lora_config)</code> and hands the resulting parameter-efficient fine-tuning (PEFT) model to the trainer, which makes the 'freeze the base, inject trainable adapters' step explicit and lets you call <code>model.print_trainable_parameters()</code> as a sanity check before training. Alternatively, pass the plain model together with <code>peft_config=lora_config</code> to the trainer, which then calls <code>get_peft_model</code> internally and handles related preparation for you (e.g. enabling input gradients under gradient checkpointing). The manual route is used here, where LoRA is the lesson. The later projects treat LoRA as plumbing and use the trainer-managed route instead (see the snippet in <a href="#43-hands-on-project-reward-model-training">Section 4.3</a>), which is also the only sensible route for the PPO stage, where the trainer manages the PEFT structure itself to recover the frozen reference policy. Do not mix the two routes: passing an already-wrapped PEFT model together with a <code>peft_config</code> is an error, and TRL's trainers raise a <code>ValueError</code> at construction. Give the trainer either a PEFT model and no <code>peft_config</code> (as here), or a plain model plus the config (as in <a href="#43-hands-on-project-reward-model-training">Section 4.3</a>).</p>
@@ -1921,7 +1921,7 @@ uv<span class="w"> </span>add<span class="w"> </span>huggingface_hub<span class=
 <span class="kn">from</span><span class="w"> </span><span class="nn">datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
 
 <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/sft-model&quot;</span>
+    <span class="s2">"/Volumes/ML_Workspace/projects/rlhf-course/sft-model"</span>
 <span class="p">)</span>
 <span class="k">if</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">pad_token</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">tokenizer</span><span class="o">.</span><span class="n">pad_token</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">eos_token</span>
@@ -1929,19 +1929,19 @@ uv<span class="w"> </span>add<span class="w"> </span>huggingface_hub<span class=
 <span class="c1"># The SFT step saved a LoRA adapter; merge it into the base model first. The</span>
 <span class="c1"># tokenizer is saved alongside so the PPO stage can load both from one path.</span>
 <span class="n">sft_model</span> <span class="o">=</span> <span class="n">AutoPeftModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/sft-model&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span>
+    <span class="s2">"/Volumes/ML_Workspace/projects/rlhf-course/sft-model"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span>
 <span class="p">)</span><span class="o">.</span><span class="n">merge_and_unload</span><span class="p">()</span>
 <span class="n">sft_model</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span>
-    <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/sft-model-merged&quot;</span>
+    <span class="s2">"/Volumes/ML_Workspace/projects/rlhf-course/sft-model-merged"</span>
 <span class="p">)</span>
 <span class="n">tokenizer</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span>
-    <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/sft-model-merged&quot;</span>
+    <span class="s2">"/Volumes/ML_Workspace/projects/rlhf-course/sft-model-merged"</span>
 <span class="p">)</span>
 
 <span class="c1"># Initialise from the merged SFT model, swapping the language model (LM) head</span>
 <span class="c1"># for a scalar head</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
-    <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/sft-model-merged&quot;</span><span class="p">,</span>
+    <span class="s2">"/Volumes/ML_Workspace/projects/rlhf-course/sft-model-merged"</span><span class="p">,</span>
     <span class="n">num_labels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">,</span>
 <span class="p">)</span>
@@ -1954,14 +1954,14 @@ uv<span class="w"> </span>add<span class="w"> </span>huggingface_hub<span class=
 <span class="n">lora_config</span> <span class="o">=</span> <span class="n">LoraConfig</span><span class="p">(</span>
     <span class="n">r</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
     <span class="n">lora_alpha</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-    <span class="n">target_modules</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;q_proj&quot;</span><span class="p">,</span> <span class="s2">&quot;v_proj&quot;</span><span class="p">],</span>
+    <span class="n">target_modules</span><span class="o">=</span><span class="p">[</span><span class="s2">"q_proj"</span><span class="p">,</span> <span class="s2">"v_proj"</span><span class="p">],</span>
     <span class="n">lora_dropout</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
-    <span class="n">task_type</span><span class="o">=</span><span class="s2">&quot;SEQ_CLS&quot;</span><span class="p">,</span>
-    <span class="n">modules_to_save</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;score&quot;</span><span class="p">],</span>
+    <span class="n">task_type</span><span class="o">=</span><span class="s2">"SEQ_CLS"</span><span class="p">,</span>
+    <span class="n">modules_to_save</span><span class="o">=</span><span class="p">[</span><span class="s2">"score"</span><span class="p">],</span>
 <span class="p">)</span>
 
-<span class="n">train_dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Anthropic/hh-rlhf&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
-<span class="n">test_dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Anthropic/hh-rlhf&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>  <span class="c1"># the authors&#39; held-out split</span>
+<span class="n">train_dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">"Anthropic/hh-rlhf"</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">"train"</span><span class="p">)</span>
+<span class="n">test_dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">"Anthropic/hh-rlhf"</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">"test"</span><span class="p">)</span>  <span class="c1"># the authors' held-out split</span>
 
 <span class="c1"># max_length below FILTERS out over-long pairs rather than truncating them,</span>
 <span class="c1"># and RewardTrainer silently applies the same filter to any eval set it is</span>
@@ -1972,16 +1972,16 @@ uv<span class="w"> </span>add<span class="w"> </span>huggingface_hub<span class=
 <span class="k">def</span><span class="w"> </span><span class="nf">within_cap</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">cap</span><span class="o">=</span><span class="mi">512</span><span class="p">):</span>        <span class="c1"># cap matches max_length below</span>
     <span class="n">eos</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">eos_token</span>
     <span class="n">chosen</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">([</span><span class="n">t</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">eos</span><span class="p">)</span> <span class="k">else</span> <span class="n">t</span> <span class="o">+</span> <span class="n">eos</span>
-                        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;chosen&quot;</span><span class="p">]])[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span>
+                        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">[</span><span class="s2">"chosen"</span><span class="p">]])[</span><span class="s2">"input_ids"</span><span class="p">]</span>
     <span class="n">rejected</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">([</span><span class="n">t</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">eos</span><span class="p">)</span> <span class="k">else</span> <span class="n">t</span> <span class="o">+</span> <span class="n">eos</span>
-                          <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;rejected&quot;</span><span class="p">]])[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span>
+                          <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">[</span><span class="s2">"rejected"</span><span class="p">]])[</span><span class="s2">"input_ids"</span><span class="p">]</span>
     <span class="k">return</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">cap</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">cap</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">chosen</span><span class="p">,</span> <span class="n">rejected</span><span class="p">)]</span>
 
 <span class="n">gate_dataset</span> <span class="o">=</span> <span class="n">test_dataset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">within_cap</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">eval_dataset</span> <span class="o">=</span> <span class="n">gate_dataset</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1_000</span><span class="p">))</span>
 
 <span class="n">config</span> <span class="o">=</span> <span class="n">RewardConfig</span><span class="p">(</span>
-    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/rm-output&quot;</span><span class="p">,</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">"/Volumes/ML_Workspace/projects/rlhf-course/rm-output"</span><span class="p">,</span>
     <span class="n">num_train_epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">per_device_train_batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
     <span class="n">per_device_eval_batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>      <span class="c1"># small to cap the eval-time memory peak</span>
@@ -1990,17 +1990,17 @@ uv<span class="w"> </span>add<span class="w"> </span>huggingface_hub<span class=
                                        <span class="c1"># larger steps than full fine-tuning (1e-5)</span>
     <span class="n">bf16</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">logging_steps</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-    <span class="n">eval_strategy</span><span class="o">=</span><span class="s2">&quot;steps&quot;</span><span class="p">,</span>
+    <span class="n">eval_strategy</span><span class="o">=</span><span class="s2">"steps"</span><span class="p">,</span>
     <span class="n">eval_steps</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
     <span class="n">save_steps</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
     <span class="c1"># Keep the lowest eval-loss checkpoint: the Bradley-Terry loss is strictly</span>
     <span class="c1"># monotone in the reward margin, so it is a sound selection metric</span>
     <span class="n">load_best_model_at_end</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">metric_for_best_model</span><span class="o">=</span><span class="s2">&quot;eval_loss&quot;</span><span class="p">,</span>
+    <span class="n">metric_for_best_model</span><span class="o">=</span><span class="s2">"eval_loss"</span><span class="p">,</span>
     <span class="n">greater_is_better</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">max_length</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>                    <span class="c1"># pairs with a longer side are filtered out</span>
     <span class="n">center_rewards_coefficient</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>   <span class="c1"># pins rewards near zero (see Section 4.1)</span>
-    <span class="n">report_to</span><span class="o">=</span><span class="s2">&quot;tensorboard&quot;</span><span class="p">,</span>
+    <span class="n">report_to</span><span class="o">=</span><span class="s2">"tensorboard"</span><span class="p">,</span>
     <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -2015,7 +2015,7 @@ uv<span class="w"> </span>add<span class="w"> </span>huggingface_hub<span class=
 <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
 <span class="c1"># Saves the LoRA adapter, the fully trained scalar head, and the tokenizer</span>
 <span class="n">trainer</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span>
-    <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/rm-model&quot;</span>
+    <span class="s2">"/Volumes/ML_Workspace/projects/rlhf-course/rm-model"</span>
 <span class="p">)</span>
 </code></pre></div>
 <p><strong>Implementation tips.</strong> The module names passed to <code>LoraConfig</code> are simply the attribute names in the model's <code>nn.Module</code> tree, defined by the model's implementation in <code>transformers</code> (e.g. <code>Qwen2Attention</code> declares <code>self.q_proj = nn.Linear(...)</code> and <code>Qwen2ForSequenceClassification</code> declares <code>self.score = nn.Linear(...)</code>). To discover them, print the model with <code>print(model)</code> or list fully qualified names with <code>[n for n, _ in model.named_modules()]</code>, which yields entries such as <code>model.layers.0.self_attn.q_proj</code>. PEFT matches each <code>target_modules</code> entry against the <em>suffix</em> of those qualified names, so <code>"q_proj"</code> catches that projection in every layer, and the modules actually matched can be confirmed afterwards via <code>peft_model.targeted_module_names</code>. Two caveats: the names are architecture-specific (GPT-2 uses a fused <code>c_attn</code> rather than separate query/key/value projections, and BERT-style models name the classification head <code>classifier</code> rather than <code>score</code>), and a name that matches nothing raises an error rather than silently training nothing. The shortcut <code>target_modules="all-linear"</code> adapts every linear layer except the output head, useful when inspecting the module tree is inconvenient.</p>
@@ -2121,17 +2121,17 @@ uv<span class="w"> </span>add<span class="w"> </span>huggingface_hub<span class=
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">trl.experimental.ppo</span><span class="w"> </span><span class="kn">import</span> <span class="n">PPOConfig</span><span class="p">,</span> <span class="n">PPOTrainer</span>
 
-<span class="n">sft_path</span> <span class="o">=</span> <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/sft-model-merged&quot;</span>
-<span class="n">rm_path</span>  <span class="o">=</span> <span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/rm-model&quot;</span>
+<span class="n">sft_path</span> <span class="o">=</span> <span class="s2">"/Volumes/ML_Workspace/projects/rlhf-course/sft-model-merged"</span>
+<span class="n">rm_path</span>  <span class="o">=</span> <span class="s2">"/Volumes/ML_Workspace/projects/rlhf-course/rm-model"</span>
 
 <span class="c1"># The RM step saved a LoRA adapter; merge it into its backbone first</span>
-<span class="n">rm_merged_path</span> <span class="o">=</span> <span class="n">rm_path</span> <span class="o">+</span> <span class="s2">&quot;-merged&quot;</span>
+<span class="n">rm_merged_path</span> <span class="o">=</span> <span class="n">rm_path</span> <span class="o">+</span> <span class="s2">"-merged"</span>
 <span class="n">AutoPeftModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
     <span class="n">rm_path</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span>
 <span class="p">)</span><span class="o">.</span><span class="n">merge_and_unload</span><span class="p">()</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="n">rm_merged_path</span><span class="p">)</span>
 
 <span class="c1"># Left padding for batched generation</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">sft_path</span><span class="p">,</span> <span class="n">padding_side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">sft_path</span><span class="p">,</span> <span class="n">padding_side</span><span class="o">=</span><span class="s2">"left"</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">pad_token</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">tokenizer</span><span class="o">.</span><span class="n">pad_token</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">eos_token</span>
 
@@ -2151,28 +2151,28 @@ uv<span class="w"> </span>add<span class="w"> </span>huggingface_hub<span class=
 <span class="n">lora_config</span> <span class="o">=</span> <span class="n">LoraConfig</span><span class="p">(</span>
     <span class="n">r</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
     <span class="n">lora_alpha</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
-    <span class="n">target_modules</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;q_proj&quot;</span><span class="p">,</span> <span class="s2">&quot;v_proj&quot;</span><span class="p">],</span>
+    <span class="n">target_modules</span><span class="o">=</span><span class="p">[</span><span class="s2">"q_proj"</span><span class="p">,</span> <span class="s2">"v_proj"</span><span class="p">],</span>
     <span class="n">lora_dropout</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
-    <span class="n">task_type</span><span class="o">=</span><span class="s2">&quot;CAUSAL_LM&quot;</span><span class="p">,</span>
+    <span class="n">task_type</span><span class="o">=</span><span class="s2">"CAUSAL_LM"</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="c1"># PPOTrainer expects pre-tokenised prompts in an &#39;input_ids&#39; column</span>
+<span class="c1"># PPOTrainer expects pre-tokenised prompts in an 'input_ids' column</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">extract_prompt</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="n">marker</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Assistant:&quot;</span>
+    <span class="n">marker</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n\n</span><span class="s2">Assistant:"</span>
     <span class="k">return</span> <span class="n">text</span><span class="p">[:</span> <span class="n">text</span><span class="o">.</span><span class="n">rindex</span><span class="p">(</span><span class="n">marker</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">marker</span><span class="p">)]</span>
 
-<span class="n">dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Anthropic/hh-rlhf&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">"Anthropic/hh-rlhf"</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">"train"</span><span class="p">)</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
-    <span class="k">lambda</span> <span class="n">ex</span><span class="p">:</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">extract_prompt</span><span class="p">(</span><span class="n">ex</span><span class="p">[</span><span class="s2">&quot;chosen&quot;</span><span class="p">])),</span>
+    <span class="k">lambda</span> <span class="n">ex</span><span class="p">:</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">extract_prompt</span><span class="p">(</span><span class="n">ex</span><span class="p">[</span><span class="s2">"chosen"</span><span class="p">])),</span>
     <span class="n">remove_columns</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">column_names</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="c1"># Filter out (not truncate) over-long prompts: a truncated dialogue can lose</span>
 <span class="c1"># the actual question, leaving the policy to optimise reward on nonsense</span>
-<span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">ex</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">ex</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">256</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">ex</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">ex</span><span class="p">[</span><span class="s2">"input_ids"</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">256</span><span class="p">)</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="n">test_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># held-out eval prompts</span>
 
 <span class="n">config</span> <span class="o">=</span> <span class="n">PPOConfig</span><span class="p">(</span>
-    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/ppo-output&quot;</span><span class="p">,</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">"/Volumes/ML_Workspace/projects/rlhf-course/ppo-output"</span><span class="p">,</span>
     <span class="n">learning_rate</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span>
     <span class="n">per_device_train_batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
     <span class="n">gradient_accumulation_steps</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
@@ -2186,11 +2186,11 @@ uv<span class="w"> </span>add<span class="w"> </span>huggingface_hub<span class=
     <span class="n">num_ppo_epochs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>       <span class="c1"># passes over each rollout batch (episodes reused 4x)</span>
     <span class="n">response_length</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>    <span class="c1"># generation budget (max new tokens)</span>
     <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
-    <span class="n">stop_token</span><span class="o">=</span><span class="s2">&quot;eos&quot;</span><span class="p">,</span>       <span class="c1"># truncate responses at EOS before scoring</span>
+    <span class="n">stop_token</span><span class="o">=</span><span class="s2">"eos"</span><span class="p">,</span>       <span class="c1"># truncate responses at EOS before scoring</span>
     <span class="n">missing_eos_penalty</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>   <span class="c1"># subtracted from the RM score if no EOS emitted</span>
     <span class="n">kl_coef</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>            <span class="c1"># beta (fixed; the adaptive KL controller was removed)</span>
     <span class="n">gradient_checkpointing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">gradient_checkpointing_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;use_reentrant&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+    <span class="n">gradient_checkpointing_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">"use_reentrant"</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
     <span class="n">bf16</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="c1"># The PPO loop prints its metrics every update regardless of logging_steps;</span>
     <span class="c1"># the value still gates other consumers, e.g. callbacks</span>
@@ -2198,7 +2198,7 @@ uv<span class="w"> </span>add<span class="w"> </span>huggingface_hub<span class=
     <span class="c1"># train() takes no arguments, so PPO runs cannot resume; checkpoints exist</span>
     <span class="c1"># only for manual adapter recovery after a crash</span>
     <span class="n">save_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">report_to</span><span class="o">=</span><span class="s2">&quot;tensorboard&quot;</span><span class="p">,</span>
+    <span class="n">report_to</span><span class="o">=</span><span class="s2">"tensorboard"</span><span class="p">,</span>
     <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -2209,13 +2209,13 @@ uv<span class="w"> </span>add<span class="w"> </span>huggingface_hub<span class=
     <span class="n">ref_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>   <span class="c1"># pi_ref = the policy with its adapters disabled</span>
     <span class="n">reward_model</span><span class="o">=</span><span class="n">reward_model</span><span class="p">,</span>
     <span class="n">value_model</span><span class="o">=</span><span class="n">value_model</span><span class="p">,</span>
-    <span class="n">train_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">],</span>
-    <span class="n">eval_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">],</span>
+    <span class="n">train_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">"train"</span><span class="p">],</span>
+    <span class="n">eval_dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">"test"</span><span class="p">],</span>
     <span class="n">peft_config</span><span class="o">=</span><span class="n">lora_config</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">ppo_trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
-<span class="c1"># Saves the policy&#39;s LoRA adapter</span>
-<span class="n">ppo_trainer</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="s2">&quot;/Volumes/ML_Workspace/projects/rlhf-course/ppo-model&quot;</span><span class="p">)</span>
+<span class="c1"># Saves the policy's LoRA adapter</span>
+<span class="n">ppo_trainer</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="s2">"/Volumes/ML_Workspace/projects/rlhf-course/ppo-model"</span><span class="p">)</span>
 </code></pre></div>
 <p><strong>Implementation tips: the critic is trained in full.</strong> In the snippet above, LoRA applies to the policy alone. <code>PPOTrainer</code> applies <code>peft_config</code> only to <code>model</code>, then wraps the policy and the critic in one module and builds the optimiser over both, so every parameter of <code>value_model</code>, backbone and scalar head alike, is updated. Of the four models of <a href="#51-theory">Section 5.1</a>, the reward model and the reference are frozen, the policy trains only its adapters, and the critic is the sole fully trained network. It therefore carries the largest optimiser state (full Adam moments for the whole backbone), which is worth remembering when budgeting memory.</p>
 <p>TRL implements the critic this way because TRL v1's trainer reproduces the canonical OpenAI recipe: a separate value function, initialised from the reward model and trained in full, as in the papers of <a href="#53-suggested-reading">Section 5.3</a>. Note that those works predate LoRA and fully fine-tuned every component, so the full critic was the default of its era rather than a verdict against a low-rank critic. TRL grafts PEFT on only where it buys something structural, namely the policy, where the adapter also yields the free reference model via adapter disabling. A pragmatic argument for keeping the default is that value accuracy directly controls advantage noise and hence PPO stability, so maximal critic plasticity is the conservative choice. The critic is also discarded after training, so no artefact-size argument favours an adapter.</p>
@@ -2225,12 +2225,12 @@ uv<span class="w"> </span>add<span class="w"> </span>huggingface_hub<span class=
 <span class="n">value_lora_config</span> <span class="o">=</span> <span class="n">LoraConfig</span><span class="p">(</span>
     <span class="n">r</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
     <span class="n">lora_alpha</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-    <span class="n">target_modules</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;q_proj&quot;</span><span class="p">,</span> <span class="s2">&quot;v_proj&quot;</span><span class="p">],</span>
+    <span class="n">target_modules</span><span class="o">=</span><span class="p">[</span><span class="s2">"q_proj"</span><span class="p">,</span> <span class="s2">"v_proj"</span><span class="p">],</span>
     <span class="n">lora_dropout</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
-    <span class="n">task_type</span><span class="o">=</span><span class="s2">&quot;SEQ_CLS&quot;</span><span class="p">,</span>
+    <span class="n">task_type</span><span class="o">=</span><span class="s2">"SEQ_CLS"</span><span class="p">,</span>
     <span class="c1"># Value targets are non-stationary (the policy keeps moving), so the</span>
     <span class="c1"># scalar head must remain trainable</span>
-    <span class="n">modules_to_save</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;score&quot;</span><span class="p">],</span>
+    <span class="n">modules_to_save</span><span class="o">=</span><span class="p">[</span><span class="s2">"score"</span><span class="p">],</span>
 <span class="p">)</span>
 <span class="n">value_model</span> <span class="o">=</span> <span class="n">get_peft_model</span><span class="p">(</span><span class="n">value_model</span><span class="p">,</span> <span class="n">value_lora_config</span><span class="p">)</span>
 </code></pre></div>

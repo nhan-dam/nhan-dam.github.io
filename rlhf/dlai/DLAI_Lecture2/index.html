@@ -1755,11 +1755,11 @@
 <p>All <code>input_text</code> values end with the literal string <code>[summary]:</code>. This is a deliberate formatting choice: the model must encounter the same instruction token at inference time as it did during training, so that it can recognise the pattern and generalise correctly. Mismatching training and inference formats will degrade performance.</p>
 <h3 id="33-human-preference-labels">3.3. Human Preference Labels<a class="headerlink" href="#33-human-preference-labels" title="Permanent link">&para;</a></h3>
 <p>A human labeller is shown both <code>candidate_0</code> and <code>candidate_1</code> and selects the better summary. The selected candidate is the <strong>winning</strong> candidate; the other is the <strong>losing</strong> candidate. For example:</p>
-<div class="highlight"><pre><span></span><code>candidate_0: &quot;When applying through a massive job portal, is just one HR
-              person seeing ALL of them?&quot;
+<div class="highlight"><pre><span></span><code>candidate_0: "When applying through a massive job portal, is just one HR
+              person seeing ALL of them?"
 
-candidate_1: &quot;When applying to many jobs through a single university jobs
-              portal, is just one HR person reading ALL my applications?&quot;
+candidate_1: "When applying to many jobs through a single university jobs
+              portal, is just one HR person reading ALL my applications?"
 
 choice: 1   →  candidate_1 is preferred
 </code></pre></div>
@@ -1770,13 +1770,13 @@ choice: 1   →  candidate_1 is preferred
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 
 <span class="n">preference_data</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;sample_preference.jsonl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'sample_preference.jsonl'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">preference_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
 
 <span class="n">sample</span> <span class="o">=</span> <span class="n">preference_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-<span class="c1"># dict_keys([&#39;input_text&#39;, &#39;candidate_0&#39;, &#39;candidate_1&#39;, &#39;choice&#39;])</span>
+<span class="c1"># dict_keys(['input_text', 'candidate_0', 'candidate_1', 'choice'])</span>
 </code></pre></div>
 <hr />
 <h2 id="4-prompt-dataset">4. Prompt Dataset<a class="headerlink" href="#4-prompt-dataset" title="Permanent link">&para;</a></h2>
@@ -1790,7 +1790,7 @@ choice: 1   →  candidate_1 is preferred
 <p>Once the reward model has been trained on the preference dataset, the prompt dataset is fed into the RL loop. At each step, the base LLM generates a completion for a sampled prompt; the reward model scores that completion; and the policy is updated accordingly.</p>
 <h3 id="43-loading-the-data">4.3. Loading the Data<a class="headerlink" href="#43-loading-the-data" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">prompt_data</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;sample_prompt.jsonl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'sample_prompt.jsonl'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">prompt_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
 
@@ -1799,7 +1799,7 @@ choice: 1   →  candidate_1 is preferred
 <p>A helper function for readable inspection:</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">print_d</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;key:</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="se">\n</span><span class="s2">val:</span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"key:</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="se">\n</span><span class="s2">val:</span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="n">print_d</span><span class="p">(</span><span class="n">prompt_data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </code></pre></div>

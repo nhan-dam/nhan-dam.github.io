@@ -1864,7 +1864,7 @@
 <p>For a plain directory not managed by <code>uv</code>:</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>init
 git<span class="w"> </span>add<span class="w"> </span>.
-git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Initial commit&quot;</span>
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Initial commit"</span>
 </code></pre></div>
 <hr />
 <h2 id="2-push-a-local-repository-to-a-new-remote-repository">2. Push a Local Repository to a New Remote Repository<a class="headerlink" href="#2-push-a-local-repository-to-a-new-remote-repository" title="Permanent link">&para;</a></h2>
@@ -2029,7 +2029,7 @@ git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span
 <hr />
 <h2 id="10-temporarily-discard-current-changes-and-revert-to-a-prior-commit">10. Temporarily Discard Current Changes and Revert to a Prior Commit<a class="headerlink" href="#10-temporarily-discard-current-changes-and-revert-to-a-prior-commit" title="Permanent link">&para;</a></h2>
 <p>'Stashing' saves uncommitted changes to a temporary stack and restores a clean working directory, without permanently discarding anything.</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;&lt;description&gt;&quot;</span>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-m<span class="w"> </span><span class="s2">"&lt;description&gt;"</span>
 git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>&lt;commit-hash&gt;
 </code></pre></div>
 <p>To restore the stashed changes later:</p>
@@ -2048,7 +2048,7 @@ git<span class="w"> </span>switch<span class="w"> </span>&lt;branch-name&gt;
 <hr />
 <h2 id="12-temporarily-discard-current-changes-and-switch-branch">12. Temporarily Discard Current Changes and Switch Branch<a class="headerlink" href="#12-temporarily-discard-current-changes-and-switch-branch" title="Permanent link">&para;</a></h2>
 <p>Stash uncommitted changes before switching, preserving them for later retrieval.</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;&lt;description&gt;&quot;</span>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-m<span class="w"> </span><span class="s2">"&lt;description&gt;"</span>
 git<span class="w"> </span>switch<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
 <p>To bring the stashed changes back after returning to the original branch:</p>

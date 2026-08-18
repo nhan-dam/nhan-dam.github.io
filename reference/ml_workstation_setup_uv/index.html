@@ -2578,7 +2578,7 @@
 <div class="highlight"><pre><span></span><code>ls<span class="w"> </span>/Volumes/ML_Workspace
 </code></pre></div>
 <p>On a freshly formatted empty volume you will see either blank output (normal) or a <code>.Spotlight-V100</code> folder that macOS creates automatically for search indexing. Both are fine.</p>
-<div class="highlight"><pre><span></span><code>diskutil<span class="w"> </span>info<span class="w"> </span>/Volumes/ML_Workspace<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;Volume Name&quot;</span>
+<div class="highlight"><pre><span></span><code>diskutil<span class="w"> </span>info<span class="w"> </span>/Volumes/ML_Workspace<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">"Volume Name"</span>
 </code></pre></div>
 <p>Expected output:</p>
 <div class="highlight"><pre><span></span><code>Volume Name:               ML_Workspace
@@ -2636,17 +2636,17 @@ mkdir<span class="w"> </span>-p<span class="w"> </span>/Volumes/ML_Workspace/oll
 <p>Accept the dialog. Takes approximately five minutes.</p>
 <h3 id="42-install-homebrew">4.2. Install Homebrew<a class="headerlink" href="#42-install-homebrew" title="Permanent link">&para;</a></h3>
 <p>Homebrew is a package manager for macOS, letting you install command-line tools with a single command rather than downloading installers manually. It is the standard way to get system-level tools that are not Python packages and cannot be installed via <code>uv</code>.</p>
-<div class="highlight"><pre><span></span><code>/bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="k">)</span><span class="s2">&quot;</span>
+<div class="highlight"><pre><span></span><code>/bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">"</span><span class="k">$(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="k">)</span><span class="s2">"</span>
 </code></pre></div>
 <p>After installation, Homebrew will print two commands to run. Run both exactly as printed. They will look like:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># 1. Adds a blank line to ~/.zprofile for readability</span>
 <span class="nb">echo</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.zprofile
 
 <span class="c1"># 2. Adds Homebrew to your PATH permanently</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;eval &quot;$(/opt/homebrew/bin/brew shellenv zsh)&quot;&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.zprofile
+<span class="nb">echo</span><span class="w"> </span><span class="s1">'eval "$(/opt/homebrew/bin/brew shellenv zsh)"'</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.zprofile
 </code></pre></div>
 <p>Then apply the changes to your current terminal session without restarting it:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>/opt/homebrew/bin/brew<span class="w"> </span>shellenv<span class="w"> </span>zsh<span class="k">)</span><span class="s2">&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="nb">eval</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>/opt/homebrew/bin/brew<span class="w"> </span>shellenv<span class="w"> </span>zsh<span class="k">)</span><span class="s2">"</span>
 </code></pre></div>
 <blockquote>
 <p><strong>Why <code>~/.zprofile</code> and not <code>~/.zshrc</code>?</strong>
@@ -2698,39 +2698,39 @@ which<span class="w"> </span>uv
 <hr />
 <h2 id="6-shell-environment-variables">6. Shell Environment Variables<a class="headerlink" href="#6-shell-environment-variables" title="Permanent link">&para;</a></h2>
 <p>This phase redirects all ML tools to store their files on the external NVMe. Add all path configuration to <code>~/.zshrc</code> in one block:</p>
-<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.zshrc<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.zshrc<span class="w"> </span><span class="s">&lt;&lt; 'EOF'</span>
 
 <span class="s"># ── ML Workstation: External NVMe Paths ──────────────────────────────────────</span>
-<span class="s">export ML_ROOT=&quot;/Volumes/ML_Workspace&quot;</span>
+<span class="s">export ML_ROOT="/Volumes/ML_Workspace"</span>
 
 <span class="s"># uv: Python installs and package cache on external drive</span>
-<span class="s">export UV_PYTHON_INSTALL_DIR=&quot;$ML_ROOT/python&quot;</span>
-<span class="s">export UV_CACHE_DIR=&quot;$ML_ROOT/cache/uv&quot;</span>
+<span class="s">export UV_PYTHON_INSTALL_DIR="$ML_ROOT/python"</span>
+<span class="s">export UV_CACHE_DIR="$ML_ROOT/cache/uv"</span>
 
 <span class="s"># HuggingFace Hub (models, tokenizers, datasets)</span>
-<span class="s">export HF_HOME=&quot;$ML_ROOT/cache/huggingface&quot;</span>
-<span class="s">export HUGGINGFACE_HUB_CACHE=&quot;$ML_ROOT/cache/huggingface/hub&quot;</span>
+<span class="s">export HF_HOME="$ML_ROOT/cache/huggingface"</span>
+<span class="s">export HUGGINGFACE_HUB_CACHE="$ML_ROOT/cache/huggingface/hub"</span>
 
 <span class="s"># PyTorch Hub</span>
-<span class="s">export TORCH_HOME=&quot;$ML_ROOT/cache/torch&quot;</span>
+<span class="s">export TORCH_HOME="$ML_ROOT/cache/torch"</span>
 
 <span class="s"># pip cache (fallback)</span>
-<span class="s">export PIP_CACHE_DIR=&quot;$ML_ROOT/cache/pip&quot;</span>
+<span class="s">export PIP_CACHE_DIR="$ML_ROOT/cache/pip"</span>
 
 <span class="s"># Ollama models</span>
-<span class="s">export OLLAMA_MODELS=&quot;$ML_ROOT/ollama/models&quot;</span>
+<span class="s">export OLLAMA_MODELS="$ML_ROOT/ollama/models"</span>
 
 <span class="s"># Ollama performance settings (Apple Silicon optimisations)</span>
-<span class="s">export OLLAMA_FLASH_ATTENTION=&quot;1&quot;</span>
-<span class="s">export OLLAMA_KV_CACHE_TYPE=&quot;q8_0&quot;</span>
+<span class="s">export OLLAMA_FLASH_ATTENTION="1"</span>
+<span class="s">export OLLAMA_KV_CACHE_TYPE="q8_0"</span>
 
 <span class="s"># Kaggle credentials</span>
-<span class="s">export KAGGLE_USERNAME=&quot;YOUR_KAGGLE_USERNAME&quot;</span>
-<span class="s">export KAGGLE_API_TOKEN=&quot;YOUR_API_TOKEN_HERE&quot;</span>
+<span class="s">export KAGGLE_USERNAME="YOUR_KAGGLE_USERNAME"</span>
+<span class="s">export KAGGLE_API_TOKEN="YOUR_API_TOKEN_HERE"</span>
 
 <span class="s"># Convenience aliases</span>
-<span class="s">alias cdml=&quot;cd $ML_ROOT&quot;</span>
-<span class="s">alias cddata=&quot;cd $ML_ROOT/datasets&quot;</span>
+<span class="s">alias cdml="cd $ML_ROOT"</span>
+<span class="s">alias cddata="cd $ML_ROOT/datasets"</span>
 <span class="s"># ─────────────────────────────────────────────────────────────────────────────</span>
 <span class="s">EOF</span>
 
@@ -2802,7 +2802,7 @@ uv<span class="w"> </span>add<span class="w"> </span>mlx<span class="w"> </span>
 uv<span class="w"> </span>add<span class="w"> </span>transformers<span class="w"> </span>datasets<span class="w"> </span>tokenizers<span class="w"> </span>accelerate<span class="w"> </span>peft<span class="w"> </span>trl<span class="w"> </span>evaluate<span class="w"> </span>huggingface_hub
 
 <span class="c1"># RL environments</span>
-uv<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;gymnasium[all]&quot;</span>
+uv<span class="w"> </span>add<span class="w"> </span><span class="s2">"gymnasium[all]"</span>
 
 <span class="c1"># Experiment tracking</span>
 uv<span class="w"> </span>add<span class="w"> </span>wandb<span class="w"> </span>tensorboard
@@ -2834,7 +2834,7 @@ uv<span class="w"> </span>add<span class="w"> </span>jupyterlab<span class="w"> 
 <p>If you edit <code>pyproject.toml</code> manually (e.g. to adjust version constraints or add multiple packages at once), run <code>uv sync</code> afterward to apply the changes to <code>uv.lock</code> and <code>.venv</code>.</p>
 <p>Commit both files to git:</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>add<span class="w"> </span>pyproject.toml<span class="w"> </span>uv.lock
-git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add project dependencies&quot;</span>
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Add project dependencies"</span>
 </code></pre></div>
 <p>On another machine, recreating the exact environment is a single command:</p>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>&lt;your-repo&gt;
@@ -2907,7 +2907,7 @@ uv<span class="w"> </span>run<span class="w"> </span>jupyter<span class="w"> </s
 <p>Register a kernel manually only if you want to run a single Jupyter Lab instance and switch between multiple project environments within it:</p>
 <div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/Volumes/ML_Workspace/projects/rlhf-course
 <span class="nb">source</span><span class="w"> </span>.venv/bin/activate
-python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="w"> </span>rlhf-course<span class="w"> </span>--display-name<span class="w"> </span><span class="s2">&quot;Python (rlhf-course)&quot;</span>
+python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="w"> </span>rlhf-course<span class="w"> </span>--display-name<span class="w"> </span><span class="s2">"Python (rlhf-course)"</span>
 </code></pre></div>
 <p>Repeat for each additional project you want accessible as a named kernel.</p>
 <h3 id="92-switch-kernels-in-notebooks">9.2. Switch Kernels in Notebooks<a class="headerlink" href="#92-switch-kernels-in-notebooks" title="Permanent link">&para;</a></h3>
@@ -2956,23 +2956,23 @@ code<span class="w"> </span>--install-extension<span class="w"> </span>charlierm
 <p>When you open <code>/Volumes/ML_Workspace/projects/rlhf-course</code> in VS Code, it automatically detects the <code>.venv</code> folder and selects the correct Python interpreter. No manual configuration is needed.</p>
 <hr />
 <h2 id="11-git-configuration">11. Git Configuration<a class="headerlink" href="#11-git-configuration" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">&quot;Your Name&quot;</span>
-git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span><span class="s2">&quot;123456789+your-username@users.noreply.github.com&quot;</span>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">"Your Name"</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span><span class="s2">"123456789+your-username@users.noreply.github.com"</span>
 git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>init.defaultBranch<span class="w"> </span>main
-git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>core.editor<span class="w"> </span><span class="s2">&quot;code --wait&quot;</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>core.editor<span class="w"> </span><span class="s2">"code --wait"</span>
 </code></pre></div>
 <blockquote>
 <p><strong>What <code>core.editor "code --wait"</code> does:</strong> This sets VS Code as the editor git opens when it needs you to write something interactively, most commonly when you run <code>git commit</code> without the <code>-m</code> flag, <code>git rebase -i</code>, or <code>git merge</code>. Git opens the file in VS Code, then waits for you to write your message and close the tab before continuing. The <code>--wait</code> flag is essential: without it, git would open VS Code and immediately proceed without waiting, since VS Code is a GUI app that opens in its own window. Without this setting, git falls back to <code>vim</code> or <code>nano</code> in the terminal.</p>
 <p><strong>Why the <code>noreply</code> email?</strong> GitHub blocks pushes that expose your real email address if the 'Block command line pushes that expose my email' privacy setting is enabled (Settings → Emails). Using your GitHub-provided no-reply address (<code>123456789+your-username@users.noreply.github.com</code>) prevents this. Find your exact no-reply address at GitHub → Settings → Emails.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><span class="c1"># SSH key for GitHub: use the same no-reply address as the comment</span>
-ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-C<span class="w"> </span><span class="s2">&quot;123456789+your-username@users.noreply.github.com&quot;</span><span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519
+ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-C<span class="w"> </span><span class="s2">"123456789+your-username@users.noreply.github.com"</span><span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519
 cat<span class="w"> </span>~/.ssh/id_ed25519.pub
 <span class="c1"># → Add to GitHub: Settings → SSH Keys</span>
 </code></pre></div>
 <h3 id="111-global-gitignore">11.1. Global <code>.gitignore</code><a class="headerlink" href="#111-global-gitignore" title="Permanent link">&para;</a></h3>
 <p>A global ignore file excludes common generated files from all repositories on the machine.</p>
-<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>&gt;<span class="w"> </span>~/.gitignore_global<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>&gt;<span class="w"> </span>~/.gitignore_global<span class="w"> </span><span class="s">&lt;&lt; 'EOF'</span>
 <span class="s">.venv/</span>
 <span class="s">.vscode/</span>
 <span class="s">__pycache__/</span>
@@ -2996,8 +2996,8 @@ git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"
 uv<span class="w"> </span>add<span class="w"> </span>kaggle
 </code></pre></div>
 <p>Kaggle authenticates via two environment variables already set in <a href="#6-shell-environment-variables">Section 6</a>:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">KAGGLE_USERNAME</span><span class="o">=</span><span class="s2">&quot;YOUR_KAGGLE_USERNAME&quot;</span>
-<span class="nb">export</span><span class="w"> </span><span class="nv">KAGGLE_API_TOKEN</span><span class="o">=</span><span class="s2">&quot;YOUR_API_TOKEN_HERE&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">KAGGLE_USERNAME</span><span class="o">=</span><span class="s2">"YOUR_KAGGLE_USERNAME"</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">KAGGLE_API_TOKEN</span><span class="o">=</span><span class="s2">"YOUR_API_TOKEN_HERE"</span>
 </code></pre></div>
 <p>To get these values: kaggle.com → Settings → API → Create New API Token. The current Kaggle UI displays your token as a string on screen rather than downloading a file. Copy it and paste it as <code>KAGGLE_API_TOKEN</code> in your <code>~/.zshrc</code>. Your username is your Kaggle account username.</p>
 <blockquote>
@@ -3030,10 +3030,10 @@ uv<span class="w"> </span>run<span class="w"> </span>kaggle<span class="w"> </sp
 brew<span class="w"> </span>services<span class="w"> </span>stop<span class="w"> </span>ollama
 
 <span class="c1"># Create the launchd plist</span>
-cat<span class="w"> </span>&gt;<span class="w"> </span>~/Library/LaunchAgents/ollama.environment.plist<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
-<span class="s">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
-<span class="s">&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;</span>
-<span class="s">&lt;plist version=&quot;1.0&quot;&gt;</span>
+cat<span class="w"> </span>&gt;<span class="w"> </span>~/Library/LaunchAgents/ollama.environment.plist<span class="w"> </span><span class="s">&lt;&lt; 'EOF'</span>
+<span class="s">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="s">&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>
+<span class="s">&lt;plist version="1.0"&gt;</span>
 <span class="s">&lt;dict&gt;</span>
 <span class="s">    &lt;key&gt;Label&lt;/key&gt;</span>
 <span class="s">    &lt;string&gt;ollama.environment&lt;/string&gt;</span>
@@ -3076,7 +3076,7 @@ ls<span class="w"> </span>/Volumes/ML_Workspace/ollama/models/
 <span class="c1"># HuggingFace (needed for gated models: Llama 3, Mistral, Gemma)</span>
 uv<span class="w"> </span>run<span class="w"> </span>hf<span class="w"> </span>auth<span class="w"> </span>login
 <span class="c1"># Paste token from huggingface.co → Settings → Access Tokens</span>
-<span class="c1"># When prompted &#39;Add token as git credential?&#39; → choose Yes</span>
+<span class="c1"># When prompted 'Add token as git credential?' → choose Yes</span>
 <span class="c1"># This stores the token in macOS Keychain so git operations</span>
 <span class="c1"># against private HuggingFace repos work without re-authenticating.</span>
 </code></pre></div>
@@ -3111,24 +3111,24 @@ uv<span class="w"> </span>run<span class="w"> </span>wandb<span class="w"> </spa
 <span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoTokenizer</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">trl</span><span class="w"> </span><span class="kn">import</span> <span class="n">DPOTrainer</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== Environment Check ===&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PyTorch:        </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MPS available:  </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">mps</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MPS built:      </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">mps</span><span class="o">.</span><span class="n">is_built</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MLX device:     </span><span class="si">{</span><span class="n">mx</span><span class="o">.</span><span class="n">default_device</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== Environment Check ==="</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"PyTorch:        </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"MPS available:  </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">mps</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"MPS built:      </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">mps</span><span class="o">.</span><span class="n">is_built</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"MLX device:     </span><span class="si">{</span><span class="n">mx</span><span class="o">.</span><span class="n">default_device</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Cache Paths (all should be on /Volumes/ML_Workspace) ===&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;HF_HOME:        </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;HF_HOME&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TORCH_HOME:     </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TORCH_HOME&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;UV_CACHE_DIR:   </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;UV_CACHE_DIR&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== Cache Paths (all should be on /Volumes/ML_Workspace) ==="</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"HF_HOME:        </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'HF_HOME'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"TORCH_HOME:     </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'TORCH_HOME'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"UV_CACHE_DIR:   </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'UV_CACHE_DIR'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Gymnasium ===&quot;</span><span class="p">)</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;CartPole-v1&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== Gymnasium ==="</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">"CartPole-v1"</span><span class="p">)</span>
 <span class="n">obs</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CartPole obs shape: </span><span class="si">{</span><span class="n">obs</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"CartPole obs shape: </span><span class="si">{</span><span class="n">obs</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✅ All checks passed.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">✅ All checks passed."</span><span class="p">)</span>
 </code></pre></div>
 <blockquote>
 <p><strong>Note on the <code>trl</code> import:</strong> <code>PPOConfig</code> was removed in recent versions of TRL. The smoke test uses <code>DPOTrainer</code> instead, which verifies TRL is correctly installed and importable. To see the full list of available classes in your installed version, run <code>uv run python -c "import trl; print(dir(trl))"</code>.</p>

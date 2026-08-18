@@ -1674,7 +1674,7 @@
 <p>The 'temporal-difference' (TD) error is the signed difference between a bootstrapped one-step estimate of return and the current value estimate. It serves as the learning signal in all TD methods.</p>
 <p>The Bellman equation states that value satisfies a recursive relationship: the return from the current step equals the immediate reward plus the discounted return from the next step. Applying this recursion whilst substituting the current value estimate for the unknown future return gives the TD error,</p>
 <div class="arithmatex">\[
-\delta_t = \underbrace{R_t + \gamma \, \hat{V}(\text{next})}_{\text{TD target}} - \underbrace{\hat{V}(\text{now})}_{\text{current estimate}},
+\delta_t = \underbrace{R_t + \gamma \hat{V}(\text{next})}_{\text{TD target}} - \underbrace{\hat{V}(\text{now})}_{\text{current estimate}},
 \]</div>
 <p>where <span class="arithmatex">\(\hat{V}\)</span> denotes the value estimate being learned and <span class="arithmatex">\(\gamma \in [0, 1]\)</span> is the discount factor. A non-zero <span class="arithmatex">\(\delta_t\)</span> indicates that the estimate is inconsistent with itself after one step of real experience. The standard update rule adjusts the estimate by <span class="arithmatex">\(\alpha \delta_t\)</span>, where <span class="arithmatex">\(\alpha\)</span> is the learning rate.</p>
 <h3 id="12-why-value-functions-satisfy-a-td-recursion">1.2. Why Value Functions Satisfy a TD Recursion<a class="headerlink" href="#12-why-value-functions-satisfy-a-td-recursion" title="Permanent link">&para;</a></h3>

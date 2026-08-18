@@ -2410,7 +2410,7 @@ y = r + \gamma Q_{\text{target}}\left(s', \arg\max_{a'} Q_{\text{online}}(s', a'
 <p><code>spawn</code> creates a child process by launching a fresh Python interpreter from scratch. The child starts with a clean slate, re-imports only the modules it needs, and receives its task via inter-process communication (IPC). This is slower to start than <code>fork</code> but safe in all contexts.</p>
 <p>macOS prohibits the <code>fork</code> start method when PyTorch is in use: the Objective-C runtime and Metal Performance Shaders (MPS) contexts are not fork-safe, and forking a process that has already initialised these subsystems produces undefined behaviour. The <code>spawn</code> start method must therefore be set explicitly before any pool is created:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">multiprocessing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mp</span>
-<span class="n">mp</span><span class="o">.</span><span class="n">set_start_method</span><span class="p">(</span><span class="s2">&quot;spawn&quot;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">mp</span><span class="o">.</span><span class="n">set_start_method</span><span class="p">(</span><span class="s2">"spawn"</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 <p>Under <code>spawn</code>, each subprocess is a fresh Python interpreter that re-imports all modules from scratch. This has two consequences. First, the worker function must be defined at module level rather than as a local function or lambda, because <code>spawn</code> pickles the function by name and unpickling requires the function to be importable. Second, all code in <code>__main__</code> must be guarded by <code>if __name__ == "__main__":</code> to prevent recursive subprocess spawning.</p>
 <h3 id="b4-device-assignment-cpu-per-worker">B.4. Device Assignment: CPU per Worker<a class="headerlink" href="#b4-device-assignment-cpu-per-worker" title="Permanent link">&para;</a></h3>
@@ -2418,7 +2418,7 @@ y = r + \gamma Q_{\text{target}}\left(s', \arg\max_{a'} Q_{\text{online}}(s', a'
 <p>First, GPU shader cores are single instruction, multiple data (SIMD) lanes that execute the same instruction across many data elements in lockstep. They have no independent program counters and no OS-level process isolation. Multiple processes submitting MPS commands therefore serialise on the hardware, providing no parallelism over sequential execution.</p>
 <p>Second, even in a sequential setting, MPS is slower than CPU for this workload. The Q-network is a two-hidden-layer multilayer perceptron (MLP) of width 128 with approximately 17,000 parameters. At this scale, Metal shader compilation and dispatch overhead exceeds the compute time saved by the GPU. The crossover point at which MPS outperforms CPU lies in the millions-of-parameters regime for the batch sizes used here.</p>
 <p>Each worker process is therefore pinned explicitly to CPU:</p>
-<div class="highlight"><pre><span></span><code><span class="n">worker_device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">worker_device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"cpu"</span><span class="p">)</span>
 </code></pre></div>
 <p>This ensures that all 12 CPU cores are utilised for compute, and the GPU is left idle rather than becoming a bottleneck.</p>
 <h3 id="b5-suppressing-per-worker-output">B.5. Suppressing Per-Worker Output<a class="headerlink" href="#b5-suppressing-per-worker-output" title="Permanent link">&para;</a></h3>
@@ -2435,7 +2435,7 @@ y = r + \gamma Q_{\text{target}}\left(s', \arg\max_{a'} Q_{\text{online}}(s', a'
         <span class="n">tqdm</span><span class="p">(</span>
             <span class="n">pool</span><span class="o">.</span><span class="n">imap_unordered</span><span class="p">(</span><span class="n">run_one_config</span><span class="p">,</span> <span class="n">configs</span><span class="p">),</span>
             <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">),</span>
-            <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Sweep&quot;</span><span class="p">,</span>
+            <span class="n">desc</span><span class="o">=</span><span class="s2">"Sweep"</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="p">)</span>
 </code></pre></div>

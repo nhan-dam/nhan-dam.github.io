@@ -2177,35 +2177,35 @@
 
 <span class="c1"># --- Load the JSONL files ---</span>
 <span class="n">eval_data_tuned</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;eval_results_tuned.jsonl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'eval_results_tuned.jsonl'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">eval_data_tuned</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
 
 <span class="n">eval_data_untuned</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;eval_results_untuned.jsonl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'eval_results_untuned.jsonl'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">eval_data_untuned</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
 
 <span class="c1"># --- Extract prompts and completions ---</span>
 <span class="c1"># Prompts are identical in both files; use the tuned list as the source.</span>
-<span class="n">prompts</span> <span class="o">=</span> <span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;inputs&#39;</span><span class="p">][</span><span class="s1">&#39;inputs_pretokenized&#39;</span><span class="p">]</span>
+<span class="n">prompts</span> <span class="o">=</span> <span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="s1">'inputs'</span><span class="p">][</span><span class="s1">'inputs_pretokenized'</span><span class="p">]</span>
            <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">eval_data_tuned</span><span class="p">]</span>
 
-<span class="n">untuned_completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span>
+<span class="n">untuned_completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="s1">'prediction'</span><span class="p">]</span>
                        <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">eval_data_untuned</span><span class="p">]</span>
 
-<span class="n">tuned_completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span>
+<span class="n">tuned_completions</span> <span class="o">=</span> <span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="s1">'prediction'</span><span class="p">]</span>
                      <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">eval_data_tuned</span><span class="p">]</span>
 
 <span class="c1"># --- Assemble the side-by-side DataFrame ---</span>
 <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span>
-    <span class="s1">&#39;prompt&#39;</span><span class="p">:</span>      <span class="n">prompts</span><span class="p">,</span>
-    <span class="s1">&#39;base_model&#39;</span><span class="p">:</span>  <span class="n">untuned_completions</span><span class="p">,</span>
-    <span class="s1">&#39;tuned_model&#39;</span><span class="p">:</span> <span class="n">tuned_completions</span><span class="p">,</span>
+    <span class="s1">'prompt'</span><span class="p">:</span>      <span class="n">prompts</span><span class="p">,</span>
+    <span class="s1">'base_model'</span><span class="p">:</span>  <span class="n">untuned_completions</span><span class="p">,</span>
+    <span class="s1">'tuned_model'</span><span class="p">:</span> <span class="n">tuned_completions</span><span class="p">,</span>
 <span class="p">})</span>
 
 <span class="c1"># Disable cell truncation so full completions are visible in the notebook.</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_colwidth&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">'display.max_colwidth'</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
 <span class="n">results</span>
 </code></pre></div>

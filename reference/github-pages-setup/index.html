@@ -1389,12 +1389,12 @@
 </blockquote>
 <p>Before creating any commits, configure git to use your GitHub private no-reply email address. This is required if the 'Block command line pushes that expose my email' privacy setting is enabled in GitHub (Settings → Emails). Pushes made with a real email address will be rejected.</p>
 <p>Find your no-reply address at GitHub → Settings → Emails. It takes the form <code>123456789+your-username@users.noreply.github.com</code>.</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">&quot;Your Name&quot;</span>
-git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span><span class="s2">&quot;123456789+your-username@users.noreply.github.com&quot;</span>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">"Your Name"</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span><span class="s2">"123456789+your-username@users.noreply.github.com"</span>
 git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>init.defaultBranch<span class="w"> </span>main
 </code></pre></div>
 <p>When generating an SSH key for GitHub authentication, use the same no-reply address as the key comment:</p>
-<div class="highlight"><pre><span></span><code>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-C<span class="w"> </span><span class="s2">&quot;123456789+your-username@users.noreply.github.com&quot;</span><span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519
+<div class="highlight"><pre><span></span><code>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-C<span class="w"> </span><span class="s2">"123456789+your-username@users.noreply.github.com"</span><span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519
 cat<span class="w"> </span>~/.ssh/id_ed25519.pub
 <span class="c1"># → Add the output to GitHub: Settings → SSH Keys</span>
 </code></pre></div>
@@ -1501,14 +1501,14 @@ rm<span class="w"> </span>main.py<span class="w">    </span><span class="c1"># s
 <p>Required for LaTeX rendering in notes. Without this file, the <code>extra_javascript</code> entry in <code>mkdocs.yml</code> will have no effect.</p>
 <div class="highlight"><pre><span></span><code><span class="nb">window</span><span class="p">.</span><span class="nx">MathJax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="nx">tex</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">inlineMath</span><span class="o">:</span><span class="w"> </span><span class="p">[[</span><span class="s2">&quot;\\(&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;\\)&quot;</span><span class="p">]],</span>
-<span class="w">    </span><span class="nx">displayMath</span><span class="o">:</span><span class="w"> </span><span class="p">[[</span><span class="s2">&quot;\\[&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;\\]&quot;</span><span class="p">]],</span>
+<span class="w">    </span><span class="nx">inlineMath</span><span class="o">:</span><span class="w"> </span><span class="p">[[</span><span class="s2">"\\("</span><span class="p">,</span><span class="w"> </span><span class="s2">"\\)"</span><span class="p">]],</span>
+<span class="w">    </span><span class="nx">displayMath</span><span class="o">:</span><span class="w"> </span><span class="p">[[</span><span class="s2">"\\["</span><span class="p">,</span><span class="w"> </span><span class="s2">"\\]"</span><span class="p">]],</span>
 <span class="w">    </span><span class="nx">processEscapes</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">    </span><span class="nx">processEnvironments</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
 <span class="w">  </span><span class="p">},</span>
 <span class="w">  </span><span class="nx">options</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">ignoreHtmlClass</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;.*|&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nx">processHtmlClass</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;arithmatex&quot;</span>
+<span class="w">    </span><span class="nx">ignoreHtmlClass</span><span class="o">:</span><span class="w"> </span><span class="s2">".*|"</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">processHtmlClass</span><span class="o">:</span><span class="w"> </span><span class="s2">"arithmatex"</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div>
@@ -1565,7 +1565,7 @@ rm<span class="w"> </span>main.py<span class="w">    </span><span class="c1"># s
 <p>Create a new repository on GitHub. The site will be served at <code>https://your-username.github.io/your-repo-name</code>, so choose the repo name accordingly.</p>
 <h2 id="62-push-the-initial-commit">6.2. Push the Initial Commit<a class="headerlink" href="#62-push-the-initial-commit" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>add<span class="w"> </span>.
-git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Initial commit&quot;</span>
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Initial commit"</span>
 git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>git@github.com:your-username/your-repo-name.git
 git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>main
 </code></pre></div>
@@ -1593,7 +1593,7 @@ git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span
 <h1 id="7-ongoing-workflow">7. Ongoing Workflow<a class="headerlink" href="#7-ongoing-workflow" title="Permanent link">&para;</a></h1>
 <p>Every subsequent <code>git push</code> to <code>main</code> triggers a rebuild automatically. No manual steps are needed after the initial setup.</p>
 <p>To force a rebuild without making a file change (e.g. to test the workflow):</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>commit<span class="w"> </span>--allow-empty<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Force rebuild&quot;</span>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>commit<span class="w"> </span>--allow-empty<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Force rebuild"</span>
 git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main
 </code></pre></div>
 <p>To preview the site locally before pushing:</p>

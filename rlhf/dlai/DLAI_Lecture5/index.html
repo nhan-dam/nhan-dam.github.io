@@ -1712,11 +1712,11 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">google.oauth2.service_account</span><span class="w"> </span><span class="kn">import</span> <span class="n">Credentials</span>
 
 <span class="c1"># Path to the downloaded JSON key file</span>
-<span class="n">key_path</span> <span class="o">=</span> <span class="s1">&#39;your_key.json&#39;</span>
+<span class="n">key_path</span> <span class="o">=</span> <span class="s1">'your_key.json'</span>
 
 <span class="n">credentials</span> <span class="o">=</span> <span class="n">Credentials</span><span class="o">.</span><span class="n">from_service_account_file</span><span class="p">(</span>
     <span class="n">key_path</span><span class="p">,</span>
-    <span class="n">scopes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;https://www.googleapis.com/auth/cloud-platform&#39;</span><span class="p">]</span>
+    <span class="n">scopes</span><span class="o">=</span><span class="p">[</span><span class="s1">'https://www.googleapis.com/auth/cloud-platform'</span><span class="p">]</span>
 <span class="p">)</span>
 
 <span class="k">if</span> <span class="n">credentials</span><span class="o">.</span><span class="n">expired</span><span class="p">:</span>
@@ -1737,8 +1737,8 @@
 <p>With credentials and a project ID available, initialise the Vertex AI client as follows. Copy your project ID from the <a href="https://cloud.google.com/resource-manager/docs/creating-managing-projects">Cloud Console</a> and substitute it below.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">google.cloud.aiplatform</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">aiplatform</span>
 
-<span class="n">PROJECT_ID</span> <span class="o">=</span> <span class="s1">&#39;your_project_ID&#39;</span>
-<span class="n">REGION</span> <span class="o">=</span> <span class="s1">&#39;us-central1&#39;</span>
+<span class="n">PROJECT_ID</span> <span class="o">=</span> <span class="s1">'your_project_ID'</span>
+<span class="n">REGION</span> <span class="o">=</span> <span class="s1">'us-central1'</span>
 
 <span class="n">aiplatform</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
     <span class="n">project</span><span class="o">=</span><span class="n">PROJECT_ID</span><span class="p">,</span>

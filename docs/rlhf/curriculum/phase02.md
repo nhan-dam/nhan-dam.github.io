@@ -299,11 +299,11 @@ The PPO stage ties together all previous components. The policy (initialised fro
 
 **Text generation as a reinforcement learning problem.** To apply the agent–environment formalism of [Module 1](phase01.md#rl-problem), generation is cast as a Markov decision process (MDP). The state $s_t = (x, a_1, \ldots, a_{t-1})$ is the prompt plus the tokens generated so far. The action $a_t$ is the next token, chosen from the vocabulary. The transition is deterministic: the chosen token is appended to the state. An episode is one complete generation, ending when the policy emits an end-of-sequence (EOS) token or hits the length limit. The environment reward is sparse: zero at every intermediate step, with the reward model's score $r_\phi(x, y)$ delivered once at the terminal step, since the RM can only judge a complete response.
 
-**The KL penalty.** The objective is not pure reward maximisation. An unconstrained policy would quickly learn to produce degenerate outputs that achieve high reward model scores through exploitation rather than genuine quality improvement, which is the reward hacking failure anticipated in [Section 4.1](#41-theory). It is mitigated by adding a **Kullback–Leibler (KL) divergence penalty** to the reward signal:
+**The KL penalty.** The objective is not pure reward maximisation. An unconstrained policy would quickly learn to produce degenerate outputs that achieve high reward model scores through exploitation rather than genuine quality improvement, which is the reward hacking failure anticipated in [Section 4.1](#41-theory). It is mitigated by adding a **Kullback–Leibler (KL) divergence penalty** to the reward signal, giving the *shaped* reward $\tilde{r}$, which is written with a tilde throughout the course to keep it distinct from the reward model's own score $r_\phi$:
 
 <span id="eq-kl-reward"></span>
 
-$$r(x, y) = r_\phi(x, y) - \beta \cdot \text{KL}\left[\pi_\theta(\cdot \mid x) \parallel \pi_{\text{ref}}(\cdot \mid x)\right]. \tag{24}$$
+$$\tilde{r}(x, y) = r_\phi(x, y) - \beta \cdot \text{KL}\left[\pi_\theta(\cdot \mid x) \parallel \pi_{\text{ref}}(\cdot \mid x)\right]. \tag{24}$$
 
 The penalty term punishes the policy for moving probability mass away from the reference. The intuition: the RM is only trustworthy on the distribution of responses it was trained on, which is (approximately) the SFT distribution. The further $\pi_\theta$ drifts from $\pi_{\text{ref}}$, the less the RM's scores can be trusted, so [(24)](#eq-kl-reward) makes distance from the reference a cost that high RM scores must outweigh.
 

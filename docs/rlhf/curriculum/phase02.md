@@ -2,7 +2,7 @@
 
 > Created on: 22 April 2026
 >
-> Updated on: 16 July 2026
+> Updated on: 4 September 2026
 
 Reinforcement learning from human feedback (RLHF), as originally described in 'Learning to Summarize from Human Feedback' (Stiennon et al., 2020) and subsequently in InstructGPT (Ouyang et al., 2022), consists of three sequential stages, each covered by one module of this phase. Supervised fine-tuning (SFT) turns a base language model into an instruction follower (Module 3). Reward model (RM) training distils human preferences into a scalar scoring function (Module 4). Proximal policy optimisation (PPO) then optimises the SFT model against the reward model (Module 5), reusing the PPO machinery developed in Module 2 ([Algorithm 4](phase01.md#alg-ppo)). Each stage consumes the artefact produced by the previous one, so the modules must be completed in order.
 
@@ -306,6 +306,12 @@ The PPO stage ties together all previous components. The policy (initialised fro
 $$\tilde{r}(x, y) = r_\phi(x, y) - \beta \cdot \text{KL}\left[\pi_\theta(\cdot \mid x) \parallel \pi_{\text{ref}}(\cdot \mid x)\right]. \tag{24}$$
 
 The penalty term punishes the policy for moving probability mass away from the reference. The intuition: the RM is only trustworthy on the distribution of responses it was trained on, which is (approximately) the SFT distribution. The further $\pi_\theta$ drifts from $\pi_{\text{ref}}$, the less the RM's scores can be trusted, so [(24)](#eq-kl-reward) makes distance from the reference a cost that high RM scores must outweigh.
+
+**The objective.** Instantiating the return of [Section 1.1](phase01.md#rl-problem) for this MDP, an episode is one complete response, so the horizon is bounded by the response budget and $\gamma = 1$ is admissible. Three properties of this stage make it the right choice rather than merely a permitted one. First, the reward is a single score on the finished response, so there is no ordering of rewards over which a time preference could be expressed. Second, the horizon is a few hundred tokens, so the effective planning horizon that $\gamma$ controls is not a lever worth pulling. Third, the penalty is distributed per token ([(25)](#eq-token-kl) below), so any $\gamma \lt 1$ would discount drift late in a response relative to drift early in it, leaving the anchor to $\pi_{\text{ref}}$ strongest at the start and weakest at the end, which nothing justifies. The common alternative of $\gamma = 0.99$ is not a rounding detail at this scale, since it scales a terminal reward at token 128 to $0.99^{128} \approx 0.28$ of its face value, penalising long responses by construction. Setting $\gamma = 1$ leaves
+
+$$J(\pi_\theta) = \mathbb{E}_{x \sim \mathcal{D}, \thinspace y \sim \pi_\theta(\cdot \mid x)}\left[\tilde{r}(x, y)\right].$$
+
+Two distinct levels are now in play and are easily conflated. [(24)](#eq-kl-reward) defines *what* is maximised, i.e. the reward the credit-assignment machinery consumes. [(17)](phase01.md#ppo-clip) defines *how* each gradient step maximises it, i.e. the clipped surrogate that PPO ascends in place of $J$ itself.
 
 **Per-token KL estimation.** The KL term in [(24)](#eq-kl-reward) is an expectation over all possible responses, which is intractable to compute exactly. It is instead estimated from the single response actually sampled. For each generated token, define
 
